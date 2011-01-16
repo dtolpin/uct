@@ -1,1 +1,9 @@
-UCT variants and improvements
+= UCT variants and improvements =
+
+UCT (Upper Confidence Bounds applied to Trees) algorithm
+is a sampling algorithm for solving hard search problems.
+
+== Project map ==
+
+README		-- general information and project map
+doc/		-- documentation
