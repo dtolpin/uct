@@ -7,3 +7,4 @@ is a sampling algorithm for solving hard search problems.
 
 README		-- general information and project map
 doc/		-- documentation
+papers/     -- others' papers on UCT theory and applications
