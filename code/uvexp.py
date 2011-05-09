@@ -10,16 +10,14 @@ def voi(o, a, b, n):
     avg = sum(o)/len(o)
     ni = len(o)
     return ( avg > b
-             and ( sum([ b-y for y in
-                         [ (sum(o)+x)/(ni+1)
-                           for x in o+[-log(n)] ]
-                         if y<b ])
-                   / (len(o)+1) )
-             or  ( sum([ y-a for y in
-                         [ (sum(o)+x)/(ni+1)
-                           for x in o+[log(n)] ]
-                         if y>a ])
-                   / (len(o)+1) ) )
+             and sum([ b-y for y in
+                       [ (sum(o)+x)/(ni+1)
+                         for x in o ]
+                       if y<b ]) + b
+             or  sum([ y-a for y in
+                       [ (sum(o)+x)/(ni+1)
+                         for x in o ]
+                       if y>a ])+1-a ) / len(o)
 
 RND = 'RND'
 UCB = 'UCB'
@@ -81,21 +79,39 @@ class Exp:
         means = [h.mean for h in self.handles]
         return max(means)-max(zip(avgs, means), key=lambda am: am[0])[1]
 
+handles_symmetric = [ Handle(1.0/3.0, lambda: random.choice([0.0, 0.0, 1.0])),
+                      Handle(2.0/3.0, lambda: random.choice([0.0, 1.0, 1.0])) ]
 
-def try_alg(alg=UCB, m=0.25, nsamples=10):
-    exp = Exp(alg, [Handle(m, lambda: m), Handle(0.5, lambda: random.choice([0.0,1.0]))])  
+handles_third = [ Handle(1.0/3.0, lambda: 1.0/3.0),
+                  Handle(2.0/3.0, lambda: random.choice([0.0, 1.0, 1.0])) ]
+
+handles_twothirds = [ Handle(2.0/3.0, lambda: 2.0/3.0),
+                      Handle(1.0/3.0, lambda: random.choice([0.0, 0.0, 1.0])) ]
+
+handles_quarter = [ Handle(0.25, lambda: 0.25),
+                    Handle(0.5, lambda: random.choice([0.0, 1.0])) ]
+
+handles_threequarters = [ Handle(0.75, lambda: 0.75),
+                          Handle(0.5, lambda: random.choice([0.0, 1.0])) ]
+
+
+
+def try_alg(alg=UCB, handles=handles_symmetric, nsamples=10):
+    exp = Exp(alg, handles=handles)  
     r = exp.run(nsamples)
     return (exp.outcomes, r)
 
-def repeat_alg(alg=UCB, m=0.25, nsamples=10, nruns=1000):
-    results = [try_alg(alg=alg, m=m, nsamples=nsamples) for i in range(nruns)]
+def repeat_alg(alg=UCB, handles=handles_symmetric, nsamples=10, nruns=1000):
+    results = [ try_alg(alg=alg, handles=handles, nsamples=nsamples)
+                for i in range(nruns) ]
     drawcounts = [round(sum([len(r[0][i]) for r in results])/float(nruns))
                   for i in range(len(results[0][0]))]
     regret = sum([r[1] for r in results])/nruns
     return (drawcounts, regret)
 
-def compare_algs(m=0.25, nsamples=10, nruns=1000):
+def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
     print "r_rnd=%s r_ucb=%s r_sve=%s" \
-        % tuple([repeat_alg(alg=alg, m=m, nsamples=nsamples, nruns=nruns) for alg in [RND, UCB, SVE]])
+        % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)
+                  for alg in [RND, UCB, SVE] ])
 
 
