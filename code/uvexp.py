@@ -17,7 +17,7 @@ def voi(o, a, b, n):
              or  sum([ y-a for y in
                        [ (sum(o)+x)/(ni+1)
                          for x in o ]
-                       if y>a ])+1-a ) / len(o)
+                       if y>a ]) + (1-a) ) / len(o)
 
 RND = 'RND'
 UCB = 'UCB'
