@@ -129,7 +129,7 @@ def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
                   for alg in [RND, UCB, SVE] ])
 
 
-def experiment(handles, nruns=10000, samples=range(1, 16)):
+def experiment(handles, nruns=30000, samples=range(1, 16)):
     print "nsamples r_rnd r_ucb r_sve"
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,
