@@ -1,24 +1,32 @@
 import random
-from math import sqrt, log
+from math import sqrt, log, exp
 
 class Handle:
     def __init__(self, mean, draw):
         self.mean = mean
         self.draw = draw
 
-def voi(o, a, b, n):
-    avg = sum(o)/len(o)
-    ni = len(o)
-    return ( avg > b
-             and sum([ b-y for y in
-                       [ (sum(o)+x)/(ni+1)
-                         for x in o ]
-                       if y<b ]) + b
-             or  sum([ y-a for y in
-                       [ (sum(o)+x)/(ni+1)
-                         for x in o ]
-                       if y>a ]) + (1-a) ) / len(o)
+def upperbound(c, n, ni):
+    return c*sqrt(2*log(n)/ni)
 
+def voi(o, a, b, n):
+    ni = len(o)
+    si = sum(o)
+    avg = si/ni
+    voi =  ( avg==a
+             and ( sum([ b-y for y in
+                         [ (si+x)/(ni+1)
+                           for x in o ]
+                         if y<b ])
+                   + upperbound(b, n, ni) )
+             or  ( sum([ y-a for y in
+                         [ (si+x)/(ni+1)
+                           for x in o ]
+                         if y>a ])
+                   + upperbound(1-a, n, ni) ) 
+             ) / (ni+1)
+    return voi
+             
 RND = 'RND'
 UCB = 'UCB'
 SVE = 'SVE'
@@ -94,6 +102,12 @@ handles_quarter = [ Handle(0.25, lambda: 0.25),
 handles_threequarters = [ Handle(0.75, lambda: 0.75),
                           Handle(0.5, lambda: random.choice([0.0, 1.0])) ]
 
+handles_many = [ Handle(0.25, lambda: 0.25),
+                 Handle(1.0/3.0, lambda: random.choice([0.0, 0.0, 1.0])),
+                 Handle(0.5, lambda: random.choice([0.0, 1.0])),
+                 Handle(0.5, lambda: 0.5),
+                 Handle(2.0/3.0, lambda: random.choice([0.0, 1.0, 1.0])),
+                 Handle(0.75, lambda: 0.75) ]
 
 
 def try_alg(alg=UCB, handles=handles_symmetric, nsamples=10):
@@ -111,7 +125,23 @@ def repeat_alg(alg=UCB, handles=handles_symmetric, nsamples=10, nruns=1000):
 
 def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
     print "r_rnd=%s r_ucb=%s r_sve=%s" \
-        % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)
+        % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1]
                   for alg in [RND, UCB, SVE] ])
 
+
+def experiment(handles, nruns=10000, samples=range(1, 16)):
+    print "nsamples r_rnd r_ucb r_sve"
+    for nsamples in [len(handles)*i for i in samples]:
+        print nsamples,
+        for alg in [RND, UCB, SVE]:
+            print repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1],
+        print
+
+if __name__=="__main__":
+    import sys
+    if sys.argv==1:
+        handles = 'many'
+    else:
+        handles = sys.argv[1]
+    experiment(locals()['handles_'+handles])
 

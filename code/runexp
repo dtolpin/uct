@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for handles in symmetric quarter threequarters third twothirds many; do
+	echo $handles
+	python uvexp.py $handles | tee ${handles}.txt
+done
