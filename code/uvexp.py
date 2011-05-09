@@ -6,8 +6,24 @@ class Handle:
         self.mean = mean
         self.draw = draw
 
-def upperbound(c, n, ni):
-    return c*sqrt(2*log(n)/ni)
+def upperbound_ucb(c, n, ni):
+    return c*sqrt(2.0*log(n)/ni)
+
+def upperbound_triv(c, n, ni):
+    return c
+
+def upperbound_dumb(c, n, ni):
+    return c/ni
+
+def upperbound_exp(c, n, ni):
+    return c*exp(-ni)
+
+upperbound = upperbound_triv
+
+def perm(seq):
+    seq = seq[:]
+    random.shuffle(seq)
+    return seq
 
 def voi(o, a, b, n):
     ni = len(o)
@@ -23,7 +39,7 @@ def voi(o, a, b, n):
                          [ (si+x)/(ni+1)
                            for x in o ]
                          if y>a ])
-                   + upperbound(1-a, n, ni) ) 
+                   + upperbound(1.0-a, n, ni) ) 
              ) / (ni+1)
     return voi
              
@@ -111,7 +127,7 @@ handles_many = [ Handle(0.25, lambda: 0.25),
 
 
 def try_alg(alg=UCB, handles=handles_symmetric, nsamples=10):
-    exp = Exp(alg, handles=handles)  
+    exp = Exp(alg, handles=perm(handles))
     r = exp.run(nsamples)
     return (exp.outcomes, r)
 
@@ -129,7 +145,7 @@ def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
                   for alg in [RND, UCB, SVE] ])
 
 
-def experiment(handles, nruns=30000, samples=range(1, 16)):
+def experiment(handles, nruns=3000, samples=range(4, 16)):
     print "nsamples r_rnd r_ucb r_sve"
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,

@@ -13,3 +13,10 @@ draw.regrets <- function(regrets_file) {
 	}
 	legend(x='topright', legend=ALGORITHMS, pch=1:length(ALGORITHMS))
 }
+
+draw.experiment <- function() {
+  	old.par <- par(no.readonly=TRUE)
+	par(mar=c(4,4,2,2))
+	layout(cbind(c(1,2,3),c(4,5,6)))
+	for(result in paste(c('symmetric', 'twothirds', 'threequarters', 'quarter', 'third', 'many'), "txt", sep=".")) draw.regrets(result)
+}
