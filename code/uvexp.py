@@ -15,31 +15,30 @@ def perm(seq):
 # two components --- upper bound and greedy
 # the influence of upper bound decreases with the number of samples
 
-def voi_greedy(o, a, b):
+def voi_semigreedy(o, a, b, n, ampl = lambda n, ni: n/ni):
     ni = len(o)
     si = sum(o)
     avg = si/ni
+    k = ampl(n, ni)
+    def u(x): return (si+k*x)/(ni+k)
+    us = (u(x) for x in o)
     voi =  ( avg==a
-             and sum(b-y for y in
-                     [ (si+x)/(ni+1)
-                       for x in o ]
-                     if y < b)
-             or  sum(y-a for y in
-                     [ (si+x)/(ni+1)
-                       for x in o ]
-                     if y > a)
-             ) / ni
+             and sum(b-y for y in us if y < b)
+             or  sum(y-a for y in us if y > a) ) / ni
     return voi
 
-def voi_upper(o, a, b):
+voi_greedy = lambda o, a, b, n: voi_semigreedy(o, a, b, n, ampl = lambda n, ni: 1)
+
+def voi_upper(o, a, b, n):
     ni = len(o)
     si = sum(o)
     avg = si/ni
-    voi = (avg==a and b or 1-a)/(ni*ni) #  or (ni*log(ni)+1) 
+    voi = (avg==a and b or 1-a)/ni
     return voi
 
-def voi(o, a, b):
-    return voi_upper(o,a,b) + voi_greedy(o,a,b)
+def voi(o, a, b, n):
+    ni = len(o)
+    return voi_upper(o, a, b, n)/ni + voi_semigreedy(o, a, b, n)
              
 RND = 'RND'
 UCB = 'UCB'
@@ -80,6 +79,7 @@ class Exp:
     
     # Sample-based VOI Estimate
     def SVE(self):
+        n = sum(len(o) for o in self.outcomes)
         # find alpha and beta
         ia, ib, a, b = -1, -1, -1, -1
         for i in range(len(self.outcomes)):
@@ -90,14 +90,13 @@ class Exp:
                 ib, b = i, avg
     
         # find best handle
-        vois = [voi(o, a, b) for o in self.outcomes]
+        vois = [voi(o, a, b, n) for o in self.outcomes]
         ibest, vbest = -1, -1
         indices = range(len(vois))
         random.shuffle(indices) # break ties randomly
         for i in indices:
             if vois[i] >= vbest:
                 ibest, vbest = i, vois[i]
-
         self.draw(ibest)
     
     def regret(self):
@@ -147,7 +146,7 @@ def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
         % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1]
                   for alg in [RND, UCB, SVE] ])
 
-def experiment(handles, nruns=1000, samples=range(4, 16)):
+def experiment(handles, nruns=10000, samples=range(4, 16)):
     print "nsamples r_rnd r_ucb r_sve"
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,
