@@ -35,11 +35,11 @@ def voi_upper(o, a, b):
     ni = len(o)
     si = sum(o)
     avg = si/ni
-    voi = (avg==a and b or 1-a)/(ni*ni) # (ni*log(ni)+1)
+    voi = (avg==a and b or 1-a)/(ni*ni) #  or (ni*log(ni)+1) 
     return voi
 
 def voi(o, a, b):
-    return voi_upper(o,a,b) +voi_greedy(o,a,b)
+    return voi_upper(o,a,b) + voi_greedy(o,a,b)
              
 RND = 'RND'
 UCB = 'UCB'

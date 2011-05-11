@@ -8,15 +8,10 @@ class RandomHandle(Handle):
             draw = lambda: random.random() < mean and 1.0 or 0.0
         elif flip==1: # constant
             draw = lambda: mean
-        elif flip==2: # triangular
+        else: # triangular
             mode = mean
             mean = (mode+1)/3
             draw = lambda: random.triangular(0, 1, mode)
-        else: # beta
-            alpha = random.randrange(1, 5)
-            beta = random.randrange(1, 5)
-            mean = alpha/(alpha+beta)
-            draw = lambda: random.betavariate(alpha, beta)
 
         Handle.__init__(self, mean, draw)
 
