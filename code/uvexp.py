@@ -70,7 +70,9 @@ class Exp:
     def UCB(self):
         n = sum(len(o) for o in self.outcomes)
         ibest, vbest = -1, -1
-        for  i in range(len(self.handles)):
+        indices = range(len(self.outcomes))
+        random.shuffle(indices) # break ties randomly
+        for i in indices:
             ni = len(self.outcomes[i])
             v = sum(self.outcomes[i])/ni+sqrt(2*log(n)/ni)
             if v > vbest:
