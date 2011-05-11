@@ -146,7 +146,7 @@ def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
         % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1]
                   for alg in [RND, UCB, SVE] ])
 
-def experiment(handles, nruns=10000, samples=range(4, 16)):
+def experiment(handles, nruns=5000, samples=range(4, 16)):
     print "nsamples r_rnd r_ucb r_sve"
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,
