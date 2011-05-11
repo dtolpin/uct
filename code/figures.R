@@ -35,4 +35,11 @@ compare.random <- function(upper_file='random-upper.txt', greedy_file='random-gr
   lines(x=semigreedy$nsamples, semigreedy$r_sve, type="o", pch=3)
   legend(x='topright', legend=c('upper', 'greedy', 'semigreedy'), pch=1:3)
 }
-  
+
+draw.random <- function() {
+  layout(cbind(c(1,2),c(3,4)))
+  draw.regrets('random-4.txt')
+  draw.regrets('random-8.txt')
+  draw.regrets('random-16.txt')
+  draw.regrets('random-64.txt')
+}
