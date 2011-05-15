@@ -2,5 +2,5 @@
 
 for handles in symmetric quarter threequarters third twothirds many; do
 	echo $handles
-	python uvexp.py $handles | tee ${handles}.txt
+	python uvexp.py $handles | tee case-${handles}.txt
 done

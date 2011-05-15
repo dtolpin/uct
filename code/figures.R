@@ -14,11 +14,11 @@ draw.regrets <- function(regrets_file) {
 	legend(x='topright', legend=ALGORITHMS, pch=1:length(ALGORITHMS))
 }
 
-draw.experiment <- function() {
+draw.experiment <- function(prefix="") {
   	old.par <- par(no.readonly=TRUE)
 	par(mar=c(4,4,2,2), yaxs='i')
 	layout(cbind(c(1,2,3),c(4,5,6)))
-	for(result in paste(c('symmetric', 'twothirds', 'threequarters', 'quarter', 'third', 'many'), "txt", sep=".")) draw.regrets(result)
+	for(result in paste(c('symmetric', 'twothirds', 'threequarters', 'quarter', 'third', 'many'), "txt", sep=".")) draw.regrets(paste(prefix,result,sep=""))
         par(old.par)
 }
 
@@ -38,8 +38,8 @@ compare.random <- function(upper_file='random-upper.txt', greedy_file='random-gr
 
 draw.random <- function() {
   layout(cbind(c(1,2),c(3,4)))
-  draw.regrets('random-4.txt')
   draw.regrets('random-8.txt')
   draw.regrets('random-16.txt')
+  draw.regrets('random-32.txt')
   draw.regrets('random-64.txt')
 }

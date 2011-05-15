@@ -67,17 +67,34 @@ class Exp:
         self.draw(random.randrange(len(self.handles)))
     
     # Upper Confidence Bounds
-    def UCB(self):
+    def UCB_1(self):
         n = sum(len(o) for o in self.outcomes)
         ibest, vbest = -1, -1
         indices = range(len(self.outcomes))
         random.shuffle(indices) # break ties randomly
         for i in indices:
             ni = len(self.outcomes[i])
-            v = sum(self.outcomes[i])/ni+sqrt(2*log(n)/ni)
+            avg = sum(self.outcomes[i])/ni
+            v = avg+sqrt(2*log(n)/ni)
             if v > vbest:
                 ibest, vbest = i, v
         self.draw(ibest)
+    
+    def UCB_1TUNED(self):
+        n = sum(len(o) for o in self.outcomes)
+        ibest, vbest = -1, -1
+        indices = range(len(self.outcomes))
+        random.shuffle(indices) # break ties randomly
+        for i in indices:
+            ni = len(self.outcomes[i])
+            avg = sum(self.outcomes[i])/ni
+            var = sum(o*o for o in self.outcomes[i])/ni-avg*avg
+            v = avg+sqrt(min(0.25,var+sqrt(2*log(n)/ni))*log(n)/ni)
+            if v > vbest:
+                ibest, vbest = i, v
+        self.draw(ibest)
+
+    UCB = UCB_1TUNED
     
     # Sample-based VOI Estimate
     def SVE(self):
