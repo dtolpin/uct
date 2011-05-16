@@ -38,7 +38,7 @@ def voi_upper(o, a, b, n):
 
 def voi(o, a, b, n):
     ni = len(o)
-    return voi_upper(o, a, b, n)/ni + voi_semigreedy(o, a, b, n)
+    return voi_upper(o, a, b, n)/ni/ni + voi_semigreedy(o, a, b, n)
              
 RND = 'RND'
 UCB = 'UCB'
@@ -94,7 +94,7 @@ class Exp:
                 ibest, vbest = i, v
         self.draw(ibest)
 
-    UCB = UCB_1TUNED
+    UCB = UCB_1 # TUNED
     
     # Sample-based VOI Estimate
     def SVE(self):
@@ -117,11 +117,13 @@ class Exp:
             if vois[i] >= vbest:
                 ibest, vbest = i, vois[i]
         self.draw(ibest)
-    
+
     def regret(self):
         avgs = [sum(o)/len(o) for o in self.outcomes]
         means = [h.mean for h in self.handles]
         return max(means)-max(zip(avgs, means), key=lambda am: am[0])[1]
+
+# Testing and Experimenting
 
 handles_symmetric = [ Handle(1.0/3.0, lambda: random.choice([0.0, 0.0, 1.0])),
                       Handle(2.0/3.0, lambda: random.choice([0.0, 1.0, 1.0])) ]
@@ -145,8 +147,6 @@ handles_many = [ Handle(0.25, lambda: 0.25),
                  Handle(2.0/3.0, lambda: random.choice([0.0, 1.0, 1.0])),
                  Handle(0.75, lambda: 0.75) ]
 
-
-
 def try_alg(alg=UCB, handles=handles_symmetric, nsamples=10):
     exp = Exp(alg, handles=perm(handles))
     r = exp.run(nsamples)
@@ -165,7 +165,7 @@ def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
         % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1]
                   for alg in [RND, UCB, SVE] ])
 
-def experiment(handles, nruns=5000, samples=range(4, 16)):
+def experiment(handles, nruns=10000, samples=range(4, 16)):
     print "nsamples r_rnd r_ucb r_sve"
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,

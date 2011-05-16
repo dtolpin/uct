@@ -1,6 +1,8 @@
 #!/bin/sh
 
+pfx=${1:-case}
+
 for handles in symmetric quarter threequarters third twothirds many; do
 	echo $handles
-	python uvexp.py $handles | tee case-${handles}.txt
+	python uvexp.py $handles | tee ${pfx}-${handles}.txt
 done
