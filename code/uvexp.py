@@ -11,38 +11,15 @@ def perm(seq):
     random.shuffle(seq)
     return seq
 
-# Value of Information:
-# two components --- upper bound and greedy
-# the influence of upper bound decreases with the number of samples
-
-def voi_semigreedy(o, a, b, n, ampl = lambda n, ni: n/ni):
-    ni = len(o)
-    si = sum(o)
-    avg = si/ni
-    k = ampl(n, ni)
-    def u(x): return (si+k*x)/(ni+k)
-    us = (u(x) for x in o)
-    voi =  ( avg==a
-             and sum(b-y for y in us if y < b)
-             or  sum(y-a for y in us if y > a) ) / ni
-    return voi
-
-voi_greedy = lambda o, a, b, n: voi_semigreedy(o, a, b, n, ampl = lambda n, ni: 1)
-
-def voi_upper(o, a, b, n):
-    ni = len(o)
-    si = sum(o)
-    avg = si/ni
-    voi = (avg==a and b or 1-a)/ni
-    return voi
-
-def voi(o, a, b, n):
-    ni = len(o)
-    return voi_upper(o, a, b, n)/ni/ni + voi_semigreedy(o, a, b, n)
-             
+    
 RND = 'RND'
 UCB = 'UCB'
-SVE = 'SVE'
+UCBt = 'UCBt'
+GRD = 'GRD'
+UVB = 'UVB'
+UVB2 = 'UVB2'
+
+ALGORITHMS = [RND, UCB, UCBt, GRD, UVB, UVB2]
 
 class Exp:
 
@@ -67,7 +44,7 @@ class Exp:
         self.draw(random.randrange(len(self.handles)))
     
     # Upper Confidence Bounds
-    def UCB_1(self):
+    def UCB(self):
         n = sum(len(o) for o in self.outcomes)
         ibest, vbest = -1, -1
         indices = range(len(self.outcomes))
@@ -79,8 +56,9 @@ class Exp:
             if v > vbest:
                 ibest, vbest = i, v
         self.draw(ibest)
-    
-    def UCB_1TUNED(self):
+
+    # UCB Tuned 
+    def UCBt(self):
         n = sum(len(o) for o in self.outcomes)
         ibest, vbest = -1, -1
         indices = range(len(self.outcomes))
@@ -94,22 +72,48 @@ class Exp:
                 ibest, vbest = i, v
         self.draw(ibest)
 
-    UCB = UCB_1 # TUNED
-    
-    # Sample-based VOI Estimate
-    def SVE(self):
-        n = sum(len(o) for o in self.outcomes)
-        # find alpha and beta
-        ia, ib, a, b = -1, -1, -1, -1
-        for i in range(len(self.outcomes)):
+    # Random greedy
+    def GRD(self):
+        ibest, abest = -1, -1
+        indices = range(len(self.outcomes))
+        random.shuffle(indices) # break ties randomly
+        for i in indices:
             avg = sum(self.outcomes[i])/len(self.outcomes[i])
-            if avg > a:
-                ia, ib, a, b = i, ia, avg, a
-            elif avg > b:
-                ib, b = i, avg
+            if avg > abest:
+                ibest, abest = i, avg
+        if random.random() > 2.0/len(self.outcomes):
+            self.draw(ibest)
+        else:
+            self.draw(random.choice(range(len(self.outcomes))))
+
+    def voi(self, o, a):
+        ni = len(o)
+        si = sum(o)
+        avg = si/ni
+        kappa = 1.0/len(self.outcomes)
+        voi = (avg==a and 1-kappa or kappa)/ni
+        return voi
+
+    def voi2(self, o, a):
+        ni = len(o)
+        si = sum(o)
+        avg = si/ni
+        kappa = 1.0/len(self.outcomes)
+        kappa = kappa*kappa
+        voi = (avg==a and 1-kappa or kappa)/ni
+        return voi
+
+
+    def UVB(self):
+        # find best average
+        abest = -1.0
+        for o in self.outcomes:
+            avg = sum(o)/len(o)
+            if avg > abest:
+                abest = avg
     
         # find best handle
-        vois = [voi(o, a, b, n) for o in self.outcomes]
+        vois = [self.voi(o, abest) for o in self.outcomes]
         ibest, vbest = -1, -1
         indices = range(len(vois))
         random.shuffle(indices) # break ties randomly
@@ -117,6 +121,25 @@ class Exp:
             if vois[i] >= vbest:
                 ibest, vbest = i, vois[i]
         self.draw(ibest)
+
+    def UVB2(self):
+        # find best average
+        abest = -1.0
+        for o in self.outcomes:
+            avg = sum(o)/len(o)
+            if avg > abest:
+                abest = avg
+    
+        # find best handle
+        vois = [self.voi2(o, abest) for o in self.outcomes]
+        ibest, vbest = -1, -1
+        indices = range(len(vois))
+        random.shuffle(indices) # break ties randomly
+        for i in indices:
+            if vois[i] >= vbest:
+                ibest, vbest = i, vois[i]
+        self.draw(ibest)
+
 
     def regret(self):
         avgs = [sum(o)/len(o) for o in self.outcomes]
@@ -160,16 +183,11 @@ def repeat_alg(alg=UCB, handles=handles_symmetric, nsamples=10, nruns=1000):
     regret = sum(r[1] for r in results)/nruns
     return (drawcounts, regret)
 
-def compare_algs(handles=handles_symmetric, nsamples=10, nruns=1000):
-    print "r_rnd=%s r_ucb=%s r_sve=%s" \
-        % tuple([ repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1]
-                  for alg in [RND, UCB, SVE] ])
-
 def experiment(handles, nruns=10000, samples=range(4, 16)):
-    print "nsamples r_rnd r_ucb r_sve"
+    print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,
-        for alg in [RND, UCB, SVE]:
+        for alg in ALGORITHMS:
             print repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1],
         print
         sys.stdout.flush()

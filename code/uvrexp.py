@@ -15,23 +15,24 @@ class RandomHandle(Handle):
 
         Handle.__init__(self, mean, draw)
 
-def repeat_alg(alg=UCB, nhandles=10, nsamples=10, nruns=1000):
-    results = [ try_alg(alg=alg,
-                        handles=[RandomHandle(random.random()) for i in range(nhandles)],
-                        nsamples=nsamples)
+def repeat_alg(alg=UCB, mkhandles=lambda: [RandomHandle(random.random()) for i in range(10)], nsamples=10, nruns=1000):
+    
+    results = [ try_alg(alg=alg, handles=mkhandles(), nsamples=nsamples)
                 for i in range(nruns) ]
     drawcounts = [round(sum(len(r[0][i]) for r in results)/float(nruns))
                   for i in range(len(results[0][0]))]
     regret = sum(r[1] for r in results)/nruns
     return (drawcounts, regret)
 
-
 def randomexp(nhandles=10, nruns=1000, samples=range(1, 20)):
-    print "nsamples r_rnd r_ucb r_sve"
+    print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
+    def mkhandles():
+        return [RandomHandle(random.random()) for i in range(nhandles)]
+    handles = mkhandles()
     for nsamples in [nhandles*i for i in samples]:
         print nsamples,
-        for alg in [RND, UCB, SVE]:
-            print repeat_alg(alg=alg, nhandles=nhandles, nsamples=nsamples, nruns=nruns)[1],
+        for alg in ALGORITHMS:
+            print repeat_alg(alg=alg, mkhandles=mkhandles, nsamples=nsamples, nruns=nruns)[1],
         print
         sys.stdout.flush()
 

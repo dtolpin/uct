@@ -3,15 +3,15 @@ ALGORITHMS <- c('rnd', 'ucb', 'sve')
 draw.regrets <- function(regrets_file) {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
-	ylim <- range(0, regrets$r_rnd, regrets$r_ucb, regrets$r_sve)
+	ylim <- range(0, regrets[-1])
 	plot(x=regrets$nsamples, type='n', xlim=xlim, ylim=ylim, xlab=expression(N[samples]), ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
 	i <- 1
-	for(alg in ALGORITHMS) {
-		lines(x=regrets[["nsamples"]], y=regrets[[paste("r_",alg,sep="")]],
+	for(alg in names(regrets)[-1]) {
+		lines(x=regrets$nsamples, y=regrets[[alg]],
 			  type="o", pch=i)
 		i <- i+1
 	}
-	legend(x='topright', legend=ALGORITHMS, pch=1:length(ALGORITHMS))
+	legend(x='topright', legend=sapply(names(regrets)[-1], function(n) substring(n, 3)), pch=1:length(names(regrets)[-1]))
 }
 
 draw.experiment <- function(prefix="") {
