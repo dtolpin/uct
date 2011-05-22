@@ -2,7 +2,8 @@
 
 HANDLES=${1:-16}
 RUNS=${2:-1000}
-RESULTS=${3:-random-$HANDLES.txt}
+TRANSFORM=${3:-identity}
+RESULTS=${4:-random-$HANDLES-$TRANSFORM.txt}
 
-python uvrexp.py $HANDLES $RUNS | tee  $RESULTS
+python uvrexp.py $HANDLES $RUNS $TRANSFORM | tee  $RESULTS
 

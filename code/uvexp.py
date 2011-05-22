@@ -1,6 +1,8 @@
 import random
 from math import sqrt, log, exp
 
+import sys
+
 class Handle:
     def __init__(self, mean, draw):
         self.mean = mean
@@ -11,7 +13,6 @@ def perm(seq):
     random.shuffle(seq)
     return seq
 
-    
 RND = 'RND'
 UCB = 'UCB'
 UCBt = 'UCBt'
@@ -19,7 +20,7 @@ GRD = 'GRD'
 UVB = 'UVB'
 UVB2 = 'UVB2'
 
-ALGORITHMS = [UCBt, GRD, UVB]
+ALGORITHMS = [UCB, GRD, UVB]
 # ALGORITHMS = [RND, UCB, UCBt, GRD, UVB, UVB2]
 
 class Exp:
@@ -83,7 +84,7 @@ class Exp:
             avg = sum(self.outcomes[i])/len(self.outcomes[i])
             if avg > abest:
                 ibest, abest = i, avg
-        if random.random() > 1/2+1/2/(k-1):
+        if random.random() > 0.5*k/(k-1):
             self.draw(ibest)
         else:
             self.draw(random.choice(range(len(self.outcomes))))
