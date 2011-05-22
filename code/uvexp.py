@@ -83,7 +83,7 @@ class Exp:
             avg = sum(self.outcomes[i])/len(self.outcomes[i])
             if avg > abest:
                 ibest, abest = i, avg
-        if random.random() > 1/2+1/k:
+        if random.random() > 1/2+1/2/(k-1):
             self.draw(ibest)
         else:
             self.draw(random.choice(range(len(self.outcomes))))
