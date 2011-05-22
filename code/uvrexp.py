@@ -4,7 +4,7 @@ import sys
 
 class RandomHandle(Handle):
     def __init__(self, mean):
-        flip = 0 # random.randrange(3)
+        flip = random.randrange(3)
         if flip==0: # bi-value
             draw = lambda: random.random() < mean and 1.0 or 0.0
         elif flip==1: # constant
