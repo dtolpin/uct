@@ -1,4 +1,5 @@
 from uvexp import *
+import math
 import sys
 
 class RandomHandle(Handle):
@@ -24,10 +25,24 @@ def repeat_alg(alg=UCB, mkhandles=lambda: [RandomHandle(random.random()) for i i
     regret = sum(r[1] for r in results)/nruns
     return (drawcounts, regret)
 
+def sigmoid(x):
+    return math.tanh(5*(x-0.5))
+    
+def steps(x):
+    return (x<0.5) and x/1.5+0.1 or 0.5+(x-0.5)/8+0.1
+
+def slop(x):
+    return (x<0.5) and x/8+0.3 or (x-0.5)/1.5+0.6
+
+def mostlybad(x):
+    return (x<0.9) and 0.1 or x
+
+transform = mostlybad # lambda x: x
+    
 def randomexp(nhandles=10, nruns=1000, samples=range(1, 20)):
     print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
     def mkhandles():
-        return [RandomHandle(random.random()) for i in range(nhandles)]
+        return [RandomHandle(transform(random.random())) for i in range(nhandles)]
     handles = mkhandles()
     for nsamples in [nhandles*i for i in samples]:
         print nsamples,

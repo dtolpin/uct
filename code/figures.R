@@ -4,7 +4,7 @@ draw.regrets <- function(regrets_file) {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
 	ylim <- range(0, regrets[-1])
-	plot(x=regrets$nsamples, type='n', xlim=xlim, ylim=ylim, xlab=expression(N[samples]), ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
+	plot(x=regrets$nsamples, type='n', xlim=xlim, ylim=ylim, yaxs='i', xlab=expression(N[samples]), ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
 	i <- 1
 	for(alg in names(regrets)[-1]) {
 		lines(x=regrets$nsamples, y=regrets[[alg]],
@@ -16,7 +16,7 @@ draw.regrets <- function(regrets_file) {
 
 draw.experiment <- function(prefix="") {
   	old.par <- par(no.readonly=TRUE)
-	par(mar=c(4,4,2,2), yaxs='i')
+	par(mar=c(4,4,2,2))
 	layout(cbind(c(1,2,3),c(4,5,6)))
 	for(result in paste(c('symmetric', 'twothirds', 'threequarters', 'quarter', 'third', 'many'), "txt", sep=".")) draw.regrets(paste(prefix,result,sep=""))
         par(old.par)

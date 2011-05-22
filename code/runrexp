@@ -4,5 +4,5 @@ HANDLES=${1:-16}
 RUNS=${2:-1000}
 RESULTS=${3:-random-$HANDLES.txt}
 
-python uvrexp.py $HANDLES $RUNS | tee  random-$HANDLES.txt
+python uvrexp.py $HANDLES $RUNS | tee  $RESULTS
 

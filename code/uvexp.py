@@ -19,7 +19,8 @@ GRD = 'GRD'
 UVB = 'UVB'
 UVB2 = 'UVB2'
 
-ALGORITHMS = [RND, UCB, UCBt, GRD, UVB, UVB2]
+ALGORITHMS = [UCBt, GRD, UVB]
+# ALGORITHMS = [RND, UCB, UCBt, GRD, UVB, UVB2]
 
 class Exp:
 
@@ -74,6 +75,7 @@ class Exp:
 
     # Random greedy
     def GRD(self):
+        k = len(self.outcomes)
         ibest, abest = -1, -1
         indices = range(len(self.outcomes))
         random.shuffle(indices) # break ties randomly
@@ -81,7 +83,7 @@ class Exp:
             avg = sum(self.outcomes[i])/len(self.outcomes[i])
             if avg > abest:
                 ibest, abest = i, avg
-        if random.random() > 2.0/len(self.outcomes):
+        if random.random() > 1/2+1/k:
             self.draw(ibest)
         else:
             self.draw(random.choice(range(len(self.outcomes))))
