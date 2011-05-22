@@ -1,9 +1,10 @@
 #!/bin/sh
 
+NSAMPLES=20000
 
 for transform in $*; do
 	for narms in 8 16 32 64 128 ; do
-		nsamples=`python -c "import math; print int(round(10000/math.log($narms)*math.log(2)))"`
+		nsamples=`python -c "import math; print int(round($NSAMPLES/math.log($narms)*math.log(2)))"`
 		echo $narms $nsamples $transform
 		./runrexp $narms  $nsamples $transform
 	done
