@@ -1,0 +1,21 @@
+
+
+search tree T (with branching factor b and depth d)
+set of handles H of size as number of leaves (b^d)
+search algorithm: chooses a move until arrives at a leave,
+                 returns the handle in the leave
+playout algorithm: selects a move until arrives at a leave,
+                 returns outcome of the handle in the leave
+                 gets selector
+                 passes to next level a next-selector(selector, level,
+                 n-levels)
+regret is computed as
+        the mean of the best handle less the mean of the selected handle
+
+
+playout algorithms to compare:
+        UCT: always UCB
+        VCT: UVB once, then UCB
+        UVT: always UVB
+        
+
