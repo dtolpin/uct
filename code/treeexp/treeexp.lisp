@@ -8,10 +8,12 @@
            "+FIXED-TREE-3X2+"))
 (in-package "TREEEXP")
 
+(defconstant +fringe-width+ 1)
+
 (defun make-fringe (make-arm)
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall make-arm :mean m))
-       (loop as i below 1
+       (loop repeat +fringe-width+
           append (let ((v (random 1.0))) (list v (- 1.0 v))))))
                     
 (defun make-tree (levels branching make-arm)
@@ -19,7 +21,7 @@
   (make-switch 
    :nodes (if (= levels 1)
               (make-fringe make-arm)
-              (coerce (loop as i below branching
+              (coerce (loop repeat branching
                          collect (make-tree (1- levels) branching make-arm))
                       'vector))))
 
@@ -31,7 +33,7 @@
 
 (defun experiment (levels branching make-arm sampling-factor nruns)
   (flet ((avgrwd (select)
-           (/ (float (loop as i below nruns
+           (/ (float (loop repeat nruns
                         sum (let ((tree (make-tree levels branching
                                                    make-arm)))
                               (- (max-mean tree) 
@@ -42,7 +44,23 @@
            (ucreg (avgrwd #'uct-select))
            (uvreg (avgrwd #'uvt-select))
            (rnreg (avgrwd #'random-select)))
-      (format t "~S ~S ~S ~S~%" vcreg ucreg uvreg rnreg))))
+      (format t "~S ~S ~S ~S ~S~%" sampling-factor vcreg ucreg uvreg rnreg)))
+  (force-output *standard-output*))
+
+(defun experiments (levels branching make-arm min-sf max-sf sf-step nruns)
+  (format t "nsamples r_vct r_uct r_uvt r_random~%")
+  (loop for sf from min-sf to max-sf by sf-step
+       do (experiment levels branching make-arm sf nruns)))
+
+(defconstant +number-of-runs+ 16000)
+
+(defun many-experiments ()
+  (loop for b = 4 then (* b 2) repeat 4
+     do (with-open-file (*standard-output* (format nil "twolevel-~S.txt" b)
+                                                :direction :output
+                                                :if-exists :supersede
+                                                :if-does-not-exist :create)
+          (experiments 2 b #'make-armb 4 24 2 (ceiling (/ +number-of-runs+ (log b 2)))))))
 
 ;; Predefined trees for testing 
 

@@ -1,6 +1,6 @@
 ALGORITHMS <- c('rnd', 'ucb', 'sve')
 
-draw.regrets <- function(regrets_file) {
+draw.regrets <- function(regrets_file, legend.position='topright') {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
 	ylim <- range(0, regrets[-1])
@@ -11,7 +11,7 @@ draw.regrets <- function(regrets_file) {
 			  type="o", pch=i)
 		i <- i+1
 	}
-	legend(x='topright', legend=sapply(names(regrets)[-1], function(n) substring(n, 3)), pch=1:length(names(regrets)[-1]))
+	legend(x=legend.position, legend=sapply(names(regrets)[-1], function(n) substring(n, 3)), pch=1:length(names(regrets)[-1]))
 }
 
 draw.experiment <- function(prefix="") {
