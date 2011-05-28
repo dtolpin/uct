@@ -47,20 +47,20 @@
       (format t "~S ~S ~S ~S ~S~%" sampling-factor vcreg ucreg uvreg rnreg)))
   (force-output *standard-output*))
 
-(defun experiments (levels branching make-arm min-sf max-sf sf-step nruns)
+(defun experiments (levels branching make-arm min-sf sf-step n-sf nruns)
   (format t "nsamples r_vct r_uct r_uvt r_random~%")
-  (loop for sf from min-sf to max-sf by sf-step
+  (loop for sf = min-sf then (round (* sf sf-step)) repeat n-sf
        do (experiment levels branching make-arm sf nruns)))
 
 (defconstant +number-of-runs+ 16000)
 
 (defun many-experiments ()
-  (loop for b = 4 then (* b 2) repeat 4
+  (loop for b = 8 then (* b 2) repeat 5
      do (with-open-file (*standard-output* (format nil "twolevel-~S.txt" b)
                                                 :direction :output
                                                 :if-exists :supersede
                                                 :if-does-not-exist :create)
-          (experiments 2 b #'make-armb 4 24 2 (ceiling (/ +number-of-runs+ (log b 2)))))))
+          (experiments 2 b #'make-armb 4 1.3 12 (ceiling (/ +number-of-runs+ (log b 2)))))))
 
 ;; Predefined trees for testing 
 
