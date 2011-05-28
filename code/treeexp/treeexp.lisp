@@ -1,9 +1,48 @@
 (defpackage "TREEEXP"
   (:documentation "Comparing MCTS algorithms on search trees")
   (:use "COMMON-LISP" "MCTS" "COMMON-LISP-USER")
-  (:export "+RANDOM-TREE-2X2+"
+  (:export "EXPERIMENT"
+           "MAKE-TREE"
+           "MAX-MEAN"
+           "+RANDOM-TREE-2X2+"
            "+FIXED-TREE-3X2+"))
 (in-package "TREEEXP")
+
+(defun make-fringe (make-arm)
+  "make a random fringe with mean 0.5"
+  (map 'vector (lambda (m) (funcall make-arm :mean m))
+       (loop as i below 1
+          append (let ((v (random 1.0))) (list v (- 1.0 v))))))
+                    
+(defun make-tree (levels branching make-arm)
+  "make a random tree"
+  (make-switch 
+   :nodes (if (= levels 1)
+              (make-fringe make-arm)
+              (coerce (loop as i below branching
+                         collect (make-tree (1- levels) branching make-arm))
+                      'vector))))
+
+(defun max-mean (tree)
+  "find the max mean of arms"
+  (etypecase tree
+    (arm (arm-mean tree))
+    (switch (reduce #'max (map 'list #'max-mean (switch-nodes tree))))))
+
+(defun experiment (levels branching make-arm sampling-factor nruns)
+  (flet ((avgrwd (select)
+           (/ (float (loop as i below nruns
+                        sum (let ((tree (make-tree levels branching
+                                                   make-arm)))
+                              (- (max-mean tree) 
+                                 (pull-best-arm tree
+                                                select sampling-factor)))))
+              nruns)))
+    (let* ((vcreg (avgrwd #'vct-select))
+           (ucreg (avgrwd #'uct-select))
+           (uvreg (avgrwd #'uvt-select))
+           (rnreg (avgrwd #'random-select)))
+      (format t "~S ~S ~S ~S~%" vcreg ucreg uvreg rnreg))))
 
 ;; Predefined trees for testing 
 

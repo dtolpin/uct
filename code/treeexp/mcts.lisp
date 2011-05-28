@@ -2,7 +2,7 @@
   (:documentation "algorithms for Monte Carlo Tree Sampling")
   (:use "COMMON-LISP")
   (:export "*SAMPLING-FACTOR*"
-           "SWITCH" "MAKE-SWITCH"
+           "SWITCH" "MAKE-SWITCH" "SWITCH-NODES"
            "ARM" "MAKE-ARM" "ARM-MEAN"
            "MAKE-ARMB" "MAKE-ARMF"
            "PULL-BEST-ARM"
@@ -46,6 +46,8 @@
   (* (1+ *sampling-factor*) (length (switch-nodes switch))))
 
 
+;; Handling sampling statistics
+
 (defstruct stat
   "play stat"
   (count 0)
@@ -68,6 +70,14 @@
     (or (gethash key *play-stats*)
         (setf (gethash key *play-stats*) (make-stat)))))
 
+(defun update-stats (switch node reward)
+  (let ((stat (get-stat switch node)))
+    (incf (stat-count stat))
+    (incf (stat-sum stat) reward))
+  reward)
+
+;; Playing a playout
+
 (defgeneric play (node select)
   (:documentation "play from this node, return reward"))
 
@@ -76,16 +86,12 @@
   (multiple-value-bind (node select) (funcall select switch)
     (update-stats switch node (play node select))))
 
-(defun update-stats (switch node reward)
-  (let ((stat (get-stat switch node)))
-    (incf (stat-count stat))
-    (incf (stat-sum stat) reward))
-  reward)
-
 (defmethod play ((arm arm) select)
   "playing a leaf node --- drawing the arm"
   (declare (ignore select))
   (draw arm))
+
+;; Move selection function: sampling, then committing
 
 (defun mk-commit-select (sampling-select)
   "sample actions, choose the one with the highest average"
@@ -110,9 +116,11 @@
                            avgmax avg)))))))
     #'commit-select))
 
+;; Various arms with different reward distributions can be defined
 (defgeneric draw (arm)
   (:documentation "draw the arm and return the outcome"))
- 
+
+;; Finally, the main function --- pulling the best arm
 (defun pull-best-arm (tree sampling-select 
                       &optional (*sampling-factor* *sampling-factor*))
   "pull the best arm"
@@ -133,14 +141,14 @@
   "Bernoulli arm: either 0.0 or 1.0"
   (if (< (random 1.0) (arm-mean arm)) 1.0 0.0))
 
-;;; Random sampling
+;;; Sampling algorithms
 
+;; Random sampling
 (defun random-select (switch)
   (values (aref (switch-nodes switch) (random (length (switch-nodes switch))))
           #'random-select))
 
-;; make sampling select function by closing on the statistics hash table
-
+;; Single-level adaptive selection
 (defun ucb (switch)
   "UCB selection: max (avg+sqrt(2*log (n) / ni))"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
@@ -159,7 +167,6 @@
           (setf nodemax (aref (switch-nodes switch) i)
                 bmax b))))))
                      
-                      
 (defun uvb (switch)
   "UVB selection: max [(1-1/k)/ni for best, 1/k/ni for rest]"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
@@ -178,17 +185,19 @@
           (setf nodemax (aref (switch-nodes switch) i)
                 bmax b))))))
 
-;;; UCT
+;;; Adaptive sampling selection functions for passing to `pull-best-arm'
+
+;; UCT
 
 (defun uct-select (switch)
   (values (ucb switch) #'uct-select))
 
-;;; UVT
+;; UVT
 
 (defun uvt-select (switch)
   (values (uvb switch) #'uvt-select))
 
-;;; VCT
+;; VCT
 
 (defun vct-select (switch)
   (values (uvb switch) #'uct-select))
