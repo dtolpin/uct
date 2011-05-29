@@ -31,7 +31,7 @@
     (arm (arm-mean tree))
     (switch (reduce #'max (map 'list #'max-mean (switch-nodes tree))))))
 
-(defun experiment (levels branching make-arm sampling-factor nruns)
+(defun experiment (levels branching make-arm sampling-factor nruns &key (vararm nil))
   (flet ((avgrwd (select)
            (/ (float (loop repeat nruns
                         sum (let ((tree (make-tree levels branching
@@ -44,13 +44,21 @@
            (ucreg (avgrwd #'uct-select))
            (uvreg (avgrwd #'uvt-select))
            (rnreg (avgrwd #'random-select)))
-      (format t "~S ~S ~S ~S ~S~%" sampling-factor vcreg ucreg uvreg rnreg)))
+      (format t "~S ~S ~S ~S ~S~%" (if vararm branching sampling-factor) vcreg ucreg uvreg rnreg)))
   (force-output *standard-output*))
 
-(defun experiments (levels branching make-arm min-sf sf-step n-sf nruns)
+(defun experiments (levels branching make-arm min-sf sf-step n-sf nruns &key (vararm nil))
   (format t "nsamples r_vct r_uct r_uvt r_random~%")
   (loop for sf = min-sf then (round (* sf sf-step)) repeat n-sf
-       do (experiment levels branching make-arm sf nruns)))
+       do (experiment levels branching make-arm sf nruns :vararm vararm)))
+
+(defun vararm-experiments (levels sampling-factor make-arm
+                           min-b b-step n-b nruns)
+  (format t "nsamples r_vct r_uct r_uvt r_random~%")
+  (loop for b = min-b then (round (* b b-step)) repeat n-b
+     do (experiment levels b make-arm sampling-factor
+                    (ceiling (/ nruns (log b 2)))
+                    :vararm t)))
 
 (defconstant +number-of-runs+ 16000)
 

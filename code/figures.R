@@ -1,10 +1,10 @@
 ALGORITHMS <- c('rnd', 'ucb', 'sve')
 
-draw.regrets <- function(regrets_file, legend.position='topright') {
+draw.regrets <- function(regrets_file, legend.position='topright', xlab=expresion(N[samples])) {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
 	ylim <- range(0, regrets[-1])
-	plot(x=regrets$nsamples, type='n', log="x", xlim=xlim, ylim=ylim, yaxs='i', xlab=expression(N[samples]), ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
+	plot(x=regrets$nsamples, type='n', log="x", xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
 	i <- 1
 	for(alg in names(regrets)[-1]) {
 		lines(x=regrets$nsamples, y=regrets[[alg]],
