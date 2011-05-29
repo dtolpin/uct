@@ -37,6 +37,7 @@ compare.random <- function(upper_file='random-upper.txt', greedy_file='random-gr
 }
 
 draw.random <- function(prefix='random', legend.position='topright') {
+  par(mar=c(4,4,2,2))
   layout(cbind(c(1,2),c(3,4)))
   draw.regrets(paste(prefix,'8.txt',sep='-'), legend.position=legend.position)
   draw.regrets(paste(prefix,'16.txt',sep='-'), legend.position=legend.position)
