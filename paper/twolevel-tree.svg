@@ -85,11 +85,15 @@
 </symbol>
 </g>
 <clipPath id="clip1">
+  <path d="M 0 230 L 266 230 L 266 0 L 0 0 L 0 230 Z M 0 230 "/>
+</clipPath>
+<clipPath id="clip2">
   <path d="M -148 668 L 464 668 L 464 -124 L -148 -124 L -148 668 Z M -148 668 "/>
 </clipPath>
 </defs>
 <g id="surface0">
 <g clip-path="url(#clip1)" clip-rule="nonzero">
+<g clip-path="url(#clip2)" clip-rule="nonzero">
 <path style="fill:none;stroke-width:0.79701;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0.396594 -6.384156 L 25.05675 -6.384156 L 25.05675 6.385375 L 0.396594 6.385375 L 0.396594 -6.384156 Z M 0.396594 -6.384156 " transform="matrix(1,0,0,-1,0.912,95.026)"/>
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
   <use xlink:href="#glyph0-1" x="4.631" y="98.089"/>
@@ -341,6 +345,7 @@
   <use xlink:href="#glyph1-10" x="258.879221" y="168.355"/>
 </g>
 <path style="fill:none;stroke-width:0.3985;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-dasharray:2.98883,2.98883;stroke-miterlimit:10;" d="M 15.115344 -6.782594 L 55.248156 -120.474 L 97.767687 -120.474 L 97.767687 -106.302125 L 133.201281 -106.302125 M 97.767687 -120.474 L 97.767687 -134.645875 L 126.115344 -134.645875 " transform="matrix(1,0,0,-1,0.912,95.026)"/>
+</g>
 </g>
 </g>
 </svg>
