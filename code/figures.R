@@ -36,10 +36,10 @@ compare.random <- function(upper_file='random-upper.txt', greedy_file='random-gr
   legend(x='topright', legend=c('upper', 'greedy', 'semigreedy'), pch=1:3)
 }
 
-draw.random <- function() {
+draw.random <- function(prefix='random', legend.position='topright') {
   layout(cbind(c(1,2),c(3,4)))
-  draw.regrets('random-8.txt')
-  draw.regrets('random-16.txt')
-  draw.regrets('random-32.txt')
-  draw.regrets('random-64.txt')
+  draw.regrets(paste(prefix,'8.txt',sep='-'), legend.position=legend.position)
+  draw.regrets(paste(prefix,'16.txt',sep='-'), legend.position=legend.position)
+  draw.regrets(paste(prefix,'32.txt',sep='-'), legend.position=legend.position)
+  draw.regrets(paste(prefix,'64.txt',sep='-'), legend.position=legend.position)
 }
