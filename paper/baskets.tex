@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage{dingbat}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric}
@@ -16,9 +17,9 @@
 	good/.style={basket, thick, draw=green!50!black, fill=green!20!white}]
 
 \draw [->,thick,draw=,>=stealth] (-2,-0.75) node [above right,gray] {0} -- (6.5, -0.75) node [above left,green!80!black] {1} node [below left,black] {Quality};
-\node [poor] at (0.6,0) {Poor};
-\node [poor] at (0.2,-0.5) {Poor};
-\node [poor] at (-0.2,-1) {Poor};
+\node [poor] at (0.6,0.0) {Poor};
+\node [poor] at (0.1,-0.5) {Poor};
+\node [poor] at (-0.4,-1.0) {Poor};
 \node [poor] at (-0.6,-1.5) {Poor};
 \node [good] at (4,-0.75) {Good};
 
