@@ -1,6 +1,6 @@
 ALGORITHMS <- c('rnd', 'ucb', 'sve')
 
-draw.regrets <- function(regrets_file, legend.position='topright', xlab=expresion(N[samples])) {
+draw.regrets <- function(regrets_file, legend.position='topright', xlab=expression(N[samples])) {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
 	ylim <- range(0, regrets[-1])
