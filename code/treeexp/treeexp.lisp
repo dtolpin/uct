@@ -16,13 +16,16 @@
        (loop repeat +fringe-width+
           append (let ((v (random 1.0))) (list v (- 1.0 v))))))
                     
-(defun make-tree (levels branching make-arm)
+(defun make-tree (levels branching make-arm 
+                  &optional
+                  (make-aswitch #'make-switch) (make-bswitch #'make-antiswitch))
   "make a random tree"
-  (make-switch 
+  (funcall make-aswitch 
    :nodes (if (= levels 1)
               (make-fringe make-arm)
               (coerce (loop repeat branching
-                         collect (make-tree (1- levels) branching make-arm))
+                         collect (make-tree (1- levels) branching make-arm
+                                            make-bswitch make-aswitch))
                       'vector))))
 
 (defun max-mean (tree)
@@ -31,11 +34,15 @@
     (arm (arm-mean tree))
     (switch (reduce #'max (map 'list #'max-mean (switch-nodes tree))))))
 
-(defun experiment (levels branching make-arm sampling-factor nruns &key (vararm nil))
+(defun experiment (levels branching make-arm make-bswitch sampling-factor nruns
+                   &key (vararm nil))
   (flet ((avgrwd (select)
            (/ (float (loop repeat nruns
-                        sum (let ((tree (make-tree levels branching
-                                                   make-arm)))
+                        sum (let* ((tree (with-unique-node-ids
+                                             (make-tree
+                                              levels branching
+                                              make-arm
+                                              #'make-switch make-bswitch))))
                               (- (max-mean tree) 
                                  (pull-best-arm tree
                                                 select sampling-factor)))))
@@ -44,19 +51,21 @@
            (ucreg (avgrwd #'uct-select))
            (uvreg (avgrwd #'uvt-select))
            (rnreg (avgrwd #'random-select)))
-      (format t "~S ~S ~S ~S ~S~%" (if vararm branching sampling-factor) vcreg ucreg uvreg rnreg)))
+      (format t "~S ~S ~S ~S ~S~%"
+              (if vararm branching sampling-factor) vcreg ucreg uvreg rnreg)))
   (force-output *standard-output*))
 
-(defun experiments (levels branching make-arm min-sf sf-step n-sf nruns &key (vararm nil))
+(defun experiments (levels branching make-arm make-bswitch min-sf sf-step n-sf nruns
+                    &key (vararm nil))
   (format t "nsamples r_vct r_uct r_uvt r_random~%")
   (loop for sf = min-sf then (round (* sf sf-step)) repeat n-sf
-       do (experiment levels branching make-arm sf nruns :vararm vararm)))
+       do (experiment levels branching make-arm make-bswitch sf nruns :vararm vararm)))
 
-(defun vararm-experiments (levels sampling-factor make-arm
+(defun vararm-experiments (levels sampling-factor make-arm make-bswitch
                            min-b b-step n-b nruns)
   (format t "nsamples r_vct r_uct r_uvt r_random~%")
   (loop for b = min-b then (round (* b b-step)) repeat n-b
-     do (experiment levels b make-arm sampling-factor
+     do (experiment levels b make-arm make-bswitch sampling-factor
                     (ceiling (/ nruns (log b 2)))
                     :vararm t)))
 
@@ -68,7 +77,7 @@
                                                 :direction :output
                                                 :if-exists :supersede
                                                 :if-does-not-exist :create)
-          (experiments 2 b #'make-armb 4 1.3 12 (ceiling (/ +number-of-runs+ (log b 2)))))))
+          (experiments 2 b #'make-armb #'make-switch 4 1.3 12 (ceiling (/ +number-of-runs+ (log b 2)))))))
 
 ;; Predefined trees for testing 
 
