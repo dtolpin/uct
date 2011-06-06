@@ -202,7 +202,7 @@
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
          (avgs (map 'vector #'stat-avg node-stats))
-         (best-avg (reduce #'max avgs))
+         (best-avg (reduce #'(lambda (x y) (if (better-reward switch x y) x y)) avgs))
          (kappa (/ 1.0 (length (switch-nodes switch))))
          (best-node nil)
          (best-reward (lowest-reward switch)))

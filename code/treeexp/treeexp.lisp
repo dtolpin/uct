@@ -18,7 +18,7 @@
                     
 (defun make-tree (levels branching make-arm 
                   &optional
-                  (make-aswitch #'make-switch) (make-bswitch #'make-antiswitch))
+                  (make-aswitch #'make-antiswitch) (make-bswitch #'make-antiswitch))
   "make a random tree"
   (funcall make-aswitch 
    :nodes (if (= levels 1)
@@ -32,7 +32,7 @@
   "find the max mean of arms"
   (etypecase tree
     (arm (arm-mean tree))
-    (switch (reduce #'max (map 'list #'max-mean (switch-nodes tree))))))
+    (switch (reduce #'min (map 'list #'max-mean (switch-nodes tree))))))
 
 (defun experiment (levels branching make-arm make-bswitch sampling-factor nruns
                    &key (vararm nil))
