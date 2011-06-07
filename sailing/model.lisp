@@ -5,7 +5,7 @@
 ;; the map size, 
 ;;   the initial position is (1 . 1) 
 ;;   the final position is (*size* . *size*)
-(defvar *size* 2)
+(defvar *size* 4)
 
 (defconstant +delay-cost+ 3)
 (defconstant +away-cost+ 1)
@@ -36,10 +36,14 @@
      (sqrt (* (sprod xa ya xa ya) (sprod xb yb xb yb)))))
 
 (defparameter +directions+
+  ; I can write a function that generates the vector
+  ; automatically, but such function would clutter the
+  ; code and obscur understanding
   #(( 1 .  0) ( 1 .  1)   ; E NE
     ( 0 .  1) (-1 .  1)   ; N NW
     (-1 .  0) (-1 . -1)   ; W SW
-    ( 0 . -1) ( 1 . -1))) ; S SE
+    ( 0 . -1) ( 1 . -1))  ; S SE
+  "a vector of direction vectors")
 
 (defun dir-x (d) (first d))
 (defun dir-y (d) (rest d))
@@ -78,7 +82,8 @@
                   ((> c 0.5) +down-cost+)
                   ((> c -0.5) +cross-cost+)
                   ((> c -0.9) +up-cost+)
-                  (t +in-cost+))))))))
+                  (t +in-cost+)))))))
+  "costs of direction-wind combinations, not including delay cost")
 
 (defparameter +wind-transitions+
   (let ((trans (make-array `(,+ndirs+ ,+ndirs+)
@@ -93,7 +98,8 @@
                 (cond
                   ((> c 0.9) +same-wind-prob+)
                   ((> c 0.5) +adj-wind-prob+)
-                  (t 0.0))))))))
+                  (t 0.0)))))))
+  "wind transition probabilities")
 
 (defstruct state
   "world state"
@@ -102,6 +108,18 @@
   (ptack 0 :type tack)           ; previous boat tack
   (pleg 0 :type direction)       ; previous boat leg
   (wind 0 :type direction))      ; current wind direction
+
+(defun make-initial-state (&key 
+                           (ptack (1- (random 3)))
+                           (pleg (random +ndirs+))
+                           (wind (random +ndirs+)))
+  "makes an initial state, ptack, pleg and wind
+   are initialized randomly if unspecified"
+  (make-state :ptack ptack :pleg pleg :wind wind))
+
+(defun goal-state-p (state)
+  "tests whether the goal state is reached"
+  (and (= (state-x state) *size*) (= (state-y state) *size*)))
 
 (defun leg-cost (state leg)
   "returns actio cost for the action in the state"
@@ -149,7 +167,7 @@
 (defun test-coord ()
   (assert (= (next-coord *size* 1) *size*))
   (assert (= (next-coord 1 -1) 1))
-  (assert (= (next-coord 2 1) 3)))
+  (assert (= (next-coord 1 1) 2)))
 
 (defun test-wind ()
   (assert (> (aref +wind-transitions+ 3 4) 0.0))
