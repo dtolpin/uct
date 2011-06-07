@@ -16,6 +16,7 @@
 (defconstant +same-wind-prob+ 0.4)
 (defconstant +adj-wind-prob+ (/ (- 1.0 +same-wind-prob+) 2.0))
 
+;; type synonyms, mostly for documenting
 (defconstant +ndirs+ 8)
 (deftype direction () `(integer 0 ,+ndirs+))
 (deftype tack () '(integer -1 1))
@@ -35,10 +36,13 @@
   (/ (sprod xa ya xb yb)
      (sqrt (* (sprod xa ya xa ya) (sprod xb yb xb yb)))))
 
+(defparameter +legs+
+  (loop for leg below +ndirs+ collect leg)
+  "a list of leg indices, useful for iterations")
+
 (defparameter +directions+
-  ; I can write a function that generates the vector
-  ; automatically, but such function would clutter the
-  ; code and obscur understanding
+  ;; could write a function that generates the vector
+  ;; automatically, but would clutter the code
   #(( 1 .  0) ( 1 .  1)   ; E NE
     ( 0 .  1) (-1 .  1)   ; N NW
     (-1 .  0) (-1 . -1)   ; W SW
@@ -54,10 +58,12 @@
     (dotimes (l +ndirs+ tacks)
         (dotimes (w +ndirs+)
           (setf (aref tacks l w) 
-                (signum (- (* (dir-x (aref +directions+ l))
-                (dir-y (aref +directions+ w)))
-             (* (dir-x (aref +directions+ w))
-                (dir-y (aref +directions+ l)))))))))
+                ;; sign of cross-product,
+                ;; same sign if same tack, zero is neutral (in or away)
+                (signum (xprod (dir-x (aref +directions+ l))
+                               (dir-y (aref +directions+ l))
+                               (dir-x (aref +directions+ w))
+                               (dir-y (aref +directions+ w))))))))
   "tacks matrix: leg x wind -> (0, 1, -1)")
 
 (defun opposite-tacks-p (ta tb)
@@ -136,6 +142,7 @@
   "randomly selects the next wind direction"
   (let ((r (random 1.0)))
     (dotimes (next-wind +ndirs+ wind)
+      ;; roulette wheel on wind probabilities
       (decf r (aref +wind-transitions+ wind next-wind))
       (if (< r 0.0) (return next-wind)))))
 

@@ -1,5 +1,8 @@
 (defpackage "SAILING"
   (:documentation "Sailing strategy simulations")
   (:use "COMMON-LISP")
-  (:export ))
+  (:export "MAKE-INITIAL-STATE"
+           "REACH-GOAL-STATE"
+           "UCT"
+           "UVT"))
 (in-package "SAILING")
