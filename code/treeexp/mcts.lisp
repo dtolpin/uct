@@ -235,3 +235,31 @@
 (defun vct-select (switch)
   (values (uvb switch) #'uct-select))
 
+;; Testing
+
+(defmacro RUN-TEST (test-name)
+  `(progn 
+     (format *error-output* " ~(~A~)" ',test-name)
+     (clear-output *error-output*)
+     (,test-name)
+     (format *error-output* " (ok)")
+     (clear-output *error-output*)))
+
+(let ((test-tree (make-switch :nodes (vector (make-armf :mean 0.0) (make-armf :mean 1.0))))
+      (*sampling-factor* 1))
+
+  (defun test-uct ()
+    (assert (= (pull-best-arm test-tree #'uct-select) 1.0)))
+
+  (defun test-vct ()
+    (assert (= (pull-best-arm test-tree #'uct-select) 1.0))))
+
+(defun test ()
+  (format *error-output* "Testing ~A:" (package-name (symbol-package 'test)))
+  (run-test test-uct)
+  (run-test test-vct)
+  (format *error-output* "~%") (clear-output *error-output*))
+
+
+(eval-when (:execute :load-toplevel)
+  (test))
