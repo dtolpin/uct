@@ -1,5 +1,7 @@
 (in-package "SAILING")
 
+;; Lake and boat model
+
 ;; the map size, 
 ;;   the initial position is (1 . 1) 
 ;;   the final position is (*size* . *size*)
