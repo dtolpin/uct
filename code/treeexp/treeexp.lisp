@@ -14,6 +14,11 @@
            "+FIXED-TREE-3X2+"))
 (in-package "TREEEXP")
 
+(defvar *make-arm* #'make-armf)
+(defvar *make-alpha-switch* #'make-switch)
+(defvar *make-beta-switch* #'make-switch)
+(defvar *choose* #'max)
+
 (defconstant +fringe-width+ 1)
 
 (defun make-fringe ()
@@ -21,11 +26,6 @@
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
        (loop repeat +fringe-width+
           append (let ((v (random 1.0))) (list v (- 1.0 v))))))
-
-(defvar *make-arm* #'make-armf)
-(defvar *make-alpha-switch* #'make-switch)
-(defvar *make-beta-switch* #'make-switch)
-(defvar *choose* #'max)
 
 (defun make-tree (levels branching
                   &optional
