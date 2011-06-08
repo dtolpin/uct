@@ -12,7 +12,7 @@
 (defconstant +down-cost+ 2)
 (defconstant +cross-cost+ 3)
 (defconstant +up-cost+ 4)
-(defconstant +in-cost+ 1024)
+(defconstant +in-cost+ most-negative-fixnum)
 (defconstant +same-wind-prob+ 0.4)
 (defconstant +adj-wind-prob+ (/ (- 1.0 +same-wind-prob+) 2.0))
 
@@ -112,16 +112,14 @@
   (x 1 :type fixnum)             ; boat position
   (y 1 :type fixnum)        
   (ptack 0 :type tack)           ; previous boat tack
-  (pleg 0 :type direction)       ; previous boat leg
   (wind 0 :type direction))      ; current wind direction
 
 (defun make-initial-state (&key 
                            (ptack (1- (random 3)))
-                           (pleg (random +ndirs+))
                            (wind (random +ndirs+)))
-  "makes an initial state, ptack, pleg and wind
+  "makes an initial state, ptack, and wind
    are initialized randomly if unspecified"
-  (make-state :ptack ptack :pleg pleg :wind wind))
+  (make-state :ptack ptack :wind wind))
 
 (defun goal-state-p (state)
   "tests whether the goal state is reached"
@@ -148,14 +146,11 @@
 
 (defun next-state (state leg)
   "returns the new state after following `leg' in `state'"
-  (with-slots (x y ptack pleg wind) (the state state)
-    (values
-     (make-state :x (next-coord x (dir-x (aref +directions+ leg)))
-                 :y (next-coord y (dir-y (aref +directions+ leg)))
-                 :ptack (aref +tacks+ leg wind)
-                 :pleg leg
-                 :wind (next-wind wind))
-     (leg-cost state leg))))
+  (with-slots (x y ptack wind) (the state state)
+    (make-state :x (next-coord x (dir-x (aref +directions+ leg)))
+                :y (next-coord y (dir-y (aref +directions+ leg)))
+                :ptack (aref +tacks+ leg wind)
+                :wind (next-wind wind))))
 
 ;; Testing
 
@@ -169,7 +164,7 @@
   (assert (= +cross-cost+ (aref +costs+ 4 2)))
   (assert (= +up-cost+ (aref +costs+ 3 0)))
   (assert (= +down-cost+ (aref +costs+ 7 6)))
-  (assert (= +in-cost+ (aref +costs+ 0 4))))
+  (assert (eql +in-cost+ (aref +costs+ 0 4))))
 
 (defun test-coord ()
   (assert (= (next-coord *size* 1) *size*))

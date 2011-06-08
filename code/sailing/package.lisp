@@ -3,6 +3,6 @@
   (:use "COMMON-LISP")
   (:export "MAKE-INITIAL-STATE"
            "REACH-GOAL-STATE"
-           "UCT"
-           "UVT"))
+           "UCT-SELECT"
+           "UVT-SELECT"))
 (in-package "SAILING")

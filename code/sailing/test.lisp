@@ -11,6 +11,7 @@
 (defun test ()
   (format *error-output* "Testing ~A:" (package-name (symbol-package 'test)))
   (run-test test-model)
+  (run-test test-agent)
   (format *error-output* "~%") (clear-output *error-output*))
 
 (eval-when (:load-toplevel :execute)

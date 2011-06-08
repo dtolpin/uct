@@ -6,6 +6,8 @@
   "number of playouts per state")
 (defvar *uct-exploration-factor* 0.25
   "the greater the factor, the more exploratory is UCT")
+(defvar *trace-state* #'identity
+  "function called on each state")
 
 (defconstant +max-manhattans+ 4)
 
@@ -31,7 +33,7 @@
   "pessimistic evaluation function, so that bad moves
    are visited rarely"
   ;; manhattan into wind and delay at each step
-  (* (+ +in-cost+ +delay-cost+) 
+  (* (+ +up-cost+ +delay-cost+) 
      (+ (- *size* (state-x state)) (- *size* (state-y state)))))
 
 ;; Bounding rewards
@@ -53,35 +55,56 @@
            (funcall select state)
          (update-stats
           state leg
-          (play (next-state state leg) select
-                (1- time-left)))))))
+          (+ (leg-cost state leg)
+             (play (next-state state leg) select
+                   (1- time-left))))))))
 
 (defconstant +infinite-time-left+ -1
   "actual search continues infinitely")
 
 ;; Sampling statistics
+(defstruct stat
+  "play stat"
+  (count 0 :type fixnum)
+  (sum 0.0d0 :type double-float))
+
 (defvar *play-stats* nil
   "playout statistics")
 
-(defun update-stats (state leg cost)
-  "updates statistics for the given (state, leg) combination"
-  cost)
+(defun stat-key (state leg)
+  "key of entry in stats"
+  (+ (state-ptack state)
+     (* 3
+        (+ (state-wind state)
+           (* +ndirs+ 
+              (+ leg 
+                 (* +ndirs+ 
+                    (+ (state-x state)
+                       (* *size* (state-y state))))))))))
 
 (defun get-stat (state leg)
   "returns statistics for the given (state,leg) combination"
-  )
+  (let ((key (stat-key state leg)))
+    (or (gethash key *play-stats*)
+        (setf (gethash key *play-stats*) (make-stat)))))
+
+(defun update-stats (state leg cost)
+  "updates statistics for the given (state, leg) combination"
+  (let ((stat (get-stat state leg)))
+    (incf (stat-count stat))
+    (incf (stat-sum stat) cost))
+  cost)
 
 (defun stat-avg (stat)
   "returns average cost"
-  0.0)
-
-(defparameter +legs+
-  (loop for leg below +ndirs+ collect leg)
-  "a list of leg indices, useful for iterations")
+  (if (plusp (stat-count stat))
+      (/ (stat-sum stat) (stat-count stat))
+      most-positive-single-float))
 
 (defun mk-commit-select (sampling-select)
   "sample actions, choose the one with the best average"
   (labels ((commit-select (state)
+             (funcall *trace-state* state)
              (let ((time-left (max-playout-time state)))
                ;; gather playing statistics
                (dotimes (i *nsamples*)
@@ -97,6 +120,8 @@
                      (best-leg nil)
                      (best-avg most-positive-single-float))
 
+                 #+nil(format *error-output* "~S~%" (map 'list (lambda (stat) (list (stat-count stat) (stat-avg stat))) stats))
+
                  ;; select best action
                  (dolist (leg (shuffled-legs) (values best-leg #'commit-select))
                    (let ((avg (stat-avg (aref stats leg))))
@@ -109,15 +134,66 @@
                          &key
                          ((:size *size*) *size*)
                          ((:nsamples *nsamples*) *nsamples*)
-                         (trace #'identity)) ; callback to trace the path
+                         ((:trace-state *trace-state*) *trace-state*))
   "reaches the goal state from the initial state,
    returns the path cost"
   (let ((*play-stats* (make-hash-table :test #'equal)))
-    (play initial-state (mk-commit-select select) +infinite-time-left+)))
+    (play initial-state (mk-commit-select select) (max-playout-time initial-state))))
 
 ;; Selectors
 
+(defun random-select (state)
+  (values (loop (let ((leg (random +ndirs+)))
+                  (when (plusp (leg-cost state leg))
+                    (return leg))))
+          #'random-select))
 
+(defun ucb (state)
+  "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
+  (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg))
+                           +legs+))
+         (avgs (map 'vector #'stat-avg state-stats))
+         (Cp-root-log-n
+          (* (Cp state) (sqrt (reduce #'+ state-stats :key #'stat-count))))
+         (best-leg nil)
+         (best-cost most-positive-single-float))
+    (dolist (leg (shuffled-legs) best-leg)
+      (let ((cost (cond
+                    ((> (stat-count (aref state-stats leg)) 0)
+                     (- (aref avgs leg)
+                        (/ Cp-root-log-n (sqrt (stat-count (aref state-stats leg))))))
+                    ((plusp (leg-cost state leg)) most-negative-single-float)
+                    (t most-positive-single-float))))
+        (when (< cost best-cost)
+          (setf best-leg leg
+                best-cost cost))))))
 
+(defun uvb (state)
+  "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
+  (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg)) +legs+))
+         (avgs (map 'vector #'stat-avg state-stats))
+         (best-avg (reduce #'min avgs))
+         (kappa (/ 1.0 +ndirs+))
+         (best-leg nil)
+         (best-reward most-negative-single-float))
+    (dolist (leg (shuffled-legs) best-leg)
+      (let ((reward (cond
+                      ((> (stat-count (aref state-stats leg)) 0)
+                       (/ (if (= (aref avgs leg) best-avg) (- 1.0 kappa) kappa)
+                          (stat-count (aref state-stats leg))))
+                      ((plusp (leg-cost state leg)) most-positive-single-float)
+                      (t most-negative-single-float))))
+        (when (> reward best-reward)
+          (setf best-leg leg
+                best-reward reward))))))
 
+(defun uct-select (state)
+  (values (ucb state) #'uct-select))
 
+(defun vct-select (state)
+  (values (uvb state) #'uct-select))
+
+;; Testing
+
+(defun test-agent ()
+  (format *error-output* "~&No tests for sailing-agent~%"))
