@@ -7,12 +7,12 @@
 ;;   the final position is (*size* . *size*)
 (defvar *size* 4)
 
-(defconstant +delay-cost+ 3)
-(defconstant +away-cost+ 1)
-(defconstant +down-cost+ 2)
-(defconstant +cross-cost+ 3)
-(defconstant +up-cost+ 4)
-(defconstant +in-cost+ most-negative-fixnum)
+(defconstant +delay-cost+ 3.0)
+(defconstant +away-cost+ 1.0)
+(defconstant +down-cost+ 2.0)
+(defconstant +cross-cost+ 3.0)
+(defconstant +up-cost+ 4.0)
+(defconstant +into-cost+ (float most-positive-fixnum))
 (defconstant +same-wind-prob+ 0.4)
 (defconstant +adj-wind-prob+ (/ (- 1.0 +same-wind-prob+) 2.0))
 
@@ -31,16 +31,20 @@
   "scalar product"
   (+ (* xa xb) (* ya yb)))
 
+(defun norm (x y)
+  "scalar norm"
+  (sqrt (sprod x y x y)))
+
 (defun cprod (xa ya xb yb)
   "cosinus product"
   (/ (sprod xa ya xb yb)
-     (sqrt (* (sprod xa ya xa ya) (sprod xb yb xb yb)))))
+     (* (norm xa ya) (norm xb yb))))
 
 (defparameter +legs+
   (loop for leg below +ndirs+ collect leg)
   "a list of leg indices, useful for iterations")
 
-(defparameter +directions+
+(defparameter +dirs+
   ;; could write a function that generates the vector
   ;; automatically, but would clutter the code
   #(( 1 .  0) ( 1 .  1)   ; E NE
@@ -60,10 +64,10 @@
           (setf (aref tacks l w) 
                 ;; sign of cross-product,
                 ;; same sign if same tack, zero is neutral (in or away)
-                (signum (xprod (dir-x (aref +directions+ l))
-                               (dir-y (aref +directions+ l))
-                               (dir-x (aref +directions+ w))
-                               (dir-y (aref +directions+ w))))))))
+                (signum (xprod (dir-x (aref +dirs+ l))
+                               (dir-y (aref +dirs+ l))
+                               (dir-x (aref +dirs+ w))
+                               (dir-y (aref +dirs+ w))))))))
   "tacks matrix: leg x wind -> (0, 1, -1)")
 
 (defun opposite-tacks-p (ta tb)
@@ -78,17 +82,17 @@
                            :element-type 'float :initial-element 0.0)))
     (dotimes (l +ndirs+ costs)
       (dotimes (w +ndirs+)
-        (let ((c (cprod (dir-x (aref +directions+ l))
-                        (dir-y (aref +directions+ l))
-                        (dir-x (aref +directions+ w))
-                        (dir-y (aref +directions+ w)))))
+        (let ((c (cprod (dir-x (aref +dirs+ l))
+                        (dir-y (aref +dirs+ l))
+                        (dir-x (aref +dirs+ w))
+                        (dir-y (aref +dirs+ w)))))
           (setf (aref costs l w)
                 (cond
                   ((> c 0.9) +away-cost+)
                   ((> c 0.5) +down-cost+)
                   ((> c -0.5) +cross-cost+)
                   ((> c -0.9) +up-cost+)
-                  (t +in-cost+)))))))
+                  (t +into-cost+)))))))
   "costs of direction-wind combinations, not including delay cost")
 
 (defparameter +wind-transitions+
@@ -96,10 +100,10 @@
                            :element-type 'float :initial-element 0.0)))
     (dotimes (i +ndirs+ trans)
       (dotimes (j +ndirs+)
-        (let ((c (cprod (dir-x (aref +directions+ i))
-                        (dir-y (aref +directions+ i))
-                        (dir-x (aref +directions+ j))
-                        (dir-y (aref +directions+ j)))))
+        (let ((c (cprod (dir-x (aref +dirs+ i))
+                        (dir-y (aref +dirs+ i))
+                        (dir-x (aref +dirs+ j))
+                        (dir-y (aref +dirs+ j)))))
           (setf (aref trans i j)
                 (cond
                   ((> c 0.9) +same-wind-prob+)
@@ -111,11 +115,11 @@
   "world state"
   (x 1 :type fixnum)             ; boat position
   (y 1 :type fixnum)        
-  (ptack 0 :type tack)           ; previous boat tack
+  (ptack 1 :type tack)           ; previous boat tack
   (wind 0 :type direction))      ; current wind direction
 
 (defun make-initial-state (&key 
-                           (ptack (1- (random 3)))
+                           (ptack (1- (* 2 (random 2))))
                            (wind (random +ndirs+)))
   "makes an initial state, ptack, and wind
    are initialized randomly if unspecified"
@@ -125,12 +129,18 @@
   "tests whether the goal state is reached"
   (and (= (state-x state) *size*) (= (state-y state) *size*)))
 
+(defun into-wind-p (state leg)
+  "true when the direction is into the wind"
+  (and (= (dir-x (aref +dirs+ leg)) (- (dir-x (aref +dirs+ (state-wind state)))))
+       (= (dir-y (aref +dirs+ leg)) (- (dir-y (aref +dirs+ (state-wind state)))))))
+
 (defun leg-cost (state leg)
   "returns actio cost for the action in the state"
   (with-slots (x y ptack wind) (the state state)
     (+ (if (opposite-tacks-p ptack (aref +tacks+ leg wind))
            +delay-cost+ 0)
-       (aref +costs+ leg wind))))
+       (* (norm (dir-x (aref +dirs+ leg)) (dir-y (aref +dirs+ leg)))
+          (aref +costs+ leg wind)))))
 
 (defun next-coord (z dz)
   "returns the next coordinate, stops at lake banks"
@@ -147,9 +157,10 @@
 (defun next-state (state leg)
   "returns the new state after following `leg' in `state'"
   (with-slots (x y ptack wind) (the state state)
-    (make-state :x (next-coord x (dir-x (aref +directions+ leg)))
-                :y (next-coord y (dir-y (aref +directions+ leg)))
-                :ptack (aref +tacks+ leg wind)
+    (make-state :x (next-coord x (dir-x (aref +dirs+ leg)))
+                :y (next-coord y (dir-y (aref +dirs+ leg)))
+                :ptack (if (zerop (aref +tacks+ leg wind))
+                           ptack (aref +tacks+ leg wind))
                 :wind (next-wind wind))))
 
 ;; Testing
@@ -164,7 +175,7 @@
   (assert (= +cross-cost+ (aref +costs+ 4 2)))
   (assert (= +up-cost+ (aref +costs+ 3 0)))
   (assert (= +down-cost+ (aref +costs+ 7 6)))
-  (assert (eql +in-cost+ (aref +costs+ 0 4))))
+  (assert (eql +into-cost+ (aref +costs+ 0 4))))
 
 (defun test-coord ()
   (assert (= (next-coord *size* 1) *size*))

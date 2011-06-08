@@ -4,12 +4,12 @@
 
 (defvar *nsamples* 8
   "number of playouts per state")
-(defvar *uct-exploration-factor* 0.25
+(defvar *uct-exploration-factor* 1.0
   "the greater the factor, the more exploratory is UCT")
 (defvar *trace-state* #'identity
   "function called on each state")
 
-(defconstant +max-manhattans+ 4)
+(defconstant +max-manhattans+ 2)
 
 ;; Helpers
 
@@ -99,7 +99,7 @@
   "returns average cost"
   (if (plusp (stat-count stat))
       (/ (stat-sum stat) (stat-count stat))
-      most-positive-single-float))
+      +into-cost+))
 
 (defun mk-commit-select (sampling-select)
   "sample actions, choose the one with the best average"
@@ -118,7 +118,7 @@
                ;; extract statistics
                (let ((stats (map 'vector (lambda (leg) (get-stat state leg)) +legs+))
                      (best-leg nil)
-                     (best-avg most-positive-single-float))
+                     (best-avg +into-cost+))
 
                  #+nil(format *error-output* "~S~%" (map 'list (lambda (stat) (list (stat-count stat) (stat-avg stat))) stats))
 
@@ -144,9 +144,11 @@
 
 (defun random-select (state)
   (values (loop (let ((leg (random +ndirs+)))
-                  (when (plusp (leg-cost state leg))
+                  (unless (into-wind-p state leg)
                     (return leg))))
           #'random-select))
+
+;; Bandit-based functions
 
 (defun ucb (state)
   "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
@@ -156,14 +158,14 @@
          (Cp-root-log-n
           (* (Cp state) (sqrt (reduce #'+ state-stats :key #'stat-count))))
          (best-leg nil)
-         (best-cost most-positive-single-float))
+         (best-cost +into-cost+))
     (dolist (leg (shuffled-legs) best-leg)
       (let ((cost (cond
+                    ((into-wind-p state leg) +into-cost+)
                     ((> (stat-count (aref state-stats leg)) 0)
                      (- (aref avgs leg)
                         (/ Cp-root-log-n (sqrt (stat-count (aref state-stats leg))))))
-                    ((plusp (leg-cost state leg)) most-negative-single-float)
-                    (t most-positive-single-float))))
+                    (t (- +into-cost+)))))
         (when (< cost best-cost)
           (setf best-leg leg
                 best-cost cost))))))
@@ -175,23 +177,39 @@
          (best-avg (reduce #'min avgs))
          (kappa (/ 1.0 +ndirs+))
          (best-leg nil)
-         (best-reward most-negative-single-float))
+         (best-reward -1.0))
     (dolist (leg (shuffled-legs) best-leg)
       (let ((reward (cond
+                      ((into-wind-p state leg) -1.0)
                       ((> (stat-count (aref state-stats leg)) 0)
                        (/ (if (= (aref avgs leg) best-avg) (- 1.0 kappa) kappa)
                           (stat-count (aref state-stats leg))))
-                      ((plusp (leg-cost state leg)) most-positive-single-float)
-                      (t most-negative-single-float))))
+                      (t +1.0))))
         (when (> reward best-reward)
           (setf best-leg leg
                 best-reward reward))))))
 
+;; Adaptive selectors
+
+;; UCT (always UCB)
 (defun uct-select (state)
   (values (ucb state) #'uct-select))
 
+;; UVB once, then UCT 
 (defun vct-select (state)
   (values (uvb state) #'uct-select))
+
+;; Always UVB
+(defun uvt-select (state)
+  (values (uvb state) #'uvt-select))
+
+;; UVB once, then random
+(defun vrt-select (state)
+  (values (uvb state) #'random-select))
+
+;; UCB once, then random
+(defun crt-select (state)
+  (values (ucb state) #'random-select))
 
 ;; Testing
 
