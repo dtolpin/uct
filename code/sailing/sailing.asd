@@ -1,3 +1,5 @@
+(setf *read-default-float-format* 'double-float)
+
 (in-package "ASDF")
 
 (defsystem "sailing"

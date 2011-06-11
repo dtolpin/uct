@@ -168,13 +168,30 @@
 
 ;; Selectors
 
-(defun random-select (state)
-  (values (loop (let ((leg (random +ndirs+)))
-                  (unless (bad-leg-p state leg)
-                    (return leg))))
-          #'random-select))
+(defun rnd (state)
+  "select random leg"
+  (loop (let ((leg (random +ndirs+)))
+          (unless (bad-leg-p state leg)
+            (return leg)))))
 
 ;; Bandit-based functions
+
+(defun greedy (state)
+  "UCB selection: min avg"
+  (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg))
+                           +legs+))
+         (avgs (map 'vector #'stat-avg state-stats))
+         (best-leg nil)
+         (best-cost +into-cost+))
+    (dolist (leg (shuffled-legs) best-leg)
+      (let ((cost (cond
+                    ((bad-leg-p state leg) +into-cost+)
+                    ((plusp (stat-count (aref state-stats leg))) (aref avgs leg))
+                    (t (- +into-cost+)))))
+        (when (< cost best-cost)
+          (setf best-leg leg
+                best-cost cost))))))
+
 
 (defun ucb (state)
   "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
@@ -188,7 +205,7 @@
     (dolist (leg (shuffled-legs) best-leg)
       (let ((cost (cond
                     ((bad-leg-p state leg) +into-cost+)
-                    ((> (stat-count (aref state-stats leg)) 0)
+                    ((plusp (stat-count (aref state-stats leg)))
                      (- (aref avgs leg)
                         (/ Cp-root-log-n (sqrt (stat-count (aref state-stats leg))))))
                     (t (- +into-cost+)))))
@@ -201,13 +218,14 @@
   (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg)) +legs+))
          (avgs (map 'vector #'stat-avg state-stats))
          (best-avg (reduce #'min avgs))
-         (kappa (/ 1.0 +ndirs+))
+         (kappa (/ 1.0 (reduce #'+ +legs+
+                               :key (lambda (leg) (if (bad-leg-p state leg) 0.0 1.0)))))
          (best-leg nil)
          (best-reward -1.0))
     (dolist (leg (shuffled-legs) best-leg)
       (let ((reward (cond
                       ((bad-leg-p state leg) -1.0)
-                      ((> (stat-count (aref state-stats leg)) 0)
+                      ((plusp (stat-count (aref state-stats leg)))
                        (/ (if (= (aref avgs leg) best-avg) (- 1.0 kappa) kappa)
                           (stat-count (aref state-stats leg))))
                       (t +1.0))))
@@ -217,9 +235,20 @@
 
 ;; Adaptive selectors
 
+;; Uniform random sampling
+(defun random-select (state)
+  (values (rnd state) #'random-select))
+
 ;; UCT (always UCB)
 (defun uct-select (state)
   (values (ucb state) #'uct-select))
+
+;; GREEDY once, than UCT
+(defun gct-select (state)
+  (values (greedy state) #'uct-select))
+
+(defun rct-select (state)
+  (values (rnd state) #'uct-select))
 
 ;; UVB once, then UCT 
 (defun vct-select (state)

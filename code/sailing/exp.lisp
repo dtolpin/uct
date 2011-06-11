@@ -10,6 +10,8 @@
            "*SAMPLE-COUNT*"
            "RANDOM-SELECT"
            "UCT-SELECT"
+           "GCT-SELECT"
+           "RCT-SELECT"
            "UVT-SELECT"
            "VCT-SELECT"
            "CRT-SELECT"
@@ -29,13 +31,15 @@
 
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
-  (format t "~&~%~{~,8T~A~}~%" '(factor random uct vct vrt crt))
+  (format t "~&~%~{~,8T~A~}~%" '(factor random uct vct rct gct vrt crt))
   (do ((*uct-exploration-factor* 0.25 (* 1.5 *uct-exploration-factor*)))
       ((> *uct-exploration-factor* 2.0))
     (format t "~,8T~5F" *uct-exploration-factor*)
     (dolist (select (list #'random-select 
                           #'uct-select
                           #'vct-select
+                          #'rct-select
+                          #'gct-select
                           #'vrt-select
                           #'crt-select))
              (format t "~,8T~5F" (exper nruns nsamples size select)))

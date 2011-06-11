@@ -7,6 +7,8 @@
            "*UCT-EXPLORATION-FACTOR*"
            "*SAMPLE-COUNT*"
            "UCT-SELECT"
+           "GCT-SELECT"
+           "RCT-SELECT"
            "UVT-SELECT"
            "VCT-SELECT"
            "CRT-SELECT"
