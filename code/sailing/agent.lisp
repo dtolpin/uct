@@ -144,7 +144,7 @@
 
 (defun random-select (state)
   (values (loop (let ((leg (random +ndirs+)))
-                  (unless (into-wind-p state leg)
+                  (unless (bad-leg-p state leg)
                     (return leg))))
           #'random-select))
 
@@ -161,7 +161,7 @@
          (best-cost +into-cost+))
     (dolist (leg (shuffled-legs) best-leg)
       (let ((cost (cond
-                    ((into-wind-p state leg) +into-cost+)
+                    ((bad-leg-p state leg) +into-cost+)
                     ((> (stat-count (aref state-stats leg)) 0)
                      (- (aref avgs leg)
                         (/ Cp-root-log-n (sqrt (stat-count (aref state-stats leg))))))
@@ -180,7 +180,7 @@
          (best-reward -1.0))
     (dolist (leg (shuffled-legs) best-leg)
       (let ((reward (cond
-                      ((into-wind-p state leg) -1.0)
+                      ((bad-leg-p state leg) -1.0)
                       ((> (stat-count (aref state-stats leg)) 0)
                        (/ (if (= (aref avgs leg) best-avg) (- 1.0 kappa) kappa)
                           (stat-count (aref state-stats leg))))

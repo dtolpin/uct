@@ -134,6 +134,17 @@
   (and (= (dir-x (aref +dirs+ leg)) (- (dir-x (aref +dirs+ (state-wind state)))))
        (= (dir-y (aref +dirs+ leg)) (- (dir-y (aref +dirs+ (state-wind state)))))))
 
+(defun into-shore-p (state leg)
+  "true when the leg will throw the boat out of the water"
+  (let ((next-x (+ (state-x state) (dir-x (aref +dirs+ leg))))
+        (next-y (+ (state-x state) (dir-x (aref +dirs+ leg)))))
+    (or (< next-x 1) (> next-x *size*)
+        (< next-y 1) (> next-y *size*))))
+
+(defun bad-leg-p (state leg)
+  "true when the leg cannot be chosen in the state"
+  (or (into-wind-p state leg) (into-shore-p state leg)))
+
 (defun leg-cost (state leg)
   "returns actio cost for the action in the state"
   (with-slots (x y ptack wind) (the state state)
