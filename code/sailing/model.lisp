@@ -5,7 +5,8 @@
 ;; the map size, 
 ;;   the initial position is (1 . 1) 
 ;;   the final position is (*size* . *size*)
-(defvar *size* 4)
+(defvar *size* 4
+  "the lake is a *size* x *size* square")
 
 (defconstant +delay-cost+ 3.0)
 (defconstant +away-cost+ 1.0)

@@ -5,6 +5,7 @@
            "REACH-GOAL-STATE"
            "RANDOM-SELECT"
            "*UCT-EXPLORATION-FACTOR*"
+           "*SAMPLE-COUNT*"
            "UCT-SELECT"
            "UVT-SELECT"
            "VCT-SELECT"

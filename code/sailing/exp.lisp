@@ -1,19 +1,13 @@
 (defpackage "SAILEXP"
   (:documentation "Experiments with the Sailing Strategies")
   (:use "COMMON-LISP" "COMMON-LISP-USER" "SAILING")
-  (:import-from "SAILING"
-                "*UCT-EXPLORATION-FACTOR*"
-                "RANDOM-SELECT"
-                "UCT-SELECT"
-                "UVT-SELECT"
-                "VCT-SELECT"
-                "CRT-SELECT"
-                "VRT-SELECT")
   (:export "EXPER"
            "EXP0"
            "EXP1"
-           ; re-export from sailing
+           ;; re-export from sailing
+           "REACH-GOAL-STATE"
            "*UCT-EXPLORATION-FACTOR*"
+           "*SAMPLE-COUNT*"
            "RANDOM-SELECT"
            "UCT-SELECT"
            "UVT-SELECT"
@@ -23,13 +17,16 @@
 (in-package "SAILEXP")
 
 (defun exper (nr ns size select)
-  (float (/ (loop repeat nr 
-               sum (reach-goal-state
-                    (make-initial-state :wind 0 :ptack 1)
-                    select
-                    :nsamples ns
-                    :size size))
-            nr)))
+  (let (cost nsamples)
+    (loop repeat nr 
+       do (multiple-value-setq (cost nsamples)
+            (reach-goal-state (make-initial-state)
+                              select :nsamples ns :size size))
+       sum cost into cost-sum
+       sum nsamples into nsamples-sum
+       finally (return (values (float (/ cost-sum nr))
+                               (round (/ nsamples-sum nr)))))))
+
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
   (format t "~&~%~{~,8T~A~}~%" '(factor random uct vct vrt crt))

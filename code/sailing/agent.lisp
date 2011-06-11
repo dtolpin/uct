@@ -2,12 +2,19 @@
 
 ;;; Sailing Agent
 
-(defvar *nsamples* 8
-  "number of playouts per state")
-(defvar *uct-exploration-factor* 1.0
+(declaim (type (member :static :dynamic) *sample-count*))
+;; static sample count is better for experiments, dynamic for deployment
+(defparameter *sample-count* :static 
+  "mode of counting samples: 
+   :static - the number of playouts beginning in a path node is *nsamples*
+   :dynamic - the number of playouts passed through a path node is *nsamples*")
+(defparameter *uct-exploration-factor* 0.5
   "the greater the factor, the more exploratory is UCT")
+
 (defvar *trace-state* #'identity
   "function called on each state")
+(defvar *nsamples* 32
+  "number of playouts per state")
 
 (defconstant +max-manhattans+ 2)
 
@@ -68,7 +75,7 @@
   (count 0 :type fixnum)
   (sum 0.0d0 :type double-float))
 
-(defvar *play-stats* nil
+(defvar *play-stats* nil ; hash table, created in reach-goal-state
   "playout statistics")
 
 (defun stat-key (state leg)
@@ -101,19 +108,35 @@
       (/ (stat-sum stat) (stat-count stat))
       +into-cost+))
 
+(defun state-nsamples (state)
+  "number of samples (playouts) passed through the state"
+  (reduce #'+ +legs+ :key (lambda (leg) (stat-count (get-stat state leg)))))
+
+(defun stats-nsamples ()
+  "total number of samples per search"
+  (let ((total 0))
+    (maphash (lambda (key stat) 
+               (declare (ignore key))
+               (incf total (stat-count stat)))
+             *play-stats*)
+    total))
+
 (defun mk-commit-select (sampling-select)
   "sample actions, choose the one with the best average"
   (labels ((commit-select (state)
              (funcall *trace-state* state)
-             (let ((time-left (max-playout-time state)))
+             (let ((time-left (max-playout-time state))
+                   (isamples -1))
                ;; gather playing statistics
-               (dotimes (i *nsamples*)
-                 (multiple-value-bind (leg sampling-select)
-                     (funcall sampling-select state)
-                   (update-stats 
-                    state leg
-                    (play (next-state state leg) sampling-select
-                          time-left))))
+               (loop while (ecase *sample-count*
+                             (:static (< (incf isamples) *nsamples*))
+                             (:dynamic (< (state-nsamples state) *nsamples*)))
+                  do (multiple-value-bind (leg sampling-select)
+                         (funcall sampling-select state)
+                       (update-stats 
+                        state leg
+                        (play (next-state state leg) sampling-select
+                              time-left))))
                
                ;; extract statistics
                (let ((stats (map 'vector (lambda (leg) (get-stat state leg)) +legs+))
@@ -138,7 +161,10 @@
   "reaches the goal state from the initial state,
    returns the path cost"
   (let ((*play-stats* (make-hash-table :test #'equal)))
-    (play initial-state (mk-commit-select select) (max-playout-time initial-state))))
+    (values
+     (play initial-state (mk-commit-select select) (max-playout-time initial-state))
+     (stats-nsamples))))
+     
 
 ;; Selectors
 
