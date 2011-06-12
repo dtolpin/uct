@@ -6,6 +6,7 @@
            "EXP1"
            ;; re-export from sailing
            "REACH-GOAL-STATE"
+           "MAKE-INITIAL-STATE"
            "*UCT-EXPLORATION-FACTOR*"
            "*SAMPLE-COUNT*"
            "RND-SELECT"

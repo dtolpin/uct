@@ -4,7 +4,7 @@ def do(logf,template='costs-size=%s-nsamples=%s.txt'):
     resf = None
     size='X'
     for line in logf:
-        m = re.match('.*\(exp1 .* :size (\d+)\)\s*', line)
+        m = re.match('.*\(exp1 .* :size (\d+)\s*', line)
         if m:
             size = int(m.group(1))
             continue

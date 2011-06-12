@@ -138,7 +138,7 @@
 (defun into-shore-p (state leg)
   "true when the leg will throw the boat out of the water"
   (let ((next-x (+ (state-x state) (dir-x (aref +dirs+ leg))))
-        (next-y (+ (state-x state) (dir-x (aref +dirs+ leg)))))
+        (next-y (+ (state-y state) (dir-y (aref +dirs+ leg)))))
     (or (< next-x 1) (> next-x *size*)
         (< next-y 1) (> next-y *size*))))
 
@@ -197,9 +197,15 @@
 (defun test-wind ()
   (assert (> (aref +wind-transitions+ 3 4) 0.0))
   (assert (= (aref +wind-transitions+ 1 5) 0.0)))
+
+(defun test-bad-leg ()
+  (assert (bad-leg-p (make-state :x 1 :y 1) 6))
+  (assert (bad-leg-p (make-state :x 1 :y 1) 4))
+  (assert (bad-leg-p (make-state :x 1 :y 1 :wind 1) 5)))
           
 (defun test-model ()
   (test-tack)
   (test-cost)
   (test-coord)
-  (test-wind))
+  (test-wind)
+  (test-bad-leg))
