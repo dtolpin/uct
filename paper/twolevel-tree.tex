@@ -19,7 +19,7 @@
 
 \draw (0,0) node (root) [switch] {root};
 
-\draw (root) -- ++(1.5,2.5) -- ++(1.5, 0)
+\draw (root) -- ++(1.5,2.25) -- ++(1.5, 0)
 	node (s1) [switch] {$switch_1$};
 \draw (s1) -- ++(0, 0.5) -- ++(1.5, 0)
 	node (a11) [arm,label=right:{$r_1=0.6$}] {$arm_{11}$};
@@ -33,14 +33,15 @@
 \draw (s2) -- ++(0, -0.5) -- ++(1.5, 0)
 	node (a22) [arm,label=right:{$1-r_2=0.1$}] {$arm_{22}$};
 
-\draw (root) -- ++(1.5,-2) -- ++(1.5, 0)
-	node (s3) [switch] {$switch_3$};
-\draw (s3) -- ++(0, 0.5) -- ++(1.5, 0)
-	node (a31) [arm,label=right:{$r_3=...$}] {$arm_{31}$};
-\draw (s3) -- ++(0, -0.5) -- ++(1.5, 0)
-	node (a32) [arm,label=right:{$1-r_3=...$}] {$arm_{32}$};
+\draw [dashed] (root) -- ++(1.5, -1.75) -- ++(2.25, 0)
+	-- ++(0, 0.375) -- ++(1.5, 0) ++(-1.5, -0.375) -- ++(0, -0.375) -- ++(1.5, 0);
 
-\draw [dashed] (root) -- ++(1.5, -4.25) -- ++(1.5, 0)
-	-- ++(0, 0.5) -- ++(1.25, 0) ++(-1.25, -0.5) -- ++(0, -0.5) -- ++(1.0, 0);
+
+\draw (root) -- ++(1.5,-3.25) -- ++(1.5, 0)
+	node (s3) [switch] {$switch_k$};
+\draw (s3) -- ++(0, 0.5) -- ++(1.5, 0)
+	node (a31) [arm,label=right:{$r_k=...$}] {$arm_{k1}$};
+\draw (s3) -- ++(0, -0.5) -- ++(1.5, 0)
+	node (a32) [arm,label=right:{$1-r_k=...$}] {$arm_{k2}$};
 \end{tikzpicture}
 \end{document}

@@ -19,18 +19,16 @@
 
 \draw (0,0) node (root) [switch] {root};
 
-\draw (root) -- ++(1.5,1.75) -- ++(1.5, 0)
+\draw (root) -- ++(1.5,1.25) -- ++(1.5, 0)
 	node (a1) [arm,label=right:{$r_1=0.6$}] {$arm_1$};
 
 \draw [seledge] (root) -- ++(1.5,0.25) -- ++(1.5, 0)
 	node (a2) [arm,selnode,label=right:{$r_2=0.9$}] {$arm_2$};
 
-\draw (root) -- ++(1.5,-1.25) -- ++(1.5, 0)
-	node (a3) [arm,label=right:{$r_3=0.4$}] {$arm_3$};
+\draw [dashed] (root) -- ++(1.5, -0.75) -- ++(1.5, 0);
 
-\draw (root) -- ++(1.5,-2.75) -- ++(1.5, 0)
-	node (a4) [arm,label=right:{$r_4=...$}] {$arm_4$};
+\draw (root) -- ++(1.5,-1.75) -- ++(1.5, 0)
+	node (a3) [arm,label=right:{$r_k=...$}] {$arm_k$};
 
-\draw [dashed] (root) -- ++(1.5, -4.25) -- ++(1.5, 0);
 \end{tikzpicture}
 \end{document}
