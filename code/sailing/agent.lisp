@@ -23,11 +23,11 @@
 ;; legs are shuffled to avoid dependency on direction order
 (defun shuffled-legs ()
   "generates a shuffled list of legs"
-  (let ((lv (coerce +legs+ 'vector)))
+  (let ((legs (copy-seq +legs+)))
     (loop for i from 7 downto 1 do
          (let ((j (random (1+ i))))
-           (rotatef (aref lv i) (aref lv j))))
-    (coerce lv 'list)))
+           (rotatef (nth i legs) (nth j legs)))
+         finally (return legs))))
 
 ;; Stopping discipline
 
@@ -81,20 +81,21 @@
 (defvar *play-stats* nil ; hash table, created in reach-goal-state
   "playout statistics")
 
-(defun stat-key (state leg)
-  "key of entry in stats"
+(defun state-leg-key (state leg)
+  (declare (type fixnum leg) (type state state))
+  "key of state+leg combination"
   (+ (state-ptack state)
      (* 3
         (+ (state-wind state)
-           (* +ndirs+ 
+           (* +ndirs+
               (+ leg 
-                 (* +ndirs+ 
-                    (+ (state-x state)
-                       (* *size* (state-y state))))))))))
+                 (* +ndirs+
+                    (+ (1- (state-x state))
+                       (* *size* (1- (state-y state)))))))))))
 
 (defun get-stat (state leg)
   "returns statistics for the given (state,leg) combination"
-  (let ((key (stat-key state leg)))
+  (let ((key (state-leg-key state leg)))
     (or (gethash key *play-stats*)
         (setf (gethash key *play-stats*) (make-stat)))))
 
@@ -104,6 +105,16 @@
     (incf (stat-count stat))
     (incf (stat-sum stat) cost))
   cost)
+
+(defvar *play-stat-vectors* nil ; hash table for memoizing state stat vectors
+  "state stats vectors")
+
+(defun get-stats (state)
+    "return stats vector"
+    (let ((key (state-leg-key state 0)))
+      (or (gethash key *play-stat-vectors*)
+          (setf (gethash key *play-stat-vectors*)
+                (map 'vector (lambda (leg) (get-stat state leg)) +legs+)))))
 
 (defun stat-avg (stat)
   "returns average cost"
@@ -142,7 +153,7 @@
                               time-left))))
                
                ;; extract statistics
-               (let ((stats (map 'vector (lambda (leg) (get-stat state leg)) +legs+))
+               (let ((stats (get-stats state))
                      (best-leg nil)
                      (best-avg +into-cost+))
 
@@ -163,11 +174,11 @@
                          ((:trace-state *trace-state*) *trace-state*))
   "reaches the goal state from the initial state,
    returns the path cost"
-  (let ((*play-stats* (make-hash-table :test #'equal)))
+  (let ((*play-stats* (make-hash-table :test #'eql))
+        (*play-stat-vectors* (make-hash-table :test #'eql)))
     (values
      (play initial-state (mk-commit-select select) (max-playout-time initial-state))
      (stats-nsamples))))
-     
 
 ;; Selectors
 
@@ -179,9 +190,7 @@
 
 (defun ucb (state)
   "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
-  (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg))
-                           +legs+))
-         (avgs (map 'vector #'stat-avg state-stats))
+  (let* ((state-stats (get-stats state))
          (Cp-root-log-n
           (* (Cp state) (sqrt (reduce #'+ state-stats :key #'stat-count))))
          (best-leg nil)
@@ -190,7 +199,7 @@
       (let ((cost (cond
                     ((bad-leg-p state leg) +into-cost+)
                     ((plusp (stat-count (aref state-stats leg)))
-                     (- (aref avgs leg)
+                     (- (stat-avg (aref state-stats leg))
                         (/ Cp-root-log-n (sqrt (stat-count (aref state-stats leg))))))
                     (t (- +into-cost+)))))
         (when (< cost best-cost)
@@ -199,9 +208,8 @@
 
 (defun uvb (state)
   "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
-  (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg)) +legs+))
-         (avgs (map 'vector #'stat-avg state-stats))
-         (best-avg (reduce #'min avgs))
+  (let* ((state-stats (get-stats state))
+         (best-avg (reduce #'min state-stats :key #'stat-avg))
          (kappa (/ 1.0 (reduce #'+ +legs+
                                :key (lambda (leg) (if (bad-leg-p state leg) 0.0 1.0)))))
          (best-leg nil)
@@ -210,7 +218,8 @@
       (let ((reward (cond
                       ((bad-leg-p state leg) -1.0)
                       ((plusp (stat-count (aref state-stats leg)))
-                       (/ (if (= (aref avgs leg) best-avg) (- 1.0 kappa) kappa)
+                       (/ (if (= (stat-avg (aref state-stats leg)) best-avg)
+                              (- 1.0 kappa) kappa)
                           (stat-count (aref state-stats leg))))
                       (t +1.0))))
         (when (> reward best-reward)

@@ -119,6 +119,18 @@
   (ptack 1 :type tack)           ; previous boat tack
   (wind 0 :type direction))      ; current wind direction
 
+(defun state-leg-key (state leg)
+  (declare (type fixnum leg) (type state state))
+  "key of state+leg combination, for haching and caching"
+  (+ (state-ptack state)
+     (* 3
+        (+ (state-wind state)
+           (* +ndirs+
+              (+ leg 
+                 (* +ndirs+
+                    (+ (1- (state-x state))
+                       (* *size* (1- (state-y state)))))))))))
+
 (defun make-initial-state (&key 
                            (ptack (1- (* 2 (random 2))))
                            (wind (random +ndirs+)))
@@ -155,7 +167,7 @@
           (aref +costs+ leg wind)))))
 
 (defun next-coord (z dz)
-  "returns the next coordinate, stops at lake banks"
+  "returns the next coordinate, stops at lake shores"
   (min *size* (max 1 (+ z dz))))
 
 (defun next-wind (wind)
