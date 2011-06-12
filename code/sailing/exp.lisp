@@ -10,10 +10,10 @@
            "*SAMPLE-COUNT*"
            "RANDOM-SELECT"
            "UCT-SELECT"
-           "GCT-SELECT"
-           "RCT-SELECT"
            "UVT-SELECT"
            "VCT-SELECT"
+           "GCT-SELECT"
+           "RCT-SELECT"
            "CRT-SELECT"
            "VRT-SELECT"))
 (in-package "SAILEXP")
@@ -30,19 +30,20 @@
                                (round (/ nsamples-sum nr)))))))
 
 
+(defparameter +selectors+ 
+  '(random gct uct vct rct)
+  #+nil '(random uct uvt vct rct gct crt vrt)
+  "list of selectors to compare")
+
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
-  (format t "~&~%~{~,8T~A~}~%" '(factor random uct vct rct gct vrt crt))
+  (format t "~&~%~{~,8T~A~}~%" (cons 'factor +selectors+))
   (do ((*uct-exploration-factor* 0.25 (* 1.5 *uct-exploration-factor*)))
       ((> *uct-exploration-factor* 2.0))
     (format t "~,8T~5F" *uct-exploration-factor*)
-    (dolist (select (list #'random-select 
-                          #'uct-select
-                          #'vct-select
-                          #'rct-select
-                          #'gct-select
-                          #'vrt-select
-                          #'crt-select))
-             (format t "~,8T~5F" (exper nruns nsamples size select)))
+    (dolist (selector +selectors+)
+      (let ((select (symbol-function
+                     (intern (concatenate 'string (string selector) "-SELECT")))))
+        (format t "~,8T~5F" (exper nruns nsamples size select))))
     (format t "~%")))
 
 (defun exp1 (&key (nruns 5000) (size 5))
