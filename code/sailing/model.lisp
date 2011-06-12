@@ -13,7 +13,7 @@
 (defconstant +down-cost+ 2.0)
 (defconstant +cross-cost+ 3.0)
 (defconstant +up-cost+ 4.0)
-(defconstant +into-cost+ (float most-positive-fixnum))
+(defconstant +into-cost+ (coerce most-positive-fixnum 'double-float))
 (defconstant +same-wind-prob+ 0.4)
 (defconstant +adj-wind-prob+ (/ (- 1.0 +same-wind-prob+) 2.0))
 

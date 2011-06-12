@@ -23,8 +23,11 @@
 ;; legs are shuffled to avoid dependency on direction order
 (defun shuffled-legs ()
   "generates a shuffled list of legs"
-  (sort (copy-seq +legs+)
-        #'> :key (lambda (x) (declare (ignore x)) (random 1.0))))
+  (let ((lv (coerce +legs+ 'vector)))
+    (loop for i from 7 downto 1 do
+         (let ((j (random (1+ i))))
+           (rotatef (aref lv i) (aref lv j))))
+    (coerce lv 'list)))
 
 ;; Stopping discipline
 
@@ -174,25 +177,6 @@
           (unless (bad-leg-p state leg)
             (return leg)))))
 
-;; Bandit-based functions
-
-(defun greedy (state)
-  "UCB selection: min avg"
-  (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg))
-                           +legs+))
-         (avgs (map 'vector #'stat-avg state-stats))
-         (best-leg nil)
-         (best-cost +into-cost+))
-    (dolist (leg (shuffled-legs) best-leg)
-      (let ((cost (cond
-                    ((bad-leg-p state leg) +into-cost+)
-                    ((plusp (stat-count (aref state-stats leg))) (aref avgs leg))
-                    (t (- +into-cost+)))))
-        (when (< cost best-cost)
-          (setf best-leg leg
-                best-cost cost))))))
-
-
 (defun ucb (state)
   "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
   (let* ((state-stats (map 'vector (lambda (leg) (get-stat state leg))
@@ -236,16 +220,12 @@
 ;; Adaptive selectors
 
 ;; Uniform random sampling
-(defun random-select (state)
-  (values (rnd state) #'random-select))
+(defun rnd-select (state)
+  (values (rnd state) #'rnd-select))
 
 ;; UCT (always UCB)
 (defun uct-select (state)
   (values (ucb state) #'uct-select))
-
-;; GREEDY once, than UCT
-(defun gct-select (state)
-  (values (greedy state) #'uct-select))
 
 (defun rct-select (state)
   (values (rnd state) #'uct-select))
@@ -253,18 +233,6 @@
 ;; UVB once, then UCT 
 (defun vct-select (state)
   (values (uvb state) #'uct-select))
-
-;; Always UVB
-(defun uvt-select (state)
-  (values (uvb state) #'uvt-select))
-
-;; UVB once, then random
-(defun vrt-select (state)
-  (values (uvb state) #'random-select))
-
-;; UCB once, then random
-(defun crt-select (state)
-  (values (ucb state) #'random-select))
 
 ;; Testing
 

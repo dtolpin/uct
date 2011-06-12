@@ -3,14 +3,10 @@
   (:use "COMMON-LISP")
   (:export "MAKE-INITIAL-STATE"
            "REACH-GOAL-STATE"
-           "RANDOM-SELECT"
            "*UCT-EXPLORATION-FACTOR*"
            "*SAMPLE-COUNT*"
+           "RND-SELECT"
            "UCT-SELECT"
-           "GCT-SELECT"
-           "RCT-SELECT"
-           "UVT-SELECT"
            "VCT-SELECT"
-           "CRT-SELECT"
-           "VRT-SELECT"))
+           "RCT-SELECT"))
 (in-package "SAILING")

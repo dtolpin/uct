@@ -8,14 +8,10 @@
            "REACH-GOAL-STATE"
            "*UCT-EXPLORATION-FACTOR*"
            "*SAMPLE-COUNT*"
-           "RANDOM-SELECT"
+           "RND-SELECT"
            "UCT-SELECT"
-           "UVT-SELECT"
            "VCT-SELECT"
-           "GCT-SELECT"
-           "RCT-SELECT"
-           "CRT-SELECT"
-           "VRT-SELECT"))
+           "RCT-SELECT"))
 (in-package "SAILEXP")
 
 (defun exper (nr ns size select)
@@ -30,7 +26,7 @@
                                (round (/ nsamples-sum nr)))))))
 
 
-(defparameter +selectors+ '(random gct uct vct rct)
+(defparameter +selectors+ '(rnd uct vct rct)
   "list of selectors to compare")
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
