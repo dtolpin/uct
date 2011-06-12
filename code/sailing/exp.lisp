@@ -30,9 +30,7 @@
                                (round (/ nsamples-sum nr)))))))
 
 
-(defparameter +selectors+ 
-  '(random gct uct vct rct)
-  #+nil '(random uct uvt vct rct gct crt vrt)
+(defparameter +selectors+ '(random gct uct vct rct)
   "list of selectors to compare")
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
