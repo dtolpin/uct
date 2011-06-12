@@ -43,7 +43,8 @@
     (dolist (selector +selectors+)
       (let ((select (symbol-function
                      (intern (concatenate 'string (string selector) "-SELECT")))))
-        (format t "~,8T~5F" (exper nruns nsamples size select))))
+        (format t "~,8T~5F" (exper nruns nsamples size select))
+        (clear-output *standard-output*)))
     (format t "~%")))
 
 (defun exp1 (&key (nruns 5000) (size 5))
