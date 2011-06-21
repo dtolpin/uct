@@ -1,0 +1,47 @@
+\section{Regret bounds}
+
+\subsection{$\varepsilon$-greedy}
+
+Regret $R_\varepsilon$:
+
+\begin{eqnarray}
+\IE[R_\varepsilon]&=&\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\end{eqnarray}
+
+For $0<\varepsilon\le1-\frac 1 K$ (see \cite{Auer.ucb}):
+
+\begin{eqnarray}
+\Pr(\overline X_j=\max_i\overline X_i)&\le&2\left(x_0\cdot \Pr\left\{T_j^R(n)\le x_0\right\} + \frac 2{\Delta_j^2}e^{-\Delta_j^2\lfloor x_0 \rfloor/2}\right)\nonumber\\
+&\le&2\left(x_0\cdot \Pr\left\{T_j^R(n)\le x_0\right\} + \frac {2 \cdot
+  e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 x_0 /2}\right)
+\end{eqnarray}
+
+Number of times $\mu$ the $j$th arm is selected {\it randomly}:
+
+\begin{equation}
+\mu\triangleq\IE\left[T_j^R(n)\right]=\frac {n\varepsilon} K
+\end{equation}
+
+Chernoff bound:
+
+\begin{equation}
+\Pr[X < (1-\delta)\IE[X]] < e^{-\delta^2\IE[X]/2}
+\end{equation}
+
+By substituting $x_0=\frac \mu 2$, obtain:
+
+\begin{eqnarray}
+\Pr(\overline X_j=\max_i\overline X_i)&\le& 2\left(\frac {\mu}{2} e^{-\mu/8} + \frac {2e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 \mu/4}\right)\nonumber\\
+&\le&\left(\mu + \frac {4\sqrt e}{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}
+\end{eqnarray}
+
+\begin{eqnarray}
+\IE[R_\varepsilon]&\le&\sum_{j=1}^K\Delta_j\left(\mu + \frac {4\sqrt e}
+{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}\nonumber\\
+&\le&K\left(\mu + \frac {4\sqrt e}{\Delta_{\min}}\right)e^{-\Delta_{\min}^2\mu/8}
+\end{eqnarray}
+
+\subsection{UCB}
+
+Regret $R_{UCB}$:
+
