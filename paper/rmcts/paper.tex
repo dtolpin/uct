@@ -62,8 +62,64 @@ Robotics Research and Production Management.
 
 \appendix
 
-\section{Regret bounds}
+\section{Facts}
 
-\input{regret.tex}
+{\bf Chernoff bound:} for $m$ independent random variables $X_1, X_2, ..., X_m$
+taking values 0 or 1, $X=\sum_{i=1}^m X_i$, and $0\le\delta\le 1$:
+
+\begin{equation}
+\label{eq:chernoff-bound}
+\Pr[X < (1-\delta)\IE[X]] < e^{-\delta^2\IE[X]/2}
+\end{equation}
+
+\section{Finite-time regret bounds}
+
+\subsection{$\varepsilon$-greedy}
+
+Regret $R_\varepsilon$:
+
+\begin{eqnarray}
+\IE[R_\varepsilon]&=&\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\end{eqnarray}
+
+For $0<\varepsilon\le1-\frac 1 K$ and $x_0>0$ (see Section 3, Proofs, in \cite{Auer.ucb}):
+
+\begin{eqnarray}
+\Pr(\overline X_j=\max_i\overline X_i)&\le&2\left(x_0\cdot \Pr\left\{T_j^R(n)\le x_0\right\} + \frac 2{\Delta_j^2}e^{-\Delta_j^2\lfloor x_0 \rfloor/2}\right)\nonumber\\
+&\le&2\left(x_0\cdot \Pr\left\{T_j^R(n)\le x_0\right\} + \frac {2 \cdot
+  e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 x_0 /2}\right)
+\end{eqnarray}
+
+Number of times $\mu$ the $j$th arm is selected {\it randomly}:
+
+\begin{equation}
+\mu\triangleq\IE\left[T_j^R(n)\right]=\frac {n\varepsilon} K
+\end{equation}
+
+By choosing $x_0=\frac \mu 2$ and applying the Chernoff bound (\ref{eq:chernoff-bound}), obtain:
+
+\begin{eqnarray}
+\Pr(\overline X_j=\max_i\overline X_i)&\le& 2\left(\frac {\mu}{2} e^{-\mu/8} + \frac {2e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 \mu/4}\right)\nonumber\\
+&\le&\left(\mu + \frac {4\sqrt e}{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}
+\end{eqnarray}
+
+\begin{eqnarray}
+\IE[R_\varepsilon]&\le&\sum_{j=1}^K\Delta_j\left(\mu + \frac {4\sqrt e}
+{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}\nonumber\\
+&\le&K\left(\mu + \frac {4\sqrt e}{\Delta_{\min}}\right)e^{-\Delta_{\min}^2\mu/8}
+\end{eqnarray}
+
+\subsection{UCB}
+
+Regret $R_{UCB}$:
+
+\subsection{UVB}
+
+Regret $R_{UVB}$:
+
+\section{Asymptotic bounds for $\varepsilon$-greedy policies}
+
+
+\section{Case study: $K-1$ and One Arms}
 
 \end{document}
