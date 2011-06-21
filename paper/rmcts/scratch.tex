@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{algpseudocode}
+\usepackage[ruled]{algorithm}
+\usepackage{url}
+\usepackage{framed}
+\usepackage{amsfonts,amsmath,amsthm}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+
+\newcommand {\mean} {\ensuremath {\mathop{\mathrm{mean}}}}
+\newcommand {\median} {\ensuremath {\mathop{\mathrm{median}}}}
+\newcommand {\N} {\ensuremath {\mathcal{N}}}
+\newcommand {\IE} {\ensuremath {\mathbb{E}}}
+\newcommand {\cov} {\ensuremath {\mathop{\mathrm{cov}}}}
+\newcommand {\BEL} {\ensuremath {\mathop{\mathrm{BEL}}}}
+
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+
+\begin{eqnarray*}
+p&=&2q \\
+q&\le&x_0\cdot \Pr\left\{T_j^R(n)\le x_0\right\} + \frac 2
+{\Delta_j^2}e^{-\Delta_j^2\lfloor x_0 \rfloor/2}\\
+&\le&x_0\cdot \Pr\left\{T_j^R(n)\le x_0\right\} + \frac {2 \cdot
+  e^{\Delta_j^2/2}}
+{\Delta_j^2}e^{-\Delta_j^2 x_0 /2}
+\end{eqnarray*}
+
+\begin{equation*}
+\IE\left[T_j^R(n)\right]=\frac {n\varepsilon} K
+\end{equation*}
+
+Chernoff bound:
+
+\begin{equation*}
+\Pr[X < (1-\delta)\mu] < e^{-\mu\delta^2/2}
+\end{equation*}
+\begin{equation}
+\end{equation}
+
+Roots of quadratic equation:
+
+\begin{eqnarray*}
+& &x^2 + px + q=0\\
+& &x =\frac 1 2 \left( -p \pm \sqrt{p^2 - 4q} \,\right) \\
+\end{eqnarray*}
+\end{document}

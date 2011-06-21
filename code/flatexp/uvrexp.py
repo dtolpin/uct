@@ -44,7 +44,7 @@ def randomexp(nhandles=10, nruns=1000, samples=range(1, 16)):
     def mkhandles():
         return [RandomHandle(transform(random.random())) for i in range(nhandles)]
     handles = mkhandles()
-    for nsamples in [nhandles*i for i in samples]:
+    for nsamples in [10*nhandles*i for i in samples]:
         print nsamples,
         for alg in ALGORITHMS:
             print repeat_alg(alg=alg, mkhandles=mkhandles, nsamples=nsamples, nruns=nruns)[1],
