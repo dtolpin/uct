@@ -61,55 +61,45 @@ where $\Delta_j=\mu_*-\mu_j$.
 \subsection{Doing better than UCB}
 
 \begin{figure}[t]
-\centering
-\includegraphics[scale=1.2]{onelevel-tree.pdf}
-\caption{Simple regret in MAB: the best arm}
-\label{fig:onelevel-tree}
+  \centering
+  \includegraphics[scale=1.2]{onelevel-tree.pdf}
+  \caption{Simple regret in MAB: the best arm}
+  \label{fig:onelevel-tree}
 \end{figure}
 
 \begin{figure}[t]
-\centering
-\includegraphics[scale=0.64]{onelevel-64.pdf}
-\caption{Simple regret in MAB: UCB vs. $\varepsilon$-greedy vs. UVB}
-\label{fig:onelevel-64}
+  \centering
+  \includegraphics[scale=0.64]{onelevel-64.pdf}
+  \caption{Simple regret in MAB: UCB vs. $\varepsilon$-greedy vs. Random}
+  \label{fig:onelevel-64}
 \end{figure}
 
 
 \subsection{Doing better than UCT}
 
 \begin{figure}[t]
-\centering
-\includegraphics[scale=1.2]{twolevel-tree.pdf}
-\caption{MCTS: a path to the best arm}
-\label{fig:twolevel-tree}
+  \centering
+  \includegraphics[scale=1.2]{twolevel-tree.pdf}
+  \caption{MCTS: a path to the best arm}
+  \label{fig:twolevel-tree}
 \end{figure}
 
 \begin{figure}[t]
-\centering
-\includegraphics[scale=0.64,trim=0pt 0pt 0pt 24pt,clip]{twolevel-64.pdf}
-\caption{MCTS: UCT vs. UVT vs. VCT vs. Random}
-\label{fig:twolevel-64}
+  \centering
+  \includegraphics[scale=0.64,trim=0pt 0pt 0pt 24pt,clip]{twolevel-64.pdf}
+  \caption{MCTS: UCT vs. GRT vs. GCT vs. Random}
+  \label{fig:twolevel-64}
 \end{figure}
 
 \section{Empirical Evaluation}
 
-\subsection{Simple regret in MAB}
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[scale=0.64,trim=0pt 0pt 0pt 0pt,clip]{onelevel-8-16-32-64.pdf}
-\caption{Simple regret in MAB, varying number of arms}
-\label{fig:onelevel-8-16-32-64}
-\end{figure}
-
 \subsection{Monte Carlo tree search}
 
 \begin{figure}[t]
-\centering
-\includegraphics[scale=0.64,trim=0pt 0pt 0pt 0pt,clip]{twolevel-8-16-32-64.pdf}
-\caption{Monte carlo tree search, varying number of arms}
-\label{fig:twolevel-8-16-32-64}
+  \centering
+  \includegraphics[scale=0.64,trim=0pt 0pt 0pt 0pt,clip]{twolevel-8-16-32-64.pdf}
+  \caption{Monte carlo tree search, varying number of arms}
+  \label{fig:twolevel-8-16-32-64}
 \end{figure}
 
 \subsection{The sailing domain}
@@ -119,10 +109,12 @@ where $\Delta_j=\mu_*-\mu_j$.
   \begin{minipage}[b]{0.5\linewidth} \centering
     \includegraphics[scale=0.45,trim=0pt 0pt 0pt
     0pt,clip]{sailing-size=8-factor=_8438.pdf}
-  \end{minipage}
+    {a. varying number of samples} 
+ \end{minipage}
   \begin{minipage}[b]{0.5\linewidth} \centering
     \includegraphics[scale=0.45,trim=0pt 0pt 0pt
     0pt,clip]{sailing-size=8-nsamples=185.pdf}
+    {b. varying exploration factor}
   \end{minipage}
   \caption{The sailing domain, a smaller lake}
   \label{fig:sailing-8}
@@ -132,10 +124,12 @@ where $\Delta_j=\mu_*-\mu_j$.
   \begin{minipage}[b]{0.5\linewidth} \centering
     \includegraphics[scale=0.45,trim=0pt 0pt 0pt
     0pt,clip]{sailing-size=13-factor=_5625.pdf}
+    {a. varying number of samples}
   \end{minipage}
   \begin{minipage}[b]{0.5\linewidth} \centering
     \includegraphics[scale=0.45,trim=0pt 0pt 0pt
     0pt,clip]{sailing-size=13-nsamples=240.pdf}
+    {b. varying exploration factor}
   \end{minipage}
   \caption{The sailing domain, a larger lake}
   \label{fig:sailing-13}

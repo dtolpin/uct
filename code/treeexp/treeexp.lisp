@@ -56,18 +56,22 @@
     (let* ((vcreg (avgrwd #'vct-select))
            (ucreg (avgrwd #'uct-select))
            (uvreg (avgrwd #'uvt-select))
+           (gcreg (avgrwd #'gct-select))
+           (grreg (avgrwd #'grt-select))
            (rnreg (avgrwd #'random-select)))
-      (format t "~S ~S ~S ~S ~S~%"
-              (if vararm branching sampling-factor) vcreg ucreg uvreg rnreg)))
+      (format t "~@{~5F~^~T~}~%"
+              (if vararm branching sampling-factor) vcreg ucreg uvreg gcreg grreg rnreg)))
   (force-output *standard-output*))
 
+(defparameter +experiment-header+ "nsamples~Tr_VCT~Tr_UCT~Tr_UVT~Tr_GCT~Tr_GRT~Tr_Random~%")
+
 (defun experiments (&key levels branching min-sf sf-step n-sf nruns)
-  (format t "nsamples r_vct r_uct r_uvt r_random~%")
+  (format t +experiment-header+)
   (loop for sf = min-sf then (round (* sf sf-step)) repeat n-sf
        do (experiment :levels levels :branching branching :sampling-factor sf :nruns nruns)))
 
 (defun vararm-experiments (&key levels sampling-factor min-b b-step n-b nruns)
-  (format t "nsamples r_vct r_uct r_uvt r_random~%")
+  (format t +experiment-header+)
   (loop for b = min-b then (round (* b b-step)) repeat n-b
      do (experiment :levels levels :branching b :sampling-factor sampling-factor
                     :nruns (ceiling (/ nruns (log b 2))) :vararm t)))

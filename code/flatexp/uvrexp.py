@@ -37,9 +37,9 @@ def highkey(x):
 def lowkey(x):
     return 0.5*(1+x**4)
 
-transform = lowkey # identity
+transform = identity
     
-def randomexp(nhandles=10, nruns=1000, samples=range(1, 16)):
+def randomexp(nhandles=10, nruns=1000, samples=[4,8,16,32,64,128]):
     print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
     def mkhandles():
         return [RandomHandle(transform(random.random())) for i in range(nhandles)]

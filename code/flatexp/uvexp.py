@@ -18,10 +18,9 @@ UCB = 'UCB'
 UCBt = 'UCBt'
 GRD = 'GRD'
 UVB = 'UVB'
-UVB2 = 'UVB2'
 
 ALGORITHMS = [RND, UCB, GRD, UVB]
-# ALGORITHMS = [RND, UCB, UCBt, GRD, UVB, UVB2]
+# ALGORITHMS = [RND, UCB, UCBt, GRD, UVB]
 
 class Exp:
 
@@ -97,16 +96,6 @@ class Exp:
         voi = (avg==a and 1-kappa or kappa)/ni
         return voi
 
-    def voi2(self, o, a):
-        ni = len(o)
-        si = sum(o)
-        avg = si/ni
-        kappa = 1.0/len(self.outcomes)
-        kappa = kappa*kappa
-        voi = (avg==a and 1-kappa or kappa)/ni
-        return voi
-
-
     def UVB(self):
         # find best average
         abest = -1.0
@@ -124,25 +113,6 @@ class Exp:
             if vois[i] >= vbest:
                 ibest, vbest = i, vois[i]
         self.draw(ibest)
-
-    def UVB2(self):
-        # find best average
-        abest = -1.0
-        for o in self.outcomes:
-            avg = sum(o)/len(o)
-            if avg > abest:
-                abest = avg
-    
-        # find best handle
-        vois = [self.voi2(o, abest) for o in self.outcomes]
-        ibest, vbest = -1, -1
-        indices = range(len(vois))
-        random.shuffle(indices) # break ties randomly
-        for i in indices:
-            if vois[i] >= vbest:
-                ibest, vbest = i, vois[i]
-        self.draw(ibest)
-
 
     def regret(self):
         avgs = [sum(o)/len(o) for o in self.outcomes]
@@ -202,4 +172,3 @@ if __name__=="__main__":
     else:
         handles = sys.argv[1]
     experiment(locals()['handles_'+handles])
-

@@ -9,7 +9,9 @@
            "RANDOM-SELECT"
            "UCT-SELECT"
            "UVT-SELECT"
-           "VCT-SELECT"))
+           "VCT-SELECT"
+           "GCT-SELECT"
+           "GRT-SELECT"))
 (in-package "MCTS")
 
 ;;; Monte-Carlo Tree Sampling
@@ -191,11 +193,30 @@
          (best-node nil)
          (best-reward (lowest-reward switch)))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
-      (let ((reward (if (> (stat-count (aref node-stats i)) 0)
-                        (upper-bound
-                         switch (aref avgs i)
-                         (/ root-2-log-n (sqrt (stat-count (aref node-stats i)))))
-                   (highest-reward switch))))
+      (when (zerop (stat-count (aref node-stats i)))
+        (return (aref (switch-nodes switch) i)))
+      (let ((reward (upper-bound switch (aref avgs i)
+                                 (/ root-2-log-n
+                                    (sqrt (stat-count (aref node-stats i)))))))
+        (when (better-reward switch reward best-reward)
+          (setf best-node (aref (switch-nodes switch) i)
+                best-reward reward))))))
+
+(defun grd (switch)
+  "0.5-greedy selection"
+  (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
+                          (switch-nodes switch)))
+         (k (length (switch-nodes switch)))
+         (avgs (map 'vector #'stat-avg node-stats))
+         (best-node nil)
+         (best-reward (lowest-reward switch)))
+    (dolist (i (shuffled-indices (switch-nodes switch)) 
+             (if (> (random 1.0) (* 0.5 (/ k (1- k))))
+                 best-node
+                 (aref (switch-nodes switch) (random k))))
+      (when (zerop (stat-count (aref node-stats i)))
+        (return (aref (switch-nodes switch) i)))
+      (let ((reward (aref avgs i)))
         (when (better-reward switch reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
@@ -210,10 +231,10 @@
          (best-node nil)
          (best-reward 0.0))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
-      (let ((reward (if (> (stat-count (aref node-stats i)) 0)
-                        (/ (if (= (aref avgs i) best-avg) (- 1.0 kappa) kappa)
-                           (stat-count (aref node-stats i)))
-                        most-positive-fixnum)))
+      (when (zerop (stat-count (aref node-stats i)))
+        (return (aref (switch-nodes switch) i)))
+      (let ((reward (/ (if (= (aref avgs i) best-avg) (- 1.0 kappa) kappa)
+                       (stat-count (aref node-stats i)))))
         (when (> reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
@@ -234,6 +255,16 @@
 
 (defun vct-select (switch)
   (values (uvb switch) #'uct-select))
+
+;; GCT 
+
+(defun gct-select (switch)
+  (values (grd switch) #'uct-select))
+
+;; GRT
+
+(defun grt-select (switch)
+  (values (grd switch) #'grt-select))
 
 ;; Testing
 

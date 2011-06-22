@@ -3,8 +3,8 @@ ALGORITHMS <- c('rnd', 'ucb', 'sve')
 draw.regrets <- function(regrets_file, legend.position='topright', xlab=expression(N[samples])) {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
-	ylim <- range(0, regrets[-1])
-	plot(x=regrets$nsamples, type='n', log="x", xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
+	ylim <- range(regrets[-1])
+	plot(x=regrets$nsamples, type='n', log="xy", xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
 	i <- 1
 	for(alg in names(regrets)[-1]) {
 		lines(x=regrets$nsamples, y=regrets[[alg]],
@@ -44,3 +44,16 @@ draw.random <- function(prefix='random', legend.position='topright') {
   draw.regrets(paste(prefix,'32.txt',sep='-'), legend.position=legend.position)
   draw.regrets(paste(prefix,'64.txt',sep='-'), legend.position=legend.position)
 }
+
+draw.curves <- function (imin=5,imax=10,max=100, alpha=1, gamma=0.5) {
+	x=0.01*(imin:imax)*max
+	rnd <- sapply(x, function (x) exp(-gamma*x/2))
+	grd <- sapply(x, function (x) exp(-gamma*x))
+	ucb <- sapply(x, function (x) x^(-alpha))
+	ylim=range(rnd, grd, ucb)
+	plot(x=x, y=rnd, log="xy", type='o', pch=1, ylim=ylim)
+	lines(x=x, y=grd, type='o', pch=2)
+	lines(x=x, y=ucb, type='o', pch=3)
+	legend(x='topright', legend=c('RND','GRD','UCB'),pch=c(1,2,3))
+}
+
