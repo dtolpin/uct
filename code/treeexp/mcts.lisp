@@ -11,7 +11,9 @@
            "UVT-SELECT"
            "VCT-SELECT"
            "GCT-SELECT"
-           "GRT-SELECT"))
+           "GRT-SELECT"
+           "UQT-SELECT"
+           "QCT-SELECT"))
 (in-package "MCTS")
 
 ;;; Monte-Carlo Tree Sampling
@@ -189,7 +191,7 @@
                           (switch-nodes switch)))
          (avgs (map 'vector #'stat-avg node-stats))
          (root-2-log-n
-          (sqrt (* 2 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))
+          (sqrt (* 2 (log (max 1.0 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))))
          (best-node nil)
          (best-reward (lowest-reward switch)))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
@@ -197,6 +199,26 @@
         (return (aref (switch-nodes switch) i)))
       (let ((reward (upper-bound switch (aref avgs i)
                                  (/ root-2-log-n
+                                    (sqrt (stat-count (aref node-stats i)))))))
+        (when (better-reward switch reward best-reward)
+          (setf best-node (aref (switch-nodes switch) i)
+                best-reward reward))))))
+
+
+(defun uqb (switch)
+  "UQB selection: max (avg+sqrt(2*sqrt (n) / ni))"
+  (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
+                          (switch-nodes switch)))
+         (avgs (map 'vector #'stat-avg node-stats))
+         (root-2-sqrt-n
+          (sqrt (* 2 (sqrt (max 1.0 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))))
+         (best-node nil)
+         (best-reward (lowest-reward switch)))
+    (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
+      (when (zerop (stat-count (aref node-stats i)))
+        (return (aref (switch-nodes switch) i)))
+      (let ((reward (upper-bound switch (aref avgs i)
+                                 (/ root-2-sqrt-n
                                     (sqrt (stat-count (aref node-stats i)))))))
         (when (better-reward switch reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
@@ -265,6 +287,16 @@
 
 (defun grt-select (switch)
   (values (grd switch) #'grt-select))
+
+;; UQT 
+
+(defun uqt-select (switch)
+  (values (uqb switch) #'uqt-select))
+
+;; QCT
+
+(defun qct-select (switch)
+  (values (uqb switch) #'qct-select))
 
 ;; Testing
 

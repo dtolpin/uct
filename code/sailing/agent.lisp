@@ -8,7 +8,7 @@
   "mode of counting samples: 
    :static - the number of playouts beginning in a path node is *nsamples*
    :dynamic - the number of playouts passed through a path node is *nsamples*")
-(defparameter *uct-exploration-factor* 0.5
+(defparameter *uct-exploration-factor* 4.0
   "the greater the factor, the more exploratory is UCT")
 
 (defvar *trace-state* #'identity
@@ -192,7 +192,7 @@
   "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
   (let* ((state-stats (get-stats state))
          (Cp-root-log-n
-          (* (Cp state) (sqrt (reduce #'+ state-stats :key #'stat-count))))
+          (* (Cp state) (sqrt (log (max 1.0 (reduce #'+ state-stats :key #'stat-count))))))
          (best-leg nil)
          (best-cost +into-cost+))
     (dolist (leg (shuffled-legs) best-leg)

@@ -45,28 +45,35 @@
     (arm (arm-mean tree))
     (switch (reduce *choose* (map 'list #'best-mean (switch-nodes tree))))))
 
-(defun experiment (&key levels branching sampling-factor nruns vararm)
-   (flet ((avgrwd (select)
-           (/ (float (loop repeat nruns
-                        sum (let* ((tree (with-unique-node-ids (make-tree levels branching))))
-                              (- (best-mean tree)
-                                 (pull-best-arm tree
-                                                select sampling-factor)))))
-              nruns)))
-    (let* ((vcreg (avgrwd #'vct-select))
-           (ucreg (avgrwd #'uct-select))
-           (uvreg (avgrwd #'uvt-select))
-           (gcreg (avgrwd #'gct-select))
-           (grreg (avgrwd #'grt-select))
-           (rnreg (avgrwd #'random-select)))
-      (format t "~@{~5F~^~T~}~%"
-              (if vararm branching sampling-factor) vcreg ucreg uvreg gcreg grreg rnreg)))
-  (force-output *standard-output*))
 
-(defparameter +experiment-header+ "nsamples~Tr_VCT~Tr_UCT~Tr_UVT~Tr_GCT~Tr_GRT~Tr_Random~%")
+(eval-when (:compile-toplevel :load-toplevel)
+  (defparameter +algorithms+ '("UCT" "GCT" "VCT" "QCT" "GRT" "Random")
+    "algorithms to compare"))
+
+(defmacro defun-experiment ()
+  (let ((varalgs (mapcar #'(lambda (alg)
+                             `(,(intern (string-upcase (concatenate 'string alg "-reg")))
+                                ,(intern (string-upcase (concatenate 'string alg "-select")))))
+                         +algorithms+)))
+    `(defun experiment (&key levels branching sampling-factor nruns vararm)
+       (flet ((avgrwd (select)
+                (/ (float (loop repeat nruns
+                             sum (let* ((tree (with-unique-node-ids (make-tree levels branching))))
+                                   (- (best-mean tree)
+                                      (pull-best-arm tree
+                                                     select sampling-factor)))))
+                   nruns)))
+         (let* ,(mapcar #'(lambda (varalg) 
+                            `(,(first varalg) (avgrwd #',(second varalg))))
+                        varalgs)
+           (format t "~D~T~@{~5F~^~T~}~%"
+                   (if vararm branching (* branching sampling-factor))
+                   ,@(mapcar #'car varalgs))))
+       (force-output *standard-output*))))
+(defun-experiment)
 
 (defun experiments (&key levels branching min-sf sf-step n-sf nruns)
-  (format t +experiment-header+)
+  (format t "nsamples~T~{~A~^~T~}~%" +algorithms+)
   (loop for sf = min-sf then (round (* sf sf-step)) repeat n-sf
        do (experiment :levels levels :branching branching :sampling-factor sf :nruns nruns)))
 
