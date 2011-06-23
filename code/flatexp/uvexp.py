@@ -74,7 +74,7 @@ class Exp:
                 ibest, vbest = i, v
         self.draw(ibest)
 
-    # Upper Qonfidence (sQuare root instead of logarithm) Bounds
+    # Upper Qonfidence (root instead of log) Bounds
     def UQB(self):
         n = sum(len(o) for o in self.outcomes)
         k = len(self.outcomes)
@@ -84,7 +84,7 @@ class Exp:
         for i in indices:
             ni = len(self.outcomes[i])
             avg = sum(self.outcomes[i])/ni
-            v = avg+sqrt(sqrt(n)/ni/k)
+            v = avg+sqrt(sqrt(n)/ni)
             if v > vbest:
                 ibest, vbest = i, v
         self.draw(ibest)
