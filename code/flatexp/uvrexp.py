@@ -39,18 +39,23 @@ def lowkey(x):
 
 transform = identity
     
-def randomexp(nhandles=10, nruns=1000, samples=[4,8,16,32,64,128]):
+MINSF=8
+def randomexp(nhandles=10, nruns=1000, minsf=MINSF, sfstep=2, nsf=8):
     print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
     def mkhandles():
         return [RandomHandle(transform(random.random())) for i in range(nhandles)]
     handles = mkhandles()
-    for nsamples in [nhandles*i for i in samples]:
+    nsamples = minsf*nhandles
+    for i in range(nsf):
         print nsamples,
-        for alg in ALGORITHMS:
-            print repeat_alg(alg=alg, mkhandles=mkhandles, nsamples=nsamples, nruns=nruns)[1],
-        print
         sys.stdout.flush()
+        for alg in ALGORITHMS:
+            print " %#8f" % repeat_alg(alg=alg, mkhandles=mkhandles, nsamples=nsamples, nruns=nruns)[1],
+            sys.stdout.flush()
+        print
+        nsamples = int(nsamples*sfstep)
 
 if __name__=="__main__":
     transform = locals()[sys.argv[3]]
-    randomexp(nhandles=int(sys.argv[1]), nruns=int(sys.argv[2]))
+    minsf = len(sys.argv)==4 and MINSF or int(sys.argv[4])
+    randomexp(nhandles=int(sys.argv[1]), nruns=int(sys.argv[2]), minsf=minsf)

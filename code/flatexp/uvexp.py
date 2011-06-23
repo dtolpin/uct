@@ -18,8 +18,9 @@ UCB = 'UCB'
 UCBt = 'UCBt'
 GRD = 'GRD'
 UVB = 'UVB'
+UQB = 'UQB'
 
-ALGORITHMS = [RND, UCB, GRD, UVB]
+ALGORITHMS = [RND, UCB, GRD, UVB, UQB]
 # ALGORITHMS = [RND, UCB, UCBt, GRD, UVB]
 
 class Exp:
@@ -69,6 +70,21 @@ class Exp:
             avg = sum(self.outcomes[i])/ni
             var = sum(o*o for o in self.outcomes[i])/ni-avg*avg
             v = avg+sqrt(min(0.25,var+sqrt(2*log(n)/ni))*log(n)/ni)
+            if v > vbest:
+                ibest, vbest = i, v
+        self.draw(ibest)
+
+    # Upper Qonfidence (sQuare root instead of logarithm) Bounds
+    def UQB(self):
+        n = sum(len(o) for o in self.outcomes)
+        k = len(self.outcomes)
+        ibest, vbest = -1, -1
+        indices = range(len(self.outcomes))
+        random.shuffle(indices) # break ties randomly
+        for i in indices:
+            ni = len(self.outcomes[i])
+            avg = sum(self.outcomes[i])/ni
+            v = avg+sqrt(sqrt(n)/ni/k)
             if v > vbest:
                 ibest, vbest = i, v
         self.draw(ibest)
