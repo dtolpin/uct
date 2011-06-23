@@ -172,12 +172,12 @@ def repeat_alg(alg=UCB, handles=handles_symmetric, nsamples=10, nruns=1000):
     regret = sum(r[1] for r in results)/nruns
     return (drawcounts, regret)
 
-def experiment(handles, nruns=10000, samples=range(4, 16)):
+def experiment(handles, nruns=10000, samples=[2**i for i in range(2,8)]):
     print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
     for nsamples in [len(handles)*i for i in samples]:
         print nsamples,
         for alg in ALGORITHMS:
-            print repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1],
+            print "%6f" % repeat_alg(alg=alg, handles=handles, nsamples=nsamples, nruns=nruns)[1],
         print
         sys.stdout.flush()
 
