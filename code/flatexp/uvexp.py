@@ -20,7 +20,7 @@ GRD = 'GRD'
 UVB = 'UVB'
 UQB = 'UQB'
 
-ALGORITHMS = [RND, UCB, GRD]
+ALGORITHMS = [RND, UCB, GRD, UQB]
 # ALGORITHMS = [RND, UCB, UCBt, GRD, UVB, UQB]
 
 class Exp:
@@ -84,7 +84,7 @@ class Exp:
         for i in indices:
             ni = len(self.outcomes[i])
             avg = sum(self.outcomes[i])/ni
-            v = avg+sqrt(sqrt(n)/ni)
+            v = avg+sqrt(2*sqrt(n)/ni)
             if v > vbest:
                 ibest, vbest = i, v
         self.draw(ibest)

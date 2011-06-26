@@ -3,7 +3,7 @@ import math
 import sys
 
 MINSF=8        # initial sampling factor in the random experiment
-MAXRWRD=0.75   # reward of a random arm is [1-MAXRWRD, MAXRWRD)
+MAXRWRD=1.0    # reward of a random arm is [1-MAXRWRD, MAXRWRD)
 
 class RandomHandle(Handle):
     def __init__(self, mean):
