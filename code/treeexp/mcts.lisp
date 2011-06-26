@@ -4,9 +4,10 @@
   (:export "*SAMPLING-FACTOR*" "WITH-UNIQUE-NODE-IDS"
            "SWITCH" "MAKE-SWITCH" "MAKE-ANTISWITCH" "SWITCH-NODES"
            "ARM" "MAKE-ARM" "ARM-MEAN"
-           "MAKE-ARMB" "MAKE-ARMF"
+           "MAKE-ARMF" "MAKE-ARMB"
            "PULL-BEST-ARM"
-           "RANDOM-SELECT"
+           "RND-SELECT"
+           "RCT-SELECT"
            "UCT-SELECT"
            "UVT-SELECT"
            "VCT-SELECT"
@@ -120,12 +121,14 @@
 (defmethod play ((switch switch) select)
   "playing a switch --- selecting a direction"
   (multiple-value-bind (node select) (funcall select switch)
-    (update-stats switch node (play node select))))
+    (multiple-value-bind (reward mean) (play node select)
+      (update-stats switch node reward)
+      (values reward mean))))
 
 (defmethod play ((arm arm) select)
   "playing a leaf node --- drawing the arm"
   (declare (ignore select))
-  (draw arm))
+  (values (draw arm) (arm-mean arm)))
 
 ;; Move selection function: sampling, then committing
 
@@ -144,6 +147,11 @@
                    (best-node nil)
                    (best-avg (lowest-reward switch)))
 
+              #+nil (progn (format t "~&~%")
+                     (map nil #'(lambda (stat) 
+                                  (format t "~@{~S~^ ~}~%" (stat-count stat) (stat-avg stat)))
+                          (sort (copy-seq stats) #'> :key #'stat-avg)))
+               
                ;; select best action
                (dolist (i (shuffled-indices stats) (values best-node #'commit-select))
                  (let ((avg (stat-avg (aref stats i))))
@@ -161,13 +169,19 @@
                       &optional (*sampling-factor* *sampling-factor*))
   "pull the best arm"
   (let ((*play-stats* (make-hash-table :test #'equal)))
-    (play tree (mk-commit-select sampling-select))))
+    (nth-value 1 (play tree (mk-commit-select sampling-select)))))
 
 ;; Basic arm kinds
 (defstruct (armf (:include arm))
   "fixed arm")
 (defstruct (armb (:include arm))
    "Bernulli arm")
+
+(defstruct (armm (:include arm))
+  "Markov arm")
+
+(defstruct (armg (:include arm))
+  "Game arm")
 
 (defmethod draw ((arm armf))
   "fixed arm: always the mean"
@@ -180,9 +194,10 @@
 ;;; Sampling algorithms
 
 ;; Random sampling
-(defun random-select (switch)
-  (values (aref (switch-nodes switch) (random (length (switch-nodes switch))))
-          #'random-select))
+(defun rnd (switch)
+  "Uniform random sampling"
+  (aref (switch-nodes switch)
+        (random (length (switch-nodes switch)))))
 
 ;; Single-level adaptive selection
 (defun ucb (switch)
@@ -262,6 +277,16 @@
                 best-reward reward))))))
 
 ;;; Adaptive sampling selection functions for passing to `pull-best-arm'
+
+;; Random
+
+(defun rnd-select (switch)
+  (values (rnd switch) #'rnd-select))
+
+;; Random than UCT
+
+(defun rct-select (switch)
+  (values (rnd switch) #'uct-select))
 
 ;; UCT
 

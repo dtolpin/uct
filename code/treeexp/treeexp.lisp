@@ -10,6 +10,7 @@
            "*MAKE-ALPHA-SWITCH*"
            "*MAKE-BETA-SWITCH*"
            "*CHOOSE*"
+           "*MAX-REWARD*"
            "+RANDOM-TREE-2X2+"
            "+FIXED-TREE-3X2+"))
 (in-package "TREEEXP")
@@ -21,11 +22,13 @@
 
 (defconstant +fringe-width+ 1)
 
+(defvar *max-reward* 1.0)
+
 (defun make-fringe ()
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
        (loop repeat +fringe-width+
-          append (let ((v (random 1.0))) (list v (- 1.0 v))))))
+          append (let ((v (+ 0.5 (* (- *max-reward* 0.5) (random 1.0))))) (list v (- 1.0 v))))))
 
 (defun make-tree (levels branching
                   &optional
@@ -47,41 +50,37 @@
 
 
 (eval-when (:compile-toplevel :load-toplevel)
-  (defparameter +algorithms+ '("UCT" "GCT" "VCT" "QCT" "GRT" "Random")
+  (defparameter +algorithms+ '("UCT" "GCT" "RCT" "RND")
     "algorithms to compare"))
 
-(defmacro defun-experiment ()
-  (let ((varalgs (mapcar #'(lambda (alg)
-                             `(,(intern (string-upcase (concatenate 'string alg "-reg")))
-                                ,(intern (string-upcase (concatenate 'string alg "-select")))))
-                         +algorithms+)))
-    `(defun experiment (&key levels branching sampling-factor nruns vararm)
-       (flet ((avgrwd (select)
-                (/ (float (loop repeat nruns
-                             sum (let* ((tree (with-unique-node-ids (make-tree levels branching))))
-                                   (- (best-mean tree)
-                                      (pull-best-arm tree
-                                                     select sampling-factor)))))
-                   nruns)))
-         (let* ,(mapcar #'(lambda (varalg) 
-                            `(,(first varalg) (avgrwd #',(second varalg))))
-                        varalgs)
-           (format t "~D~T~@{~5F~^~T~}~%"
-                   (if vararm branching (* branching sampling-factor))
-                   ,@(mapcar #'car varalgs))))
-       (force-output *standard-output*))))
-(defun-experiment)
+(defun experiment (&key levels branching sampling-factor nruns vararm (algorithms +algorithms+))
+  (flet ((avgrwd (select)
+           (/ (float (loop repeat nruns
+                        sum (let* ((tree (with-unique-node-ids (make-tree levels branching))))
+                              (- (best-mean tree)
+                                 (pull-best-arm tree
+                                                select sampling-factor)))))
+              nruns)))
+    (format t "~D~T~{~8F~^~T~}~%"
+            (if vararm branching (* branching sampling-factor))
+            (mapcar #'(lambda (alg)
+                        (avgrwd (symbol-function
+                                 (intern (format nil "~@:(~A~)-SELECT" alg)))))
+                    algorithms)))
+  (force-output *standard-output*))
 
-(defun experiments (&key levels branching min-sf sf-step n-sf nruns)
-  (format t "nsamples~T~{~A~^~T~}~%" +algorithms+)
-  (loop for sf = min-sf then (round (* sf sf-step)) repeat n-sf
-       do (experiment :levels levels :branching branching :sampling-factor sf :nruns nruns)))
+(defun experiments (&key levels branching min-sf sf-step n-sf nruns (algorithms +algorithms+))
+  (format t "nsamples~T~{r_~A~^~T~}~%" algorithms)
+  (loop for sf = min-sf then (ceiling (* sf sf-step)) repeat n-sf
+       do (experiment :levels levels :branching branching :sampling-factor sf :nruns nruns
+                      :algorithms algorithms)))
 
-(defun vararm-experiments (&key levels sampling-factor min-b b-step n-b nruns)
-  (format t +experiment-header+)
+(defun vararm-experiments (&key levels sampling-factor min-b b-step n-b nruns (algorithms +algorithms+))
+  (format t "nsamples~T~{r_~A~^~T~}~%" algorithms)
   (loop for b = min-b then (round (* b b-step)) repeat n-b
      do (experiment :levels levels :branching b :sampling-factor sampling-factor
-                    :nruns (ceiling (/ nruns (log b 2))) :vararm t)))
+                    :nruns (ceiling (/ nruns (log b 2))) :vararm t
+                    :algorithms algorithms)))
 
 (defconstant +number-of-runs+ 16000)
 
