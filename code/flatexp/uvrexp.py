@@ -2,6 +2,9 @@ from uvexp import *
 import math
 import sys
 
+MINSF=8        # initial sampling factor in the random experiment
+MAXRWRD=0.75   # reward of a random arm is [1-MAXRWRD, MAXRWRD)
+
 class RandomHandle(Handle):
     def __init__(self, mean):
         flip = random.randrange(3)
@@ -39,11 +42,13 @@ def lowkey(x):
 
 transform = identity
     
-MINSF=8
 def randomexp(nhandles=10, nruns=1000, minsf=MINSF, sfstep=2, nsf=8):
+    assert (MAXRWRD<=1.0 and MAXRWRD>0.5)
     print "nsamples "+" ".join("r_"+alg for alg in ALGORITHMS)
     def mkhandles():
-        return [RandomHandle(transform(random.random())) for i in range(nhandles)]
+        return [RandomHandle(transform(1-MAXRWRD
+                                       +(2*MAXRWRD-1)*random.random()))
+                for i in range(nhandles)]
     handles = mkhandles()
     nsamples = minsf*nhandles
     for i in range(nsf):

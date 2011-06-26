@@ -48,7 +48,6 @@
     (arm (arm-mean tree))
     (switch (reduce *choose* (map 'list #'best-mean (switch-nodes tree))))))
 
-
 (eval-when (:compile-toplevel :load-toplevel)
   (defparameter +algorithms+ '("UCT" "GCT" "RCT" "RND")
     "algorithms to compare"))

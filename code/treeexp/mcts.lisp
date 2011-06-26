@@ -4,7 +4,7 @@
   (:export "*SAMPLING-FACTOR*" "WITH-UNIQUE-NODE-IDS"
            "SWITCH" "MAKE-SWITCH" "MAKE-ANTISWITCH" "SWITCH-NODES"
            "ARM" "MAKE-ARM" "ARM-MEAN"
-           "MAKE-ARMF" "MAKE-ARMB"
+           "MAKE-ARMF" "MAKE-ARMB" "MAKE-ARMV"
            "PULL-BEST-ARM"
            "RND-SELECT"
            "RCT-SELECT"
@@ -16,6 +16,8 @@
            "UQT-SELECT"
            "QCT-SELECT"))
 (in-package "MCTS")
+
+(defvar *debug* nil)
 
 ;;; Monte-Carlo Tree Sampling
 ;;; Common Notions
@@ -139,7 +141,8 @@
              (dotimes (i (number-of-samples switch))
                (multiple-value-bind (node sampling-select)
                    (funcall sampling-select switch)
-                 (update-stats switch node (play node sampling-select))))
+                 (when node ; sample if node is not nil, skip otherwise
+                   (update-stats switch node (play node sampling-select)))))
              
              ;; extract statistics
              (let ((stats (map 'vector (lambda (node) (get-stat switch node))
@@ -147,10 +150,12 @@
                    (best-node nil)
                    (best-avg (lowest-reward switch)))
 
-              #+nil (progn (format t "~&~%")
-                     (map nil #'(lambda (stat) 
-                                  (format t "~@{~S~^ ~}~%" (stat-count stat) (stat-avg stat)))
-                          (sort (copy-seq stats) #'> :key #'stat-avg)))
+               (when (member :print-stats *debug*)
+                 (progn (format t "~&~%")
+                        (map nil #'(lambda (stat) 
+                                     (format t "~@{~S~^ ~}~%"
+                                             (stat-count stat) (stat-avg stat)))
+                             (sort (copy-seq stats) #'> :key #'stat-avg))))
                
                ;; select best action
                (dolist (i (shuffled-indices stats) (values best-node #'commit-select))
@@ -177,11 +182,8 @@
 (defstruct (armb (:include arm))
    "Bernulli arm")
 
-(defstruct (armm (:include arm))
-  "Markov arm")
-
-(defstruct (armg (:include arm))
-  "Game arm")
+(defstruct (armv (:include arm))
+  "Variance arm")
 
 (defmethod draw ((arm armf))
   "fixed arm: always the mean"
@@ -191,11 +193,17 @@
   "Bernoulli arm: either 0.0 or 1.0"
   (if (< (random 1.0) (arm-mean arm)) 1.0 0.0))
 
+(defmethod draw ((arm armv))
+  "Fixed variance arm: either mean+delta or mean-delta"
+  (if (< (random 1.0) 0.5)
+      (+ (arm-mean arm) 0.5) (- (arm-mean arm) 0.5)))
+
+
 ;;; Sampling algorithms
 
 ;; Random sampling
 (defun rnd (switch)
-  "Uniform random sampling"
+  "Uniform random sampling" 
   (aref (switch-nodes switch)
         (random (length (switch-nodes switch)))))
 
