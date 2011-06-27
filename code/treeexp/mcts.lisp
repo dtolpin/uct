@@ -215,7 +215,7 @@
                           (switch-nodes switch)))
          (avgs (map 'vector #'stat-avg node-stats))
          (root-2-log-n
-          (sqrt (* 2 (log (max 1.0 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))))
+          (sqrt (* 2.0 (log (max 1.0 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))))
          (best-node nil)
          (best-reward (lowest-reward switch)))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
@@ -234,7 +234,7 @@
   "Computes *uqb-factor* such that 
     *uqb-factor* * sqrt(n)=2*log(n) for 
     n: 2*log(n)==n/2/k"
-  (flet ((equ (n) (- (* 2.0 (log n)) (coerce (/ n k 2) 'double-float))))
+  (flet ((equ (n) (- (* 8 (log n)) (coerce (/ n k 2) 'double-float))))
     (let* ((xa k) (xb (floor most-positive-fixnum 2))
            (fa (equ xa)) (fb (equ xb))
            (n (loop
@@ -255,7 +255,7 @@
          (avgs (map 'vector #'stat-avg node-stats))
          (root-2-sqrt-n
           (sqrt (* *uqb-factor* (sqrt (max 1.0 (reduce #'+ node-stats :key #'stat-count
-                                              :initial-value 0))))))
+                                                       :initial-value 0))))))
          (best-node nil)
          (best-reward (lowest-reward switch)))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
