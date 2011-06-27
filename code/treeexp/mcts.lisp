@@ -233,8 +233,8 @@
 (defun compute-uqb-factor (k)
   "Computes *uqb-factor* such that 
     *uqb-factor* * sqrt(n)=2*log(n) for 
-    n: 2*log(n)==n/k"
-  (flet ((equ (n) (- (* 2.0 (log n)) (coerce (/ n k) 'double-float))))
+    n: 2*log(n)==n/2/k"
+  (flet ((equ (n) (- (* 2.0 (log n)) (coerce (/ n k 2) 'double-float))))
     (let* ((xa k) (xb (floor most-positive-fixnum 2))
            (fa (equ xa)) (fb (equ xb))
            (n (loop
