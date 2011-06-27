@@ -53,6 +53,7 @@
     "algorithms to compare"))
 
 (defun experiment (&key levels branching sampling-factor nruns vararm (algorithms +algorithms+))
+  (compute-uqb-factor branching)
   (flet ((avgrwd (select)
            (/ (float (loop repeat nruns
                         sum (let* ((tree (with-unique-node-ids (make-tree levels branching))))

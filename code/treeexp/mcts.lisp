@@ -14,7 +14,8 @@
            "GCT-SELECT"
            "GRT-SELECT"
            "UQT-SELECT"
-           "QCT-SELECT"))
+           "QCT-SELECT"
+           "COMPUTE-UQB-FACTOR"))
 (in-package "MCTS")
 
 (defvar *debug* nil)
@@ -227,14 +228,34 @@
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
 
+(defvar *uqb-factor* 1.0)
 
+(defun compute-uqb-factor (k)
+  "Computes *uqb-factor* such that 
+    *uqb-factor* * sqrt(n)=2*log(n) for 
+    n: 2*log(n)==n/k"
+  (flet ((equ (n) (- (* 2.0 (log n)) (coerce (/ n k) 'double-float))))
+    (let* ((xa k) (xb (floor most-positive-fixnum 2))
+           (fa (equ xa)) (fb (equ xb))
+           (n (loop
+                 (when (< (abs (- fa fb)) 1e-3) (return xa))
+                 (let* ((xc (* 0.5 (+ xa xb)))
+                        (fc (equ xc)))
+                   (if (= (signum fc) (signum fb))
+                       (setf xb xc
+                             fb fc)
+                       (setf xa xc
+                             fa fc))))))
+      (setf *uqb-factor* (/ (* 2.0 (log n)) (sqrt n))))))
+           
 (defun uqb (switch)
   "UQB selection: max (avg+sqrt(2*sqrt (n) / ni))"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
          (avgs (map 'vector #'stat-avg node-stats))
          (root-2-sqrt-n
-          (sqrt (* 2 (sqrt (max 1.0 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))))
+          (sqrt (* *uqb-factor* (sqrt (max 1.0 (reduce #'+ node-stats :key #'stat-count
+                                              :initial-value 0))))))
          (best-node nil)
          (best-reward (lowest-reward switch)))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
