@@ -19,7 +19,6 @@
 (defvar *make-alpha-switch* #'make-switch)
 (defvar *make-beta-switch* #'make-switch)
 (defvar *choose* #'max)
-(defvar *make-tree* #'make-tree)
 
 (defconstant +fringe-width+ 1)
 
@@ -52,6 +51,8 @@
                                        :mean  (+ (- 1.0d0 *max-reward*)
                                                  (* *max-reward* (random 1.0d0)))))
                    'vector)))
+
+(defvar *make-tree* #'make-tree)
 
 (defun best-mean (tree)
   "find the max mean of arms"
