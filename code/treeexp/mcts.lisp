@@ -15,10 +15,13 @@
            "GRT-SELECT"
            "UQT-SELECT"
            "QCT-SELECT"
-           "COMPUTE-UQB-FACTOR"))
+           "COMPUTE-UQB-FACTOR"
+           "*UQB-ALPHA*"))
 (in-package "MCTS")
 
 (defvar *debug* nil)
+
+(defparameter *uqb-alpha* 8)
 
 ;;; Monte-Carlo Tree Sampling
 ;;; Common Notions
@@ -230,11 +233,11 @@
 
 (defvar *uqb-factor* 1.0)
 
-(defun compute-uqb-factor (k)
+(defun compute-uqb-factor (k &optional (alpha *uqb-alpha*))
   "Computes *uqb-factor* such that 
     *uqb-factor* * sqrt(n)=2*log(n) for 
     n: 2*log(n)==n/2/k"
-  (flet ((equ (n) (- (* 8 (log n)) (coerce (/ n k 2) 'double-float))))
+  (flet ((equ (n) (- (* alpha (log n)) (coerce (/ n k 2) 'double-float))))
     (let* ((xa k) (xb (floor most-positive-fixnum 2))
            (fa (equ xa)) (fb (equ xb))
            (n (loop
