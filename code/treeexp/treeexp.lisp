@@ -19,10 +19,18 @@
 (defvar *make-alpha-switch* #'make-switch)
 (defvar *make-beta-switch* #'make-switch)
 (defvar *choose* #'max)
+(defvar *transform* #'identity)
 
 (defconstant +fringe-width+ 1)
 
 (defvar *max-reward* 1.0)
+
+(defun bounded-reward (r)
+  (+ (- 1.0d0 *max-reward*)
+     (* *max-reward* r)))
+
+(defun low-key (r)
+  (+ (* 0.0 (- r 0.5)) (if (< r 0.9) (float 1/3) (float 2/3))))
 
 (defun make-fringe ()
   "make a random fringe with mean 0.5"
@@ -48,8 +56,7 @@
            :nodes (coerce
                    (loop repeat branching
                       collect (funcall *make-arm*
-                                       :mean  (+ (- 1.0d0 *max-reward*)
-                                                 (* *max-reward* (random 1.0d0)))))
+                                       :mean (funcall *transform* (random 1.00))))
                    'vector)))
 
 (defvar *make-tree* #'make-tree)
