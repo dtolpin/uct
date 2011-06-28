@@ -84,7 +84,7 @@ class Exp:
         for i in indices:
             ni = len(self.outcomes[i])
             avg = sum(self.outcomes[i])/ni
-            v = avg+sqrt(2*log(n)*log(n)/ni)
+            v = avg+sqrt(0.5*sqrt(n)/ni)
             if v > vbest:
                 ibest, vbest = i, v
         self.draw(ibest)

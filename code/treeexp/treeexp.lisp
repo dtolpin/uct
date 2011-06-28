@@ -19,6 +19,7 @@
 (defvar *make-alpha-switch* #'make-switch)
 (defvar *make-beta-switch* #'make-switch)
 (defvar *choose* #'max)
+(defvar *make-tree* #'make-tree)
 
 (defconstant +fringe-width+ 1)
 
@@ -28,7 +29,7 @@
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
        (loop repeat +fringe-width+
-          append (let ((v (+ 0.5 (* (- *max-reward* 0.5) (random 1.0))))) (list v (- 1.0 v))))))
+          append (let ((v (+ 0.5 (* (- *max-reward* 0.5) (random 1.0d0))))) (list v (- 1.0d0 v))))))
 
 (defun make-tree (levels branching
                   &optional
@@ -41,6 +42,16 @@
                          collect (make-tree (1- levels) branching
                                             make-beta-switch make-alpha-switch))
                       'vector))))
+
+(defun make-flat (levels branching &rest args)
+  (declare (ignore levels args))
+  (funcall *make-alpha-switch*
+           :nodes (coerce
+                   (loop repeat branching
+                      collect (funcall *make-arm*
+                                       :mean  (+ (- 1.0d0 *max-reward*)
+                                                 (* *max-reward* (random 1.0d0)))))
+                   'vector)))
 
 (defun best-mean (tree)
   "find the max mean of arms"
@@ -56,7 +67,8 @@
   (compute-uqb-factor branching)
   (flet ((avgrwd (select)
            (/ (float (loop repeat nruns
-                        sum (let* ((tree (with-unique-node-ids (make-tree levels branching))))
+                        sum (let* ((tree (with-unique-node-ids
+                                             (funcall *make-tree* levels branching))))
                               (- (best-mean tree)
                                  (pull-best-arm tree
                                                 select sampling-factor)))))

@@ -40,9 +40,9 @@
 (defun shuffled-indices (sequence)
   "generate a shuffled list of indices"
   (let* ((i -1)
-         (indices (map 'list (lambda (x) (declare (ignore x)) (incf i))
+         (indices (map 'list (lambda (x) (declare (ignore x)) (cons (incf i) (random 1.0)))
                        sequence)))
-    (sort indices #'> :key (lambda (x) (declare (ignore x)) (random 1.0)))))
+    (mapcar #'car (sort indices #'> :key #'cdr))))
 
 (defstruct node
   "search tree node, either a switch or an arm"
@@ -234,7 +234,7 @@
   "Computes *uqb-factor* such that 
     *uqb-factor* * sqrt(n)=2*log(n) for 
     n: 2*log(n)==n/2/k"
-  (flet ((equ (n) (- (* 2 (log n)) (coerce (/ n k 2) 'double-float))))
+  (flet ((equ (n) (- (* 8 (log n)) (coerce (/ n k 2) 'double-float))))
     (let* ((xa k) (xb (floor most-positive-fixnum 2))
            (fa (equ xa)) (fb (equ xb))
            (n (loop
@@ -350,7 +350,7 @@
 ;; QCT
 
 (defun qct-select (switch)
-  (values (uqb switch) #'qct-select))
+  (values (uqb switch) #'uct-select))
 
 ;; Testing
 
