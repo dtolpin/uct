@@ -42,7 +42,7 @@
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
        (loop repeat +fringe-width+
-          append (let ((v (+ 0.5 (* (- *max-reward* 0.5) (random 1.0d0))))) (list v (- 1.0d0 v))))))
+          append (let ((v (funcall *transform* (random 1.0)))) (list v (- 1.0d0 v))))))
 
 (defun make-tree (levels branching
                   &optional
