@@ -30,7 +30,13 @@
      (* *max-reward* r)))
 
 (defun low-key (r)
-  (+ (* 0.0 (- r 0.5)) (if (< r 0.9) (float 1/3) (float 2/3))))
+  (if (< r 0.9) (float 1/3) (float 2/3)))
+
+(defun trilevel (r)
+  (cond
+    ((< r 0.5) 0.25)
+    ((< r 0.9) 0.5)
+    (t 0.75)))
 
 (defun make-fringe ()
   "make a random fringe with mean 0.5"
