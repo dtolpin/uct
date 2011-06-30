@@ -7,6 +7,7 @@
            "*SAMPLE-COUNT*"
            "RND-SELECT"
            "UCT-SELECT"
-           "VCT-SELECT"
+           "GCT-SELECT"
+           "QCT-SELECT"
            "RCT-SELECT"))
 (in-package "SAILING")

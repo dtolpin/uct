@@ -157,10 +157,9 @@
                      (best-leg nil)
                      (best-avg +into-cost+))
 
-                 #+nil(format *error-output* "~S~%" (map 'list (lambda (stat) (list (stat-count stat) (stat-avg stat))) stats))
-
                  ;; select best action
-                 (dolist (leg (shuffled-legs) (values best-leg #'commit-select))
+                 (dolist (leg (shuffled-legs)
+                          (values best-leg #'commit-select))
                    (let ((avg (stat-avg (aref stats leg))))
                      (when (< avg best-avg) 
                        (setf best-leg leg
@@ -177,7 +176,8 @@
   (let ((*play-stats* (make-hash-table :test #'eql))
         (*play-stat-vectors* (make-hash-table :test #'eql)))
     (values
-     (play initial-state (mk-commit-select select) (max-playout-time initial-state))
+     (play initial-state (mk-commit-select select) (max-playout-time
+                                                    initial-state))
      (stats-nsamples))))
 
 ;; Selectors
@@ -188,43 +188,47 @@
           (unless (bad-leg-p state leg)
             (return leg)))))
 
-(defun ucb (state)
-  "UCB selection: min (avg-Cp*sqrt(log (n) / ni))"
+(defun u*b (state fun alpha)
+  "U*B selection: min (avg-Cp*sqrt(fun (n) / ni))"
   (let* ((state-stats (get-stats state))
-         (Cp-root-log-n
-          (* (Cp state) (sqrt (log (max 1.0 (reduce #'+ state-stats :key #'stat-count))))))
+         (Cp-root-fun-n
+          (* alpha (Cp state)
+             (sqrt (funcall fun (max 1.0 (reduce #'+ state-stats
+                                                 :key #'stat-count))))))
          (best-leg nil)
          (best-cost +into-cost+))
     (dolist (leg (shuffled-legs) best-leg)
-      (let ((cost (cond
-                    ((bad-leg-p state leg) +into-cost+)
-                    ((plusp (stat-count (aref state-stats leg)))
-                     (- (stat-avg (aref state-stats leg))
-                        (/ Cp-root-log-n (sqrt (stat-count (aref state-stats leg))))))
-                    (t (- +into-cost+)))))
-        (when (< cost best-cost)
-          (setf best-leg leg
-                best-cost cost))))))
+      (unless (bad-leg-p state leg)
+        (when (zerop (stat-count (aref state-stats leg)))
+          (return leg))
+        (let ((cost (- (stat-avg (aref state-stats leg))
+                       (/ Cp-root-fun-n
+                          (sqrt (stat-count (aref state-stats leg)))))))
+          (when (< cost best-cost)
+            (setf best-leg leg
+                  best-cost cost)))))))
 
-(defun uvb (state)
-  "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
+(defun ucb (state) (u*b state #'log 1.0))
+(defun uqb (state) (u*b state #'sqrt 0.25))
+
+(defun grd (state)
+  "0.5-greedy selection"
   (let* ((state-stats (get-stats state))
-         (best-avg (reduce #'min state-stats :key #'stat-avg))
-         (kappa (/ 1.0 (reduce #'+ +legs+
-                               :key (lambda (leg) (if (bad-leg-p state leg) 0.0 1.0)))))
+         (k (reduce #'+ +legs+
+                    :key (lambda (leg) (if (bad-leg-p state leg) 0.0 1.0))))
          (best-leg nil)
-         (best-reward -1.0))
-    (dolist (leg (shuffled-legs) best-leg)
-      (let ((reward (cond
-                      ((bad-leg-p state leg) -1.0)
-                      ((plusp (stat-count (aref state-stats leg)))
-                       (/ (if (= (stat-avg (aref state-stats leg)) best-avg)
-                              (- 1.0 kappa) kappa)
-                          (stat-count (aref state-stats leg))))
-                      (t +1.0))))
-        (when (> reward best-reward)
-          (setf best-leg leg
-                best-reward reward))))))
+         (best-cost +into-cost+))
+    (dolist (leg (shuffled-legs)
+             (if (> (random 1.0) (* 0.5 (/ k (- k 1.0d0))))
+                 best-leg
+                 (rnd state)))
+      (unless (bad-leg-p state leg)
+        (when (zerop (stat-count (aref state-stats leg)))
+          (return leg))
+        (let ((cost (stat-avg (aref state-stats leg))))
+          (when (< cost best-cost)
+            (setf best-leg leg
+                  best-cost cost)))))))
 
 ;; Adaptive selectors
 
@@ -236,12 +240,19 @@
 (defun uct-select (state)
   (values (ucb state) #'uct-select))
 
+;; RCT (Random once, then UCB)
 (defun rct-select (state)
   (values (rnd state) #'uct-select))
 
-;; UVB once, then UCT 
-(defun vct-select (state)
-  (values (uvb state) #'uct-select))
+;; GCT (Greedy once, than UCB)
+
+(defun gct-select (switch)
+  (values (grd switch) #'uct-select))
+
+;; UQT (UQB once, than UCT)
+
+(defun qct-select (switch)
+  (values (uqb switch) #'uct-select))
 
 ;; Testing
 

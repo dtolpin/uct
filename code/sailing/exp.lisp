@@ -11,7 +11,8 @@
            "*SAMPLE-COUNT*"
            "RND-SELECT"
            "UCT-SELECT"
-           "VCT-SELECT"
+           "GCT-SELECT"
+           "QCT-SELECT"
            "RCT-SELECT"))
 (in-package "SAILEXP")
 
@@ -27,7 +28,7 @@
                                (round (/ nsamples-sum nr)))))))
 
 
-(defparameter +selectors+ '(rnd uct vct rct)
+(defparameter +selectors+ '(rnd rct uct gct qct)
   "list of selectors to compare")
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
