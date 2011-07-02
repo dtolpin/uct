@@ -20,10 +20,8 @@
 
 ;; Helpers
 
-;; legs are shuffled to avoid dependency on direction order
 (defun shuffled-legs () 
   "generates a shuffled list of legs"
-  #-nil (return-from shuffled-legs +legs+)
   (let ((legs (copy-seq +legs+)))
     (loop for i from 7 downto 1 do
          (let ((j (random (1+ i))))
@@ -250,10 +248,15 @@
 (defun gct-select (switch)
   (values (grd switch) #'uct-select))
 
-;; UQT (UQB once, than UCT)
+;; QCT (UQB once, than UCT)
 
 (defun qct-select (switch)
   (values (uqb switch) #'uct-select))
+
+;; UQT (always UQB)
+
+(defun uqt-select (switch)
+  (values (uqb switch) #'uqt-select))
 
 ;; Testing
 

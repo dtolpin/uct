@@ -3,13 +3,15 @@ import sys
 
 def median(vals):
   vals.sort()
-
   if len(vals) % 2 == 1:
     return vals[(len(vals)+1)/2-1]
   else:
     lower = vals[len(vals)/2-1]
     upper = vals[len(vals)/2]
-    return (float(lower + upper)) / 2  
+    return (float(lower + upper))/2.0
+
+def mean(vals):
+    return float(sum(vals))/len(vals)
 
 def do(filenames):
     regrets = {}
@@ -26,7 +28,7 @@ def do(filenames):
             lvs = [float(v) for v in line.split()[1:]]
             for i in range(len(values)):
                 values[i].append(lvs[i])
-            regrets[nsamples] = [min(vs) for vs in values]
+            regrets[nsamples] = [median(vs) for vs in values]
         f.close()
     names = ['SAMPLES']+names[1:]
     f = file("costs-size=%s.txt" % size, "w")

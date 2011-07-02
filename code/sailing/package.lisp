@@ -9,5 +9,6 @@
            "UCT-SELECT"
            "GCT-SELECT"
            "QCT-SELECT"
+           "UQT-SELECT"
            "RCT-SELECT"))
 (in-package "SAILING")

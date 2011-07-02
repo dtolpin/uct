@@ -26,27 +26,39 @@
 (defvar *max-reward* 1.0)
 
 (defun bounded-reward (r)
-  (+ (- 1.0d0 *max-reward*)
-     (* *max-reward* r)))
+  (values
+   (+ (- 1.0 *max-reward*)
+      (* *max-reward* r))
+   (- 1.0 *max-reward*)))
 
 (defun low-key (r)
-  (if (< r 0.9) (float 1/3) (float 2/3)))
+  (values
+   (if (< r 0.9) (float 1/3) (float 2/3))
+   (float 1/3)))
 
 (defun trilevel (r)
-  (cond
-    ((< r 0.5) 0.25)
-    ((< r 0.9) 0.5)
-    (t 0.75)))
+  (values
+   (cond
+     ((< r 0.5) 0.25)
+     ((< r 0.9) 0.5)
+     (t 0.75))
+   0.25))
 
 (defun make-fringe ()
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
        (loop repeat +fringe-width+
-          append (let ((v (funcall *transform* (random 1.0)))) (list v (- 1.0d0 v))))))
+          nconc (multiple-value-bind (v v-min)
+                    (funcall *transform* (random 1.0))
+                  ;; now map v to [0.5,1]
+                  (let* ((v-min (or v-min 0.0))
+                         (v (* 0.5 (+ 1.0 (- v v-min)))))
+                    (list v (- 1.0 v)))))))
 
 (defun make-tree (levels branching
                   &optional
-                  (make-alpha-switch *make-alpha-switch*) (make-beta-switch *make-beta-switch*))
+                  (make-alpha-switch *make-alpha-switch*)
+                  (make-beta-switch *make-beta-switch*))
   "make a random tree"
   (funcall make-alpha-switch 
    :nodes (if (= levels 1)
@@ -73,9 +85,7 @@
     (arm (arm-mean tree))
     (switch (reduce *choose* (map 'list #'best-mean (switch-nodes tree))))))
 
-(eval-when (:compile-toplevel :load-toplevel)
-  (defparameter +algorithms+ '("UCT" "GCT" "RCT" "RND")
-    "algorithms to compare"))
+(defparameter +algorithms+ '("UCT" "GCT" "RCT" "RND"))
 
 (defun experiment (&key levels branching sampling-factor nruns vararm (algorithms +algorithms+))
   (compute-uqb-factor branching)
