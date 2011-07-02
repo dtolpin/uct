@@ -43,8 +43,8 @@
         (clear-output *standard-output*)))
     (format t "~%")))
 
-(defun exp1 (&key (nruns 5000) (size 5))
-  (do ((nsamples 50 (round (* 1.3 nsamples))))
-      ((> nsamples 500))
+(defun exp1 (&key (size 5) (nruns 5000))
+  (do ((nsamples (* 2 size) (round (* 1.3 nsamples))))
+      ((> nsamples (* 100 size)))
     (format t "~&~%[~A samples]~%" nsamples)
     (exp0 :nruns nruns :nsamples nsamples :size size)))
