@@ -21,8 +21,9 @@
 ;; Helpers
 
 ;; legs are shuffled to avoid dependency on direction order
-(defun shuffled-legs ()
+(defun shuffled-legs () 
   "generates a shuffled list of legs"
+  #-nil (return-from shuffled-legs +legs+)
   (let ((legs (copy-seq +legs+)))
     (loop for i from 7 downto 1 do
          (let ((j (random (1+ i))))

@@ -1,6 +1,6 @@
 draw.costs.of.factor <- function(costs_file, legend.position='bottomright',maxfactor=1.5) {
-  algorithms <- c('RANDOM', 'UCT', 'VCT')
   costs <- read.table(costs_file, header=T)
+  algorithms <- names(costs)[-1]
   xlim <- range(costs$FACTOR[costs$FACTOR<=maxfactor])
   costs$RANDOM <- mean(costs$RANDOM)
   ylim <- range(min(costs[algorithms]), costs$RANDOM)
@@ -17,13 +17,13 @@ draw.costs.of.factor <- function(costs_file, legend.position='bottomright',maxfa
   legend(x=legend.position, legend=algorithms, pch=1:length(algorithms))
 }
 
-draw.costs.of.nsamples <- function(costs_file, legend.position='right', minsamples=80) {
-  algorithms <- c('RANDOM', 'UCT', 'VCT', 'OPT')
+draw.costs.of.nsamples <- function(costs_file, legend.position='right', log="x") {
   costs <- read.table(costs_file, header=T)
-  xlim <- range(costs$SAMPLES[costs$SAMPLES>=minsamples])
-  costs$RANDOM <- mean(costs$RANDOM)
-  ylim <- range(min(costs[algorithms]), costs$RANDOM)
-  plot(x=costs$nsamples, type='n', log="", xlim=xlim, ylim=ylim, xaxs='i',
+  algorithms <- names(costs)[-1]
+  xlim <- range(costs$SAMPLES)
+  ylim <- range(costs[algorithms])
+  print(costs)
+  plot(x=costs$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, xaxs='i',
        xlab='samples per node', ylab='cost',
        main=do.call(paste,as.list(unlist(strsplit(costs_file,
          "-|\\.txt",fixed=FALSE)))[-1]))

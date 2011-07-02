@@ -33,8 +33,8 @@
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
   (format t "~&~%~{~,8T~A~}~%" (cons 'factor +selectors+))
-  (do ((*uct-exploration-factor* 0.5 (* 2 *uct-exploration-factor*)))
-      ((> *uct-exploration-factor* 16.0))
+  (do ((*uct-exploration-factor* 1 (* 2 *uct-exploration-factor*)))
+      ((> *uct-exploration-factor* 4.0))
     (format t "~,8T~5F" *uct-exploration-factor*)
     (dolist (selector +selectors+)
       (let ((select (symbol-function
