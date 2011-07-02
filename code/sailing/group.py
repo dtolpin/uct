@@ -28,7 +28,7 @@ def do(filenames):
             lvs = [float(v) for v in line.split()[1:]]
             for i in range(len(values)):
                 values[i].append(lvs[i])
-            regrets[nsamples] = [median(vs) for vs in values]
+            regrets[nsamples] = [min(vs) for vs in values]
         f.close()
     names = ['SAMPLES']+names[1:]
     f = file("costs-size=%s.txt" % size, "w")
