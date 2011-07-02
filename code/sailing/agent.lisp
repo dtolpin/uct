@@ -18,16 +18,6 @@
 
 (defconstant +max-manhattans+ 2)
 
-;; Helpers
-
-(defun shuffled-legs () 
-  "generates a shuffled list of legs"
-  (let ((legs (copy-seq +legs+)))
-    (loop for i from 7 downto 1 do
-         (let ((j (random (1+ i))))
-           (rotatef (nth i legs) (nth j legs)))
-         finally (return legs))))
-
 ;; Stopping discipline
 
 ;;   stop an episode if more than +max-manhattans+ long
@@ -157,7 +147,7 @@
                      (best-avg +into-cost+))
 
                  ;; select best action
-                 (dolist (leg (shuffled-legs)
+                 (dolist (leg +legs+
                           (values best-leg #'commit-select))
                    (let ((avg (stat-avg (aref stats leg))))
                      (when (< avg best-avg) 
@@ -196,7 +186,7 @@
                                                  :key #'stat-count))))))
          (best-leg nil)
          (best-cost +into-cost+))
-    (dolist (leg (shuffled-legs) best-leg)
+    (dolist (leg +legs+ best-leg)
       (unless (bad-leg-p state leg)
         (when (zerop (stat-count (aref state-stats leg)))
           (return leg))
@@ -217,7 +207,7 @@
                     :key (lambda (leg) (if (bad-leg-p state leg) 0.0 1.0))))
          (best-leg nil)
          (best-cost +into-cost+))
-    (dolist (leg (shuffled-legs)
+    (dolist (leg +legs+
              (if (> (random 1.0) (* 0.5 (/ k (- k 1.0d0))))
                  best-leg
                  (rnd state)))
