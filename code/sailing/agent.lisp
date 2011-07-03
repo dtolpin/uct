@@ -16,7 +16,7 @@
 (defvar *nsamples* 32
   "number of playouts per state")
 
-(defconstant +max-manhattans+ 1)
+(defconstant +max-manhattans+ 16)
 
 ;; Stopping discipline
 
@@ -32,13 +32,12 @@
   "pessimistic evaluation function, so that bad moves
    are visited rarely"
   ;; manhattan into wind and delay at each step
-  (* (+ +up-cost+ +delay-cost+) 
+  (* (+ +up-cost+ +delay-cost+)
      (+ (- *size* (state-x state)) (- *size* (state-y state)))))
 
 ;; Bounding rewards
-;;   the worst feasible cost is manhattan into wind,
-;;   the best is away by diagonal, lower-bound it as 0
 (defun Cp (state)
+  (declare (ignore state))
   "UCT factor $C_p$ in $2 C_p \sqrt{\frac {log n_i} n}$"
   (* *uct-exploration-factor* (evaluate-state state)))
 

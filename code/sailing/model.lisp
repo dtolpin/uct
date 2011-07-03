@@ -11,7 +11,7 @@
 (defconstant +delay-cost+ 4.0)
 (defconstant +away-cost+ 1.0)
 (defconstant +down-cost+ 2.0)
-(defconstant +cross-cost+ 8.0)
+(defconstant +cross-cost+ 3.0)
 (defconstant +up-cost+ 4.0)
 (defconstant +into-cost+ (coerce most-positive-fixnum 'double-float))
 (defconstant +same-wind-prob+ 0.4)

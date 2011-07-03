@@ -32,10 +32,11 @@
 (defparameter +selectors+ '(rnd rct uct gct qct)
   "list of selectors to compare")
 
-(defun exp0 (&key (nruns 5000) (nsamples 100) (size 5))
+(defun exp0 (&key (nruns 5000) (nsamples 100) (size 5)
+             (min-ef 1.0) (ef-step 2.0) (max-ef 4.0))
   (format t "~&~%~{~,8T~A~}~%" (cons 'factor +selectors+))
-  (do ((*uct-exploration-factor* 1 (* 2 *uct-exploration-factor*)))
-      ((> *uct-exploration-factor* 4.0))
+  (do ((*uct-exploration-factor* min-ef (* ef-step *uct-exploration-factor*)))
+      ((> *uct-exploration-factor* max-ef))
     (format t "~,8T~5F" *uct-exploration-factor*)
     (dolist (selector +selectors+)
       (let ((select (symbol-function
@@ -44,8 +45,10 @@
         (clear-output *standard-output*)))
     (format t "~%")))
 
-(defun exp1 (&key (size 5) (nruns 5000) (minsamples 20))
+(defun exp1 (&key (size 5) (nruns 5000) (minsamples 20)
+             (min-ef 1.0) (ef-step 2.0) (max-ef 4.0))
   (do ((nsamples minsamples (round (* (sqrt 2) nsamples))))
       ((> nsamples (* 100 size)))
     (format t "~&~%[~A samples]~%" nsamples)
-    (exp0 :nruns nruns :nsamples nsamples :size size)))
+    (exp0 :nruns nruns :nsamples nsamples :size size
+          :min-ef min-ef :ef-step ef-step :max-ef max-ef)))
