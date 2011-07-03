@@ -16,7 +16,7 @@
 (defvar *nsamples* 32
   "number of playouts per state")
 
-(defconstant +max-manhattans+ 16)
+(defconstant +max-manhattans+ 4)
 
 ;; Stopping discipline
 
