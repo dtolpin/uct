@@ -5,6 +5,7 @@
            "REACH-GOAL-STATE"
            "*TRACE-STATE*"
            "*UCT-EXPLORATION-FACTOR*"
+           "*EXPLORATION-DEPTH*"
            "*SAMPLE-COUNT*"
            "RND-SELECT"
            "UCT-SELECT"

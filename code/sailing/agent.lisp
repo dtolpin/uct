@@ -11,6 +11,9 @@
 (defparameter *uct-exploration-factor* 4.0
   "the greater the factor, the more exploratory is UCT")
 
+(defparameter *exploration-depth* nil
+  "if nil, explore to varying depth in various directions")
+
 (defvar *trace-state* #'identity
   "function called on each state")
 (defvar *nsamples* 32
@@ -18,9 +21,12 @@
 
 ;; Stopping discipline: stop randomly with probability  1/state-nsamples
 
-(defun leaf-state-p (state)
+(defun leaf-state-p (state depth)
   "true when the state should not be expanded"
-  (< (random 1.0) (/ (+ 1.0 (state-nsamples state)))))
+  (when depth
+    (if *exploration-depth*
+        (= depth *exploration-depth*)
+        (< (random 1.0) (/ (+ 1.0 (state-nsamples state)))))))
 
 (defun evaluate-state (state)
   "state evaluation function"
@@ -37,7 +43,7 @@
 
 ;; Playing (sampling and committing)
 
-(defun play (state select)
+(defun play (state select  &optional (depth 0))
   "play in the current state and return the reward,
    actual or estimated"
   (cond
@@ -47,9 +53,10 @@
          (update-stats
           state leg
           (+ (leg-cost state leg)
-             (if (leaf-state-p state) 
+             (if (leaf-state-p state depth) 
                  (evaluate-state state)
-                 (play (next-state state leg) select))))))))
+                 (play (next-state state leg) select
+                       (and depth (1+ depth))))))))))
 
 ;; Sampling statistics
 (defstruct stat
@@ -127,7 +134,7 @@
                          (funcall sampling-select state)
                        (update-stats 
                         state leg
-                        (play (next-state state leg) sampling-select))))
+                        (play (next-state state leg) sampling-select 0))))
                
                ;; extract statistics
                (let ((stats (get-stats state))
@@ -153,7 +160,7 @@
   (let ((*play-stats* (make-hash-table :test #'eql))
         (*play-stat-vectors* (make-hash-table :test #'eql)))
     (values
-     (play initial-state (mk-commit-select select))
+     (play initial-state (mk-commit-select select) nil)
      (stats-nsamples))))
 
 ;; Selectors
