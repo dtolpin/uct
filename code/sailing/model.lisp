@@ -36,6 +36,10 @@
   "scalar norm"
   (sqrt (sprod x y x y)))
 
+(defun dist (xa ya xb yb)
+  "distance between a and b"
+  (norm (- xb xa) (- yb ya)))
+
 (defun cprod (xa ya xb yb)
   "cosinus product"
   (/ (sprod xa ya xb yb)

@@ -29,16 +29,16 @@
                                (round (/ nsamples-sum nr)))))))
 
 
-(defparameter +selectors+ '(rnd rct uct gct qct)
+(defparameter *selectors* '(rnd rct uct gct qct)
   "list of selectors to compare")
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5)
              (min-ef 1.0) (ef-step 2.0) (max-ef 4.0))
-  (format t "~&~%~{~,8T~A~}~%" (cons 'factor +selectors+))
+  (format t "~&~%~{~,8T~A~}~%" (cons 'factor *selectors*))
   (do ((*uct-exploration-factor* min-ef (* ef-step *uct-exploration-factor*)))
       ((> *uct-exploration-factor* max-ef))
     (format t "~,8T~5F" *uct-exploration-factor*)
-    (dolist (selector +selectors+)
+    (dolist (selector *selectors*)
       (let ((select (symbol-function
                      (intern (concatenate 'string (string selector) "-SELECT")))))
         (format t "~,8T~5F" (exper nruns nsamples size select))

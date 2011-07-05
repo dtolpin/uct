@@ -3,6 +3,7 @@
   (:use "COMMON-LISP")
   (:export "MAKE-INITIAL-STATE"
            "REACH-GOAL-STATE"
+           "*TRACE-STATE*"
            "*UCT-EXPLORATION-FACTOR*"
            "*SAMPLE-COUNT*"
            "RND-SELECT"

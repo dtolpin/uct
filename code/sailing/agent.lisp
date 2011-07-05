@@ -16,49 +16,40 @@
 (defvar *nsamples* 32
   "number of playouts per state")
 
-(defconstant +max-manhattans+ 4)
+;; Stopping discipline: stop randomly with probability  1/state-nsamples
 
-;; Stopping discipline
-
-;;   stop an episode if more than +max-manhattans+ long
-;;   and evaluate the remaining cost as manhattan into wind.
-
-(defun max-playout-time (state)
-  "stops playout after +max-manhattans+ manhattans two the goal"
-  (* +max-manhattans+
-     (+ (- *size* (state-x state)) (- *size* (state-y state)))))
+(defun leaf-state-p (state)
+  "true when the state should not be expanded"
+  (< (random 1.0) (/ (+ 1.0 (state-nsamples state)))))
 
 (defun evaluate-state (state)
-  "pessimistic evaluation function, so that bad moves
-   are visited rarely"
-  ;; manhattan into wind and delay at each step
-  (* (+ +up-cost+ +delay-cost+)
-     (+ (- *size* (state-x state)) (- *size* (state-y state)))))
+  "state evaluation function"
+  ; optimistic
+  (* +away-cost+
+     (dist (state-x state) (state-y state) *size* *size*)))
 
 ;; Bounding rewards
 (defun Cp (state)
   (declare (ignore state))
   "UCT factor $C_p$ in $2 C_p \sqrt{\frac {log n_i} n}$"
-  (* *uct-exploration-factor* (evaluate-state state)))
+  (* *uct-exploration-factor*
+     (- (+ +up-cost+ +delay-cost+) +away-cost+)))
 
 ;; Playing (sampling and committing)
 
-(defun play (state select &optional time-left)
+(defun play (state select)
   "play in the current state and return the reward,
    actual or estimated"
   (cond
     ((goal-state-p state) 0)
-    ((= time-left 0) (evaluate-state state))
     (t (multiple-value-bind (leg select)
            (funcall select state)
          (update-stats
           state leg
           (+ (leg-cost state leg)
-             (play (next-state state leg) select
-                   (1- time-left))))))))
-
-(defconstant +infinite-time-left+ -1
-  "actual search continues infinitely")
+             (if (leaf-state-p state) 
+                 (evaluate-state state)
+                 (play (next-state state leg) select))))))))
 
 ;; Sampling statistics
 (defstruct stat
@@ -127,8 +118,7 @@
   "sample actions, choose the one with the best average"
   (labels ((commit-select (state)
              (funcall *trace-state* state)
-             (let ((time-left (max-playout-time state))
-                   (isamples -1))
+             (let ((isamples -1))
                ;; gather playing statistics
                (loop while (ecase *sample-count*
                              (:static (< (incf isamples) *nsamples*))
@@ -137,8 +127,7 @@
                          (funcall sampling-select state)
                        (update-stats 
                         state leg
-                        (play (next-state state leg) sampling-select
-                              time-left))))
+                        (play (next-state state leg) sampling-select))))
                
                ;; extract statistics
                (let ((stats (get-stats state))
@@ -164,8 +153,7 @@
   (let ((*play-stats* (make-hash-table :test #'eql))
         (*play-stat-vectors* (make-hash-table :test #'eql)))
     (values
-     (play initial-state (mk-commit-select select) (max-playout-time
-                                                    initial-state))
+     (play initial-state (mk-commit-select select))
      (stats-nsamples))))
 
 ;; Selectors
