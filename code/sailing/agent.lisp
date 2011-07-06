@@ -23,7 +23,7 @@
 
 (defun leaf-state-p (state depth)
   "true when the state should not be expanded"
-  (when depth
+  (when depth ; if depth is nil, never a leaf
     (if *exploration-depth*
         (= depth *exploration-depth*)
         (< (random 1.0) (/ (+ 1.0 (state-nsamples state)))))))
@@ -31,7 +31,7 @@
 (defun evaluate-state (state)
   "state evaluation function"
   ; optimistic
-  (* +away-cost+
+  (* +cross-cost+
      (dist (state-x state) (state-y state) *size* *size*)))
 
 ;; Bounding rewards
@@ -42,8 +42,7 @@
      (- (+ +up-cost+ +delay-cost+) +away-cost+)))
 
 ;; Playing (sampling and committing)
-
-(defun play (state select  &optional (depth 0))
+(defun play (state select  depth)
   "play in the current state and return the reward,
    actual or estimated"
   (cond
