@@ -31,7 +31,7 @@
 (defun evaluate-state (state)
   "state evaluation function"
   ; optimistic
-  (* +cross-cost+
+  (* +away-cost+
      (dist (state-x state) (state-y state) *size* *size*)))
 
 ;; Bounding rewards
@@ -42,20 +42,26 @@
      (- (+ +up-cost+ +delay-cost+) +away-cost+)))
 
 ;; Playing (sampling and committing)
-(defun play (state select  depth)
-  "play in the current state and return the reward,
-   actual or estimated"
+(defun play (state select)
+  "play in the current state and return the reward"
   (cond
     ((goal-state-p state) 0)
     (t (multiple-value-bind (leg select)
            (funcall select state)
-         (update-stats
-          state leg
-          (+ (leg-cost state leg)
-             (if (leaf-state-p state depth) 
-                 (evaluate-state state)
-                 (play (next-state state leg) select
-                       (and depth (1+ depth))))))))))
+         (+ (leg-cost state leg)
+            (play (next-state state leg) select))))))
+
+(defun sample (state select depth)   
+  "sample and update statistics"
+  (multiple-value-bind (leg select) (funcall select state)
+    (update-stats
+     state leg
+     (+ (leg-cost state leg)
+        (let ((next-state (next-state state leg)))
+          (cond
+            ((goal-state-p next-state) 0)
+            ((leaf-state-p next-state depth) (evaluate-state next-state))
+            (t (sample next-state select (1+ depth)))))))))
 
 ;; Sampling statistics
 (defstruct stat
@@ -123,17 +129,13 @@
 (defun mk-commit-select (sampling-select)
   "sample actions, choose the one with the best average"
   (labels ((commit-select (state)
-             (funcall *trace-state* state)
-             (let ((isamples -1))
+             (let ((*play-stats* (make-hash-table :test #'eql))
+                   (*play-stat-vectors* (make-hash-table :test #'eql)))
+               (funcall *trace-state* state)
+
                ;; gather playing statistics
-               (loop while (ecase *sample-count*
-                             (:static (< (incf isamples) *nsamples*))
-                             (:dynamic (< (state-nsamples state) *nsamples*)))
-                  do (multiple-value-bind (leg sampling-select)
-                         (funcall sampling-select state)
-                       (update-stats 
-                        state leg
-                        (play (next-state state leg) sampling-select 0))))
+               (loop repeat *nsamples*
+                  do (sample state sampling-select 0))
                
                ;; extract statistics
                (let ((stats (get-stats state))
@@ -147,7 +149,7 @@
                      (when (< avg best-avg) 
                        (setf best-leg leg
                              best-avg avg))))))))
-      #'commit-select))
+    #'commit-select))
 
 (defun reach-goal-state (initial-state select 
                          &key
@@ -156,11 +158,7 @@
                          ((:trace-state *trace-state*) *trace-state*))
   "reaches the goal state from the initial state,
    returns the path cost"
-  (let ((*play-stats* (make-hash-table :test #'eql))
-        (*play-stat-vectors* (make-hash-table :test #'eql)))
-    (values
-     (play initial-state (mk-commit-select select) nil)
-     (stats-nsamples))))
+  (play initial-state (mk-commit-select select)))
 
 ;; Selectors
 

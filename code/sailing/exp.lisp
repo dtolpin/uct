@@ -18,16 +18,11 @@
 (in-package "SAILEXP")
 
 (defun exper (nr ns size select)
-  (let (cost nsamples)
-    (loop repeat nr 
-       do (multiple-value-setq (cost nsamples)
-            (reach-goal-state (make-initial-state)
-                              select :nsamples ns :size size))
-       sum cost into cost-sum
-       sum nsamples into nsamples-sum
-       finally (return (values (float (/ cost-sum nr))
-                               (round (/ nsamples-sum nr)))))))
-
+  (loop repeat nr 
+     sum (reach-goal-state (make-initial-state)
+                           select :nsamples ns :size size)
+     into cost-sum
+     finally (return (float (/ cost-sum nr)))))
 
 (defparameter *selectors* '(rnd rct uct gct qct)
   "list of selectors to compare")
