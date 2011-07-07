@@ -51,7 +51,7 @@
          (+ (leg-cost state leg)
             (play (next-state state leg) select))))))
 
-(defun sample (state select depth)   
+(defun sample (state select &optional (depth 1))
   "sample and update statistics"
   (multiple-value-bind (leg select) (funcall select state)
     (update-stats
@@ -135,7 +135,7 @@
 
                ;; gather playing statistics
                (loop repeat *nsamples*
-                  do (sample state sampling-select 0))
+                  do (sample state sampling-select))
                
                ;; extract statistics
                (let ((stats (get-stats state))
