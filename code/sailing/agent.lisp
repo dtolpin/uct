@@ -21,12 +21,11 @@
 
 ;; Stopping discipline: stop randomly with probability  1/state-nsamples
 
-(defun leaf-state-p (state depth)
+(defun leaf-leg-p (state leg depth)
   "true when the state should not be expanded"
-  (when depth ; if depth is nil, never a leaf
-    (if *exploration-depth*
-        (= depth *exploration-depth*)
-        (< (random 1.0) (/ (+ 1.0 (state-nsamples state)))))))
+  (if *exploration-depth*
+      (= depth *exploration-depth*)
+      (< (random 1.0) (/ 1.0 (+ 1.0 (stat-count (get-stat state leg)))))))
 
 (defun evaluate-state (state)
   "state evaluation function"
@@ -53,6 +52,7 @@
 
 (defun sample (state select &optional (depth 1))
   "sample and update statistics"
+  (format t "~&depth=~S~%" depth)
   (multiple-value-bind (leg select) (funcall select state)
     (update-stats
      state leg
@@ -60,7 +60,7 @@
         (let ((next-state (next-state state leg)))
           (cond
             ((goal-state-p next-state) 0)
-            ((leaf-state-p next-state depth) (evaluate-state next-state))
+            ((leaf-leg-p state leg depth) (evaluate-state next-state))
             (t (sample next-state select (1+ depth)))))))))
 
 ;; Sampling statistics
