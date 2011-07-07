@@ -52,7 +52,6 @@
 
 (defun sample (state select &optional (depth 1))
   "sample and update statistics"
-  (format t "~&depth=~S~%" depth)
   (multiple-value-bind (leg select) (funcall select state)
     (update-stats
      state leg
