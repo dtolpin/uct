@@ -17,26 +17,41 @@
            "RCT-SELECT"))
 (in-package "SAILEXP")
 
+(defparameter *print-counts* nil
+  "whether to print total sample counts")
+
 (defun exper (nr ns size select)
-  (loop repeat nr 
-     sum (reach-goal-state (make-initial-state)
-                           select :nsamples ns :size size)
-     into cost-sum
-     finally (return (float (/ cost-sum nr)))))
+  (let ((cost-sum 0)
+        (nsamples-sum 0))
+    (loop repeat nr 
+       do (multiple-value-bind (cost nsamples)
+              (reach-goal-state (make-initial-state)
+                                select :nsamples ns :size size)
+            (incf cost-sum cost)
+            (incf nsamples-sum nsamples))
+       finally (return (values (float (/ cost-sum nr))
+                               (float (/ nsamples-sum nr)))))))
 
 (defparameter *selectors* '(rnd rct uct gct qct)
   "list of selectors to compare")
 
 (defun exp0 (&key (nruns 5000) (nsamples 100) (size 5)
              (min-ef 1.0) (ef-step 2.0) (max-ef 4.0))
-  (format t "~&~%~{~,8T~A~}~%" (cons 'factor *selectors*))
+  (if *print-counts* 
+      (format t "~&~,8TFACTOR~{~,8TR_~A~,8TN_~:*~A~}~%" *selectors*)
+      (format t "~&~{~,8T~A~}~%" (cons 'factor *selectors*)))
   (do ((*uct-exploration-factor* min-ef (* ef-step *uct-exploration-factor*)))
       ((> *uct-exploration-factor* max-ef))
     (format t "~,8T~5F" *uct-exploration-factor*)
     (dolist (selector *selectors*)
       (let ((select (symbol-function
                      (intern (concatenate 'string (string selector) "-SELECT")))))
-        (format t "~,8T~5F" (exper nruns nsamples size select))
+
+        (if *print-counts*
+            (format t "~{~,8T~5F~}" (multiple-value-list 
+                                     (exper nruns nsamples size select)))
+            (format t "~,8T~5F" (exper nruns nsamples size select)))
+                    
         (clear-output *standard-output*)))
     (format t "~%")))
 

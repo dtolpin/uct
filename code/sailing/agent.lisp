@@ -14,55 +14,13 @@
 (defparameter *exploration-depth* nil
   "if nil, explore to varying depth in various directions")
 
-(defvar *trace-state* #'identity
+(defparameter *trace-state* #'identity
   "function called on each state")
-(defvar *nsamples* 32
+(defparameter *nsamples* 32
   "number of playouts per state")
 
-;; Stopping discipline: stop randomly with probability  1/state-nsamples
-
-(defun leaf-leg-p (state leg depth)
-  "true when the state should not be expanded"
-  (if *exploration-depth*
-      (= depth *exploration-depth*)
-      (< (random 1.0) (/ 1.0 (+ 1.0 (stat-count (get-stat state leg)))))))
-
-(defun evaluate-state (state)
-  "state evaluation function"
-  ; optimistic
-  (* +away-cost+
-     (dist (state-x state) (state-y state) *size* *size*)))
-
-;; Bounding rewards
-(defun Cp (state)
-  (declare (ignore state))
-  "UCT factor $C_p$ in $2 C_p \sqrt{\frac {log n_i} n}$"
-  (* *uct-exploration-factor*
-     (- (+ +up-cost+ +delay-cost+) +away-cost+)))
-
-;; Playing (sampling and committing)
-(defun play (state select)
-  "play in the current state and return the reward"
-  (cond
-    ((goal-state-p state) 0)
-    (t (multiple-value-bind (leg select)
-           (funcall select state)
-         (+ (leg-cost state leg)
-            (play (next-state state leg) select))))))
-
-(defun sample (state select &optional (depth 1))
-  "sample and update statistics"
-  (multiple-value-bind (leg select) (funcall select state)
-    (update-stats
-     state leg
-     (+ (leg-cost state leg)
-        (let ((next-state (next-state state leg)))
-          (cond
-            ((goal-state-p next-state) 0)
-            ((leaf-leg-p state leg depth) (evaluate-state next-state))
-            (t (sample next-state select (1+ depth)))))))))
-
 ;; Sampling statistics
+
 (defstruct stat
   "play stat"
   (count 0 :type fixnum)
@@ -116,14 +74,52 @@
   "number of samples (playouts) passed through the state"
   (reduce #'+ +legs+ :key (lambda (leg) (stat-count (get-stat state leg)))))
 
-(defun stats-nsamples ()
-  "total number of samples per search"
-  (let ((total 0))
-    (maphash (lambda (key stat) 
-               (declare (ignore key))
-               (incf total (stat-count stat)))
-             *play-stats*)
-    total))
+(defvar *total-sample-count* nil
+  "total number of samples, for comparative experiments")
+
+;; Stopping discipline: stop randomly with probability  1/state-nsamples
+
+(defun leaf-leg-p (state leg depth)
+  "true when the state should not be expanded"
+  (if *exploration-depth*
+      (= depth *exploration-depth*)
+      (< (random 1.0) (/ 1.0 (+ 1.0 (stat-count (get-stat state leg)))))))
+
+(defun evaluate-state (state)
+  "state evaluation function"
+  ; optimistic
+  (* +away-cost+
+     (dist (state-x state) (state-y state) *size* *size*)))
+
+;; Bounding rewards
+(defun Cp (state)
+  (declare (ignore state))
+  "UCT factor $C_p$ in $2 C_p \sqrt{\frac {log n_i} n}$"
+  (* *uct-exploration-factor*
+     (- (+ +up-cost+ +delay-cost+) +away-cost+)))
+
+;; Playing (sampling and committing)
+(defun play (state select)
+  "play in the current state and return the reward"
+  (cond
+    ((goal-state-p state) 0)
+    (t (multiple-value-bind (leg select)
+           (funcall select state)
+         (+ (leg-cost state leg)
+            (play (next-state state leg) select))))))
+
+(defun sample (state select &optional (depth 1))
+  "sample and update statistics"
+  (incf *total-sample-count*)
+  (multiple-value-bind (leg select) (funcall select state)
+    (update-stats
+     state leg
+     (+ (leg-cost state leg)
+        (let ((next-state (next-state state leg)))
+          (cond
+            ((goal-state-p next-state) 0)
+            ((leaf-leg-p state leg depth) (evaluate-state next-state))
+            (t (sample next-state select (1+ depth)))))))))
 
 (defun mk-commit-select (sampling-select)
   "sample actions, choose the one with the best average"
@@ -157,7 +153,9 @@
                          ((:trace-state *trace-state*) *trace-state*))
   "reaches the goal state from the initial state,
    returns the path cost"
-  (play initial-state (mk-commit-select select)))
+  (let ((*total-sample-count* 0))
+    (values (play initial-state (mk-commit-select select))
+            *total-sample-count*)))
 
 ;; Selectors
 
