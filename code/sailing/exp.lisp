@@ -55,10 +55,12 @@
         (clear-output *standard-output*)))
     (format t "~%")))
 
-(defun exp1 (&key (size 5) (nruns 5000) (minsamples 20)
+(defun exp1 (&key (size 5) (nruns 5000)
+             (minsamples (* 4 size)) (samples-step (sqrt 2))
+             (maxsamples (* 200 size))
              (min-ef 1.0) (ef-step 2.0) (max-ef 4.0))
-  (do ((nsamples minsamples (round (* (sqrt 2) nsamples))))
-      ((> nsamples (* 200 size)))
+  (do ((nsamples minsamples (round (* samples-step nsamples))))
+      ((> nsamples maxsamples))
     (format t "~&~%[~A samples]~%" nsamples)
     (exp0 :nruns nruns :nsamples nsamples :size size
           :min-ef min-ef :ef-step ef-step :max-ef max-ef)))
