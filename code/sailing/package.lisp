@@ -1,7 +1,8 @@
 (defpackage "SAILING"
   (:documentation "Sailing strategy simulations")
   (:use "COMMON-LISP")
-  (:export "MAKE-INITIAL-STATE"
+  (:export "*RANDOMIZE-COST*"
+           "MAKE-INITIAL-STATE"
            "REACH-GOAL-STATE"
            "*TRACE-STATE*"
            "*UCT-EXPLORATION-FACTOR*"

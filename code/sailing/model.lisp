@@ -1,5 +1,7 @@
 (in-package "SAILING")
 
+(defparameter *randomize-cost* nil)
+
 ;; Lake and boat model
 
 ;; the map size, 
@@ -164,11 +166,13 @@
 
 (defun leg-cost (state leg)
   "returns actio cost for the action in the state"
-  (with-slots (x y ptack wind) (the state state)
-    (+ (if (opposite-tacks-p ptack (aref +tacks+ leg wind))
-           +delay-cost+ 0)
-       (* (norm (dir-x (aref +dirs+ leg)) (dir-y (aref +dirs+ leg)))
-          (aref +costs+ leg wind)))))
+  (let ((cost (with-slots (x y ptack wind) (the state state)
+                (+ (if (opposite-tacks-p ptack (aref +tacks+ leg wind))
+                       +delay-cost+ 0)
+                   (* (norm (dir-x (aref +dirs+ leg))
+                            (dir-y (aref +dirs+ leg)))
+                      (aref +costs+ leg wind))))))
+    (if *randomize-cost* (* (+ 0.5 (random 1.0)) cost) cost)))
 
 (defun next-coord (z dz)
   "returns the next coordinate, stops at lake shores"
