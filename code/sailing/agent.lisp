@@ -85,18 +85,16 @@
       (= depth *exploration-depth*)
       (< (random 1.0) (/ 1.0 (+ 1.0 (stat-count (get-stat state leg)))))))
 
+(defun shortest-path (x y)
+  "shortest path through the lake from the current point to the target"
+  (when (> x y) (rotatef x y))
+  (+ (- y x) (dist y y *size* *size*))) 
+  
+
 (defun evaluate-state (state)
   "state evaluation function"
-  ; optimistic
-  (* +cross-cost+
-     (dist (state-x state) (state-y state) *size* *size*)))
-
-;; Bounding rewards
-(defun Cp (state)
-  (declare (ignore state))
-  "UCT factor $C_p$ in $2 C_p \sqrt{\frac {log n_i} n}$"
-  (* *uct-exploration-factor*
-     (- (+ +up-cost+ +delay-cost+) +away-cost+)))
+  (* (+ +cross-cost+ (* 0.25 +delay-cost+))
+     (shortest-path (state-x state) (state-y state))))
 
 ;; Playing (sampling and committing)
 (defun play (state select)
@@ -169,7 +167,7 @@
   "U*B selection: min (avg-Cp*sqrt(fun (n) / ni))"
   (let* ((state-stats (get-stats state))
          (Cp-root-fun-n
-          (* alpha (Cp state)
+          (* alpha
              (sqrt (funcall fun (max 1.0 (reduce #'+ state-stats
                                                  :key #'stat-count))))))
          (best-leg nil)
@@ -185,8 +183,8 @@
             (setf best-leg leg
                   best-cost cost)))))))
 
-(defun ucb (state) (u*b state #'log 2.0))
-(defun uqb (state) (u*b state #'sqrt 0.25))
+(defun ucb (state) (u*b state #'log *uct-exploration-factor*))
+(defun uqb (state) (u*b state #'sqrt 1.0))
 
 (defun grd (state)
   "0.5-greedy selection"
