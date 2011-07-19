@@ -2,7 +2,6 @@ draw.costs.of.factor <- function(costs_file, legend.position='bottomright', log=
   costs <- read.table(costs_file, header=T)
   algorithms <- names(costs)[-1]
   xlim <- range(costs$FACTOR)
-  costs$RND <- mean(costs$RND)+0.25*(costs$RND-mean(costs$RND))
   ylim <- range(min(costs[algorithms]), costs$RND)
   plot(x=costs$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, xaxs='i',
        xlab='exploration factor', ylab='cost',
