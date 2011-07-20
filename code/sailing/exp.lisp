@@ -40,9 +40,29 @@
   (if *print-counts* 
       (format t "~&~,8TFACTOR~{~,8TR_~A~,8TN_~:*~A~}~%" *selectors*)
       (format t "~&~{~,8T~A~}~%" (cons 'factor *selectors*)))
-  (do ((*uct-exploration-factor* min-ef (* ef-step *uct-exploration-factor*)))
-      ((> *uct-exploration-factor* max-ef))
-    (format t "~,8T~5F" *uct-exploration-factor*)
+  (do ((*ucb-exploration-factor* min-ef (* ef-step *ucb-exploration-factor*)))
+      ((> *ucb-exploration-factor* max-ef))
+    (format t "~,8T~5F" *ucb-exploration-factor*)
+    (dolist (selector *selectors*)
+      (let ((select (symbol-function
+                     (intern (concatenate 'string (string selector) "-SELECT")))))
+
+        (if *print-counts*
+            (format t "~{~,8T~5F~}" (multiple-value-list 
+                                     (exper nruns nsamples size select)))
+            (format t "~,8T~5F" (exper nruns nsamples size select)))
+                    
+        (clear-output *standard-output*)))
+    (format t "~%")))
+
+(defun qexp0 (&key (nruns 5000) (nsamples 100) (size 5)
+             (min-ef 1.0) (ef-step 2.0) (max-ef 4.0))
+  (if *print-counts* 
+      (format t "~&~,8TFACTOR~{~,8TR_~A~,8TN_~:*~A~}~%" *selectors*)
+      (format t "~&~{~,8T~A~}~%" (cons 'factor *selectors*)))
+  (do ((*uqb-exploration-factor* min-ef (* ef-step *uqb-exploration-factor*)))
+      ((> *uqb-exploration-factor* max-ef))
+    (format t "~,8T~5F" *uqb-exploration-factor*)
     (dolist (selector *selectors*)
       (let ((select (symbol-function
                      (intern (concatenate 'string (string selector) "-SELECT")))))
