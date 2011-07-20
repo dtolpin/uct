@@ -184,7 +184,7 @@
                   best-cost cost)))))))
 
 (defun ucb (state) (u*b state #'log *uct-exploration-factor*))
-(defun uqb (state) (u*b state #'sqrt 1.0))
+(defun uqb (state) (u*b state #'sqrt 10.0))
 
 (defun grd (state)
   "0.5-greedy selection"
