@@ -8,8 +8,11 @@
   "mode of counting samples: 
    :static - the number of playouts beginning in a path node is *nsamples*
    :dynamic - the number of playouts passed through a path node is *nsamples*")
-(defparameter *uct-exploration-factor* 4.0
+(defparameter *ucb-exploration-factor* 4.0
   "the greater the factor, the more exploratory is UCT")
+
+(defparameter *uqb-exploration-factor* 4.0
+  "like ucb")
 
 (defparameter *exploration-depth* nil
   "if nil, explore to varying depth in various directions")
@@ -183,8 +186,8 @@
             (setf best-leg leg
                   best-cost cost)))))))
 
-(defun ucb (state) (u*b state #'log *uct-exploration-factor*))
-(defun uqb (state) (u*b state #'sqrt 10.0))
+(defun ucb (state) (u*b state #'log *ucb-exploration-factor*))
+(defun uqb (state) (u*b state #'sqrt *uqb-exploration-factor*))
 
 (defun grd (state)
   "0.5-greedy selection"

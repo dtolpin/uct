@@ -1,6 +1,9 @@
 import re 
 import sys
 
+def minimum(vals):
+  return min(vals)
+
 def median(vals):
   vals.sort()
   if len(vals) % 2 == 1:
@@ -13,7 +16,7 @@ def median(vals):
 def mean(vals):
     return float(sum(vals))/len(vals)
 
-def do(filenames):
+def do(filenames,group):
     regrets = {}
     names = None
     size = None
@@ -28,10 +31,10 @@ def do(filenames):
             lvs = [float(v) for v in line.split()[1:]]
             for i in range(len(values)):
                 values[i].append(lvs[i])
-            regrets[nsamples] = [min(vs) for vs in values]
+            regrets[nsamples] = [globals()[group](vs) for vs in values]
         f.close()
     names = ['SAMPLES']+names[1:]
-    f = file("costs-size=%s.txt" % size, "w")
+    f = file("costs-size=%s-group=%s.txt" % (size,group), "w")
     print >> f, ' '.join(names)
     for nsamples in sorted(regrets.keys()):
         print >> f, nsamples, ' '.join([str(x) for x in regrets[nsamples]])
@@ -39,7 +42,8 @@ def do(filenames):
 
 if __name__=='__main__':
     import sys
-    do(sys.argv[1:])
+    for group in ['minimum', 'median']:
+      do(sys.argv[1:], group)
     
             
             
