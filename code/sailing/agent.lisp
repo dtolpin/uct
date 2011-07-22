@@ -237,6 +237,9 @@
 (defun uqt-select (switch)
   (values (uqb switch) #'uqt-select))
 
+(defun cct-select (switch)
+  (values (u*b switch #'log *uqb-exploration-factor*) #'uct-select))
+
 ;; Testing
 
 (defun test-agent ()
