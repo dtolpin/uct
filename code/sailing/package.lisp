@@ -13,6 +13,7 @@
            "UCT-SELECT"
            "GCT-SELECT"
            "QCT-SELECT"
+           "CCT-SELECT"
            "UQT-SELECT"
            "RCT-SELECT"))
 (in-package "SAILING")
