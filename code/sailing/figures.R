@@ -35,3 +35,10 @@ draw.costs.of.nsamples <- function(costs_file, legend.position='right', log="x")
   legend(x=legend.position, legend=algorithms, pch=1:length(algorithms))
 }
   
+draw.rcq <- function() {
+	layout(cbind(c(1,2), c(3,4))); 
+	for(x in c(199, 397, 793, 1585)) 
+		draw.costs.of.factor(paste('../../exp/sailing/rcq-size=6-nsamples=', x, '.txt', sep=''),
+							 legend.position='right')
+}
+							 
