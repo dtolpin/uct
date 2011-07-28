@@ -1,12 +1,12 @@
 ALGORITHMS <- c('rnd', 'ucb', 'sve')
 
 
-draw.regrets <- function(regrets_file, log="xy", legend.position='topright', xlab=expression(N[samples])) {
+draw.regrets <- function(regrets_file, log="xy", legend.position='topright', xlab=expression(N[samples]), main=NA) {
 	regrets <- read.table(regrets_file, header=T)
 	xlim <- range(regrets$nsamples)
 	values <- unlist(regrets[-1])
 	ylim <- range(values[values>0])
-	plot(x=regrets$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=unlist(strsplit(regrets_file, "\\."))[[1]])
+	plot(x=regrets$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main)
 	i <- 1
 	for(alg in names(regrets)[-1]) {
 		y <- regrets[[alg]]
@@ -61,3 +61,13 @@ draw.curves <- function (imin=5,imax=10,max=100, alpha=1, gamma=0.5,log="xy") {
 	legend(x='topright', legend=c('RND','GRD','UCB'),pch=c(1,2,3))
 }
 
+make.pdfs <- function() {
+  for(prefix in c('flat-low-key', 'flat-trilevel', 'tree-trilevel', 'tree-identity')) {
+    for(k in c('16', '32', '64')) {
+      basename <- paste(prefix, '-k=', k, '-uqb=8', sep='')
+      pdf(file=paste(basename, 'pdf', sep='.'), width=6, height=4.5)
+      draw.regrets(paste(basename,'txt', sep='.'), legend.position='right', main='')
+      dev.off()
+    }
+  }
+}
