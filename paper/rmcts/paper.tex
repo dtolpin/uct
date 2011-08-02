@@ -60,65 +60,129 @@ where $\Delta_j=\mu_*-\mu_j$.
 
 \subsection{Doing better than UCB}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=1.2]{onelevel-tree.pdf}
-  \caption{Simple regret in MAB: the best arm}
-  \label{fig:onelevel-tree}
-\end{figure}
-
-%\begin{figure}[t]
-%  \centering
-%  \includegraphics[scale=0.64]{onelevel-64.pdf}
-%  \caption{Simple regret in MAB: UCB vs. $\varepsilon$-greedy vs. Random}
-%  \label{fig:onelevel-64}
-%\end{figure}
-
-
 \subsection{Doing better than UCT}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=1.2]{twolevel-tree.pdf}
-  \caption{MCTS: a path to the best arm}
-  \label{fig:twolevel-tree}
-\end{figure}
-
-%\begin{figure}[t]
-%  \centering
-%  \includegraphics[scale=0.64,trim=0pt 0pt 0pt 24pt,clip]{twolevel-64.pdf}
-%  \caption{MCTS: UCT vs. GRT vs. GCT vs. Random}
-%  \label{fig:twolevel-64}
-%\end{figure}
 
 \section{Empirical Evaluation}
 
+\subsection{Simple regret in multi-armed bandits}
+
+
+\begin{figure}[t]
+  \begin{minipage}[c]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=1.0]{onelevel-tree.pdf}\\
+    \vspace{4em}
+    a. search tree
+  \end{minipage}
+  \begin{minipage}[c]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.5]{flat-trilevel-k=64-uqb=8.pdf}\\
+    b. regret vs. number of samples
+  \end{minipage}
+  \label{fig:mab-simple-regret}
+  \caption{Simple regret in MAB}
+\end{figure}
+
 \subsection{Monte Carlo tree search}
 
-%\begin{figure}[t]
-%  \centering
-%  \includegraphics[scale=0.64,trim=0pt 0pt 0pt 0pt,clip]{twolevel-8-16-32-64.pdf}
-%  \caption{Monte carlo tree search, varying number of arms}
-%  \label{fig:twolevel-8-16-32-64}
-%\end{figure}
+\begin{figure}
+  \begin{minipage}[c]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.8]{twolevel-tree.pdf}\\
+    a. search tree
+  \end{minipage}
+  \begin{minipage}[c]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.4]{tree-identity-k=16-uqb=8.pdf}\\ 
+    b. 16 arms \\
+    \vspace{1em}
+    \includegraphics[scale=0.4]{tree-identity-k=64-uqb=8.pdf} \\
+    c. 64 arms
+ \end{minipage}
+  \label{fig:mcts-regret}
+  \caption{MCTS: a path to the best arm}
+\end{figure}
 
 \subsection{The sailing domain}
 
 
-%\begin{figure}[t]
-%  \begin{minipage}[b]{0.5\linewidth} \centering
-%    \includegraphics[scale=0.45,trim=0pt 0pt 0pt
-%    0pt,clip]{sailing-size=8-factor=_8438.pdf}
-%    {a. varying number of samples} 
-% \end{minipage}
-%  \begin{minipage}[b]{0.5\linewidth} \centering
-%    \includegraphics[scale=0.45,trim=0pt 0pt 0pt
-%    0pt,clip]{sailing-size=8-nsamples=185.pdf}
-%    {b. varying exploration factor}
-%  \end{minipage}
-%  \caption{The sailing domain, a smaller lake}
-%  \label{fig:sailing-8}
-%\end{figure}
+\begin{figure}[t]
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{costs-size=6-group=median.pdf}\\
+    a. median cost
+  \end{minipage}
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{costs-size=6-group=minimum.pdf}\\
+    b. minimum cost
+  \end{minipage}
+  \caption{The sailing domain, $6\times 6$ lake, cost vs. number of playouts}
+  \label{fig:sailing-cost-vs-nsamples}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{costs-size=6-nsamples=199.pdf}\\
+    a. 199 playouts\\
+    \vspace{1em}
+    \includegraphics[scale=0.45]{costs-size=6-nsamples=397.pdf}\\
+    b. 397 playouts\\
+  \end{minipage}
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{costs-size=6-nsamples=793.pdf}\\
+    c. 793 playouts\\
+    \vspace{1em}
+    \includegraphics[scale=0.45]{costs-size=6-nsamples=1585.pdf}\\
+    d. 1585 playouts\\
+  \end{minipage}
+  \caption{The sailing domain, $6\times 6$ lake, cost vs. factor}
+  \label{fig:sailing-cost-vs-factor}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{minipage}[b]{0.333\linewidth}
+    \centering
+    \includegraphics[scale=0.35]{costs-size=3-nsamples=397.pdf}\\
+    a. $3\times 3$ lake
+  \end{minipage}
+  \begin{minipage}[b]{0.333\linewidth}
+    \centering
+    \includegraphics[scale=0.35]{costs-size=6-nsamples=397.pdf}\\
+    b. $6\times 6$ lake
+  \end{minipage}
+  \begin{minipage}[b]{0.333\linewidth}
+    \centering
+    \includegraphics[scale=0.35]{costs-size=10-nsamples=397.pdf}\\
+    b. $10\times 10$ lake
+  \end{minipage}
+  \caption{The sailing domain, 397 samples, cost vs. factor}
+  \label{fig:sailing-lake-size}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{rcq-size=6-nsamples=199.pdf}\\
+    a. 199 playouts\\
+    \vspace{1em}
+    \includegraphics[scale=0.45]{rcq-size=6-nsamples=397.pdf}\\
+    b. 397 playouts\\
+  \end{minipage}
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{rcq-size=6-nsamples=793.pdf}\\
+    c. 793 playouts\\
+    \vspace{1em}
+    \includegraphics[scale=0.45]{rcq-size=6-nsamples=1585.pdf}\\
+    d. 1585 playouts\\
+  \end{minipage}
+  \caption{The sailing domain, log vs. sqrt, $6\times 6$ lake}
+  \label{fig:sailing-cost-vs-factor}
+\end{figure}
 %
 %\begin{figure}[t]
 %  \begin{minipage}[b]{0.5\linewidth} \centering
@@ -193,24 +257,74 @@ By choosing $x_0=\frac \mu 2$ and applying the Chernoff bound (\ref{eq:chernoff-
 &\le&\left(\mu + \frac {4\sqrt e}{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}
 \end{eqnarray}
 
-A bound on the simple regret $R_\varepsilon$ of an
+A bound on the simple regret $r_\varepsilon$ of an
 $\varepsilon$-greedy policy follows from substituting
 (\ref{eq:pr-epsilon-greedy}) into (\ref{eq:simple-regret}):
 
 \begin{eqnarray}
-\IE[R_\varepsilon]&\le&\sum_{j=1}^K\Delta_j\left(\mu + \frac {4\sqrt e}
+  \IE r_\varepsilon&\le&\sum_{j=1}^K\Delta_j\left(\mu + \frac {4\sqrt e}
 {\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}\nonumber\\
-&\le&K\left(\mu + \frac {4\sqrt e}{\Delta_{\min}}\right)e^{-\Delta_{\min}^2\mu/8}
+&\le&K\left(\mu + \frac {4\sqrt
+    e}{\Delta_{\min}}\right)e^{-\Delta_{\min}^2\mu/8}
+\label{eq:deriv-epsilon-greedy-b}
 \end{eqnarray}
 
-\subsubsection{UCB}
+\subsubsection{UCB($\alpha$)}
 
-Regret $R_{UCB}$:
+$n_b$ pulls of the best arm and $n_j$ pulls of the $j$th arm are
+achieved simultaneously when either 
 
-\subsubsection{UVB}
 
-Regret $R_{UVB}$:
+\begin{equation}
+\sqrt {\frac {\alpha \log n} {n_j-1}} \ge 1 + \sqrt { \frac {\alpha \log n} {n_b}}
+\end{equation}
 
-\subsection{Asymptotic bounds for $\varepsilon$-greedy policies}
+or
+
+\begin{equation}
+\sqrt {\frac {\alpha \log n} {n_j}} \le 1 + \sqrt { \frac {\alpha \log n} {n_b - 1}}
+\label{eq:deriv-ucb-alpha-a}
+\end{equation}
+
+Inequality (\ref{eqn:deriv-ucb-alpha-a}) can be used to derive a lower
+bound on the number of pulls of a non-optimal arm,  and, consequently, the upper
+bound on the probability of selecting a non-optimal arm:
+
+\begin{eqnarray}
+\frac {\alpha \log n} {n_j}&\le& 1 + 2  \sqrt {\frac {\alpha \log n}
+  {n_b-1}} + \frac {\alpha \log n} {n_b-1}\nonumber\\
+n_j &\ge& \frac {\alpha \log n} {1+2 \sqrt {\frac {\alpha \log n}
+    {n_b-1}} + \frac {\alpha \log n} {n_b-1}}\nonumber\\
+    &\ge& \frac {\alpha \log n} {4} \mbox{ for } \alpha \log n \le n_b-1
+\end{eqnarray}
+
+The probability that the $j$th arm will be chosen can be bounded based
+on the Chernoff inequality and the union bound:
+\begin{equation}
+P_j \le 2 \exp\left(-\frac {\alpha \Delta_j^2 \log n} 8 \right) = 2n^{\frac {-\alpha \Delta_j^2} 8}
+\end{equation}
+
+The expected simple regret of an UCB($\alpha$) algorithm is thus
+bounded by the following inequality:
+\begin{equation}
+\IE r_{ucb} \le 2\sum_{j=1}^K \Delta_jn^{\frac {-\alpha \Delta_j^2} 8}
+\label{eq:deriv-ucb-alpha-b}
+\end{equation}
+
+\cite{Bubeck.pure} provides for UCB($\alpha$) a similar bound,
+polynomial in the number of pulls $n$.
+
+\subsection{Asymptotic regret analysis}
+
+Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) where
+derived ignoring dependency of the allocation on expected values
+of non-optimal arms. Derivation of better bounds seems complicated; instead, insights
+can be obtained by analysing  asymptotic behavior of each of the
+algorithms in assumption that the sample mean approaches the expected
+value. 
+
+\subsubsection{$\varepsilon$-greedy}
+
+\subsubsection{UCB($\alpha$)}
 
 \end{document}
