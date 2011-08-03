@@ -43,30 +43,105 @@ minization and outperforms UCT. Finite-time and asymptotic analysis of
 the policies is provided, and the algorithms are empirically compared.
 \end{abstract}
 
+\section{Introduction and definitions}
 
-\section{Introduction}
+The Multi-armed Bandit is a set of $K$ arms. Each arm can be pulled
+multiple times. When the $i$th arm is pulled, a random reward $X_i$
+from an unknown stationary distribution is returned.  The reward is 
+bounded between 0 and 1. 
 
 The simple regret of a sampling policy for the Multi-armed Bandit
 Problem is the expected difference between the best expected reward
-$\mu_*$ and the expected reward of the arm with the best sample mean
-$\mu_j,\;\overline X_j=\max_i\overline X_i$:
+$\mu_*$ and the expected reward $\mu_j$ of the arm with the best sample mean
+$\overline X_j=\max_i\overline X_i$:
 \begin{equation}
 \label{eq:simple-regret}
 \IE[R]=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
 \end{equation}
 where $\Delta_j=\mu_*-\mu_j$.
+Strategies that minimize the simple reward are called pure exploration
+strategies \cite{Bubeck.pure}.
+
+Such strategies are used to select the best arm, and, by
+extension, the best action in search, when every action in the
+current world state is viewed as a different arm, and the best arm
+must be chosen. Algorithm UCB that maximizes the accumulated reward
+\cite{Auer.ucb} had been extended to tree search as UCT \cite{Kocsis.uct}. 
+
+UCT-driven search achieves good results in many search problems. At each
+search step, the algorithm allocates Monte Carlo playouts to choose
+the best action, thereby minimizing the simple regret. However, the
+simple and the accumulated regret cannot be minimized simultaneously;
+moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
+accumulated regret, the greater is the simple regret.
+
+UCT performance can be improved by combining UCB with a sampling
+scheme that minimizes the simple regret of selecting an action at the
+current root node. Indeed, the algorithm must select an action with
+the minimum regret \emph{given assumption that after performing the selected action
+the algorithm performs optimally}, which corresponds to maximizing the
+value of partial information \cite{Russell.aima}. Therefore, an
+improved allocation scheme would
+\begin{itemize}
+\item maximize the value of partial
+information by sampling actions to minimize the \textbf{simple} regret at the
+current root node, and then 
+\item minimize the \textbf{accumulated} regret of the playouts from the second
+  step on to approach the optimum behavior. 
+\end{itemize}
+
 
 \section{Main Results}
 
 \subsection{Doing better than UCB}
 
+The $\varepsilon$-greedy allocation scheme has exponential convergence
+rate of the simple regret $\IE r$ (see Appendix~\ref{app:derivations-finite-eps}):
+\begin{equation}
+  \IE r_\varepsilon\le\sum_{j=1}^K\Delta_j\left(\frac {n\varepsilon} K + \frac {4\sqrt e}
+{\Delta_j^2}\right)e^{-\Delta_j^2n\varepsilon/8K}
+\end{equation}
+while UCB exhibits polynomial convergence
+rate (see Appendix~\ref{app:derivations-finite-ucb}):
+\begin{equation}
+\IE r_{ucb} \le 2\sum_{j=1}^K \Delta_jn^{\frac {-\alpha \Delta_j^2} 8}
+\end{equation}
+The best $\varepsilon$ is $\frac 1 2$, and for a large number of arms
+the upper regret bound for the 1/2-greedy scheme approaches the square of the
+upper regret bound for uniform sampling (see
+Appendix~\ref{app:derivations-asym-eps}).
+
+Another improved allocation scheme (UQB) for minimizing the simple
+regret is obtained by substituting $\sqrt{\cdot}$ instead of $\log(\cdot)$ into
+the formula for UCB and has a superpolynomial convergence rate
+(see Appendix~\ref{app:derivations-asym-ucb}).
+
 \subsection{Doing better than UCT}
 
+By extension, a Monte Carlo tree search sampling scheme that selects
+an action at the current root node according to an algorithm that
+minimizes the simple regret, such as $1/2-greedy$ or $UQB$, and then
+selects actions according to $UCB$, outperforms the UCT sampling
+scheme that selects actions based on UCB only.
+
+Such sampling scheme is significantly less sensitive to the tuning of
+the empirical upper bound ($C_p$ in \cite{Kocsis.uct}) of UCT, since
+the conflict \cite{Bubeck.pure} between the need for a larger value of $C_p$ on the first
+step (simple regret) and a smaller value for the rest of the playout
+(accumulated regret) is resolved. In fact, a sampling scheme that uses
+UCB at all steps but a larger value of $C_p$ for the first step than
+for the rest of the steps, outperforms UCT.
 
 \section{Empirical Evaluation}
 
-\subsection{Simple regret in multi-armed bandits}
+The results were empirically verified on Multi-armed Bandit instances
+(Section~\ref{seq:emp-mab}), on search trees
+(Section~\ref{seq:emp-mcts}), and on the sailing domain
+(Section~\ref{seq:emp-sailing}), as defined in \cite{Kocsis.uct}. The
+experiments confirmed the hypotheses.
 
+\subsection{Simple regret in multi-armed bandits}
+\label{seq:emp-mab}
 
 \begin{figure}[ht]
   \begin{minipage}[c]{0.5\linewidth}
@@ -85,6 +160,7 @@ where $\Delta_j=\mu_*-\mu_j$.
 \end{figure}
 
 \subsection{Monte Carlo tree search}
+\label{seq:emp-mcts}
 
 \begin{figure}
   \begin{minipage}[c]{0.5\linewidth}
@@ -105,6 +181,7 @@ where $\Delta_j=\mu_*-\mu_j$.
 \end{figure}
 
 \subsection{The sailing domain}
+\label{seq:emp-sailing}
 
 
 \begin{figure}[ht]
@@ -183,23 +260,8 @@ where $\Delta_j=\mu_*-\mu_j$.
   \caption{The sailing domain, log vs. sqrt, $6\times 6$ lake}
   \label{fig:sailing-rcq-vs-factor}
 \end{figure}
-%
-%\begin{figure}[ht]
-%  \begin{minipage}[b]{0.5\linewidth} \centering
-%    \includegraphics[scale=0.45,trim=0pt 0pt 0pt
-%    0pt,clip]{sailing-size=13-factor=_5625.pdf}
-%    {a. varying number of samples}
-%  \end{minipage}
-%  \begin{minipage}[b]{0.5\linewidth} \centering
-%    \includegraphics[scale=0.45,trim=0pt 0pt 0pt
-%    0pt,clip]{sailing-size=13-nsamples=240.pdf}
-%    {b. varying exploration factor}
-%  \end{minipage}
-%  \caption{The sailing domain, a larger lake}
-%  \label{fig:sailing-13}
-%\end{figure}
 
-\section{Summary and Future Work}
+%\section{Summary and Future Work}
 
 \section*{Acknowledgments}
 
@@ -226,14 +288,17 @@ taking values 0 or 1, $X=\sum_{i=1}^m X_i$, and $0\le\delta\le 1$:
 \end{equation}
 
 \section{Derivations}
+\label{app:derivations}
 
 \subsection{Finite-time regret bounds}
+\label{app:derivations-finite}
 
 For an analysis of pure exploration of uniform and UCB algorithms, see also
 \cite{Bubeck.pure}.
 
 
 \subsubsection{$\varepsilon$-greedy}
+\label{app:derivations-finite-eps}
 
 For $0<\varepsilon\le1-\frac 1 K$ and $x_0>0$ (see Section 3, Proofs, in \cite{Auer.ucb}):
 
@@ -243,18 +308,18 @@ For $0<\varepsilon\le1-\frac 1 K$ and $x_0>0$ (see Section 3, Proofs, in \cite{A
   e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 x_0 /2}\right)
 \end{eqnarray}
 
-Number of times $\mu$ the $j$th arm is selected {\it randomly}:
+Number of times $\xi$ the $j$th arm is selected {\it randomly}:
 
 \begin{equation}
-\mu\triangleq\IE\left[T_j^R(n)\right]=\frac {n\varepsilon} K
+\xi\triangleq\IE\left[T_j^R(n)\right]=\frac {n\varepsilon} K
 \end{equation}
 
-By choosing $x_0=\frac \mu 2$ and applying the Chernoff bound (\ref{eq:chernoff-bound}), obtain:
+By choosing $x_0=\frac \xi 2$ and applying the Chernoff bound (\ref{eq:chernoff-bound}), obtain:
 
 \begin{eqnarray}
 \label{eq:pr-epsilon-greedy}
-\Pr(\overline X_j=\max_i\overline X_i)&\le& 2\left(\frac {\mu}{2} e^{-\mu/8} + \frac {2e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 \mu/4}\right)\nonumber\\
-&\le&\left(\mu + \frac {4\sqrt e}{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}
+\Pr(\overline X_j=\max_i\overline X_i)&\le& 2\left(\frac {\xi}{2} e^{-\xi/8} + \frac {2e^{\Delta_j^2/2}}{\Delta_j^2}e^{-\Delta_j^2 \xi/4}\right)\nonumber\\
+&\le&\left(\xi + \frac {4\sqrt e}{\Delta_j^2}\right)e^{-\Delta_j^2\xi/8}
 \end{eqnarray}
 
 A bound on the simple regret $r_\varepsilon$ of an
@@ -262,14 +327,15 @@ $\varepsilon$-greedy policy follows from substituting
 (\ref{eq:pr-epsilon-greedy}) into (\ref{eq:simple-regret}):
 
 \begin{eqnarray}
-  \IE r_\varepsilon&\le&\sum_{j=1}^K\Delta_j\left(\mu + \frac {4\sqrt e}
-{\Delta_j^2}\right)e^{-\Delta_j^2\mu/8}\nonumber\\
-&\le&K\left(\mu + \frac {4\sqrt
-    e}{\Delta_{\min}}\right)e^{-\Delta_{\min}^2\mu/8}
+  \IE r_\varepsilon&\le&\sum_{j=1}^K\Delta_j\left(\xi + \frac {4\sqrt e}
+{\Delta_j^2}\right)e^{-\Delta_j^2\xi/8}\nonumber\\
+&\le&K\left(\xi + \frac {4\sqrt
+    e}{\Delta_{\min}}\right)e^{-\Delta_{\min}^2\xi/8}
 \label{eq:deriv-epsilon-greedy-b}
 \end{eqnarray}
 
 \subsubsection{UCB($\alpha$)}
+\label{app:derivations-finite-ucb}
 
 $n_*$ pulls of the best arm and $n_j$ pulls of the $j$th arm are
 achieved simultaneously when either 
@@ -315,6 +381,7 @@ bounded by the following inequality:
 polynomial in the number of pulls $n$.
 
 \subsection{Asymptotic regret analysis}
+\label{app:derivations-asym}
 
 Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) were
 derived ignoring dependency of the allocation on expected values
@@ -323,13 +390,15 @@ complicated. Instead, one can analyse symptotic behavior of each of the
 algorithms in assumption that the sample mean is close to the expectation.
 
 \subsubsection{$\varepsilon$-greedy}
+\label{app:derivations-asym-eps}
+
 
 A common technique \cite{Auer.ucb} to bound the probability of
 selecting a non-optimal arm $j$ is to split the interval between
 $\mu_j$ and $\mu_*$ at the middle and bound the probability of
 selecting the $j$th arm by the sum of the probabilities that the samle
-mean $\overline x_j$ of the $j$th arm is greater than $\mu_j+\frac
-{\Delta_j} 2$ and the sample mean $\overline x_*$ of the optimal arm is
+mean $\overline X_j$ of the $j$th arm is greater than $\mu_j+\frac
+{\Delta_j} 2$ and the sample mean $\overline X_*$ of the optimal arm is
 less than $\mu_*- \frac {\Delta_j} 2$. Each of the probabilities can
 be bound using the Chernoff-Hoefding bound.
 
@@ -423,6 +492,7 @@ Equation (\ref{eq:derive-uniform-vs-half-greedy}) suggests that
 sampling for a large number of arms.
 
 \subsubsection{UCB($\alpha$)}
+\label{app:derivations-asym-ucb}
 
 The $UCB(\alpha)$ allocation scheme distributes arm pulls such that
 the upper bound on the probability of selecting a non-optimal arm is
@@ -455,7 +525,7 @@ rate of the upper bound:
 P_j^{uqb}=\mathbb{B}P_j^{uqb}\approx2\exp\left(-\beta\Delta_j^2\frac {\sqrt n}{\Delta_j^2}\right)
             =2\exp(-2\beta\sqrt n)
  \end{equation}
-where $\beta$ is a constant depending on reward bounds.
+where $\beta$ is a constant that depends on reward bounds only.
 Finite time convergence can still be shown similarly to UCB.
 
 \end{document}
