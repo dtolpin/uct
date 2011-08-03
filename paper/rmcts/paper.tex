@@ -125,7 +125,7 @@ selects actions according to $UCB$, outperforms the UCT sampling
 scheme that selects actions based on UCB only.
 
 Such sampling scheme is significantly less sensitive to the tuning of
-the empirical upper bound ($C_p$ in \cite{Kocsis.uct}) of UCT, since
+the exploration factor ($C_p$ in \cite{Kocsis.uct}) of UCT, since
 the conflict \cite{Bubeck.pure} between the need for a larger value of $C_p$ on the first
 step (simple regret) and a smaller value for the rest of the playout
 (accumulated regret) is resolved. In fact, a sampling scheme that uses
@@ -142,6 +142,25 @@ experiments confirmed the hypotheses.
 
 \subsection{Simple regret in multi-armed bandits}
 \label{seq:emp-mab}
+
+Figure~\ref{fig:mab-simple-regret} presents a comparison of simple
+regret minimization algorithms for Multi-armed
+bandits. Figure~\ref{fig:mab-simple-regret}.a shows the search tree
+corresponding to a problem instance. Each arm returns a random reward
+drawn from a Bernoulli distribution. The search selects an arm
+and compares the expected reward, unknown to the algorithm during the
+sampling, to the expected reward of the best arm.
+
+Figure~\ref{fig:mab-simple-regret}.b shows the regret
+vs. the number of samples, averages over $10^4$ experiments, for uniform
+random sampling (RND), UCT (same as UCB in this case),
+1/2-greedy (GCT), and QCT (UCT with $\log(\cdot)$ replaced by
+$\sqrt{\cdot}$), for randomly generated instances of 32 arms. 
+
+For smaller numbers of samples, 1/2-greedy achieves the best
+performance; for large number of samples, QCT outperforms GCT. QCT is
+better than UCT everywhere except for very small numbers of samples. A
+combination of GCT and QCT dominates UCT over the whole range.
 
 \begin{figure}[ht]
   \begin{minipage}[c]{0.5\linewidth}
@@ -161,6 +180,26 @@ experiments confirmed the hypotheses.
 
 \subsection{Monte Carlo tree search}
 \label{seq:emp-mcts}
+
+The second set of experiments was performed on randomly generated
+trees crafted in such a way that uniform random sampling selects a
+direction at the root randomly. The degree of the root is a parameter of
+the tree generator. The degree of all nodes at distance 1 from the
+root is 2, and all nodes at distance 2 from the roots are leaves. The
+average reward of two children of each node at distance 1 is
+0.5. Thus, a uniform sampling scheme results in the same average reward for
+all edges at the root, and an adaptive sampling scheme, such as UCT,
+has to be used.
+
+Figure~\ref{fig:mcts-regret} shows a sketch of the search tree
+(Figure~\ref{fig:mcts-regret}.a) and the dependency of the regret vs. the
+number of samples for trees with root degree 16
+(Figure~\ref{fig:mcts-regret}.b) and 64 (Figure~\ref{fig:mcts-regret}.c). The
+dependencies look differently from Multi-armed bandit instances, but
+the algorithms exhibit a similar relative performance: GCT and QCT
+simultaneously are better than UCT, QCT dominates UCT everywhere
+except for small numbers of instances. The advantage of QCT grows with
+the number of arms.
 
 \begin{figure}
   \begin{minipage}[c]{0.5\linewidth}
@@ -183,6 +222,16 @@ experiments confirmed the hypotheses.
 \subsection{The sailing domain}
 \label{seq:emp-sailing}
 
+Figures~\ref{fig:sailing-cost-vs-nsamples}--\ref{fig:sailing-rcq-vs-factor}
+show results of experiments on the sailing
+domain. Figure~\ref{fig:sailing-cost-vs-nsamples} shows the regret
+vs. the number of samples, computed for a range of values of
+$C_p$. Figure~\ref{fig:sailing-cost-vs-nsamples}.a shows the median
+cost, and Figure~\ref{fig:sailing-cost-vs-nsamples}.b --- the minimum
+costs. UCT is always worse than either 1/2-greedy (GCT) or QCT, and is sensitive to
+the value of $C_p$: the median cost is much higher than the minimum
+cost for UCT. For both 1/2-greedy and QCT, the difference is
+significantly less prominent.
 
 \begin{figure}[ht]
   \begin{minipage}[b]{0.5\linewidth}
@@ -198,6 +247,11 @@ experiments confirmed the hypotheses.
   \caption{The sailing domain, $6\times 6$ lake, cost vs. number of playouts}
   \label{fig:sailing-cost-vs-nsamples}
 \end{figure}
+
+Figure~\ref{fig:sailing-cost-vs-factor} shows the rerget vs. the
+factor for different numbers of samples. QCT is always better than
+UCT, and 1/2-greedy is better than UCT expect for a small range of
+values of the exploration factor $C_p$. 
 
 \begin{figure}[ht]
   \begin{minipage}[b]{0.5\linewidth}
@@ -220,6 +274,12 @@ experiments confirmed the hypotheses.
   \label{fig:sailing-cost-vs-factor}
 \end{figure}
 
+
+Figure~\ref{fig:sailing-lake-size} shows the cost vs. the exploration
+factor for lakes of different sizes. The relative difference between
+the sampling schemes becomes more prominent when the lake size
+increases.
+
 \begin{figure}[ht]
   \begin{minipage}[b]{0.333\linewidth}
     \centering
@@ -239,6 +299,14 @@ experiments confirmed the hypotheses.
   \caption{The sailing domain, 397 samples, cost vs. factor}
   \label{fig:sailing-lake-size}
 \end{figure}
+
+Figure~\ref{fig:sailing-rcq-vs-factor} compares QCT with UCT with a
+different exploration factor at the root (CCT). $C_p$ for the rest of
+the steps was chosen to ensure the best performance from earlier
+experiments on the domain. Both algorithms exhibit similar dependency,
+but as the number of samples grows, QCT achieves smaller average
+regrets and is less sensitive to the choice of the value for $C_p$ at
+the first step.
 
 \begin{figure}[ht]
   \begin{minipage}[b]{0.5\linewidth}
