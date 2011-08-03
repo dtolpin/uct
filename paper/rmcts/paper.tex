@@ -271,18 +271,18 @@ $\varepsilon$-greedy policy follows from substituting
 
 \subsubsection{UCB($\alpha$)}
 
-$n_b$ pulls of the best arm and $n_j$ pulls of the $j$th arm are
+$n_*$ pulls of the best arm and $n_j$ pulls of the $j$th arm are
 achieved simultaneously when either 
 
 
 \begin{equation}
-\sqrt {\frac {\alpha \log n} {n_j-1}} \ge 1 + \sqrt { \frac {\alpha \log n} {n_b}}
+\sqrt {\frac {\alpha \log n} {n_j-1}} \ge 1 + \sqrt { \frac {\alpha \log n} {n_*}}
 \end{equation}
 
 or
 
 \begin{equation}
-\sqrt {\frac {\alpha \log n} {n_j}} \le 1 + \sqrt { \frac {\alpha \log n} {n_b - 1}}
+\sqrt {\frac {\alpha \log n} {n_j}} \le 1 + \sqrt { \frac {\alpha \log n} {n_* - 1}}
 \label{eq:deriv-ucb-alpha-a}
 \end{equation}
 
@@ -292,14 +292,14 @@ bound on the probability of selecting a non-optimal arm:
 
 \begin{eqnarray}
 \frac {\alpha \log n} {n_j}&\le& 1 + 2  \sqrt {\frac {\alpha \log n}
-  {n_b-1}} + \frac {\alpha \log n} {n_b-1}\nonumber\\
+  {n_*-1}} + \frac {\alpha \log n} {n_*-1}\nonumber\\
 n_j &\ge& \frac {\alpha \log n} {1+2 \sqrt {\frac {\alpha \log n}
-    {n_b-1}} + \frac {\alpha \log n} {n_b-1}}\nonumber\\
-    &\ge& \frac {\alpha \log n} {4} \mbox{ for } \alpha \log n \le n_b-1
+    {n_*-1}} + \frac {\alpha \log n} {n_*-1}}\nonumber\\
+    &\ge& \frac {\alpha \log n} {4} \mbox{ for } \alpha \log n \le n_*-1
 \end{eqnarray}
 
 The probability that the $j$th arm will be chosen can be bounded based
-on the Chernoff inequality and the union bound:
+on the Chernoff-Hoeffding bound:
 \begin{equation}
 P_j \le 2 \exp\left(-\frac {\alpha \Delta_j^2 \log n} 8 \right) = 2n^{\frac {-\alpha \Delta_j^2} 8}
 \end{equation}
@@ -316,14 +316,83 @@ polynomial in the number of pulls $n$.
 
 \subsection{Asymptotic regret analysis}
 
-Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) where
+Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) were
 derived ignoring dependency of the allocation on expected values
-of non-optimal arms. Derivation of better bounds seems complicated; instead, insights
-can be obtained by analysing  asymptotic behavior of each of the
-algorithms in assumption that the sample mean approaches the expected
-value. 
+of non-optimal arms. Derivation of better bounds seems
+complicated. Instead, one can analyse symptotic behavior of each of the
+algorithms in assumption that the sample mean is close to the expectation.
 
 \subsubsection{$\varepsilon$-greedy}
+
+A common technique \cite{Auer.ucb} to bound the probability of
+selecting a non-optimal arm $j$ is to split the interval between
+$\mu_j$ and $\mu_*$ at the middle and bound the probability of
+selecting the $j$th arm by the sum of the probabilities that the samle
+mean $\overline x_j$ of the $j$th arm is greater than $\mu_j+\frac
+{\Delta_j} 2$ and the sample mean $\overline x_*$ of the optimal arm is
+less than $\mu_*- \frac {\Delta_j} 2$. Each of the probabilities can
+be bound using the Chernoff-Hoefding bound.
+
+Splitting the interval between $\mu_j$ and $\mu_*$ half-way is an
+arbirtrary decision. By selecting a different split point
+depending on the allocation of samples, one can obtain a tighter
+bound. On the other hand, there is a value of $\varepsilon$ that
+minimizes the bound for the $\varepsilon$-greedy allocation scheme.
+Thus, the  $\varepsilon$-greedy allocation scheme can be tuned by
+finding $\varepsilon$ that minimizes the bound obtained by
+selecting the best split point. 
+
+Split the interval $[\mu_j, \mu_*]$ at $\mu_j+\delta_j$. The
+probability $P_j$ for selecting the $j$th arm is bounded as:
+
+\begin{equation}
+P_j\le exp\left(-2\delta_j^2n_j\right)+exp\left(-2(\Delta_j-\delta_j)^2n_*\right)
+\end{equation}
+
+For the $\varepsilon$-greedy scheme, $n_i=\frac {\varepsilon n} K$,
+$n_*=(1-\varepsilon)n$, thus
+
+\begin{equation}
+P_j \le \exp\left(-\frac {2\delta_j^2\varepsilon n} (K-1)\right) +\exp\left(-2(\Delta_j-\delta_j)^2(1-\varepsilon)n\right)
+\end{equation}
+
+In general, $\varepsilon$ and $\delta$ which minimize $P_j$ will
+depend of $n$. For a constant $\varepsilon$, require that the
+exponents in both terms are equal
+\begin{eqnarray}
+\exp\left(-\frac {2\delta_j^2\varepsilon n} (K-1)\right)
+   &=& \exp\left(-2(\Delta_j-\delta_j)^2(1-\varepsilon)n\right)\\
+\frac {\delta_j} {\Delta_j - \delta_j}
+   &=& \sqrt { \frac {(K-1)(1-\varepsilon)} \varepsilon }
+\label{eq:deriv-exps-equal}
+\end{eqnarray}
+and find conditional minima of $P_j(\delta_j, \epsilon)$ by requiring
+either $\frac {\partial P_j} {\partial \delta_j}=0$ or ${\partial P_j}
+{\partial \varepsilon}=0$. 
+
+$\frac {\partial P_j} {\partial \delta_j}=0$:
+
+\begin{eqnarray*}
+\frac {4\delta_j\varepsilon n} (K-1)
+  &-& 4(\Delta_j-\delta_j)(1-\varepsilon)n=0\\
+\frac {\delta_j} {\Delta_j-\delta_j}&=&{ \frac {(K-1)(1-\varepsilon)} \varepsilon }
+\end{eqnarray*}
+and together with (\ref{eq:deriv-exps-equal}) this gives:
+\begin{eqnarray}
+\delta_j&=&\frac {Delta_j} 2\nonumber\\
+\varepsilon&=&1-\frac 1 K
+\label{eq:deriv-uniform-sampling}
+\end{eqnarray}
+
+That is, the case $\frac {\partial P_j} {\partial \delta_j}=0$
+corresponds to uniform random sampling, the tightest bound is obtained
+by splitting the interval at the middle and the convergence rate
+is $exp\left(-\frac {\Delta_j^2n} {2K}\right)$.
+
+
+
+
+
 
 \subsubsection{UCB($\alpha$)}
 
