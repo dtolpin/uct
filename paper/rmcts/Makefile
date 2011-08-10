@@ -35,6 +35,7 @@ figures: \
 	flat-trilevel-k=16-uqb=8.pdf flat-trilevel-k=16-uqb=8.svg \
 	flat-trilevel-k=32-uqb=8.pdf flat-trilevel-k=32-uqb=8.svg \
 	flat-trilevel-k=64-uqb=8.pdf flat-trilevel-k=64-uqb=8.svg \
+	flat-trilevel-vct-k=64.pdf flat-trilevel-vct-k=64.svg \
 	onelevel-tree.pdf onelevel-tree.svg \
 	rcq-size=6-nsamples=1585.pdf rcq-size=6-nsamples=1585.svg \
 	rcq-size=6-nsamples=199.pdf rcq-size=6-nsamples=199.svg \

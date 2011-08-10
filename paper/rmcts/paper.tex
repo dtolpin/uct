@@ -62,14 +62,21 @@ where $\Delta_j=\mu_*-\mu_j$.
 Strategies that minimize the simple reward are called pure exploration
 strategies \cite{Bubeck.pure}.
 
-Such strategies are used to select the best arm, and, by
-extension, the best action in search, when every action in the
-current world state is viewed as a different arm, and the best arm
-must be chosen. Algorithm UCB that maximizes the accumulated reward
-\cite{Auer.ucb} had been extended to tree search as UCT \cite{Kocsis.uct}. 
+Such strategies are used to select the best arm, and, by extension,
+the best action in Monte Carlo tree search. Monte Carlo tree search is
+used to solve Markov Decision Processes (MDP) approximately. An MDP is
+defined by the set of states $S$, the set of actions $A$, the
+transition table $T(s, a, s')$, the reward table $R(s, a, s')$, the
+initial state $s$ and the goal state $t$: $(S, A, T, R, s, t)$.  Monte
+Carlo tree search explores an MDP by \emph{rollouts}---trajectories
+from the current state to a state in which a termination condition is
+satisfied (either the goal state, or a cutoff state for which the
+reward is evaluated approximately). Algorithm UCB that maximizes the
+accumulated reward \cite{Auer.ucb} had been extended to tree search as
+UCT \cite{Kocsis.uct}.
 
 UCT-driven search achieves good results in many search problems. At each
-search step, the algorithm allocates Monte Carlo playouts to choose
+search step, the algorithm allocates Monte Carlo rollouts to choose
 the best action, thereby minimizing the simple regret. However, the
 simple and the accumulated regret cannot be minimized simultaneously;
 moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
@@ -86,7 +93,7 @@ improved allocation scheme would
 \item maximize the value of partial
 information by sampling actions to minimize the \textbf{simple} regret at the
 current root node, and then 
-\item minimize the \textbf{accumulated} regret of the playouts from the second
+\item minimize the \textbf{accumulated} regret of the rollouts from the second
   step on to approach the optimum behavior. 
 \end{itemize}
 
@@ -107,7 +114,7 @@ rate (see Appendix~\ref{app:derivations-finite-ucb}):
 \IE r_{ucb} \le 2\sum_{j=1}^K \Delta_jn^{\frac {-\alpha \Delta_j^2} 8}
 \end{equation}
 The best $\varepsilon$ is $\frac 1 2$, and for a large number of arms
-the upper regret bound for the 1/2-greedy scheme approaches the square of the
+the upper regret bound for the $\frac 1 2$-greedy scheme approaches the square of the
 upper regret bound for uniform sampling (see
 Appendix~\ref{app:derivations-asym-eps}).
 
@@ -118,21 +125,45 @@ the formula for UCB and has a superpolynomial convergence rate
 
 \subsection{Doing better than UCT}
 
-By extension, a Monte Carlo tree search sampling scheme that selects
-an action at the current root node according to an algorithm that
-minimizes the simple regret, such as $1/2-greedy$ or $UQB$, and then
-selects actions according to $UCB$, outperforms the UCT sampling
-scheme that selects actions based on UCB only.
+The {\bf two-stage} Monte Carlo tree search sampling
+scheme selects an action at the current root node according to an
+algorithm that minimizes the simple regret, such as $\frac 1 2$-greedy or
+UQB, and then selects actions according to UCB. Such two-stage
+outperforms the UCT sampling scheme that selects actions based on
+UCB only.
 
 Such sampling scheme is significantly less sensitive to the tuning of
-the exploration factor ($C_p$ in \cite{Kocsis.uct}) of UCT, since
-the conflict \cite{Bubeck.pure} between the need for a larger value of $C_p$ on the first
-step (simple regret) and a smaller value for the rest of the playout
-(accumulated regret) is resolved. In fact, a sampling scheme that uses
-UCB at all steps but a larger value of $C_p$ for the first step than
-for the rest of the steps, outperforms UCT.
+the exploration factor ($C_p$ in \cite{Kocsis.uct}) of UCT, since the
+conflict \cite{Bubeck.pure} between the need for a larger value of
+$C_p$ on the first step (simple regret) and a smaller value for the
+rest of the rollout (accumulated regret) is resolved. In fact, a
+sampling scheme that uses UCB at all steps but a larger value of $C_p$
+for the first step than for the rest of the steps, outperforms
+UCT. The pseudocode of the two-stage rollout is in
+Algorithm~\ref{alg:two-stage-mcts}.
 
-\emph{TODO: Algorithm}
+\begin{algorithm}[t]
+\caption{Two-stage Monte-Carlo tree search sampling}
+\label{alg:two-stage-mcts}
+\begin{algorithmic}[1]
+\Procedure{Rollout}{node}
+  \State $depth \gets 0$
+  \State $reward \gets 0$
+  \While {$\lnot leaf(node)$}
+    \If {$depth=1$}
+      \State $action \gets$\Call{FirstAction}{node} \Comment minimizes simple regret, e.g. $\frac 1 2$-greedy
+    \Else
+      \State $action \gets$\Call{NextAction}{node} \Comment  UCB --- minimizes accumulated regret
+    \EndIf
+    \State $node' \gets$\Call{NextState}{node, action}
+    \State $reward \gets reward+$\Call{TransitionReward}{node, action, node'}
+    \State $node \gets node'$
+    \State $depth \gets depth+1$
+  \EndWhile
+  \State \textbf{return} $reward$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 \section{Empirical Evaluation}
 
@@ -156,15 +187,15 @@ sampling, to the expected reward of the best arm.
 Figure~\ref{fig:mab-simple-regret}.b shows the regret
 vs. the number of samples, averages over $10^4$ experiments, for uniform
 random sampling (RND), UCT (same as UCB in this case),
-1/2-greedy (GCT), and QCT (UCT with $\log(\cdot)$ replaced by
+$\frac 1 2$-greedy (GCT), and QCT (UCT with $\log(\cdot)$ replaced by
 $\sqrt{\cdot}$), for randomly generated instances of 32 arms. 
 
-For smaller numbers of samples, 1/2-greedy achieves the best
+For smaller numbers of samples, $\frac 1 2$-greedy achieves the best
 performance; for large number of samples, QCT outperforms GCT. QCT is
 better than UCT everywhere except for very small numbers of samples. A
 combination of GCT and QCT dominates UCT over the whole range.
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \begin{minipage}[c]{0.5\linewidth}
     \centering
     \includegraphics[scale=1.0]{onelevel-tree.pdf}\\
@@ -230,12 +261,12 @@ domain. Figure~\ref{fig:sailing-cost-vs-nsamples} shows the regret
 vs. the number of samples, computed for a range of values of
 $C_p$. Figure~\ref{fig:sailing-cost-vs-nsamples}.a shows the median
 cost, and Figure~\ref{fig:sailing-cost-vs-nsamples}.b --- the minimum
-costs. UCT is always worse than either 1/2-greedy (GCT) or QCT, and is sensitive to
+costs. UCT is always worse than either $\frac 1 2$-greedy (GCT) or QCT, and is sensitive to
 the value of $C_p$: the median cost is much higher than the minimum
-cost for UCT. For both 1/2-greedy and QCT, the difference is
+cost for UCT. For both $\frac 1 2$-greedy and QCT, the difference is
 significantly less prominent.
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \begin{minipage}[b]{0.5\linewidth}
     \centering
     \includegraphics[scale=0.45]{costs-size=6-group=median.pdf}\\
@@ -246,31 +277,31 @@ significantly less prominent.
     \includegraphics[scale=0.45]{costs-size=6-group=minimum.pdf}\\
     b. minimum cost
   \end{minipage}
-  \caption{The sailing domain, $6\times 6$ lake, cost vs. number of playouts}
+  \caption{The sailing domain, $6\times 6$ lake, cost vs. number of rollouts}
   \label{fig:sailing-cost-vs-nsamples}
 \end{figure}
 
 Figure~\ref{fig:sailing-cost-vs-factor} shows the rerget vs. the
 factor for different numbers of samples. QCT is always better than
-UCT, and 1/2-greedy is better than UCT expect for a small range of
+UCT, and $\frac 1 2$-greedy is better than UCT expect for a small range of
 values of the exploration factor $C_p$. 
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \begin{minipage}[b]{0.5\linewidth}
     \centering
     \includegraphics[scale=0.45]{costs-size=6-nsamples=199.pdf}\\
-    a. 199 playouts\\
+    a. 199 rollouts\\
     \vspace{1em}
     \includegraphics[scale=0.45]{costs-size=6-nsamples=397.pdf}\\
-    b. 397 playouts\\
+    b. 397 rollouts\\
   \end{minipage}
   \begin{minipage}[b]{0.5\linewidth}
     \centering
     \includegraphics[scale=0.45]{costs-size=6-nsamples=793.pdf}\\
-    c. 793 playouts\\
+    c. 793 rollouts\\
     \vspace{1em}
     \includegraphics[scale=0.45]{costs-size=6-nsamples=1585.pdf}\\
-    d. 1585 playouts\\
+    d. 1585 rollouts\\
   \end{minipage}
   \caption{The sailing domain, $6\times 6$ lake, cost vs. factor}
   \label{fig:sailing-cost-vs-factor}
@@ -282,7 +313,7 @@ factor for lakes of different sizes. The relative difference between
 the sampling schemes becomes more prominent when the lake size
 increases.
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \begin{minipage}[b]{0.333\linewidth}
     \centering
     \includegraphics[scale=0.35]{costs-size=3-nsamples=397.pdf}\\
@@ -310,22 +341,22 @@ but as the number of samples grows, QCT achieves smaller average
 regrets and is less sensitive to the choice of the value for $C_p$ at
 the first step.
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \begin{minipage}[b]{0.5\linewidth}
     \centering
     \includegraphics[scale=0.45]{rcq-size=6-nsamples=199.pdf}\\
-    a. 199 playouts\\
+    a. 199 rollouts\\
     \vspace{1em}
     \includegraphics[scale=0.45]{rcq-size=6-nsamples=397.pdf}\\
-    b. 397 playouts\\
+    b. 397 rollouts\\
   \end{minipage}
   \begin{minipage}[b]{0.5\linewidth}
     \centering
     \includegraphics[scale=0.45]{rcq-size=6-nsamples=793.pdf}\\
-    c. 793 playouts\\
+    c. 793 rollouts\\
     \vspace{1em}
     \includegraphics[scale=0.45]{rcq-size=6-nsamples=1585.pdf}\\
-    d. 1585 playouts\\
+    d. 1585 rollouts\\
   \end{minipage}
   \caption{The sailing domain, log vs. sqrt, $6\times 6$ lake}
   \label{fig:sailing-rcq-vs-factor}
@@ -333,9 +364,44 @@ the first step.
 
 \section{Summary and Future Work}
 
-\emph{TODO}
+The Monte Carlo tree search algorithms presented in the paper differ
+from UCT at the first step of the rollout, when the `simple' selection
+regret is minimized instead of the accumulated regret. Both the
+theoretical analysis and the empirical evaluation provide evidence for
+better general performance of the proposed algorithms.
 
+The improvement is based on the notion of value of information (VOI),
+but VOI is used implicitly in the analysis of the algorithm, rather
+than computed or learned explicitly in order to plan the rollouts. A
+further improvement can be achieved by computing or estimating the VOI
+of the rollouts and chosing a rollout that maximizes the VOI. Using VOI
+to guide Monte Carlo sampling instead of relying on the sample means
+of different actions  is particularly beneficial when different
+actions have qualitatively different distributions: for example, when the
+distribution variance varies signficantly between the actions.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.45,trim=0 0 0 16pt,clip]{flat-trilevel-vct-k=64.pdf}\\
+  \caption{VOI-based action selection (VCT) vs. other algorithms}
+  \label{fig:flat-trilevel-vct}
+\end{figure}
+
+VOI of a rollout can be computed when the sample distribution of an
+action is known up to the parameters, such as the normal distribution
+with an unknown mean and/or variance. Alternatively, the value of
+information can be estimated from the set of samples, and the need to
+assume a particular shape of the distribution is be lifted. In one
+realization of the latter approach the VOI of performing an action is
+estimated as the value of perfect information learned from the outcome
+of earlier samples of the action divided by the number of
+samples. Early experiments with this approach showed the best
+performance for sets of Bernoulli arms, and even a more prominent
+improvement for mixed arms (e.g. Bernoulli, triangularly distributed,
+and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}).  Sample-based
+VOI estimation requires keeping more information than an algorithm
+based only on the sample mean, but the overhead is small and justifies
+the improvement.
 
 \section*{Acknowledgments}
 
@@ -344,24 +410,22 @@ Science Foundation grant 305/09, by the Lynne and William Frankel
 Center for Computer Sciences, and by the Paul Ivanier Center for
 Robotics Research and Production Management.
 
-\bibliographystyle{plain}
-\bibliography{refs}
-
-\pagebreak
-
+\clearpage
 \appendix
 
 \section{Facts}
 
-{\bf Chernoff bound (see \cite{Hagerup.chernoff}):} for $m$ independent random variables $X_1, X_2, ..., X_m$
-taking values 0 or 1, $X=\sum_{i=1}^m X_i$, and $0\le\delta\le 1$:
-
+{\bf Chernoff bounds (see \cite{Hagerup.chernoff}):} for $m$ independent random variables $X_1, X_2, ..., X_m$
+taking on values 0 or 1, $X=\sum_{i=1}^m X_i$, and $0\le\delta\le 1$:
 \begin{equation}
+\Pr[X < (1-\delta)\IE[X]] < e^{-\delta^2\IE[X]/2} \mbox{ (Chernoff bound)}
 \label{eq:chernoff-bound}
-\Pr[X < (1-\delta)\IE[X]] < e^{-\delta^2\IE[X]/2}
 \end{equation}
-
-\emph{TODO: Chernoff-Hoeffding bound}
+Further on, if $\forall i. \IE[X_i]=\mu$:
+\begin{equation}
+\Pr[X < n\mu-a] <  e^{-2a^2/n}
+\label{eq:chernoff-hoeffding-bound} \mbox{ (Hoeffding-Chernoff bound)}
+\end{equation}
 
 \section{Derivations}
 \label{app:derivations}
@@ -603,5 +667,10 @@ P_j^{uqb}\le\mathbb{B}P_j^{uqb}\approx2\exp\left(-\beta\Delta_j^2\frac {\sqrt n}
  \end{equation}
 where $\beta$ is a constant that depends on reward bounds only.
 Finite time convergence can still be shown similarly to UCB.
+
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
 
 \end{document}

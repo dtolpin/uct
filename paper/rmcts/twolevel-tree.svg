@@ -88,11 +88,15 @@
 </symbol>
 </g>
 <clipPath id="clip1">
+  <path d="M 0 204 L 266 204 L 266 0 L 0 0 L 0 204 Z M 0 204 "/>
+</clipPath>
+<clipPath id="clip2">
   <path d="M -148 668 L 464 668 L 464 -124 L -148 -124 L -148 668 Z M -148 668 "/>
 </clipPath>
 </defs>
 <g id="surface0">
 <g clip-path="url(#clip1)" clip-rule="nonzero">
+<g clip-path="url(#clip2)" clip-rule="nonzero">
 <path style="fill:none;stroke-width:0.79701;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0.396594 -6.385219 L 25.05675 -6.385219 L 25.05675 6.384313 L 0.396594 6.384313 L 0.396594 -6.385219 Z M 0.396594 -6.385219 " transform="matrix(1,0,0,-1,0.912,87.939)"/>
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
   <use xlink:href="#glyph0-1" x="4.631" y="91.003"/>
@@ -347,6 +351,7 @@
   <use xlink:href="#glyph1-10" x="254.604" y="196.701"/>
   <use xlink:href="#glyph1-10" x="257.37161" y="196.701"/>
   <use xlink:href="#glyph1-10" x="260.139221" y="196.701"/>
+</g>
 </g>
 </g>
 </g>
