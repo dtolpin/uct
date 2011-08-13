@@ -67,13 +67,14 @@ the best action in Monte Carlo tree search. Monte Carlo tree search is
 used to solve Markov Decision Processes (MDP) approximately. An MDP is
 defined by the set of states $S$, the set of actions $A$, the
 transition table $T(s, a, s')$, the reward table $R(s, a, s')$, the
-initial state $s$ and the goal state $t$: $(S, A, T, R, s, t)$.  Monte
-Carlo tree search explores an MDP by \emph{rollouts}---trajectories
-from the current state to a state in which a termination condition is
-satisfied (either the goal state, or a cutoff state for which the
-reward is evaluated approximately). Algorithm UCB that maximizes the
-accumulated reward \cite{Auer.ucb} had been extended to tree search as
-UCT \cite{Kocsis.uct}.
+initial state $s$ and the goal state $t$: $(S, A, T, R, s, t)$
+\cite{Russell.aima}.  Monte Carlo tree search explores an MDP by
+\emph{rollouts}---trajectories from the current state to a state in
+which a termination condition is satisfied (either the goal state, or
+a cutoff state for which the reward is evaluated
+approximately). Algorithm UCB that maximizes the accumulated reward
+\cite{Auer.ucb} had been extended to tree search as UCT
+\cite{Kocsis.uct}.
 
 UCT-driven search achieves good results in many search problems. At each
 search step, the algorithm allocates Monte Carlo rollouts to choose
@@ -146,21 +147,20 @@ Algorithm~\ref{alg:two-stage-mcts}.
 \caption{Two-stage Monte-Carlo tree search sampling}
 \label{alg:two-stage-mcts}
 \begin{algorithmic}[1]
-\Procedure{Rollout}{node}
-  \State $depth \gets 0$
-  \State $reward \gets 0$
-  \While {$\lnot leaf(node)$}
-    \If {$depth=1$}
-      \State $action \gets$\Call{FirstAction}{node} \Comment minimizes simple regret, e.g. $\frac 1 2$-greedy
+\Procedure{Rollout}{node, depth=1}
+  \If {\Call{IsLeaf}{node, depth}}
+    \State \textbf{return} 0
+  \Else
+    \If {depth=1}
+      \State action $\gets$ \Call{FirstAction}{node} \Comment minimizes simple regret, e.g. $\frac 1 2$-greedy
     \Else
-      \State $action \gets$\Call{NextAction}{node} \Comment  UCB --- minimizes accumulated regret
+      \State action $\gets$ \Call{NextAction}{node} \Comment  UCB --- minimizes accumulated regret
     \EndIf
-    \State $node' \gets$\Call{NextState}{node, action}
-    \State $reward \gets reward+$\Call{TransitionReward}{node, action, node'}
-    \State $node \gets node'$
-    \State $depth \gets depth+1$
-  \EndWhile
-  \State \textbf{return} $reward$
+    \State next-node $\gets$ \Call{NextState}{node, action}
+    \State reward $\gets$ \Call{TransitionReward}{node, action, next-node}
+    \State \hspace{4em} + \Call{Rollout}{next-node, depth+1} \Comment call {\sc Rollout} recursively
+    \State \Call{UpdateStats}{node, action, reward}
+  \EndIf
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -370,7 +370,7 @@ regret is minimized instead of the accumulated regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
 better general performance of the proposed algorithms.
 
-The improvement is based on the notion of value of information (VOI),
+The improvement is inspired by the notion of value of information (VOI),
 but VOI is used implicitly in the analysis of the algorithm, rather
 than computed or learned explicitly in order to plan the rollouts. A
 further improvement can be achieved by computing or estimating the VOI
@@ -621,14 +621,14 @@ r_{\varepsilon=1/2}&\le&B_{1/2\mbox{-}greedy}=2\exp\left(-\frac
 \end{eqnarray}
 
 That is, the case $\frac {\partial P_j} {\partial \varepsilon}=0$
-corresponds to \emph{0.5-greedy sampling}, and for a large number of
+corresponds to \emph{$\frac 1 2$-greedy sampling}, and for a large number of
 arms $K$ 
 \begin{equation}
 \mathbb{B}r_{1/2\mbox{-}greedy}\approx \mathbb{B}r_{uniform}^2
 \label{eq:derive-uniform-vs-half-greedy}
 \end{equation}
 Equation (\ref{eq:derive-uniform-vs-half-greedy}) suggests that
-0.5-greedy sampling has a much higher convergence rate than uniform
+$\frac 1 2$-greedy sampling has a much higher convergence rate than uniform
 sampling for a large number of arms.
 
 \subsubsection{UCB($\alpha$)}
