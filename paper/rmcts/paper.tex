@@ -36,9 +36,9 @@ UCT, a state-of-the art algorithm for Monte Carlo tree sampling
 Problem (MAB) that minimizes the accumulated regret. However, MCTS
 differs from MAB in that only the final choice, rather than all arm
 pulls, brings a reward, that is, the simple regret, as opposite to the
-accumulated regret, must be minimized. This work introduces policies for
+cumulative regret, must be minimized. This work introduces policies for
 multi-armed bandits with lower simple regret than UCB, and an
-algorithm for MCTS which combines accumulated and simple regret
+algorithm for MCTS which combines cumulative and simple regret
 minization and outperforms UCT. Finite-time and asymptotic analysis of
 the policies is provided, and the algorithms are empirically compared.
 \end{abstract}
@@ -72,21 +72,21 @@ initial state $s$ and the goal state $t$: $(S, A, T, R, s, t)$
 \emph{rollouts}---trajectories from the current state to a state in
 which a termination condition is satisfied (either the goal state, or
 a cutoff state for which the reward is evaluated
-approximately). Algorithm UCB that maximizes the accumulated reward
+approximately). Algorithm UCB that minimizes the cumulative regret
 \cite{Auer.ucb} had been extended to tree search as UCT
 \cite{Kocsis.uct}.
 
 UCT-driven search achieves good results in many search problems. At each
 search step, the algorithm allocates Monte Carlo rollouts to choose
-the best action, thereby minimizing the simple regret. However, the
-simple and the accumulated regret cannot be minimized simultaneously;
+the best action, thereby minimizing the cumulative regret. However, the
+simple and the cumulative regret cannot be minimized simultaneously;
 moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
-accumulated regret, the greater is the simple regret.
+cumulative regret, the greater the simple regret.
 
 UCT performance can be improved by combining UCB with a sampling
 scheme that minimizes the simple regret of selecting an action at the
 current root node. Indeed, the algorithm must select an action with
-the minimum regret \emph{given assumption that after performing the selected action
+the minimum regret \emph{given the assumption that after performing the selected action
 the algorithm performs optimally}, which corresponds to maximizing the
 value of partial information \cite{Russell.aima}. Therefore, an
 improved allocation scheme would
@@ -94,7 +94,7 @@ improved allocation scheme would
 \item maximize the value of partial
 information by sampling actions to minimize the \textbf{simple} regret at the
 current root node, and then 
-\item minimize the \textbf{accumulated} regret of the rollouts from the second
+\item minimize the \textbf{cumulative} regret of the rollouts from the second
   step on to approach the optimum behavior. 
 \end{itemize}
 
@@ -137,7 +137,7 @@ Such sampling scheme is significantly less sensitive to the tuning of
 the exploration factor ($C_p$ in \cite{Kocsis.uct}) of UCT, since the
 conflict \cite{Bubeck.pure} between the need for a larger value of
 $C_p$ on the first step (simple regret) and a smaller value for the
-rest of the rollout (accumulated regret) is resolved. In fact, a
+rest of the rollout (cumulative regret) is resolved. In fact, a
 sampling scheme that uses UCB at all steps but a larger value of $C_p$
 for the first step than for the rest of the steps, outperforms
 UCT. The pseudocode of the two-stage rollout is in
@@ -154,7 +154,7 @@ Algorithm~\ref{alg:two-stage-mcts}.
     \If {depth=1}
       \State action $\gets$ \Call{FirstAction}{node} \Comment minimizes simple regret, e.g. $\frac 1 2$-greedy
     \Else
-      \State action $\gets$ \Call{NextAction}{node} \Comment  UCB --- minimizes accumulated regret
+      \State action $\gets$ \Call{NextAction}{node} \Comment  UCB --- minimizes cumulative regret
     \EndIf
     \State next-node $\gets$ \Call{NextState}{node, action}
     \State reward $\gets$ \Call{TransitionReward}{node, action, next-node}
@@ -185,7 +185,7 @@ and compares the expected reward, unknown to the algorithm during the
 sampling, to the expected reward of the best arm.
 
 Figure~\ref{fig:mab-simple-regret}.b shows the regret
-vs. the number of samples, averages over $10^4$ experiments, for uniform
+vs. the number of samples, averaged over $10^4$ experiments, for uniform
 random sampling (RND), UCT (same as UCB in this case),
 $\frac 1 2$-greedy (GCT), and QCT (UCT with $\log(\cdot)$ replaced by
 $\sqrt{\cdot}$), for randomly generated instances of 32 arms. 
@@ -229,8 +229,8 @@ Figure~\ref{fig:mcts-regret} shows a sketch of the search tree
 number of samples for trees with root degree 16
 (Figure~\ref{fig:mcts-regret}.b) and 64 (Figure~\ref{fig:mcts-regret}.c). The
 dependencies look differently from Multi-armed bandit instances, but
-the algorithms exhibit a similar relative performance: GCT and QCT
-simultaneously are better than UCT, QCT dominates UCT everywhere
+the algorithms exhibit a similar relative performance: either GCT or QCT
+is always better than UCT, QCT dominates UCT everywhere
 except for small numbers of instances. The advantage of QCT grows with
 the number of arms.
 
@@ -282,7 +282,7 @@ significantly less prominent.
 \end{figure}
 
 Figure~\ref{fig:sailing-cost-vs-factor} shows the rerget vs. the
-factor for different numbers of samples. QCT is always better than
+exploration factor for different numbers of samples. QCT is always better than
 UCT, and $\frac 1 2$-greedy is better than UCT expect for a small range of
 values of the exploration factor $C_p$. 
 
@@ -366,7 +366,7 @@ the first step.
 
 The Monte Carlo tree search algorithms presented in the paper differ
 from UCT at the first step of the rollout, when the `simple' selection
-regret is minimized instead of the accumulated regret. Both the
+regret is minimized instead of the cumulative regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
 better general performance of the proposed algorithms.
 
@@ -531,8 +531,8 @@ polynomial in the number of pulls $n$.
 Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) were
 derived ignoring dependency of the allocation on expected values
 of non-optimal arms. Derivation of better bounds seems
-complicated. Instead, one can analyse symptotic behavior of each of the
-algorithms in assumption that the sample mean is close to the expectation.
+complicated. Instead, one can analyse the asymptotic behavior of each of the
+algorithms under the assumption that the sample mean is close to the expectation.
 
 \subsubsection{$\varepsilon$-greedy}
 \label{app:derivations-asym-eps}
@@ -670,7 +670,7 @@ rate of the upper bound:
 P_j^{uqb}\le\mathbb{B}P_j^{uqb}\approx2\exp\left(-\beta\Delta_j^2\frac {\sqrt n}{\Delta_j^2}\right)
             =2\exp(-\beta\sqrt n)
  \end{equation}
-where $\beta$ is a constant that depends on reward bounds only.
+where $\beta$ is a constant that depends only on reward bounds.
 Finite time convergence can still be shown similarly to UCB.
 
 
