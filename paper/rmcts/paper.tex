@@ -103,21 +103,25 @@ current root node, and then
 
 \subsection{Doing better than UCB}
 
-The $\varepsilon$-greedy allocation scheme has exponential convergence
+\begin{enumerate}
+\item The $\varepsilon$-greedy allocation scheme has exponential convergence
 rate of the simple regret $\IE r$ (see Appendix~\ref{app:derivations-finite-eps}):
 \begin{equation}
   \IE r_\varepsilon\le\sum_{j=1}^K\Delta_j\left(\frac {n\varepsilon} K + \frac {4\sqrt e}
 {\Delta_j^2}\right)e^{-\Delta_j^2n\varepsilon/8K}
 \end{equation}
-while UCB exhibits polynomial convergence
+\item The UCB allocation scheme exhibits polynomial convergence
 rate (see Appendix~\ref{app:derivations-finite-ucb}):
 \begin{equation}
 \IE r_{ucb} \le 2\sum_{j=1}^K \Delta_jn^{\frac {-\alpha \Delta_j^2} 8}
 \end{equation}
-The best $\varepsilon$ is $\frac 1 2$, and for a large number of arms
-the upper regret bound for the $\frac 1 2$-greedy scheme approaches the square of the
-upper regret bound for uniform sampling (see
+\item A tighter upper regret bound for the $\varepsilon$-greedy allocation scheme depends on
+$\varepsilon$. The lowest bound is
+acheived for $\varepsilon=\frac 1
+2$, and for a large number of arms the bound for the $\frac 1 2$-greedy scheme approaches the square of the
+bound for uniform sampling (see
 Appendix~\ref{app:derivations-asym-eps}).
+\end{enumerate}
 
 Another improved allocation scheme for minimizing the simple regret,
 called \textbf{UQB} here, is obtained by substituting $\sqrt{\cdot}$
@@ -172,7 +176,17 @@ The results were empirically verified on Multi-armed Bandit instances
 (Section~\ref{seq:emp-mab}), on search trees
 (Section~\ref{seq:emp-mcts}), and on the sailing domain
 (Section~\ref{seq:emp-sailing}), as defined in \cite{Kocsis.uct}. The
-experiments confirmed the hypotheses.
+experiments confirmed the hypotheses. The algorithms used in the
+experiments are:
+\begin{description}
+\item[RND:] uniform \underline{r}a\underline{nd}om samping;
+\item[UCT:] \underline{U}pper \underline{C}onfidence Bounds applied to
+  \underline{T}rees \cite{Kocsis.uct};
+\item[GCT:] U\underline{CT} with the first step
+  replaced with $\frac 1 2$-\underline{g}reedy sampling;
+\item[QCT:] U\underline{CT} with the first step
+  replaced with U\underline{Q}B.
+\end{description}
 
 \subsection{Simple regret in multi-armed bandits}
 \label{seq:emp-mab}
@@ -186,10 +200,8 @@ and compares the expected reward, unknown to the algorithm during the
 sampling, to the expected reward of the best arm.
 
 Figure~\ref{fig:mab-simple-regret}.b shows the regret
-vs. the number of samples, averaged over $10^4$ experiments, for uniform
-random sampling (RND), UCT (same as UCB in this case),
-$\frac 1 2$-greedy (GCT), and QCT (UCT with $\log(\cdot)$ replaced by
-$\sqrt{\cdot}$), for randomly generated instances of 32 arms. 
+vs. the number of samples, averaged
+over $10^4$ experiments for randomly generated instances of 32 arms. 
 
 For smaller numbers of samples, $\frac 1 2$-greedy achieves the best
 performance; for large number of samples, QCT outperforms GCT. QCT is
@@ -394,17 +406,18 @@ with an unknown mean and/or variance. Alternatively, the value of
 information can be estimated from the set of samples, and the need to
 assume a particular shape of the distribution is be lifted. In one
 realization of the latter approach the VOI of performing an action is
-estimated as the value of perfect information learned from the outcome
+estimated as \emph{the value of perfect information learned from the outcome
 of earlier samples of the action divided by the number of
-samples. Early experiments with this approach showed the best
+samples}. Early experiments with this approach showed the best
 performance for sets of Bernoulli arms, and even a more prominent
 improvement for mixed arms (e.g. Bernoulli, triangularly distributed,
 and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}):
 \textbf{VCT}, the algorithm which selects an action with the maximum VOI estimate on
 the first step exhibits lower average regret than other algorithms.
 Sample-based VOI estimation requires keeping more information than an
-algorithm based only on the sample mean, but the overhead is small and justifies
-the improvement.
+algorithm based only on the sample
+mean, but the overhead is small and
+is justified by the improvement.
 
 \section*{Acknowledgments}
 
@@ -544,7 +557,7 @@ algorithms under the assumption that the sample mean is close to the expectation
 A common technique \cite{Auer.ucb} to bound the probability of
 selecting a non-optimal arm $j$ is to split the interval between
 $\mu_j$ and $\mu_*$ at the middle and bound the probability of
-selecting the $j$th arm by the sum of the probabilities that the samle
+selecting the $j$th arm by the sum of the probabilities that the sample
 mean $\overline X_j$ of the $j$th arm is greater than $\mu_j+\frac
 {\Delta_j} 2$ and the sample mean $\overline X_*$ of the optimal arm is
 less than $\mu_*- \frac {\Delta_j} 2$. Each of the probabilities can
@@ -560,11 +573,13 @@ finding $\varepsilon$ that minimizes the bound obtained by
 selecting the best split point. 
 
 Split the interval $[\mu_j, \mu_*]$ at $\mu_j+\delta_j$. The
-probability $P_j$ for selecting the $j$th arm is bounded as:
+probability $P_j$ for selecting the
+$j$th arm is bounded, using the union bound and the Chernoff-Hoeffding bound, as:
 
-\begin{equation}
-P_j\le exp\left(-2\delta_j^2n_j\right)+exp\left(-2(\Delta_j-\delta_j)^2n_*\right)
-\end{equation}
+\begin{eqnarray}
+P_j&\le&\Pr[\overline X_j>\mu_j+\delta_j]+\Pr[\overline X_*<\mu_*-(\Delta_j-\delta_j)]\nonumber\\
+   &\le&\exp\left(-2\delta_j^2n_j\right)+\exp\left(-2(\Delta_j-\delta_j)^2n_*\right)
+\end{eqnarray}
 
 For the $\varepsilon$-greedy scheme, $n_i=\frac {\varepsilon n} K$,
 $n_*=(1-\varepsilon)n$, thus
