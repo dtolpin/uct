@@ -121,13 +121,14 @@ acheived for $\varepsilon=\frac 1
 2$, and for a large number of arms the bound for the $\frac 1 2$-greedy scheme approaches the square of the
 bound for uniform sampling (see
 Appendix~\ref{app:derivations-asym-eps}).
-\end{enumerate}
 
-Another improved allocation scheme for minimizing the simple regret,
+\item Another improved allocation scheme for minimizing the simple regret,
 called \textbf{UQB} here, is obtained by substituting $\sqrt{\cdot}$
 instead of $\log(\cdot)$ into the formula for UCB and has a
 superpolynomial convergence rate (see
 Appendix~\ref{app:derivations-asym-ucb}).
+\end{enumerate}
+
 
 \subsection{Doing better than UCT}
 
@@ -650,9 +651,10 @@ arms $K$
 \mathbb{B}r_{1/2\mbox{-}greedy}\approx \mathbb{B}r_{uniform}^2
 \label{eq:derive-uniform-vs-half-greedy}
 \end{equation}
-Equation (\ref{eq:derive-uniform-vs-half-greedy}) suggests that
-$\frac 1 2$-greedy sampling has a much higher convergence rate than uniform
-sampling for a large number of arms.
+Equation (\ref{eq:derive-uniform-vs-half-greedy}) suggests
+that \emph{for a large number of arms} $\frac 1 2$-greedy
+sampling has a much higher convergence rate than uniform
+sampling.
 
 \subsubsection{UCB($\alpha$)}
 \label{app:derivations-asym-ucb}
