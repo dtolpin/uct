@@ -119,10 +119,11 @@ the upper regret bound for the $\frac 1 2$-greedy scheme approaches the square o
 upper regret bound for uniform sampling (see
 Appendix~\ref{app:derivations-asym-eps}).
 
-Another improved allocation scheme (UQB) for minimizing the simple
-regret is obtained by substituting $\sqrt{\cdot}$ instead of $\log(\cdot)$ into
-the formula for UCB and has a superpolynomial convergence rate
-(see Appendix~\ref{app:derivations-asym-ucb}).
+Another improved allocation scheme for minimizing the simple regret,
+called \textbf{UQB} here, is obtained by substituting $\sqrt{\cdot}$
+instead of $\log(\cdot)$ into the formula for UCB and has a
+superpolynomial convergence rate (see
+Appendix~\ref{app:derivations-asym-ucb}).
 
 \subsection{Doing better than UCT}
 
@@ -398,9 +399,11 @@ of earlier samples of the action divided by the number of
 samples. Early experiments with this approach showed the best
 performance for sets of Bernoulli arms, and even a more prominent
 improvement for mixed arms (e.g. Bernoulli, triangularly distributed,
-and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}).  Sample-based
-VOI estimation requires keeping more information than an algorithm
-based only on the sample mean, but the overhead is small and justifies
+and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}):
+\textbf{VCT}, the algorithm which selects an action with the maximum VOI estimate on
+the first step exhibits lower average regret than other algorithms.
+Sample-based VOI estimation requires keeping more information than an
+algorithm based only on the sample mean, but the overhead is small and justifies
 the improvement.
 
 \section*{Acknowledgments}
