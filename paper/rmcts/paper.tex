@@ -36,16 +36,33 @@ UCT, a state-of-the art algorithm for Monte Carlo tree sampling
 Problem (MAB) that minimizes the accumulated regret. However, MCTS
 differs from MAB in that only the final choice, rather than all arm
 pulls, brings a reward, that is, the simple regret, as opposite to the
-cumulative regret, must be minimized. This work introduces policies for
+cumulative regret, must be minimized. This ongoing work aims at applying
+meta-reasoning techniques to MCTS, which is non-trivial.
+We begin by introducing policies for
 multi-armed bandits with lower simple regret than UCB, and an
 algorithm for MCTS which combines cumulative and simple regret
-minization and outperforms UCT. Finite-time and asymptotic analysis of
-the policies is provided, and the algorithms are empirically compared.
+minimization and outperforms UCT. We also develop a sampling scheme loosely based
+on a myopic version of perfect value of information.
+Finite-time and asymptotic analysis of
+the policies is provided, and the algorithms are compared empirically.
 \end{abstract}
+
 
 \section{Introduction and definitions}
 
-The Multi-armed Bandit is a set of $K$ arms. Each arm can be pulled
+Monte-Carlo tree sampling, and especially a version based on the
+UCT formula \cite{Kocsis.uct} appears in numerous search applications,
+such as \cite{Eyerich.ctp}. Although these methods are shown to be successful empirically,
+most authors appear to be using the UCT formula ``because it has been shown
+to be successful in the past'', and ``because it does a good job of
+trading off exploration and exploitation''. While the latter statement may be
+correct for the multi-armed bandit and for the UCB method \cite{Auer.ucb},
+we argue that it is inappropriate for search. The problem is not that
+UCT does not work; rather, we argue that a simple reconsideration from basic
+principles can result in schemes that outperform UCT. This is demonstrated both
+theoretically and empirically.
+
+In the Multi-armed Bandit problem we have a set of $K$ arms. Each arm can be pulled
 multiple times. When the $i$th arm is pulled, a random reward $X_i$
 from an unknown stationary distribution is returned.  The reward is 
 bounded between 0 and 1. 
@@ -72,18 +89,27 @@ initial state $s$ and the goal state $t$: $(S, A, T, R, s, t)$
 \emph{rollouts}---trajectories from the current state to a state in
 which a termination condition is satisfied (either the goal state, or
 a cutoff state for which the reward is evaluated
-approximately). Algorithm UCB that minimizes the cumulative regret
-\cite{Auer.ucb} had been extended to tree search as UCT
-\cite{Kocsis.uct}.
+approximately). The UCB algorithm (that attempts to minimize the cumulative regret)
+\cite{Auer.ucb} had been extended into the tree search sampling scheme
+known as UCT \cite{Kocsis.uct}.
 
 UCT-driven search achieves good results in many search problems. At each
 search step, the algorithm allocates Monte Carlo rollouts to choose
-the best action, thereby minimizing the cumulative regret. However, the
-simple and the cumulative regret cannot be minimized simultaneously;
+the best action, thereby (approximately) minimizing the cumulative regret. 
+The core issue is that in search (especially for adversarial search
+and for ``games against nature'' - optimizing behavior under uncertainty) the goal is typically
+to either find a good (or optimal) strategy, or even to find the best first
+action of such a policy. Once such an action is discovered, it is not beneficial
+to further sample that action, ``exploitation'' is thus meaningless for
+search problems. Finding a good first action is closer to the pure exploration
+variant, as seen in the selection problem \cite{Bubeck.pure,TolpinShimony.blinkered}. In the selection
+problem, it is much better to minimize the {\em simple} regret.
+However, the simple and the cumulative regret cannot be minimized simultaneously;
 moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
 cumulative regret, the greater the simple regret.
 
-UCT performance can be improved by combining UCB with a sampling
+
+UCT performance can thus be improved by combining UCB with a sampling
 scheme that minimizes the simple regret of selecting an action at the
 current root node. Indeed, the algorithm must select an action with
 the minimum regret \emph{given the assumption that after performing the selected action
@@ -94,11 +120,39 @@ improved allocation scheme would
 \item maximize the value of partial
 information by sampling actions to
 minimize the \textbf{simple} regret
-of the selection at the current root node, and then 
-\item minimize the \textbf{cumulative} regret of the rollouts from the second
-  step on to approach the optimum behavior. 
+of the selection at the current root node, and
+\item as the goal of sampling in deeper tree nodes is estimating the value of
+a node, rather than selection, it makes sense to
+minimize the \textbf{cumulative} regret of the rollouts from the second
+step onwards. 
 \end{itemize}
 
+The ultimate goal of this ongoing work is ``optimal'' sampling
+in the meta-reasoning sense. Nevertheless, this task is daunting for
+the following reasons:
+\begin{itemize}
+\item Defining the cost of a sample is not easy, and even if we simply use time-cost
+as an approximation, we get an intractable meta-reasoning problem.
+\item Applying the standard myopic and subtree independence assumptions, we run into
+serious problems. Even in the standard selection problem \cite{TolpinShimony.blinkered}, we get a non-concave
+utility function and premature stopping of the algorithm. This is due to the fact
+that the value of information of a single measurement (analogous
+to a sample in MCTS) is frequently less than its
+time-cost, even though this is not true for multiple measurements.
+When applying the selection problem to MCTS, the situation is exacerbated. 
+The utility of an action is usually bounded, and thus in many cases a single sample
+may be insufficient to change the current best action, {\em regardless} of its
+outcome. As a result, we frequently
+get a {\em zero} ``myopic'' value of information for a single sample.
+\end{itemize}
+
+As the ultimate task is extremely difficult
+to achieve, and even harder to analyze, we begin with
+simple schemes more amenable to analysis. We then
+develop a crude value of information (VOI)
+based scheme. Although the latter is a somewhat ad-hoc attempt to
+estimate value of information of a sample, it already appears (empirically) to do
+better than UCT as well as better than all the simpler schemes we propose.
 
 \section{Main Results}
 
@@ -118,7 +172,7 @@ rate (see Appendix~\ref{app:derivations-finite-ucb}):
 \end{equation}
 \item A tighter upper regret bound for the $\varepsilon$-greedy allocation scheme depends on
 $\varepsilon$. The lowest bound is
-acheived for $\varepsilon=\frac 1
+achieved for $\varepsilon=\frac 1
 2$, and for a large number of arms the bound for the $\frac 1 2$-greedy scheme approaches the square of the
 bound for uniform sampling (see
 Appendix~\ref{app:derivations-asym-eps}).
@@ -296,7 +350,7 @@ significantly less prominent.
   \label{fig:sailing-cost-vs-nsamples}
 \end{figure}
 
-Figure~\ref{fig:sailing-cost-vs-factor} shows the rerget vs. the
+Figure~\ref{fig:sailing-cost-vs-factor} shows the regret vs. the
 exploration factor for different numbers of samples. QCT is always better than
 UCT, and $\frac 1 2$-greedy is better than UCT expect for a small range of
 values of the exploration factor $C_p$. 
@@ -389,11 +443,11 @@ The improvement is inspired by the notion of value of information (VOI),
 but VOI is used implicitly in the analysis of the algorithm, rather
 than computed or learned explicitly in order to plan the rollouts. A
 further improvement can be achieved by computing or estimating the VOI
-of the rollouts and chosing a rollout that maximizes the VOI. Using VOI
+of the rollouts and choosing a rollout that maximizes the VOI. Using VOI
 to guide Monte Carlo sampling instead of relying on the sample means
 of different actions  is particularly beneficial when different
 actions have qualitatively different distributions: for example, when the
-distribution variance varies signficantly between the actions.
+distribution variance varies significantly between the actions.
 
 \begin{figure}[t]
   \centering
@@ -406,7 +460,7 @@ VOI of a rollout can be computed when the sample distribution of an
 action is known up to the parameters, such as the normal distribution
 with an unknown mean and/or variance. Alternatively, the value of
 information can be estimated from the set of samples, and the need to
-assume a particular shape of the distribution is be lifted. In one
+assume a particular shape of the distribution can be lifted. In one
 realization of the latter approach the VOI of performing an action is
 estimated as \emph{the value of perfect information learned from the outcome
 of earlier samples of the action divided by the number of
@@ -549,7 +603,7 @@ polynomial in the number of pulls $n$.
 Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) were
 derived ignoring dependency of the allocation on expected values
 of non-optimal arms. Derivation of better bounds seems
-complicated. Instead, one can analyse the asymptotic behavior of each of the
+complicated. Instead, one can analyze the asymptotic behavior of each of the
 algorithms under the assumption that the sample mean is close to the expectation.
 
 \subsubsection{$\varepsilon$-greedy}
@@ -566,7 +620,7 @@ less than $\mu_*- \frac {\Delta_j} 2$. Each of the probabilities can
 be bound using the Chernoff-Hoefding bound.
 
 Splitting the interval between $\mu_j$ and $\mu_*$ half-way is an
-arbirtrary decision. By selecting a different split point
+arbitrary decision. By selecting a different split point
 depending on the allocation of samples, one can obtain a tighter
 bound. On the other hand, there is a value of $\varepsilon$ that
 minimizes the bound for the $\varepsilon$-greedy allocation scheme.
