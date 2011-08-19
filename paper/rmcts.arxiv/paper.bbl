@@ -1,0 +1,35 @@
+\begin{thebibliography}{1}
+
+\bibitem{Auer.ucb}
+Peter Auer, Nicol\`{o} Cesa-Bianchi, and Paul Fischer.
+\newblock Finite-time analysis of the multiarmed bandit problem.
+\newblock {\em Mach. Learn.}, 47:235--256, May 2002.
+
+\bibitem{Bubeck.pure}
+S{\'e}bastien Bubeck, R{\'e}mi Munos, and Gilles Stoltz.
+\newblock Pure exploration in finitely-armed and continuous-armed bandits.
+\newblock {\em Theor. Comput. Sci.}, 412(19):1832--1852, 2011.
+
+\bibitem{Eyerich.ctp}
+Patrick Eyerich, Thomas Keller, Malte Helmert, and Albert ludwigs-universität
+  Freiburg.
+\newblock High-quality policies for the canadian travelers problem.
+\newblock In {\em In Proc. AAAI 2010}, pages 51--58, 2010.
+
+\bibitem{Kocsis.uct}
+Levente Kocsis and Csaba Szepesv{\'a}ri.
+\newblock Bandit based monte-carlo planning.
+\newblock In {\em ECML}, pages 282--293, 2006.
+
+\bibitem{Russell.aima}
+Stuart~J. Russell and Peter Norvig.
+\newblock {\em Artificial Intelligence: A Modern Approach}.
+\newblock Pearson Education, 2003.
+
+\bibitem{TolpinShimony.blinkered}
+David Tolpin and Solomon~Eyal Shimony.
+\newblock Semi-myopic measurement selection for optimization under uncertainty.
+\newblock Technical Report 10-01, Lynne and William Frankel Center for Computer
+  Science at Ben Gurion University of the Negev, Israel, 2010.
+
+\end{thebibliography}

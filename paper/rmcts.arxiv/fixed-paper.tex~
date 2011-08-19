@@ -41,7 +41,7 @@ meta-reasoning techniques to MCTS, which is non-trivial.
 We begin by introducing policies for
 multi-armed bandits with lower simple regret than UCB, and an
 algorithm for MCTS which combines cumulative and simple regret
-minimization and outperforms UCT. We also develop a sampling scheme loosely based
+minization and outperforms UCT. We also develop a sampling scheme loosly based
 on a myopic version of perfect value of information.
 Finite-time and asymptotic analysis of
 the policies is provided, and the algorithms are compared empirically.
@@ -51,12 +51,12 @@ the policies is provided, and the algorithms are compared empirically.
 \section{Introduction and definitions}
 
 Monte-Carlo tree sampling, and especially a version based on the
-UCT formula \cite{Kocsis.uct} appears in numerous search applications,
-such as \cite{Eyerich.ctp}. Although these methods are shown to be successful empirically,
+UCT formula \cite{} appears in numerous search applications,
+such as \cite{}. Although these methods are shown to be succesfull empirically,
 most authors appear to be using the UCT formula ``because it has been shown
 to be successful in the past'', and ``because it does a good job of
 trading off exploration and exploitation''. While the latter statement may be
-correct for the multi-armed bandit and for the UCB method \cite{Auer.ucb},
+correct for the multi-armed bandit and for the UCB method \cite{},
 we argue that it is inappropriate for search. The problem is not that
 UCT does not work; rather, we argue that a simple reconsideration from basic
 principles can result in schemes that outperform UCT. This is demonstrated both
@@ -97,12 +97,12 @@ UCT-driven search achieves good results in many search problems. At each
 search step, the algorithm allocates Monte Carlo rollouts to choose
 the best action, thereby (approximately) minimizing the cumulative regret. 
 The core issue is that in search (especially for adversarial search
-and for ``games against nature'' - optimizing behavior under uncertainty) the goal is typically
+and for ``games against nature'' - optimizing behaviour under uncertainty) the goal is typically
 to either find a good (or optimal) strategy, or even to find the best first
 action of such a policy. Once such an action is discovered, it is not beneficial
 to further sample that action, ``exploitation'' is thus meaningless for
 search problems. Finding a good first action is closer to the pure exploration
-variant, as seen in the selection problem \cite{Bubeck.pure,TolpinShimony.blinkered}. In the selection
+variant, as seen in the selection problem \cite{}. In the selection
 problem, it is much better to minimize the {\em simple} regret.
 However, the simple and the cumulative regret cannot be minimized simultaneously;
 moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
@@ -134,10 +134,10 @@ the following reasons:
 \item Defining the cost of a sample is not easy, and even if we simply use time-cost
 as an approximation, we get an intractable meta-reasoning problem.
 \item Applying the standard myopic and subtree independence assumptions, we run into
-serious problems. Even in the standard selection problem \cite{TolpinShimony.blinkered}, we get a non-concave
+serious problems. Even in the standard selection problem \cite{}, we get a non-concave
 utility function and premature stopping of the algorithm. This is due to the fact
 that the value of information of a single measurement (analogous
-to a sample in MCTS) is frequently less than its
+to a samplein MCTS) is frequently less than its
 time-cost, even though this is not true for multiple measurements.
 When applying the selection problem to MCTS, the situation is exacerbated. 
 The utility of an action is usually bounded, and thus in many cases a single sample
@@ -149,7 +149,7 @@ get a {\em zero} ``myopic'' value of information for a single sample.
 As the ultimate task is extremely difficult
 to achieve, and even harder to analyze, we begin with
 simple schemes more amenable to analysis. We then
-develop a crude value of information (VOI)
+develop a crude value of infomation (VOI)
 based scheme. Although the latter is a somewhat ad-hoc attempt to
 estimate value of information of a sample, it already appears (empirically) to do
 better than UCT as well as better than all the simpler schemes we propose.
@@ -172,7 +172,7 @@ rate (see Appendix~\ref{app:derivations-finite-ucb}):
 \end{equation}
 \item A tighter upper regret bound for the $\varepsilon$-greedy allocation scheme depends on
 $\varepsilon$. The lowest bound is
-achieved for $\varepsilon=\frac 1
+acheived for $\varepsilon=\frac 1
 2$, and for a large number of arms the bound for the $\frac 1 2$-greedy scheme approaches the square of the
 bound for uniform sampling (see
 Appendix~\ref{app:derivations-asym-eps}).
@@ -350,7 +350,7 @@ significantly less prominent.
   \label{fig:sailing-cost-vs-nsamples}
 \end{figure}
 
-Figure~\ref{fig:sailing-cost-vs-factor} shows the regret vs. the
+Figure~\ref{fig:sailing-cost-vs-factor} shows the rerget vs. the
 exploration factor for different numbers of samples. QCT is always better than
 UCT, and $\frac 1 2$-greedy is better than UCT expect for a small range of
 values of the exploration factor $C_p$. 
@@ -443,11 +443,11 @@ The improvement is inspired by the notion of value of information (VOI),
 but VOI is used implicitly in the analysis of the algorithm, rather
 than computed or learned explicitly in order to plan the rollouts. A
 further improvement can be achieved by computing or estimating the VOI
-of the rollouts and choosing a rollout that maximizes the VOI. Using VOI
+of the rollouts and chosing a rollout that maximizes the VOI. Using VOI
 to guide Monte Carlo sampling instead of relying on the sample means
 of different actions  is particularly beneficial when different
 actions have qualitatively different distributions: for example, when the
-distribution variance varies significantly between the actions.
+distribution variance varies signficantly between the actions.
 
 \begin{figure}[t]
   \centering
@@ -472,7 +472,8 @@ and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}):
 the first step exhibits lower average regret than other algorithms.
 Sample-based VOI estimation requires keeping more information than an
 algorithm based only on the sample
-mean, but the overhead is small and justified by the improvement.
+mean, but the overhead is small and
+is justified by the improvement.
 
 \section*{Acknowledgments}
 
@@ -602,7 +603,7 @@ polynomial in the number of pulls $n$.
 Bounds (\ref{eq:deriv-epsilon-greedy-b}, \ref{eq:deriv-ucb-alpha-b}) were
 derived ignoring dependency of the allocation on expected values
 of non-optimal arms. Derivation of better bounds seems
-complicated. Instead, one can analyze the asymptotic behavior of each of the
+complicated. Instead, one can analyse the asymptotic behavior of each of the
 algorithms under the assumption that the sample mean is close to the expectation.
 
 \subsubsection{$\varepsilon$-greedy}
@@ -619,7 +620,7 @@ less than $\mu_*- \frac {\Delta_j} 2$. Each of the probabilities can
 be bound using the Chernoff-Hoefding bound.
 
 Splitting the interval between $\mu_j$ and $\mu_*$ half-way is an
-arbitrary decision. By selecting a different split point
+arbirtrary decision. By selecting a different split point
 depending on the allocation of samples, one can obtain a tighter
 bound. On the other hand, there is a value of $\varepsilon$ that
 minimizes the bound for the $\varepsilon$-greedy allocation scheme.

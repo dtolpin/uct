@@ -472,7 +472,8 @@ and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}):
 the first step exhibits lower average regret than other algorithms.
 Sample-based VOI estimation requires keeping more information than an
 algorithm based only on the sample
-mean, but the overhead is small and justified by the improvement.
+mean, but the overhead is small and
+is justified by the improvement.
 
 \section*{Acknowledgments}
 

@@ -1,0 +1,8 @@
+\sqrt (\alpha ln n / ni) <= 1 + \sqrt (\alpha ln n / (nb-1) )
+\alpha ln n / ni <= 1 + 2  \sqrt (\alpha ln n / nb) + \alpha ln n / nb
+ni >= \alpha ln n / [1+2 \sqrt (\alpha ln n / nb) + \alpha ln n / nb]
+ni >= \alpha ln n / 4 for ln n <= nb
+P_i <=  2*exp(-\alpha delta^2 ln n / 8 ) = 2n^[-\alpha delta^2/8]
+r <= 2\sum_i delta_i*n^[-\alpha delta_i^2/8] 
+---------------------------------
+
