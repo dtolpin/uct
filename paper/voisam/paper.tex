@@ -33,7 +33,72 @@ Ben-Gurion University of the Negev, Beer Sheva, Israel \\
 \begin{abstract}
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction and Definitions}
+
+Taking a sequence of samples in order to minimize the
+regret of a decision based on the samples is abstracted by the
+{\em Multi-armed Bandit Problem.} In the Multi-armed Bandit problem
+we have a set of $K$ arms. Each arm can be pulled multiple
+times. When the $i$th arm is pulled, a random reward $X_i$ from an
+unknown stationary distribution is returned.  The reward is bounded
+between 0 and 1.
+
+The simple regret of a sampling policy for the Multi-armed Bandit
+Problem is the expected difference between the best expected reward
+$\mu_*$ and the expected reward $\mu_j$ of the arm with the best sample mean
+$\overline X_j=\max_i\overline X_i$:
+\begin{equation}
+\label{eq:simple-regret}
+\IE[R]=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\end{equation}
+where $\Delta_j=\mu_*-\mu_j$.
+Strategies that minimize the simple regret are called pure exploration
+strategies \cite{Bubeck.pure}. Principles of rational metareasoning
+\cite{Russel.right} suggest that at each step the arm with the great
+value of information (VOI) must be pulled, and the sampling must be
+stopped and a decision must be made when no arm has positive VOI. 
+
+To estimate the VOI of pulling an arm, either a particular 
+distribution of the rewards should be assumed (and updated based on
+pull outcomes), or a distribution-independent bound on the VOI can be
+used as the estimate. In this paper, we use {\em concentration inequalities}
+to derive distribution-independent bounds on the VOI.
+
+\section{Some Concentration Inequalities}
+
+\begin{description}
+\item[Markov' inequality \cite{}:] Let $X \ge 0$ be a random non-negative variable
+  with finite mean $\IE[X]$. Then for all $a > 0$
+\begin{equation}
+\Pr(X\ge a)\le \frac {\IE[X]} a
+\label{eq:conc-markov-upper}
+\end{equation}
+If additionally $X\le 1$, then by susbstituting $Y=1-X$
+\begin{equation}
+\Pr(X\le a)\le \frac {1-\IE[X]} {1-a}
+\label{eq:conc-markov-lower}
+\end{equation}
+\item[Hoeffding's inequality \cite{}:] Let $X_1, \ldots, X_n$ be
+independent random variables with values from $[0,1]$,
+$X=\frac 1 n \sum_{i=1}^n X_i$. Then 
+\begin{eqnarray}
+\Pr(X-\IE[X] \ge a) &\le& \exp ( -2na^2)\nonumber\\
+\Pr(\IE[X]-X \ge a) &\le& \exp ( -2na^2)
+\label{eq:conc-hoeffding}
+\end{eqnarray}
+\item[Maurer \& Pontil's inequality \cite{MaurerPontil.benrstein}:] \footnote{A
+  modification of Bennet's inequality \cite{} based on the sample,
+  rather than the true, variance.}
+\end{description}
+
+
+\section{Upper Bounds on Value of Information}
+
+\section{VOI-based Sampling Control}
+
+\subsection{Selection Criterion}
+
+\subsection{Termination Condition}
 
 \bibliographystyle{plain}
 \bibliography{refs}
