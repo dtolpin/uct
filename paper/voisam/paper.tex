@@ -31,7 +31,7 @@ Ben-Gurion University of the Negev, Beer Sheva, Israel \\
 \maketitle
 
 \begin{abstract}
-Upper bounds for the VOI are provided for pure exploitation in the
+Upper bounds for the VOI are provided for pure exploration in the
 Multi-armed Bandit Problem. Sampling policies based on the upper
 bounds are suggested.
 \end{abstract}
@@ -83,7 +83,7 @@ $X=\frac 1 n \sum_{i=1}^n X_i$. Then
 \begin{eqnarray}
 \Pr(X-\IE[X] \ge a) &\le& 2\exp \left( - \frac {na^2} {\frac {14} {3}
                           \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\nonumber\\
-                    &<& 2\exp \left( - \frac {na^2} {10a+2\overline\sigma_n^2}\right)
+                    &\le& 2\exp \left( - \frac {na^2} {10a+2\overline\sigma_n^2}\right)
 \label{eq:conc-empbernstein}
 \end{eqnarray}
 where sample variance $\overline\sigma_n^2$ is
@@ -137,8 +137,8 @@ inequality~(\ref{eq:conc-hoeffding}):
 \end{eqnarray}
 For the empirical Bernstein's inequality~(\ref{eq:conc-empbernstein}):
 \begin{eqnarray}
-\Lambda_\alpha&\le&\hat\Lambda_\alpha^h=\overline X_\beta \exp\left(-\frac {n(\overline X_\alpha - \overline X_\beta)^2} {10(\overline X_\alpha - \overline X_\beta)+2\overline\sigma_{\alpha,n}^2}\right)\nonumber\\
-\Lambda_\alpha&\le&\hat\Lambda_{i|i\ne \alpha}^h=(1-\overline X_\alpha) \exp\left(-\frac {2n(\overline X_\alpha - \overline X_i)^2} {10(\overline X_\alpha - \overline X_i)+2\overline\sigma_{i,n}^2}\right)
+\Lambda_\alpha&\le&\hat\Lambda_\alpha^h=2\overline X_\beta \exp\left(-\frac {n(\overline X_\alpha - \overline X_\beta)^2} {10(\overline X_\alpha - \overline X_\beta)+2\overline\sigma_{\alpha,n}^2}\right)\nonumber\\
+\Lambda_{i|i\ne \alpha}&\le&\hat\Lambda_{i|i\ne \alpha}^h=2(1-\overline X_\alpha) \exp\left(-\frac {n(\overline X_\alpha - \overline X_i)^2} {10(\overline X_\alpha - \overline X_i)+2\overline\sigma_{i,n}^2}\right)
 \label{eq:lambda-bernstein-bounds}
 \end{eqnarray}
 and a tighter bound can be constructed as $\hat\Lambda^{h,b}=\min(\hat\Lambda^h,\hat\Lambda^b)$.
