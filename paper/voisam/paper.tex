@@ -31,6 +31,9 @@ Ben-Gurion University of the Negev, Beer Sheva, Israel \\
 \maketitle
 
 \begin{abstract}
+Upper bounds for the VOI are provided for pure exploitaiton in the
+Mulit-armed Bandit Problem. Sampling policies based on the upper
+bounds are suggested.
 \end{abstract}
 
 \section{Introduction and Definitions}
@@ -96,11 +99,66 @@ around the mean. Bound~(\ref{eq:conc-empbernstein}) is tighter than
 
 \section{Upper Bounds on Value of Information}
 
+The intrinsic VOI of pulling an arm is the expected decrease
+in the regret compared to selecting an arm without pulling any arm at
+all. The intrinsic VOI can be estimated as the intrinsic 
+value of perfect information $\Lambda_i$ about the mean reward of the $i$th arm. Two
+cases are possible:
+\begin{itemize}
+\item the arm ($\alpha$) with the highest sample mean is pulled, and the 
+mean of the arm is lower than the sample mean the second-best arm ($\beta$);
+\item another arm is pulled, and the mean of the arm is higher
+than the current highest sample mean ($\alpha$).
+\end{itemize}
+\begin{eqnarray}
+\Lambda_\alpha&=&\int_0^{\overline X_\beta}p(\IE[X_\alpha]=x)(\overline X_\beta-x)dx\nonumber\\
+\Lambda_{i|i\ne\alpha}&=&\int_{\overline X_\alpha}^1p(\IE[X_i]=x)(x-\overline X_\alpha)dx
+\end{eqnarray}
+Using the concentration inequalities, $\Lambda_i$ can be bounded from
+above as the probability that a different arm is selected times the
+maximum possible increase in the reward:
+\begin{eqnarray}
+\Lambda_\alpha&\le&\Pr(\IE[X_\alpha]\le\overline X_\beta)\overline X_\beta\nonumber\\
+\Lambda_{i|i\ne \alpha}&\le&\Pr(\IE[X_i]\ge\overline
+X_\alpha)(1-\overline X_\alpha)
+\label{eq:lambda-general-bounds}
+\end{eqnarray}
+
+The probabilities in bounds~(\ref{eq:lambda-general-bounds}) can be
+bounded from above by the concentration
+inequalities~(\ref{eq:conc-hoeffding}, \ref{eq:conc-empbernstein});
+thus upper bounds on $\Lambda$ corresponding to each of the
+concentration inequalities are obtained. For the Hoeffding's
+inequality~(\ref{eq:conc-hoeffding}):
+\begin{eqnarray}
+\Lambda_\alpha&\le&\hat\Lambda_\alpha^h=\overline X_\beta \exp\left(-2n(\overline  X_\alpha - \overline X_\beta)^2\right)\nonumber\\
+\Lambda_{i|i\ne \alpha}&\le&\hat\Lambda_{i|i\ne \alpha}^h=(1-\overline X_\alpha) \exp\left(-2n(\overline X_\alpha - \overline X_i)^2\right)
+\label{eq:lambda-hoeffding-bounds}
+\end{eqnarray}
+For the empirical Bernstein's inequality~(\ref{eq:conc-empbernstein}):
+\begin{eqnarray}
+\Lambda_\alpha&\le&\hat\Lambda_\alpha^h=\overline X_\beta \exp\left(-\frac {n(\overline X_\alpha - \overline X_\beta)^2} {10(\overline X_\alpha - \overline X_\beta)+2\overline\sigma_{\alpha,n}^2}\right)\nonumber\\
+\Lambda_\alpha&\le&\hat\Lambda_{i|i\ne \alpha}^h=(1-\overline X_\alpha) \exp\left(-\frac {2n(\overline X_\alpha - \overline X_i)^2} {10(\overline X_\alpha - \overline X_i)+2\overline\sigma_{i,n}^2}\right)
+\label{eq:lambda-bernstein-bounds}
+\end{eqnarray}
+and a tighter bound can be constructed as $\hat\Lambda^{h,b}=\min(\hat\Lambda^h,\hat\Lambda^b)$.
+
+
 \section{VOI-based Sampling Control}
 
 \subsection{Selection Criterion}
 
+Following the principles of rational metareasoning, an arm with the highest upper bound $\hat
+Lambda$ on the perfect value of information should be pulled at each
+step. This way, arms known to have a low VOI  would be pulled less frequently.
+
 \subsection{Termination Condition}
+
+The upper bounds~(\ref{eq:lambda-hoeffding-bounds}, \ref{eq:lambda-bernstein-bounds}) decrease exponentially with the
+number of pulls $n$. When the upper bound of the VOI for all arms
+becomes lower than a threshold $\lambda$, which can be chosen based on
+resource constraints, the sampling should be stopped and an arm should
+be chosen.
 
 \appendix
 
