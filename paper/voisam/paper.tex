@@ -58,10 +58,10 @@ strategies \cite{Bubeck.pure}. Principles of rational metareasoning
 value of information (VOI) must be pulled, and the sampling must be
 stopped and a decision must be made when no arm has positive VOI. 
 
-To estimate the VOI of pulling an arm, either a particular 
+To estimate the VOI of pulling an arm, either a certain 
 distribution of the rewards should be assumed (and updated based on
-pull outcomes), or a distribution-independent bound on the VOI can be
-used as the estimate. In this paper, we use {\em concentration inequalities}
+observed rewards), or a distribution-independent bound on the VOI can be
+used as the VOI estimate. In this paper, we use {\em concentration inequalities}
 to derive distribution-independent bounds on the VOI.
 
 \section{Some Concentration Inequalities}
@@ -74,11 +74,15 @@ $X=\frac 1 n \sum_{i=1}^n X_i$. Then
 \Pr(X-\IE[X] \ge a) \le \exp ( -2na^2)
 \label{eq:conc-hoeffding}
 \end{equation}
-\item[Empirical Bernstein's inequality \rm{\cite{MaurerPontil.benrstein}}:]
-\begin{equation}
-\Pr(X-\IE[X] \ge a) \le 2\exp \left( \frac {-na^2} {10a+2\overline\sigma_n^2}\right)
+\item[Empirical Bernstein's inequality
+  \rm{\cite{MaurerPontil.benrstein}}:]\footnote{see
+    Appendix~\ref{app:deriv-conc-empbernstein} for derivation}
+\begin{eqnarray}
+\Pr(X-\IE[X] \ge a) &\le& 2\exp \left( - \frac {na^2} {\frac {14} {3}
+                          \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\nonumber\\
+                    &<& 2\exp \left( - \frac {na^2} {10a+2\overline\sigma_n^2}\right)
 \label{eq:conc-empbernstein}
-\end{equation}
+\end{eqnarray}
 where sample variance $\overline\sigma_n^2$ is
 \begin{equation}
 \overline\sigma_n^2=\frac 1 {n(n-1)} \sum_{1\le i < j\le n}(X_i-X_j)^2
@@ -86,7 +90,7 @@ where sample variance $\overline\sigma_n^2$ is
 \end{equation}
 \end{description}
 Bounds (\ref{eq:conc-hoeffding}, \ref{eq:conc-empbernstein}) are symmetrical
-around the mean. Bound (\ref{eq:conc-empbernstein}) is tighter than
+around the mean. Bound~(\ref{eq:conc-empbernstein}) is tighter than
 (\ref{eq:conc-hoeffding}) for small $a$ and $\overline\sigma_n^2$. 
 
 
@@ -98,8 +102,25 @@ around the mean. Bound (\ref{eq:conc-empbernstein}) is tighter than
 
 \subsection{Termination Condition}
 
+\appendix
+
+\section{Empirical Bernstein Inequality}
+\label{app:deriv-conc-empbernstein}
+
+Theorem~4 in~\cite{MaurerPontil.benrstein} states that
+\[\Pr\left(\IE[X]-\overline X_n \ge \sqrt { \frac {2\overline\sigma_n^2 \ln 2/\delta} n } + \frac {7 \ln 2/\delta} {3(n-1)}\right)\le \delta,\]
+Therefore
+\[\Pr\left(\IE[X]-\overline X_n \ge \sqrt { \left(\frac {7 \ln 2/\delta} {3(n-1)}\right)^2+\frac {2\overline\sigma_n^2 \ln 2/\delta} n } + \frac {7 \ln 2/\delta} {3(n-1)}\right)\le
+\delta.\]
+$t=\sqrt { \left(\frac {7 \ln 2/\delta} {3(n-1)}\right)^2+\frac {2\overline\sigma_n^2 \ln 2/\delta} n } + \frac {7 \ln 2/\delta} {3(n-1)}$ is a root of
+square equation
+\[t^2-t\frac {14 \ln 2/\delta} {3(n-1)} -\frac {2\overline\sigma_n^2 \ln 2/\delta} n=0\]
+which, solved for $\delta\triangleq\Pr(\IE[X]-\overline X_n\ge t)$,
+gives
+\[\Pr(\IE[X]-\overline X_n\ge t)\le 2\exp \left( - \frac {na^2} {\frac {14} {3} \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\]
+Other derivations, giving slightly different results, are possible.
+
 \bibliographystyle{plain}
 \bibliography{refs}
-
 
 \end{document}
