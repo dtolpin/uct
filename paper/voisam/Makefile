@@ -1,4 +1,4 @@
-all: paper.pdf
+all: paper.pdf onbetterbound.pdf
 
 %.pdf: %.tex
 	pdflatex $<
