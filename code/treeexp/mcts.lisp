@@ -297,7 +297,7 @@
                :initial-value 0.0)
        (* len len))))
                      
-(defun uvb (switch)
+(defun v*b (switch voi)
   "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
@@ -318,8 +318,8 @@
       (when (zerop (stat-count (aref node-stats i)))
         (return (aref (switch-nodes switch) i)))
       (let ((reward (if (= (aref avgs i) alpha)
-                        (voi beta (stat-rewards (aref node-stats i)) #'<)
-                        (voi alpha (stat-rewards (aref node-stats i)) #'>))))
+                        (funcall voi beta (stat-rewards (aref node-stats i)) #'<)
+                        (funcall voi alpha (stat-rewards (aref node-stats i)) #'>))))
         (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
@@ -351,10 +351,15 @@
 (defun qct-select (switch)
   (values (uqb switch) #'uct-select))
 
-;; VCT
+;; HCT (Hoeffding then UCT)
 
-(defun vct-select (switch)
-  (values (uvb switch) #'uct-select))
+(defun hct-select (switch)
+  (values (vhb switch) #'uct-select))
+
+;; BCT (Bernstein then UCT)
+
+(defun bct-select (switch)
+  (values (vbb switch) #'uct-select))
 
 ;; Testing
 
