@@ -211,13 +211,14 @@
         (random (length (switch-nodes switch)))))
 
 ;; Single-level adaptive selection
-(defun ucb (switch)
+(defun u*b (switch fun factor)
   "UCB selection: max (avg+sqrt(2*log (n) / ni))"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
          (avgs (map 'vector #'stat-avg node-stats))
          (root-2-log-n
-          (sqrt (* 2.0 (log (max 1.0 (reduce #'+ node-stats :key #'stat-count :initial-value 0))))))
+          (sqrt (* factor (funcall fun (max 1.0 (reduce #'+ node-stats :key #'stat-count
+                                                        :initial-value 0))))))
          (best-node nil)
          (best-reward (lowest-reward switch)))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
@@ -229,6 +230,8 @@
         (when (better-reward switch reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
+
+(defun ucb (switch) (u*b switch #'log 2.0))
 
 (defvar *uqb-factor* 1.0)
 
@@ -249,26 +252,10 @@
                        (setf xa xc
                              fa fc))))))
       (setf *uqb-factor* (/ (* 2.0 (log n)) (sqrt n))))))
-           
-(defun uqb (switch)
-  "UQB selection: max (avg+sqrt(2*sqrt (n) / ni))"
-  (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
-                          (switch-nodes switch)))
-         (avgs (map 'vector #'stat-avg node-stats))
-         (root-2-sqrt-n
-          (sqrt (* *uqb-factor* (sqrt (max 1.0 (reduce #'+ node-stats :key #'stat-count
-                                                       :initial-value 0))))))
-         (best-node nil)
-         (best-reward (lowest-reward switch)))
-    (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
-      (when (zerop (stat-count (aref node-stats i)))
-        (return (aref (switch-nodes switch) i)))
-      (let ((reward (upper-bound switch (aref avgs i)
-                                 (/ root-2-sqrt-n
-                                    (sqrt (stat-count (aref node-stats i)))))))
-        (when (better-reward switch reward best-reward)
-          (setf best-node (aref (switch-nodes switch) i)
-                best-reward reward))))))
+
+(defun uqb (switch) (u*b switch #'sqrt *uqb-factor*))
+
+
 
 (defun grd (switch)
   "0.5-greedy selection"
@@ -323,6 +310,9 @@
         (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
+
+; TODO: vhb, vbb
+
 
 ;;; Adaptive sampling selection functions for passing to `pull-best-arm'
 
