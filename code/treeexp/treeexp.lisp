@@ -85,7 +85,7 @@
     (arm (arm-mean tree))
     (switch (reduce *choose* (map 'list #'best-mean (switch-nodes tree))))))
 
-(defparameter +algorithms+ '("UCT" "GCT" "RCT" "RND"))
+(defparameter +algorithms+ '("RND" "UCT" "GCT" "QCT" "VCT"))
 
 (defun experiment (&key levels branching sampling-factor nruns vararm (algorithms +algorithms+))
   (compute-uqb-factor branching)

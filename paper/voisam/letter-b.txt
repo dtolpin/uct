@@ -1,0 +1,32 @@
+Hello Eyal,
+
+[a lower bound on VOI cannot be obtained unless a distribution is assumed.]
+
+GOOD NEWS: A tighter upper bound can be obtained if the sample variance is available along with the sample mean, using McDiarmid's (Bennet's, Bernstein's) inequalities, with some modifications, known in the literature.
+
+The `classical' Bernstein's inequality states:
+
+Pr(avg(X)-E[X]>t)<exp(-nt^2/(Var[X] + t/3)) (1)
+
+that is, the probability that the sample mean deviates from the expected value grows with variance, and for small variances the bound is tighter than the Chernoff bound.
+
+BUT, Var[x] is the `theoretical' variance rather than the sample variance. I found a paper (COLT 2009, http://arxiv.org/abs/0907.3740) that proves a similar inequality based on the sample variance SVar:
+
+Pr(avg(X)-E[X]>t)<2*exp(-nt^2/[SVar(X)+7nt/3(n-1)) (2)
+
+which can be used to bound the VOI when the sample variance is collected along with the sample mean.
+
+very roughly, the arms should be sorted (the smaller the better) by
+
+n*[avg(X_best)-avg(X)]^2/[SVar(X)+...]
+
+The trends are right: the closer avg(X) to avg(X_best) and the greater the sample variance, the better is the arm.
+
+I am going to write down the theoretical part formally now, with all the proper citations: we will have two upper bounds:
+
+- based on the sample mean only
+- based on the sample mean and sample variance estimate
+
+the second bound will work better in the cases when different arms have significantly different variances. Both estimates allow to specify the termination condition, since they decrease with number of pulls (samples) (exp(-An), where A is some constant).
+
+David

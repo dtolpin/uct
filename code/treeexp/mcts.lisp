@@ -9,12 +9,9 @@
            "RND-SELECT"
            "RCT-SELECT"
            "UCT-SELECT"
-           "UVT-SELECT"
-           "VCT-SELECT"
            "GCT-SELECT"
-           "GRT-SELECT"
-           "UQT-SELECT"
            "QCT-SELECT"
+           "VCT-SELECT"
            "COMPUTE-UQB-FACTOR"
            "*UQB-ALPHA*"))
 (in-package "MCTS")
@@ -94,7 +91,8 @@
 (defstruct stat
   "play stat"
   (count 0)
-  (sum 0.0))
+  (sum 0.0)
+  (rewards '(0.0 1.0)))
 
 (defun stat-avg (stat)
   (/ (stat-sum stat) (max (stat-count stat) 1)))
@@ -115,6 +113,7 @@
 
 (defun update-stats (switch node reward)
   (let ((stat (get-stat switch node)))
+    (push reward (stat-rewards stat))
     (incf (stat-count stat))
     (incf (stat-sum stat) reward))
   reward)
@@ -289,22 +288,39 @@
         (when (better-reward switch reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
+
+(defun voi (avg rewards cmp)
+  "complete voi"
+  (let ((len (length rewards)))
+    (/ (reduce (lambda (sum v) (+ sum (abs (- v avg))))
+               (remove-if (lambda (x) (funcall cmp avg x)) rewards)
+               :initial-value 0.0)
+       (* len len))))
                      
 (defun uvb (switch)
   "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
          (avgs (map 'vector #'stat-avg node-stats))
-         (best-avg (reduce #'(lambda (x y) (if (better-reward switch x y) x y)) avgs))
-         (kappa (/ 1.0 (length (switch-nodes switch))))
+         (alpha 0.0)
+         (beta 0.0)
          (best-node nil)
          (best-reward 0.0))
+    (dotimes (i (length avgs))
+      (let ((avg (aref avgs i)))
+        (cond
+          ((> avg alpha)
+           (psetf beta alpha
+                  alpha avg))
+          ((> alpha avg beta)
+           (psetf beta avg)))))
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
       (when (zerop (stat-count (aref node-stats i)))
         (return (aref (switch-nodes switch) i)))
-      (let ((reward (/ (if (= (aref avgs i) best-avg) (- 1.0 kappa) kappa)
-                       (stat-count (aref node-stats i)))))
-        (when (> reward best-reward)
+      (let ((reward (if (= (aref avgs i) alpha)
+                        (voi beta (stat-rewards (aref node-stats i)) #'<)
+                        (voi alpha (stat-rewards (aref node-stats i)) #'>))))
+        (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
 
@@ -325,35 +341,20 @@
 (defun uct-select (switch)
   (values (ucb switch) #'uct-select))
 
-;; UVT
-
-(defun uvt-select (switch)
-  (values (uvb switch) #'uvt-select))
-
-;; VCT
-
-(defun vct-select (switch)
-  (values (uvb switch) #'uct-select))
-
 ;; GCT 
 
 (defun gct-select (switch)
   (values (grd switch) #'uct-select))
 
-;; GRT
-
-(defun grt-select (switch)
-  (values (grd switch) #'grt-select))
-
-;; UQT 
-
-(defun uqt-select (switch)
-  (values (uqb switch) #'uqt-select))
-
 ;; QCT
 
 (defun qct-select (switch)
   (values (uqb switch) #'uct-select))
+
+;; VCT
+
+(defun vct-select (switch)
+  (values (uvb switch) #'uct-select))
 
 ;; Testing
 
