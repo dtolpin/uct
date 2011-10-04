@@ -11,7 +11,8 @@
            "UCT-SELECT"
            "GCT-SELECT"
            "QCT-SELECT"
-           "VCT-SELECT"
+           "HCT-SELECT"
+           "BCT-SELECT"
            "COMPUTE-UQB-FACTOR"
            "*UQB-ALPHA*"))
 (in-package "MCTS")
@@ -276,14 +277,6 @@
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
 
-(defun voi (avg rewards cmp)
-  "complete voi"
-  (let ((len (length rewards)))
-    (/ (reduce (lambda (sum v) (+ sum (abs (- v avg))))
-               (remove-if (lambda (x) (funcall cmp avg x)) rewards)
-               :initial-value 0.0)
-       (* len len))))
-                     
 (defun v*b (switch voi)
   "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
@@ -304,14 +297,30 @@
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
       (when (zerop (stat-count (aref node-stats i)))
         (return (aref (switch-nodes switch) i)))
-      (let ((reward (if (= (aref avgs i) alpha)
-                        (funcall voi beta (stat-rewards (aref node-stats i)) #'<)
-                        (funcall voi alpha (stat-rewards (aref node-stats i)) #'>))))
+      (let ((reward (funcall voi alpha beta (aref node-stats i))))
         (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
 
 ; TODO: vhb, vbb
+
+(flet ((square (x) (* x x)))
+
+  (defun voi-hoeffding (alpha beta stat)
+    "Chernoff-Hoeffding based VOI estimate"
+    (let ((avg (stat-avg stat)))
+      (/ (if (> avg beta)
+             (* beta (exp (* -2.0 (stat-count stat) (square (- avg beta)))))
+             (* (- 1.0 alpha) (exp (* -2.0 (stat-count stat) (square (- alpha avg))))))
+         (stat-count stat))))
+
+  (defun voi-bernstein (alpha beta stat)
+    "Empirical Bernstein based VOI estimate"
+    (declare (ignore alpha beta stat))
+    (error "not implemented")))
+
+(defun vhb (switch) (v*b switch #'voi-hoeffding))
+(defun vbb (switch) (v*b switch #'voi-bernstein))
 
 
 ;;; Adaptive sampling selection functions for passing to `pull-best-arm'
@@ -365,15 +374,11 @@
       (*sampling-factor* 1))
 
   (defun test-uct ()
-    (assert (= (pull-best-arm test-tree #'uct-select) 1.0)))
-
-  (defun test-vct ()
     (assert (= (pull-best-arm test-tree #'uct-select) 1.0))))
 
 (defun test ()
   (format *error-output* "Testing ~A:" (package-name (symbol-package 'test)))
   (run-test test-uct)
-  (run-test test-vct)
   (format *error-output* "~%") (clear-output *error-output*))
 
 
