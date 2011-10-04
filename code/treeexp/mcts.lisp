@@ -11,6 +11,7 @@
            "UCT-SELECT"
            "GCT-SELECT"
            "QCT-SELECT"
+           "TCT-SELECT"
            "HCT-SELECT"
            "BCT-SELECT"
            "COMPUTE-UQB-FACTOR"
@@ -302,7 +303,12 @@
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
 
-; TODO: vhb, vbb
+
+(defun voi-trivial (alpha beta stat)
+    "Trivial VOI upper"
+    (let ((avg (stat-avg stat)))
+      (/ (if (> avg beta) beta (- 1.0 alpha))
+         (stat-count stat))))
 
 (flet ((square (x) (* x x)))
 
@@ -319,6 +325,7 @@
     (declare (ignore alpha beta stat))
     (error "not implemented")))
 
+(defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
@@ -349,6 +356,12 @@
 
 (defun qct-select (switch)
   (values (uqb switch) #'uct-select))
+
+
+;; TCT (Trivial then UCT)
+
+(defun tct-select (switch)
+  (values (vtb switch) #'uct-select))
 
 ;; HCT (Hoeffding then UCT)
 
