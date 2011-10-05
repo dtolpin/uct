@@ -44,6 +44,10 @@
      (t 0.75))
    0.25))
 
+(defun n-level (n)
+  (lambda (r)
+    (/ (coerce (round (* r n)) 'double-float) n)))
+
 (defun make-fringe ()
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
