@@ -94,7 +94,7 @@
   "play stat"
   (count 0)
   (sum 0.0)
-  (rewards '(0.0 1.0)))
+  (rewards '()))
 
 (defun stat-avg (stat)
   (/ (stat-sum stat) (max (stat-count stat) 1)))
@@ -310,20 +310,38 @@
       (/ (if (> avg beta) beta (- 1.0 alpha))
          (stat-count stat))))
 
-(flet ((square (x) (* x x)))
+(defun square (x) (* x x))
 
+(defun variance (x n) 
+  (let ((sum 0.0))
+    (mapl #'(lambda (xij) 
+              (let ((xi (car xij)))
+                (mapc  #'(lambda (xj) (incf sum (square (- xi xj))))
+                       (cdr xij))))
+          x)
+    (/ sum (* n (1- n)))))
+
+(flet ((estimate (n over under) (* over (exp (* -2.0 n (square under))))))
   (defun voi-hoeffding (alpha beta stat)
     "Chernoff-Hoeffding based VOI estimate"
     (let ((avg (stat-avg stat)))
       (/ (if (> avg beta)
-             (* beta (exp (* -2.0 (stat-count stat) (square (- avg beta)))))
-             (* (- 1.0 alpha) (exp (* -2.0 (stat-count stat) (square (- alpha avg))))))
-         (stat-count stat))))
+             (estimate (stat-count stat) beta (- avg beta))
+             (estimate (stat-count stat) ( - 1.0 alpha) (- alpha avg)))
+         (stat-count stat)))))
 
+(flet ((estimate (n over under variance)
+         (* 2 over (exp (- (/ (* n (square under))
+                              (+ (* 10 under) (* 2 variance))))))))
   (defun voi-bernstein (alpha beta stat)
     "Empirical Bernstein based VOI estimate"
-    (declare (ignore alpha beta stat))
-    (error "not implemented")))
+    (if (<= (stat-count stat) 1) (voi-hoeffding alpha beta stat)
+        (let ((avg (stat-avg stat))
+              (variance (variance (stat-rewards stat) (stat-count stat))))
+          (/ (if (> avg beta)
+                 (estimate (stat-count stat) beta (- avg beta) variance)
+                 (estimate (stat-count stat) (1- alpha) (- alpha avg) variance))
+             (stat-count stat))))))
 
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
