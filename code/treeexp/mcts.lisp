@@ -94,12 +94,23 @@
   "play stat"
   (count 0)
   (sum 0.0)
+  (varsum 0.0)
   (rewards '()))
 
 (defun stat-avg (stat)
-  (/ (stat-sum stat) (max (stat-count stat) 1)))
+  (/ (stat-sum stat)
+     (max 1 (stat-count stat))))
 
-(defun stat-key (switch node) 
+(defun stat-avg* (stat)
+  (if (plusp (stat-count stat)) (stat-avg stat) 0))
+
+(defun square (x) (* x x))
+
+(defun stat-var (stat)
+  (/ (stat-varsum stat)
+     (* (stat-count stat) (1- (stat-count stat)))))
+
+(defun stat-key (switch node)
   "key of action in stats"
   (cons (node-id switch) (node-id node)))
 
@@ -115,9 +126,11 @@
 
 (defun update-stats (switch node reward)
   (let ((stat (get-stat switch node)))
-    (push reward (stat-rewards stat))
     (incf (stat-count stat))
-    (incf (stat-sum stat) reward))
+    (incf (stat-sum stat) reward)
+    (dolist (r (stat-rewards stat))
+      (incf (stat-varsum stat) (square (- reward r))))
+    (push reward (stat-rewards stat)))
   reward)
 
 ;; Playing a playout
@@ -159,8 +172,8 @@
                  (progn (format t "~&~%")
                         (map nil #'(lambda (stat) 
                                      (format t "~@{~S~^ ~}~%"
-                                             (stat-count stat) (stat-avg stat)))
-                             (sort (copy-seq stats) #'> :key #'stat-avg))))
+                                             (stat-count stat) (stat-avg* stat)))
+                             (sort (copy-seq stats) #'> :key #'stat-avg*))))
                
                ;; select best action
                (dolist (i (shuffled-indices stats) (values best-node #'commit-select))
@@ -209,24 +222,31 @@
 ;; Random sampling
 (defun rnd (switch)
   "Uniform random sampling" 
-  (aref (switch-nodes switch)
-        (random (length (switch-nodes switch)))))
+  (let ((node-stats (map 'vector (lambda (node) (get-stat switch node))
+                         (switch-nodes switch))))
+    (dotimes (i (length node-stats))
+      (when (zerop (stat-count (aref node-stats i)))
+        (return-from rnd (aref (switch-nodes switch) i))))
+    (aref (switch-nodes switch)
+          (random (length (switch-nodes switch))))))
+
 
 ;; Single-level adaptive selection
 (defun u*b (switch fun factor)
   "UCB selection: max (avg+sqrt(2*log (n) / ni))"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
-         (avgs (map 'vector #'stat-avg node-stats))
          (root-2-log-n
-          (sqrt (* factor (funcall fun (max 1.0 (reduce #'+ node-stats :key #'stat-count
-                                                        :initial-value 0))))))
+          (sqrt (* factor (funcall fun (max 1 (reduce #'+ node-stats
+                                                      :key #'stat-count
+                                                      :initial-value 0))))))
          (best-node nil)
          (best-reward (lowest-reward switch)))
+
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
       (when (zerop (stat-count (aref node-stats i)))
         (return (aref (switch-nodes switch) i)))
-      (let ((reward (upper-bound switch (aref avgs i)
+      (let ((reward (upper-bound switch (stat-avg (aref node-stats i))
                                  (/ root-2-log-n
                                     (sqrt (stat-count (aref node-stats i)))))))
         (when (better-reward switch reward best-reward)
@@ -257,23 +277,21 @@
 
 (defun uqb (switch) (u*b switch #'sqrt *uqb-factor*))
 
-
-
 (defun grd (switch)
   "0.5-greedy selection"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
          (k (length (switch-nodes switch)))
-         (avgs (map 'vector #'stat-avg node-stats))
          (best-node nil)
          (best-reward (lowest-reward switch)))
+
     (dolist (i (shuffled-indices (switch-nodes switch)) 
              (if (> (random 1.0) (* 0.5 (/ k (1- k))))
                  best-node
                  (aref (switch-nodes switch) (random k))))
       (when (zerop (stat-count (aref node-stats i)))
-        (return (aref (switch-nodes switch) i)))
-      (let ((reward (aref avgs i)))
+        (return-from grd (aref (switch-nodes switch) i)))
+      (let ((reward (stat-avg (aref node-stats i))))
         (when (better-reward switch reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
@@ -282,66 +300,63 @@
   "UVB selection: max [(1-1/k)/ni for best-, 1/k/ni for rest]"
   (let* ((node-stats (map 'vector (lambda (node) (get-stat switch node))
                           (switch-nodes switch)))
-         (avgs (map 'vector #'stat-avg node-stats))
          (alpha 0.0)
          (beta 0.0)
          (best-node nil)
          (best-reward 0.0))
-    (dotimes (i (length avgs))
-      (let ((avg (aref avgs i)))
+
+    (dotimes (i (length node-stats))
+      (when (zerop (stat-count (aref node-stats i)))
+        (return-from v*b (aref (switch-nodes switch) i)))
+      (let ((avg (stat-avg (aref node-stats i))))
         (cond
           ((> avg alpha)
            (psetf beta alpha
                   alpha avg))
           ((> alpha avg beta)
            (psetf beta avg)))))
+
     (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
-      (when (zerop (stat-count (aref node-stats i)))
-        (return (aref (switch-nodes switch) i)))
       (let ((reward (funcall voi alpha beta (aref node-stats i))))
         (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
-
-
+    
 (defun voi-trivial (alpha beta stat)
-    "Trivial VOI upper"
-    (let ((avg (stat-avg stat)))
-      (/ (if (> avg beta) beta (- 1.0 alpha))
-         (stat-count stat))))
-
-(defun square (x) (* x x))
-
-(defun variance (x n) 
-  (let ((sum 0.0))
-    (mapl #'(lambda (xij) 
-              (let ((xi (car xij)))
-                (mapc  #'(lambda (xj) (incf sum (square (- xi xj))))
-                       (cdr xij))))
-          x)
-    (/ sum (* n (1- n)))))
+  "Trivial VOI upper"
+  (let ((avg (stat-avg stat)))
+    (/ (if (> avg beta) beta (- 1.0 alpha))
+       (stat-count stat))))
 
 (flet ((estimate (n over under) (* over (exp (* -2.0 n (square under))))))
   (defun voi-hoeffding (alpha beta stat)
     "Chernoff-Hoeffding based VOI estimate"
-    (let ((avg (stat-avg stat)))
-      (/ (if (> avg beta)
-             (estimate (stat-count stat) beta (- avg beta))
-             (estimate (stat-count stat) ( - 1.0 alpha) (- alpha avg)))
-         (stat-count stat)))))
+    (/ (if (> (stat-avg stat) beta)
+           (estimate (stat-count stat)
+                     beta (- (stat-avg stat) beta))
+           (estimate (stat-count stat)
+                     ( - 1.0 alpha) (- alpha (stat-avg stat))))
+       (stat-count stat))))
 
-(flet ((estimate (n over under variance)
+(flet ((estimate (n over under var)
          (* 2 over (exp (- (/ (* n (square under))
-                              (+ (* 10 under) (* 2 variance))))))))
+                              (+ (/ (* 14.0 n under)
+                                    (* 3.0 (1- n))) 
+                                 (* 2 var)
+                                 least-positive-short-float)))))))
   (defun voi-bernstein (alpha beta stat)
     "Empirical Bernstein based VOI estimate"
-    (if (<= (stat-count stat) 1) (voi-hoeffding alpha beta stat)
-        (let ((avg (stat-avg stat))
-              (variance (variance (stat-rewards stat) (stat-count stat))))
-          (/ (if (> avg beta)
-                 (estimate (stat-count stat) beta (- avg beta) variance)
-                 (estimate (stat-count stat) (1- alpha) (- alpha avg) variance))
-             (stat-count stat))))))
+    (let ((voih (voi-hoeffding alpha beta stat)))
+      (if (<= (stat-count stat) 1) voih
+          (min voih
+               (/ (if (> (stat-avg stat) beta)
+                      (estimate (stat-count stat)
+                                beta (- (stat-avg stat) beta)
+                                (stat-var stat))
+                      (estimate (stat-count stat)
+                                (1- alpha) (- alpha (stat-avg stat)) 
+                                (stat-var stat)))
+                  (stat-count stat)))))))
 
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
