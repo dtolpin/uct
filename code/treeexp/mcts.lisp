@@ -328,7 +328,9 @@
     (/ (if (> avg beta) beta (- 1.0 alpha))
        (stat-count stat))))
 
-(flet ((estimate (n over under) (* over (exp (* -2.0 n (square under))))))
+(flet ((estimate (n over under)
+         (* over (exp (* -2.0 n (square under))))))
+
   (defun voi-hoeffding (alpha beta stat)
     "Chernoff-Hoeffding based VOI estimate"
     (/ (if (> (stat-avg stat) beta)
@@ -343,20 +345,21 @@
                               (+ (/ (* 14.0 n under)
                                     (* 3.0 (1- n))) 
                                  (* 2 var)
-                                 least-positive-short-float)))))))
+            #| avoid 0/0 |#      least-positive-short-float)))))))
+
   (defun voi-bernstein (alpha beta stat)
     "Empirical Bernstein based VOI estimate"
-    (let ((voih (voi-hoeffding alpha beta stat)))
-      (if (<= (stat-count stat) 1) voih
-          (min voih
-               (/ (if (> (stat-avg stat) beta)
-                      (estimate (stat-count stat)
-                                beta (- (stat-avg stat) beta)
-                                (stat-var stat))
-                      (estimate (stat-count stat)
-                                (- 1.0 alpha) (- alpha (stat-avg stat)) 
-                                (stat-var stat)))
-                  (stat-count stat)))))))
+    (cond
+      ((= (stat-count stat) 1) (voi-hoeffding alpha beta stat))
+      (t (min (voi-hoeffding alpha beta stat)
+              (/ (if (> (stat-avg stat) beta)
+                     (estimate (stat-count stat)
+                               beta (- (stat-avg stat) beta)
+                               (stat-var stat))
+                     (estimate (stat-count stat)
+                               (- 1.0 alpha) (- alpha (stat-avg stat)) 
+                               (stat-var stat)))
+                 (stat-count stat)))))))
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
