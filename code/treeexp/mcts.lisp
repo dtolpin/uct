@@ -354,10 +354,10 @@
                                 beta (- (stat-avg stat) beta)
                                 (stat-var stat))
                       (estimate (stat-count stat)
-                                (1- alpha) (- alpha (stat-avg stat)) 
+                                (- 1.0 alpha) (- alpha (stat-avg stat)) 
                                 (stat-var stat)))
                   (stat-count stat)))))))
-
+                 
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
