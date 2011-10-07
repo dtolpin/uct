@@ -36,7 +36,7 @@ An upper bound on the VOI is thus the product of the probability that
 the true mean of the current best item is less than the sample mean
 $\beta$ of the current second-best item times the maximum reward,
 $\beta$:
-\[ V \le \beta \exp\left(-2n(\alpha-\beta)^2\right) \]
+\[ V_{\overline x=\alpha} \le \beta \exp\left(-2n(\alpha-\beta)^2\right) \]
 The bound can be supposedly be improved by selecting a midpoint
 $0 < \gamma < \beta$ and computing the bound as the sum of two parts:
 \begin{itemize}
@@ -45,7 +45,7 @@ $0 < \gamma < \beta$ and computing the bound as the sum of two parts:
 \item $\beta$ multiplied by the probability that $\mu_\alpha\le
   \gamma$.
 \end{itemize}.
-\[ V^* \le (\beta-\gamma)\exp\left(-2n(\alpha-\beta)^2\right)+\beta\exp\left(-2n(\alpha-\gamma)^2\right) \]
+\[ V_{\overline x=\alpha} \le (\beta-\gamma)\exp\left(-2n(\alpha-\beta)^2\right)+\beta\exp\left(-2n(\alpha-\gamma)^2\right) \]
 
 \vspace{\baselineskip}
 
@@ -65,8 +65,13 @@ second-best sample means are close.
 
 The derivation for the other case
 (sampling an item that can be better than the current best) is
-obtained by substitution $1-\alpha, 1-\beta, 1-\gamma$ instead of
-$\alpha, \beta, \gamma$. The anticipated influence of the improved
+obtained by substitution $1-\overline x, 1-\alpha, 1-\gamma$ instead of
+$\alpha, \beta, \gamma$:
+
+\[ V_{\overline x\ne\alpha} \le (\gamma-\alpha)\exp\left(-2n(\alpha-\overline
+  x)^2\right)+(1-\alpha)\exp\left(-2n(\gamma-\overline x)^2\right) \]
+
+The anticipated influence of the improved
 VOI estimate would be that the selected item will be a less discovered
 one and further from the current best or second-best.
 
