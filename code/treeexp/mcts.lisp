@@ -13,6 +13,7 @@
            "QCT-SELECT"
            "TCT-SELECT"
            "HCT-SELECT"
+           "OCT-SELECT"
            "BCT-SELECT"
            "COMPUTE-UQB-FACTOR"
            "*UQB-ALPHA*"))
@@ -340,6 +341,21 @@
                      ( - 1.0 alpha) (- alpha (stat-avg stat))))
        (stat-count stat))))
 
+;; improved hOeffding
+(flet ((estimate (n over under)
+         (+ (* under (exp (* -2.0 n (square under))))
+            (* over (exp (* -8.0 n (square under)))))))
+
+  (defun voi-oeffding (alpha beta stat)
+    "Improved by mid-point Chernoff-Hoeffding estimate"
+    (min (voi-hoeffding alpha beta stat)
+         (/ (if (> (stat-avg stat) beta)
+                (estimate (stat-count stat)
+                          beta (- (stat-avg stat) beta))
+                (estimate (stat-count stat)
+                          ( - 1.0 alpha) (- alpha (stat-avg stat))))
+            (stat-count stat)))))
+
 (flet ((estimate (n over under var)
          (* 2 over (exp (- (/ (* n (square under))
                               (+ (/ (* 14.0 n under)
@@ -363,6 +379,7 @@
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
+(defun vob (switch) (v*b switch #'voi-oeffding))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
 
@@ -403,6 +420,11 @@
 
 (defun hct-select (switch)
   (values (vhb switch) #'uct-select))
+
+;; OCT (Oeffding then UCT)
+
+(defun oct-select (switch)
+  (values (vob switch) #'uct-select))
 
 ;; BCT (Bernstein then UCT)
 
