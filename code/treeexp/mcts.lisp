@@ -14,6 +14,7 @@
            "TCT-SELECT"
            "HCT-SELECT"
            "OCT-SELECT"
+           "ECT-SELECT"
            "BCT-SELECT"
            "COMPUTE-UQB-FACTOR"
            "*UQB-ALPHA*"))
@@ -341,6 +342,23 @@
                      ( - 1.0 alpha) (- alpha (stat-avg stat))))
        (stat-count stat))))
 
+
+;; find root of a function by bisection
+(labels ((bs (f a b fa fb eps)
+           #+nil (declare (optimize (speed 3) (debug 0)))
+           (let* ((c (* 0.5 (+ a b)))
+                  (fc (funcall f c)))
+             (cond
+               ((eql (>= fa 0.0) (>= fb 0.0)) a)
+               ((<= (- b a) eps) c)
+               ((eql (>= fb 0) (>= fc 0)) (bs f a c fa fc eps))
+               (t (bs f c b fc fb eps))))))
+
+  (defun bisection (f a b eps)
+    "finds root of f in interval a b"
+    (bs f a b (funcall f a) (funcall f b) eps)))
+  
+
 ;; improved hOeffding
 (flet ((estimate (n over under)
          (+ (* under (exp (* -2.0 n (square under))))
@@ -348,13 +366,32 @@
 
   (defun voi-oeffding (alpha beta stat)
     "Improved by mid-point Chernoff-Hoeffding estimate"
-    (min (voi-hoeffding alpha beta stat)
+    (min #+nil (voi-hoeffding alpha beta stat)
          (/ (if (> (stat-avg stat) beta)
                 (estimate (stat-count stat)
                           beta (- (stat-avg stat) beta))
                 (estimate (stat-count stat)
                           ( - 1.0 alpha) (- alpha (stat-avg stat))))
             (stat-count stat)))))
+
+;; better improved hoEffding
+(flet ((estimate (n over under)
+         (flet ((destim (between)
+                  (- (* 4.0 n over between (exp (* -2.0 n (square between))))
+                     (exp (* -2.0 n (square under))))))
+
+           (let ((between (bisection #'destim under (+ under over) 0.001)))
+             (+ (* (- between under) (exp (* -2.0 n (square under))))
+                (* over (exp (* -2.0 n (square between)))))))))
+
+  (defun voi-eeffding (alpha beta stat)
+    "Improved by mid-point Chernoff-Hoeffding estimate"
+    (/ (if (> (stat-avg stat) beta)
+           (estimate (stat-count stat)
+                     beta (- (stat-avg stat) beta))
+           (estimate (stat-count stat)
+                     ( - 1.0 alpha) (- alpha (stat-avg stat))))
+       (stat-count stat))))
 
 (flet ((estimate (n over under var)
          (* 2 over (exp (- (/ (* n (square under))
@@ -380,6 +417,7 @@
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
 (defun vob (switch) (v*b switch #'voi-oeffding))
+(defun veb (switch) (v*b switch #'voi-eeffding))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
 
@@ -421,10 +459,15 @@
 (defun hct-select (switch)
   (values (vhb switch) #'uct-select))
 
-;; OCT (Oeffding then UCT)
+;; OCT (hOeffding then UCT)
 
 (defun oct-select (switch)
   (values (vob switch) #'uct-select))
+
+;; OCT (hoEffding then UCT)
+
+(defun ect-select (switch)
+  (values (veb switch) #'uct-select))
 
 ;; BCT (Bernstein then UCT)
 
