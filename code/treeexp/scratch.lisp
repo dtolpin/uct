@@ -8,3 +8,11 @@
       (*make-tree* #'make-flat))
            (experiments :nruns 100 :levels 2 :branching 32
                         :min-sf 1 :sf-step ( sqrt 2) :n-sf 10))
+
+(let ((*make-arm* #'make-armb)
+      (*transform* (combine bounded-reward (n-level 12)))
+      (*max-reward* 0.7)
+      (*make-tree* #'make-flat))
+  (experiments :nruns 100 :levels 1 :branching 32
+               :min-sf 1 :sf-step (sqrt 2) :n-sf 30
+               :algorithms '(uct gct tct hct ect bct)))
