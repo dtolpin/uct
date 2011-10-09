@@ -366,7 +366,7 @@
 
   (defun voi-oeffding (alpha beta stat)
     "Improved by mid-point Chernoff-Hoeffding estimate"
-    (min #+nil (voi-hoeffding alpha beta stat)
+    (min (voi-hoeffding alpha beta stat)
          (/ (if (> (stat-avg stat) beta)
                 (estimate (stat-count stat)
                           beta (- (stat-avg stat) beta))
