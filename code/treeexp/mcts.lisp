@@ -367,7 +367,7 @@
              (+ (* (- between under) (exp (* -2.0 n (square under))))
                 (* over (exp (* -2.0 n (square between)))))))))
 
-  (defun voi-effding (alpha beta stat)
+  (defun voi-eyal (alpha beta stat)
     "Improved by mid-point Chernoff-Hoeffding estimate"
     (/ (if (> (stat-avg stat) beta)
            (estimate (stat-count stat)
@@ -399,7 +399,7 @@
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
-(defun veb (switch) (v*b switch #'voi-effding))
+(defun veb (switch) (v*b switch #'voi-eyal))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
 
