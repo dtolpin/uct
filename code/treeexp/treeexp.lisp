@@ -48,6 +48,15 @@
   (lambda (r)
     (/ (coerce (round (* r n)) 'double-float) n)))
 
+(defun combine (&rest args) 
+  "function combination"
+  (lambda (x)
+    (reduce (lambda (&optional (f #'identity) y)
+              (funcall f y))
+            args
+            :initial-value x
+            :from-end t)))
+
 (defun make-fringe ()
   "make a random fringe with mean 0.5"
   (map 'vector (lambda (m) (funcall *make-arm* :mean m))
