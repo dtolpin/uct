@@ -9,10 +9,8 @@
            (experiments :nruns 100 :levels 2 :branching 32
                         :min-sf 1 :sf-step ( sqrt 2) :n-sf 10))
 
-(let ((*make-arm* #'make-armb)
-      (*transform* (combine bounded-reward (n-level 12)))
-      (*max-reward* 0.7)
-      (*make-tree* #'make-flat))
-  (experiments :nruns 100 :levels 1 :branching 32
-               :min-sf 1 :sf-step (sqrt 2) :n-sf 30
-               :algorithms '(uct gct tct hct ect bct)))
+
+(let ((*make-arm* #'make-armb) (*transform* (n-level 16)) (*make-tree* #'make-flat))
+           (experiments :nruns 2000 :levels 1 :branching 8 :min-sf 8 :sf-step (sqrt 2) :n-sf 20 :algorithms '(uct hct bct)))
+
+(let ((*make-arm* #'make-armf) (*transform* (n-level 16)) (*make-tree* #'make-tree)) (experiments :nruns 2000 :levels 3 :branching 8 :min-sf 8 :sf-step (sqrt 2) :n-sf 20 :algorithms '(uct ect)))
