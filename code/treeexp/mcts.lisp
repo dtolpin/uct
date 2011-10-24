@@ -13,6 +13,7 @@
            "QCT-SELECT"
            "TCT-SELECT"
            "HCT-SELECT"
+           "LCT-SELECT"
            "ECT-SELECT"
            "BCT-SELECT"
            "COMPUTE-UQB-FACTOR"
@@ -360,7 +361,9 @@
      (stat-count stat))))
 
 (flet ((estimate (n over under)
-         (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under))))))
+         (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under)))))
+       (per-sample (voi n-samples)
+         (- voi (log n-samples))))
 
   (defun voi-loeffding (alpha beta stat)
     "Chernoff-Hoeffding based VOI estimate, logariphmic"
@@ -432,6 +435,7 @@
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
+(defun vlb (switch) (v*b switch #'voi-loeffding))
 (defun veb (switch) (v*b switch #'voi-eyal))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
@@ -473,6 +477,11 @@
 
 (defun hct-select (switch)
   (values (vhb switch) #'uct-select))
+
+;; LCT (Logarithmic Hoeffding then UCT)
+
+(defun lct-select (switch)
+  (values (vlb switch) #'uct-select))
 
 ;; ECT (hoEffding then UCT)
 

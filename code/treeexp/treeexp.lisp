@@ -23,13 +23,11 @@
 
 (defconstant +fringe-width+ 1)
 
-(defvar *max-reward* 1.0)
-
-(defun bounded-reward (r)
-  (values
-   (+ (- 1.0 *max-reward*)
-      (* *max-reward* r))
-   (- 1.0 *max-reward*)))
+(defun bounded (lower upper)
+  (lambda (r)
+    (values 
+     (+ lower (* (- upper lower) r))
+     lower)))
 
 (defun low-key (r)
   (values
@@ -46,7 +44,9 @@
 
 (defun n-level (n)
   (lambda (r)
-    (/ (coerce (round (* r n)) 'double-float) n)))
+    (values
+     (/ (coerce (floor (* r n)) 'double-float) n)
+     (float (/ n)))))
 
 (defun combine (&rest args) 
   "function combination"
