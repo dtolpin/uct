@@ -13,6 +13,7 @@
            "QCT-SELECT"
            "TCT-SELECT"
            "HCT-SELECT"
+           "LCT-SELECT"
            "ECT-SELECT"
            "BCT-SELECT"
            "COMPUTE-UQB-FACTOR"
@@ -304,7 +305,7 @@
          (alpha 0.0)
          (beta 0.0)
          (best-node nil)
-         (best-reward 0.0))
+         (best-reward most-negative-single-float))
 
     (dotimes (i (length node-stats))
       (when (zerop (stat-count (aref node-stats i)))
@@ -322,24 +323,57 @@
         (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
-    
+
+(defun per-sample (voi n-samples)
+  (/ voi n-samples))
+
 (defun voi-trivial (alpha beta stat)
   "Trivial VOI upper"
   (let ((avg (stat-avg stat)))
-    (/ (if (> avg beta) beta (- 1.0 alpha))
-       (stat-count stat))))
+    (per-sample
+     (if (> avg beta) beta (- 1.0 alpha))
+     (stat-count stat))))
+
+(flet ((estimate (n over under)
+         (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under))))))
+
+  (defun voi-hoeffding (alpha beta stat)
+    "Chernoff-Hoeffding based VOI estimate"
+    (per-sample
+     (if (> (stat-avg stat) beta)
+         (estimate (stat-count stat)
+                   beta (- (stat-avg stat) beta))
+         (estimate (stat-count stat)
+                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
+     (stat-count stat))))
 
 (flet ((estimate (n over under)
          (* over (exp (* -2.0 n (square under))))))
 
   (defun voi-hoeffding (alpha beta stat)
     "Chernoff-Hoeffding based VOI estimate"
-    (/ (if (> (stat-avg stat) beta)
-           (estimate (stat-count stat)
-                     beta (- (stat-avg stat) beta))
-           (estimate (stat-count stat)
-                     ( - 1.0 alpha) (- alpha (stat-avg stat))))
-       (stat-count stat))))
+    (per-sample
+     (if (> (stat-avg stat) beta)
+         (estimate (stat-count stat)
+                   beta (- (stat-avg stat) beta))
+         (estimate (stat-count stat)
+                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
+     (stat-count stat))))
+
+(flet ((estimate (n over under)
+         (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under)))))
+       (per-sample (voi n-samples)
+         (- voi (log n-samples))))
+
+  (defun voi-loeffding (alpha beta stat)
+    "Chernoff-Hoeffding based VOI estimate, logariphmic"
+    (per-sample
+     (if (> (stat-avg stat) beta)
+         (estimate (stat-count stat)
+                   beta (- (stat-avg stat) beta))
+         (estimate (stat-count stat)
+                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
+     (stat-count stat))))
 
 
 ;; find root of a function by bisection
@@ -369,12 +403,13 @@
 
   (defun voi-eyal (alpha beta stat)
     "Improved by mid-point Chernoff-Hoeffding estimate"
-    (/ (if (> (stat-avg stat) beta)
-           (estimate (stat-count stat)
-                     beta (- (stat-avg stat) beta))
-           (estimate (stat-count stat)
-                     ( - 1.0 alpha) (- alpha (stat-avg stat))))
-       (stat-count stat))))
+    (per-sample
+     (if (> (stat-avg stat) beta)
+         (estimate (stat-count stat)
+                   beta (- (stat-avg stat) beta))
+         (estimate (stat-count stat)
+                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
+     (stat-count stat))))
 
 (flet ((estimate (n over under var)
          (* 2 over (exp (- (/ (* n (square under))
@@ -388,17 +423,19 @@
     (cond
       ((= (stat-count stat) 1) (voi-hoeffding alpha beta stat))
       (t (min (voi-hoeffding alpha beta stat)
-              (/ (if (> (stat-avg stat) beta)
-                     (estimate (stat-count stat)
-                               beta (- (stat-avg stat) beta)
-                               (stat-var stat))
-                     (estimate (stat-count stat)
-                               (- 1.0 alpha) (- alpha (stat-avg stat)) 
-                               (stat-var stat)))
-                 (stat-count stat)))))))
+              (per-sample
+               (if (> (stat-avg stat) beta)
+                   (estimate (stat-count stat)
+                             beta (- (stat-avg stat) beta)
+                             (stat-var stat))
+                   (estimate (stat-count stat)
+                             (- 1.0 alpha) (- alpha (stat-avg stat)) 
+                             (stat-var stat)))
+               (stat-count stat)))))))
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
+(defun vlb (switch) (v*b switch #'voi-loeffding))
 (defun veb (switch) (v*b switch #'voi-eyal))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
@@ -440,6 +477,11 @@
 
 (defun hct-select (switch)
   (values (vhb switch) #'uct-select))
+
+;; LCT (Logarithmic Hoeffding then UCT)
+
+(defun lct-select (switch)
+  (values (vlb switch) #'uct-select))
 
 ;; ECT (hoEffding then UCT)
 
