@@ -3,4 +3,4 @@
 	url = http://quotenil.com/git/micmac.git
 [submodule "pachi"]
 	path = pachi
-	url = ./pachi
+	url = https://github.com/dtolpin/pachi.git
