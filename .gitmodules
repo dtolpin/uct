@@ -1,3 +1,6 @@
 [submodule "codes/micmac"]
 	path = codes/micmac
 	url = http://quotenil.com/git/micmac.git
+[submodule "pachi"]
+	path = pachi
+	url = ./pachi

@@ -344,7 +344,7 @@
 
 ;; find root of a function by bisection
 (labels ((bs (f a b fa fb eps)
-           #+nil (declare (optimize (speed 3) (debug 0)))
+           (declare (optimize (speed 3) (debug 0)))
            (let* ((c (* 0.5 (+ a b)))
                   (fc (funcall f c)))
              (cond
