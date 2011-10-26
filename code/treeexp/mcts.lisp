@@ -154,7 +154,40 @@
 
 ;; Move selection function: sampling, then committing
 
-(defun mk-commit-select (sampling-select)
+(defun print-stats (stats)
+  "print stats, for debugging"
+  (when (member :print-stats *debug*)
+    (progn (format t "~&~%")
+           (map nil #'(lambda (stat) 
+                        (format t "~@{~S~^ ~}~%"
+                                (stat-count stat) (stat-avg* stat)))
+                (sort (copy-seq stats) #'> :key #'stat-avg*)))))
+    
+
+(defun choose-best-by-reward (switch stats)
+  "choose best child by max reward"
+  (print-stats stats)
+  (let ((best-node nil)
+        (best-avg (lowest-reward switch)))
+    ;; select best action
+    (dolist (i (shuffled-indices stats) best-node)
+      (let ((avg (stat-avg (aref stats i))))
+        (when (better-reward switch avg best-avg) 
+          (setf best-node (aref (switch-nodes switch) i)
+                best-avg avg))))))
+
+(defun choose-best-by-count (switch stats)
+  "choose best child by max count, for UCT"
+  (print-stats stats)
+  (let ((best-node nil)
+        (best-count 0))
+    (dolist (i (shuffled-indices stats) best-node)
+      (let ((count (stat-count (aref stats i))))
+        (when (> count best-count)
+          (setf best-node (aref (switch-nodes switch) i)
+                best-count count))))))
+
+(defun mk-commit-select (sampling-select choose-best)
   "sample actions, choose the one with the best average"
   (labels ((commit-select (switch)
              ;; gather playing statistics
@@ -165,24 +198,12 @@
                    (update-stats switch node (play node sampling-select)))))
              
              ;; extract statistics
-             (let ((stats (map 'vector (lambda (node) (get-stat switch node))
-                               (switch-nodes switch)))
-                   (best-node nil)
-                   (best-avg (lowest-reward switch)))
-
-               (when (member :print-stats *debug*)
-                 (progn (format t "~&~%")
-                        (map nil #'(lambda (stat) 
-                                     (format t "~@{~S~^ ~}~%"
-                                             (stat-count stat) (stat-avg* stat)))
-                             (sort (copy-seq stats) #'> :key #'stat-avg*))))
-               
-               ;; select best action
-               (dolist (i (shuffled-indices stats) (values best-node #'commit-select))
-                 (let ((avg (stat-avg (aref stats i))))
-                   (when (better-reward switch avg best-avg) 
-                     (setf best-node (aref (switch-nodes switch) i)
-                           best-avg avg)))))))
+             (values
+              (funcall choose-best
+                       switch
+                       (map 'vector (lambda (node) (get-stat switch node))
+                            (switch-nodes switch)))
+              #'commit-select)))
     #'commit-select))
 
 ;; Various arms with different reward distributions can be defined
@@ -194,7 +215,8 @@
                       &optional (*sampling-factor* *sampling-factor*))
   "pull the best arm"
   (let ((*play-stats* (make-hash-table :test #'equal)))
-    (nth-value 1 (play tree (mk-commit-select sampling-select)))))
+    (nth-value 1 (play tree (mk-commit-select sampling-select
+                                              #'choose-best-by-reward)))))
 
 ;; Basic arm kinds
 (defstruct (armf (:include arm))
