@@ -6,16 +6,7 @@
            "ARM" "MAKE-ARM" "ARM-MEAN"
            "MAKE-ARMF" "MAKE-ARMB" "MAKE-ARMV"
            "PULL-BEST-ARM"
-           "RND-SELECT"
-           "RCT-SELECT"
-           "UCT-SELECT"
-           "GCT-SELECT"
-           "QCT-SELECT"
-           "TCT-SELECT"
-           "HCT-SELECT"
-           "LCT-SELECT"
-           "ECT-SELECT"
-           "BCT-SELECT"
+           "MK-SAMPLING-SELECT"
            "COMPUTE-UQB-FACTOR"
            "*UQB-ALPHA*"))
 (in-package "MCTS")
@@ -158,36 +149,30 @@
   "print stats, for debugging"
   (when (member :print-stats *debug*)
     (progn (format t "~&~%")
-           (map nil #'(lambda (stat) 
+           (map nil (lambda (stat) 
                         (format t "~@{~S~^ ~}~%"
                                 (stat-count stat) (stat-avg* stat)))
                 (sort (copy-seq stats) #'> :key #'stat-avg*)))))
-    
 
-(defun choose-best-by-reward (switch stats)
-  "choose best child by max reward"
-  (print-stats stats)
-  (let ((best-node nil)
-        (best-avg (lowest-reward switch)))
-    ;; select best action
-    (dolist (i (shuffled-indices stats) best-node)
-      (let ((avg (stat-avg (aref stats i))))
-        (when (better-reward switch avg best-avg) 
-          (setf best-node (aref (switch-nodes switch) i)
-                best-avg avg))))))
+(defgeneric mk-choose-best-child (alg)
+  (:documentation "choose best child")
+  (:method (alg)
+    "choose best child by max reward"
+    (lambda (switch stats)
+      (print-stats stats)
+      (let ((best-node nil)
+            (best-avg (lowest-reward switch)))
+        ;; select best action
+        (dolist (i (shuffled-indices stats) best-node)
+          (let ((avg (stat-avg (aref stats i))))
+            (when (better-reward switch avg best-avg) 
+              (setf best-node (aref (switch-nodes switch) i)
+                    best-avg avg))))))))
 
-(defun choose-best-by-count (switch stats)
-  "choose best child by max count, for UCT"
-  (print-stats stats)
-  (let ((best-node nil)
-        (best-count 0))
-    (dolist (i (shuffled-indices stats) best-node)
-      (let ((count (stat-count (aref stats i))))
-        (when (> count best-count)
-          (setf best-node (aref (switch-nodes switch) i)
-                best-count count))))))
+(defgeneric mk-sampling-select (alg)
+  (:documentation "make sampling select"))
 
-(defun mk-commit-select (sampling-select choose-best)
+(defun mk-commit-select (sampling-select choose-best-child)
   "sample actions, choose the one with the best average"
   (labels ((commit-select (switch)
              ;; gather playing statistics
@@ -199,7 +184,7 @@
              
              ;; extract statistics
              (values
-              (funcall choose-best
+              (funcall choose-best-child
                        switch
                        (map 'vector (lambda (node) (get-stat switch node))
                             (switch-nodes switch)))
@@ -211,12 +196,12 @@
   (:documentation "draw the arm and return the outcome"))
 
 ;; Finally, the main function --- pulling the best arm
-(defun pull-best-arm (tree sampling-select 
+(defun pull-best-arm (tree alg
                       &optional (*sampling-factor* *sampling-factor*))
   "pull the best arm"
   (let ((*play-stats* (make-hash-table :test #'equal)))
-    (nth-value 1 (play tree (mk-commit-select sampling-select
-                                              #'choose-best-by-reward)))))
+    (nth-value 1 (play tree (mk-commit-select (mk-sampling-select alg)
+                                              (mk-choose-best-child alg))))))
 
 ;; Basic arm kinds
 (defstruct (armf (:include arm))
@@ -464,56 +449,54 @@
 
 ;;; Adaptive sampling selection functions for passing to `pull-best-arm'
 
-;; Random
+(defmacro def-mk-sampling-select (alg first next-alg)
+  `(defmethod mk-sampling-select ((alg (eql ,alg)))
+     (lambda (switch)
+       (values (,first switch) (mk-sampling-select ,next-alg)))))
 
-(defun rnd-select (switch)
-  (values (rnd switch) #'rnd-select))
+;; Random
+(def-mk-sampling-select :rnd rnd :rnd)
 
 ;; Random than UCT
-
-(defun rct-select (switch)
-  (values (rnd switch) #'uct-select))
+(def-mk-sampling-select :rct rnd :uct)
 
 ;; UCT
+(def-mk-sampling-select :uct ucb :uct)
+(def-mk-sampling-select :uctc ucb :uct)
 
-(defun uct-select (switch)
-  (values (ucb switch) #'uct-select))
+(defmethod mk-choose-best-child ((alg (eql :uctc)))
+  "choose best child by max count"
+  (lambda (switch stats)
+    (print-stats stats)
+    (let ((best-node nil)
+          (max-count 0))
+      ;; select best action
+      (dolist (i (shuffled-indices stats) best-node)
+        (let ((count (stat-count (aref stats i))))
+          (when (> count max-count)
+            (setf best-node (aref (switch-nodes switch) i)
+                  max-count count)))))))
 
 ;; GCT 
-
-(defun gct-select (switch)
-  (values (grd switch) #'uct-select))
+(def-mk-sampling-select :gct grd :uct)
 
 ;; QCT
-
-(defun qct-select (switch)
-  (values (uqb switch) #'uct-select))
-
+(def-mk-sampling-select :qct uqb :uct)
 
 ;; TCT (Trivial then UCT)
-
-(defun tct-select (switch)
-  (values (vtb switch) #'uct-select))
+(def-mk-sampling-select :tct vtb :uct)
 
 ;; HCT (Hoeffding then UCT)
-
-(defun hct-select (switch)
-  (values (vhb switch) #'uct-select))
+(def-mk-sampling-select :hct vhb :uct)
 
 ;; LCT (Logarithmic Hoeffding then UCT)
-
-(defun lct-select (switch)
-  (values (vlb switch) #'uct-select))
+(def-mk-sampling-select :lct vlb :uct)
 
 ;; ECT (hoEffding then UCT)
-
-(defun ect-select (switch)
-  (values (veb switch) #'uct-select))
+(def-mk-sampling-select :ect veb :uct)
 
 ;; BCT (Bernstein then UCT)
-
-(defun bct-select (switch)
-  (values (vbb switch) #'uct-select))
+(def-mk-sampling-select :bct vbb :uct)
 
 ;; Testing
 
@@ -529,7 +512,7 @@
       (*sampling-factor* 1))
 
   (defun test-uct ()
-    (assert (= (pull-best-arm test-tree #'uct-select) 1.0))))
+    (assert (= (pull-best-arm test-tree :uct) 1.0))))
 
 (defun test ()
   (format *error-output* "Testing ~A:" (package-name (symbol-package 'test)))

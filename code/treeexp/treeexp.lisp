@@ -102,19 +102,18 @@
 
 (defun experiment (&key levels branching sampling-factor nruns vararm (algorithms +algorithms+))
   (compute-uqb-factor branching)
-  (flet ((avgrwd (select)
+  (flet ((avgrwd (alg)
            (/ (float (loop repeat nruns
                         sum (let* ((tree (with-unique-node-ids
                                              (funcall *make-tree* levels branching))))
                               (- (best-mean tree)
                                  (pull-best-arm tree
-                                                select sampling-factor)))))
+                                                alg sampling-factor)))))
               nruns)))
     (format t "~D~T~{~8F~^~T~}~%"
             (if vararm branching (* branching sampling-factor))
-            (mapcar #'(lambda (alg)
-                        (avgrwd (symbol-function
-                                 (intern (format nil "~@:(~A~)-SELECT" alg)))))
+            (mapcar (lambda (alg)
+                      (avgrwd (intern (string alg) "KEYWORD")))
                     algorithms)))
   (force-output *standard-output*))
 
