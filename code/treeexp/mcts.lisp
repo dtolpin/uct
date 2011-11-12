@@ -342,7 +342,7 @@
      (stat-count stat))))
 
 (flet ((estimate (n over under)
-         (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under))))))
+         (* over (exp (* -2.0 n (square under))))))
 
   (defun voi-hoeffding (alpha beta stat)
     "Chernoff-Hoeffding based VOI estimate"
@@ -357,15 +357,15 @@
 (flet ((estimate (n over under)
          (* over (exp (* -2.0 n (square under))))))
 
-  (defun voi-hoeffding (alpha beta stat)
-    "Chernoff-Hoeffding based VOI estimate"
-    (per-sample
+  (defun voi-thoeffding (alpha beta stat)
+    "Minimum of trivial and Chernoff-Hoeffding based perfect VOI estimate"
+    (min 
+     (voi-trivial alpha beta stat)
      (if (> (stat-avg stat) beta)
          (estimate (stat-count stat)
                    beta (- (stat-avg stat) beta))
          (estimate (stat-count stat)
-                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
-     (stat-count stat))))
+                   ( - 1.0 alpha) (- alpha (stat-avg stat)))))))
 
 (flet ((estimate (n over under)
          (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under)))))
@@ -442,10 +442,10 @@
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
+(defun vthb (switch) (v*b switch #'voi-thoeffding))
 (defun vlb (switch) (v*b switch #'voi-loeffding))
 (defun veb (switch) (v*b switch #'voi-eyal))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
-
 
 ;;; Adaptive sampling selection functions for passing to `pull-best-arm'
 
@@ -488,6 +488,9 @@
 
 ;; HCT (Hoeffding then UCT)
 (def-mk-sampling-select :hct vhb :uct)
+
+;; THCT (Thoeffding then UCT)
+(def-mk-sampling-select :thct vthb :uct)
 
 ;; LCT (Logarithmic Hoeffding then UCT)
 (def-mk-sampling-select :lct vlb :uct)
