@@ -332,7 +332,7 @@
                 best-reward reward))))))
 
 (defun per-sample (voi n-samples)
-  (/ voi n-samples))
+  (/ voi (1+ n-samples)))
 
 (defun voi-trivial (alpha beta stat)
   "Trivial VOI upper"
