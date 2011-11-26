@@ -71,3 +71,36 @@ make.pdfs <- function() {
     }
   }
 }
+
+
+go.times <- c('5000', '7000', '10000', '15000')
+go.pchs <- list('5000'=1, '7000'=2, '10000'=3, '15000'=4)
+draw.go.curves <- function(agent="vct") {
+  res <- list()
+  lo <- 1.0
+  hi <- 0.0
+  for(time in go.times) {
+    fname <- paste("uct", agent, "-time=", time, ".shomersu.dat", sep="")
+    res[[time]] <- read.table(fname, header=T)
+    res[[time]]$MAXVOI <- res[[time]]$MAXVOI+1E-8
+    if(lo > min(res[[time]]$WIN_W)) lo <- min(res[[time]]$WIN_W)
+    if(hi < max(res[[time]]$WIN_W)) hi <- max(res[[time]]$WIN_W)
+  }
+  lo <- min(lo, 0.3)
+  hi <- min(hi, 0.7)
+  
+
+  plot(res[['5000']]$MAXVOI, res[['5000']]$WIN_W, ylim=c(lo,hi), log="x", type='n',
+       main=NA, xlab=expression(VOI[min]), ylab='UCT wins, %')
+  abline(h=0.5, lty='dashed')
+  lines
+  for(time in go.times) {
+    lines(res[[time]]$MAXVOI, res[[time]]$WIN_W, type='o', pch=go.pchs[[time]])
+  }
+
+  legend(x='topleft', legend=go.times, pch=sapply(go.times, function(time) go.pchs[[time]]))
+}
+
+  
+  
+
