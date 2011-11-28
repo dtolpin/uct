@@ -75,7 +75,7 @@ make.pdfs <- function() {
 
 go.times <- c('5000', '7000', '10000', '15000')
 go.pchs <- list('5000'=1, '7000'=2, '10000'=3, '15000'=4)
-draw.go.curves <- function(agent="vct") {
+go.draw.curves <- function(agent="vct") {
   res <- list()
   lo <- 100.0
   hi <- 0.0
@@ -102,9 +102,8 @@ draw.go.curves <- function(agent="vct") {
   legend(x='topleft', legend=go.times, pch=sapply(go.times, function(time) go.pchs[[time]]))
 }
 
-go.draw.bests <- function(bestsfile, colors=rainbow(3)) {
+go.draw.bests <- function(bestsfile, colors=rainbow(3), densities=c(20, 20, 30)) {
   angles <- c(70, -45, 30)
-  densities <- c(20, 20, 30)
   bests <- read.table(bestsfile, header=T)
   barplot(t(as.matrix(bests[,-1])), names.arg = bests$NSMPLS,
           density=densities, angle=angles, col=colors, beside=T)
