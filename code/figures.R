@@ -77,22 +77,23 @@ go.times <- c('5000', '7000', '10000', '15000')
 go.pchs <- list('5000'=1, '7000'=2, '10000'=3, '15000'=4)
 draw.go.curves <- function(agent="vct") {
   res <- list()
-  lo <- 1.0
+  lo <- 100.0
   hi <- 0.0
   for(time in go.times) {
     fname <- paste("uct", agent, "-time=", time, ".shomersu.dat", sep="")
     res[[time]] <- read.table(fname, header=T)
     res[[time]]$MAXVOI <- res[[time]]$MAXVOI+1E-8
+    res[[time]]$WIN_W <- res[[time]]$WIN_W*100 
     if(lo > min(res[[time]]$WIN_W)) lo <- min(res[[time]]$WIN_W)
     if(hi < max(res[[time]]$WIN_W)) hi <- max(res[[time]]$WIN_W)
   }
-  lo <- min(lo, 0.3)
-  hi <- min(hi, 0.7)
+  lo <- min(lo, 30)
+  hi <- min(hi, 70)
   
 
   plot(res[['5000']]$MAXVOI, res[['5000']]$WIN_W, ylim=c(lo,hi), log="x", type='n',
-       main=NA, xlab=expression(VOI[min]), ylab='UCT wins, %')
-  abline(h=0.5, lty='dashed')
+       main=NA, xlab=expression(VOI[min]+10^-8), ylab='UCT wins, %')
+  abline(h=50, lty='dashed')
   lines
   for(time in go.times) {
     lines(res[[time]]$MAXVOI, res[[time]]$WIN_W, type='o', pch=go.pchs[[time]])
@@ -101,6 +102,12 @@ draw.go.curves <- function(agent="vct") {
   legend(x='topleft', legend=go.times, pch=sapply(go.times, function(time) go.pchs[[time]]))
 }
 
-  
-  
-
+go.draw.bests <- function(bestsfile, colors=rainbow(3)) {
+  angles <- c(70, -45, 30)
+  densities <- c(20, 20, 30)
+  bests <- read.table(bestsfile, header=T)
+  barplot(t(as.matrix(bests[,-1])), names.arg = bests$NSMPLS,
+          density=densities, angle=angles, col=colors, beside=T)
+  legend(x="topright", names(bests)[-1], angle=angles,
+         density=densities, fill=colors, bty="n", ncol=3, bg=rainbow(3))
+}
