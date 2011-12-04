@@ -36,7 +36,7 @@ Ben-Gurion University of the Negev, Beer Sheva, Israel \\
 Upper bounds for the VOI are provided for pure exploration in the
 Multi-armed Bandit Problem. Sampling policies based on the upper
 bounds are suggested. Empirical evaluation of the policies is provided
-on random problems as well on the Go game.
+on random problems as well as on the Go game.
 \end{abstract}
 
 
@@ -119,10 +119,8 @@ around the mean. Bound~(\ref{eqn:conc-empbernstein}) is tighter than
 \begin{equation}
   \Lambda_i^b \le \left\{
   \begin{array}{l l}
-    \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N
-       {N+n_i} < \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N
-       {n_i} & \mbox{if $i=\alpha$} \\
-    \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline X_\alpha)\frac N {N+n_i}&  \mbox{otherwise}
+    \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N {N+n_i} < \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N   {n_i} & \mbox{if $i=\alpha$} \\
+    \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline X_\alpha)\frac N {N+n_i} < \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline X_\alpha)\frac N {n_i}&  \mbox{otherwise}
   \end{array} \right.
 \label{eqn:thm-be}
 \end{equation}
@@ -137,8 +135,8 @@ based on the Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 \begin{eqnarray}
 \Pr(\IE[X_i] \le \overline X_\beta|i=\alpha)& \le & \exp(-2 (\overline X_i - \overline X_\beta)^2 n_i)\nonumber\\
 \Pr(\IE[X_i] \ge \overline X_\alpha|i\ne\alpha)& \le & \exp(-2 (\overline X_\alpha - \overline X_i)^2 n_i)\nonumber\\
-\Pr(X_i' \le \overline X_\beta|i=\alpha)& \le & 2\exp(-0.5(\overline X_i - \overline X_\beta)^2 n_i)\nonumber\\
-\Pr(X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp(-0.5(\overline X_\alpha - \overline X_i)^2 n_i)
+\Pr(X_i' \le \overline X_\beta|i=\alpha)& \le & 2\exp\left(-\frac {(\overline X_i - \overline X_\beta)^2 n_i} 2 \right)\nonumber\\
+\Pr(X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
 \label{eqn:probound-perf-hoeffding}
 \end{eqnarray}
 \label{lemma:hoeffding-prob-bounds}
@@ -146,7 +144,8 @@ based on the Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 
 Better bounds can be obtained through tighter estimates on
 the probabilities, for example, based on the empirical Bernstein
-inequality (\ref{eqn:conc-empbernstein}).
+inequality (\ref{eqn:conc-empbernstein}) or through a more careful
+application of the Hoeffding inequality (Appendix~\ref{app:better-hoeffding-bound}).
 
 \section{Empirical Evaluation}
 
@@ -178,6 +177,29 @@ inequality (\ref{eqn:conc-empbernstein}).
 \label{fig:best-winning-rate}
 \end{figure}
 
+\section{VOI-based Sampling Control}
+
+\subsection{Selection Criterion}
+
+Following the principles of rational metareasoning, an arm with the highest upper bound $\hat
+\Lambda$ on the perfect value of information should be pulled at each
+step. This way, arms known to have a low VOI  would be pulled less frequently.
+
+\subsection{Termination Condition}
+
+The upper bounds~(\ref{eq:lambda-hoeffding-bounds}, \ref{eq:lambda-bernstein-bounds}) decrease exponentially with the
+number of pulls $n$. When the upper bound of the VOI for all arms
+becomes lower than a threshold $\lambda$, which can be chosen based on
+resource constraints, the sampling should be stopped, and an arm should
+be chosen.
+
+\subsection{Sample Redistribution in Trees}
+
+UCT forwards samples to the next search stage when the winner at the
+current state is known with high confidence. VOI-based termination
+condition can be used to stop the sampling in the current state early
+and save the remaining samples for re-use in a later search state.
+
 \clearpage
 
 \appendix
@@ -197,6 +219,52 @@ which, solved for $\delta\triangleq\Pr(\IE[X]-\overline X_n\ge a)$,
 gives
 \[\Pr(\IE[X]-\overline X_n\ge a)\le 2\exp \left( - \frac {na^2} {\frac {14} {3} \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\]
 Other derivations, giving slightly different results, are possible.
+
+\section{Better Hoeffding-Based Bound on Value of Perfect Information}
+\label{app:better-hoeffding-bound}
+
+The bound can be supposedly be improved by selecting a midpoint
+$0 < \gamma < \overline X_\beta$ and computing the bound as the sum of two parts:
+\begin{itemize}
+\item $\overline X_\beta-\gamma$ multiplied by the probability that
+  $\mu_\alpha \le \overline X_\beta$;
+\item $\overline X_\beta$ multiplied by the probability that $\mu_\alpha\le
+  \gamma$.
+\end{itemize}.
+\[ V_{\overline X=\overline X_\alpha} \le (\overline X_\beta-\gamma)\exp\left(-2n(\overline X_\alpha-\overline X_\beta)^2\right)+\overline X_\beta\exp\left(-2n(\overline X_\alpha-\gamma)^2\right) \]
+
+\vspace{\baselineskip}
+
+The minimum of $V^*$ is achieved when $\frac {dV^*} {d\gamma}=0$, that
+is, when $\gamma$ is the root of the following equation:
+\[ 4\overline X_\beta n(\overline X_\alpha-\gamma)=\exp\left(-2n\left(\frac {\overline X_\alpha-\overline X_\beta}
+    {\overline X_\alpha-\gamma}\right)^2\right) \]
+If a root in the interval  $0\le\gamma\le\beta$ exists, then the
+number of samples is bounded as
+\[n\le\frac 1 {4\overline X_\beta(\overline X_\alpha-\overline X_\beta)}\]
+by observing that the right-hand side 
+is at most $1$ (a negative power), and the left-hand side is at least
+$4\overline X_\beta n(\overline X_\alpha-\overline X_\beta)$.
+So, the bound can supposedly be improved for smaller values of
+$n$. The improvement is more significant when the current best and
+second-best sample means are close.
+
+The derivation for the other case
+(sampling an item that can be better than the current best) is
+obtained by substitution $1-\overline X, 1-\overline X_\alpha, 1-\gamma$ instead of
+$\overline X_\alpha, \overline X_\beta, \gamma$:
+
+\[ V_{\overline X\ne\overline X_\alpha} \le (\gamma-\overline X_\alpha)\exp\left(-2n(\overline X_\alpha-\overline
+  X)^2\right)+(1-\overline X_\alpha)\exp\left(-2n(\gamma-\overline X)^2\right) \]
+
+The anticipated influence of the improved
+VOI estimate would be that the selected item will be a less discovered
+one and further from the current best or second-best.
+
+A closed-form solution for $\gamma$ cannot be obtained, but given
+$\overline X_\alpha, \overline X_\beta, n$, the value of $\gamma$ can be efficiently
+computed. It should be determined empirically whether the improved
+estimate has justified influence on the performance of the algorithm.
 
 \bibliographystyle{plain}
 \bibliography{refs}
