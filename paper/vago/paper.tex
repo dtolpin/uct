@@ -150,7 +150,7 @@ based on the Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 \Pr(\IE[X_i] \le \overline X_\beta|i=\alpha)& \le & \exp(-2 (\overline X_i - \overline X_\beta)^2 n_i)\nonumber\\
 \Pr(\IE[X_i] \ge \overline X_\alpha|i\ne\alpha)& \le & \exp(-2 (\overline X_\alpha - \overline X_i)^2 n_i)\nonumber\\
 \Pr(\overline X_i' \le \overline X_\beta|i=\alpha)& \le &  2\exp\left(-\frac {2(\overline X_i - \overline X_\beta)^2  (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2}  \right) \le 2\exp\left(-\frac {(\overline X_i - \overline X_\beta)^2 n_i} 2 \right)\nonumber\\
-\Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
+\Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2} \right) \le  2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
 \label{eqn:probound-perf-hoeffding}
 \end{eqnarray}
 \label{lemma:hoeffding-prob-bounds}
