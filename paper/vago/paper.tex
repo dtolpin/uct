@@ -102,6 +102,20 @@ around the mean. Bound~(\ref{eqn:conc-empbernstein}) is tighter than
 
 \section{Upper Bounds on Value of Information}
 
+The intrinsic VOI of pulling an arm is the expected decrease
+in the regret compared to selecting an arm without pulling any arm at
+all. The intrinsic VOI can be estimated as the intrinsic 
+value of perfect information $\Lambda_i$ about the mean reward of the $i$th arm. Two
+cases are possible:
+\begin{itemize}
+\item the arm ($\alpha$) with the highest sample mean is pulled, and the 
+mean of the arm is lower than the sample mean the second-best arm ($\beta$);
+\item another arm is pulled, and the mean of the arm is higher
+than the current highest sample mean ($\alpha$).
+\end{itemize}
+$\Lambda_i$ can be bounded from above as the probability that a different arm is selected times the
+maximum possible increase in the reward:
+
 \begin{thm} The intrinsic value of perfect information $\Lambda_i^p$ about the $i$th arm is
   bounded from above as
 \begin{equation}
@@ -135,8 +149,8 @@ based on the Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 \begin{eqnarray}
 \Pr(\IE[X_i] \le \overline X_\beta|i=\alpha)& \le & \exp(-2 (\overline X_i - \overline X_\beta)^2 n_i)\nonumber\\
 \Pr(\IE[X_i] \ge \overline X_\alpha|i\ne\alpha)& \le & \exp(-2 (\overline X_\alpha - \overline X_i)^2 n_i)\nonumber\\
-\Pr(X_i' \le \overline X_\beta|i=\alpha)& \le & 2\exp\left(-\frac {(\overline X_i - \overline X_\beta)^2 n_i} 2 \right)\nonumber\\
-\Pr(X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
+\Pr(\overline X_i' \le \overline X_\beta|i=\alpha)& \le &  2\exp\left(-\frac {2(\overline X_i - \overline X_\beta)^2  (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2}  \right) \le 2\exp\left(-\frac {(\overline X_i - \overline X_\beta)^2 n_i} 2 \right)\nonumber\\
+\Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
 \label{eqn:probound-perf-hoeffding}
 \end{eqnarray}
 \label{lemma:hoeffding-prob-bounds}
@@ -149,31 +163,48 @@ application of the Hoeffding inequality (Appendix~\ref{app:better-hoeffding-boun
 
 \section{Empirical Evaluation}
 
+\subsection{Selecting best arm}
+
+Figure~\ref{fig:random-instances}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{flat.pdf}
+\caption{Random instances: regret vs. number of samples}
+\label{fig:random-instances}
+\end{figure}
+
+
+\subsection{Playing Go against UCT}
+
+Figure~\ref{fig:uct-against-vct}, Figure~\ref{fig:uct-against-ect}, Figure~\ref{fig:uct-against-bct},
+Figure~\ref{fig:best-winning-rate}.
+
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{vct-wins.pdf}
-\caption{Winning rate: UCT against VCT}
+\caption{Go: winning rate --- UCT against VCT}
 \label{fig:uct-against-vct}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{ect-wins.pdf}
-\caption{Winning rate: UCT against ECT}
+\caption{Go: winning rate --- UCT against ECT}
 \label{fig:uct-against-ect}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{bct-wins.pdf}
-\caption{Winning rate: UCT against BCT}
+\caption{Go: winning rate --- UCT against BCT}
 \label{fig:uct-against-bct}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{bests-colorful.pdf}
-\caption{Best winning rate comparison}
+\caption{Go: best winning rate comparison}
 \label{fig:best-winning-rate}
 \end{figure}
 

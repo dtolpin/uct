@@ -8,7 +8,7 @@ draw.regrets <- function(regrets_file, log="xy", legend.position='topright', xla
 	ylim <- range(values[values>0])
 	plot(x=regrets$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main)
 	i <- 1
-	for(alg in names(regrets)[-1]) {
+	for(alg in algs) {
 		y <- regrets[[alg]]
 		lines(x=regrets$nsamples, y=regrets[[alg]],
 			  type="o", pch=i)
