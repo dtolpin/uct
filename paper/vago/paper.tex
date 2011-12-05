@@ -35,8 +35,9 @@ Ben-Gurion University of the Negev, Beer Sheva, Israel \\
 \begin{abstract}
 Upper bounds for the VOI are provided for pure exploration in the
 Multi-armed Bandit Problem. Sampling policies based on the upper
-bounds are suggested. Empirical evaluation of the policies is provided
-on random problems as well as on the Go game.
+bounds are suggested. Empirical evaluation of the policies and
+comparison to the UCB1 and UCT policies is provided
+on random problem instances as well as on the Go game.
 \end{abstract}
 
 
@@ -102,10 +103,13 @@ around the mean. Bound~(\ref{eqn:conc-empbernstein}) is tighter than
 
 \section{Upper Bounds on Value of Information}
 
-The intrinsic VOI of pulling an arm is the expected decrease
+The intrinsic VOI $\Lambda_i$ of pulling an arm is the expected decrease
 in the regret compared to selecting an arm without pulling any arm at
-all. The intrinsic VOI can be estimated as the intrinsic 
-value of perfect information $\Lambda_i$ about the mean reward of the $i$th arm. Two
+all. The \textit{myopic} VOI estimate is of limited applicability to
+Monte Carlo sampling, since the effect of a single sample is small,
+and the myopic VOI estimate will often be non-positive, resulting in premature
+termination of the search. However, $\Lambda_i$ can be estimated as the intrinsic 
+value of perfect information $\Lambda_i^p$ about the mean reward of the $i$th arm. Two
 cases are possible:
 \begin{itemize}
 \item the arm ($\alpha$) with the highest sample mean is pulled, and the 
@@ -113,7 +117,8 @@ mean of the arm is lower than the sample mean the second-best arm ($\beta$);
 \item another arm is pulled, and the mean of the arm is higher
 than the current highest sample mean ($\alpha$).
 \end{itemize}
-$\Lambda_i$ can be bounded from above as the probability that a different arm is selected times the
+$\Lambda_i^p$ can be bounded from above as the probability that a
+different arm is selected, multiplied by the
 maximum possible increase in the reward:
 
 \begin{thm} The intrinsic value of perfect information $\Lambda_i^p$ about the $i$th arm is
@@ -128,17 +133,31 @@ maximum possible increase in the reward:
 \end{equation}
 \end{thm}
 
-\begin{thm} The blinkered estimate $\Lambda_i^b$ of intrinsic value of information of sampling
-  the $i$th arm for the remaining budget of $N$ samples is bounded from above as
+The search time is finite, and in a simple case the \textit{search
+  budget} specified as the maximum number of samples.
+An estimate based on the perfect intrinsic VOI does not take in
+consideration the remaining number of samples. Given two arms
+with the same intrinsic perfect VOI, the VOI
+estimate of the arm pulled fewer times so far should be higher.
+
+\begin{dfn} The \textbf{blinkered estimate} of intrinsic VOI information of the
+  $i$th arm is the intrinsic VOI of pulling the $i$th arm for the
+  remaining budget.
+\end{dfn}
+
+\begin{thm} Denote the current number of samples of the $i$th arm as
+  $n_i$. The blinkered estimate $\Lambda_i^b$ of intrinsic value of
+  information of pulling the $i$th arm for the remaining budget of $N$
+  samples is bounded from above as
 \begin{equation}
   \Lambda_i^b \le \left\{
   \begin{array}{l l}
-    \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N {N+n_i} < \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N   {n_i} & \mbox{if $i=\alpha$} \\
-    \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline X_\alpha)\frac N {N+n_i} < \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline X_\alpha)\frac N {n_i}&  \mbox{otherwise}
+    \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N {N+n_i} & \mbox{if $i=\alpha$} \\
+    \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline  X_\alpha)\frac N {N+n_i} &  \mbox{otherwise}
   \end{array} \right.
 \label{eqn:thm-be}
 \end{equation}
-where $\overline X_i'$ is the sample mean of the $i$th arm after $N$ more
+where $\overline X_i'$ is the sample mean of the $i$th arm after $n_i+N$ 
 samples.
 \end{thm}
 
@@ -149,8 +168,8 @@ based on the Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 \begin{eqnarray}
 \Pr(\IE[X_i] \le \overline X_\beta|i=\alpha)& \le & \exp(-2 (\overline X_i - \overline X_\beta)^2 n_i)\nonumber\\
 \Pr(\IE[X_i] \ge \overline X_\alpha|i\ne\alpha)& \le & \exp(-2 (\overline X_\alpha - \overline X_i)^2 n_i)\nonumber\\
-\Pr(\overline X_i' \le \overline X_\beta|i=\alpha)& \le &  2\exp\left(-\frac {2(\overline X_i - \overline X_\beta)^2  (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2}  \right) \le 2\exp\left(-\frac {(\overline X_i - \overline X_\beta)^2 n_i} 2 \right)\nonumber\\
-\Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2} \right) \le  2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
+\Pr(\overline X_i' \le \overline X_\beta|i=\alpha)& \le &  2\exp\left(-\frac {2(\overline X_i - \overline X_\beta)^2  (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2}  \right) < 2\exp\left(-\frac {(\overline X_i - \overline X_\beta)^2 n_i} 2 \right)\nonumber\\
+\Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha)& \le & 2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 (n_i+N) n_i} {(\sqrt n_i + \sqrt {n_i + N})^2} \right) <  2\exp\left(-\frac {(\overline X_\alpha - \overline X_i)^2 n_i} 2 \right)
 \label{eqn:probound-perf-hoeffding}
 \end{eqnarray}
 \label{lemma:hoeffding-prob-bounds}
@@ -161,9 +180,32 @@ the probabilities, for example, based on the empirical Bernstein
 inequality (\ref{eqn:conc-empbernstein}) or through a more careful
 application of the Hoeffding inequality (Appendix~\ref{app:better-hoeffding-bound}).
 
+\section{VOI-based Sampling Control}
+
+\subsection{Selection Criterion}
+
+Following the principles of rational metareasoning, an arm with the highest upper bound $\hat
+\Lambda$ on the perfect value of information should be pulled at each
+step. This way, arms known to have a low VOI  would be pulled less frequently.
+
+\subsection{Termination Condition}
+
+The upper bounds~(\ref{eq:lambda-hoeffding-bounds}, \ref{eq:lambda-bernstein-bounds}) decrease exponentially with the
+number of pulls $n$. When the upper bound of the VOI for all arms
+becomes lower than a threshold $\lambda$, which can be chosen based on
+resource constraints, the sampling should be stopped, and an arm should
+be chosen.
+
+\subsection{Sample Redistribution in Trees}
+
+UCT forwards samples to the next search stage when the winner at the
+current state is known with high confidence. VOI-based termination
+condition can be used to stop the sampling in the current state early
+and save the remaining samples for re-use in a later search state.
+
 \section{Empirical Evaluation}
 
-\subsection{Selecting best arm}
+\subsection{Selecting The Best Arm}
 
 Figure~\ref{fig:random-instances}
 
@@ -175,7 +217,7 @@ Figure~\ref{fig:random-instances}
 \end{figure}
 
 
-\subsection{Playing Go against UCT}
+\subsection{Playing Go Against UCT}
 
 Figure~\ref{fig:uct-against-vct}, Figure~\ref{fig:uct-against-ect}, Figure~\ref{fig:uct-against-bct},
 Figure~\ref{fig:best-winning-rate}.
@@ -208,29 +250,6 @@ Figure~\ref{fig:best-winning-rate}.
 \label{fig:best-winning-rate}
 \end{figure}
 
-\section{VOI-based Sampling Control}
-
-\subsection{Selection Criterion}
-
-Following the principles of rational metareasoning, an arm with the highest upper bound $\hat
-\Lambda$ on the perfect value of information should be pulled at each
-step. This way, arms known to have a low VOI  would be pulled less frequently.
-
-\subsection{Termination Condition}
-
-The upper bounds~(\ref{eq:lambda-hoeffding-bounds}, \ref{eq:lambda-bernstein-bounds}) decrease exponentially with the
-number of pulls $n$. When the upper bound of the VOI for all arms
-becomes lower than a threshold $\lambda$, which can be chosen based on
-resource constraints, the sampling should be stopped, and an arm should
-be chosen.
-
-\subsection{Sample Redistribution in Trees}
-
-UCT forwards samples to the next search stage when the winner at the
-current state is known with high confidence. VOI-based termination
-condition can be used to stop the sampling in the current state early
-and save the remaining samples for re-use in a later search state.
-
 \clearpage
 
 \appendix
@@ -255,22 +274,22 @@ Other derivations, giving slightly different results, are possible.
 \label{app:better-hoeffding-bound}
 
 The bound can be supposedly be improved by selecting a midpoint
-$0 < \gamma < \overline X_\beta$ and computing the bound as the sum of two parts:
+$0 < y < \overline X_\beta$ and computing the bound as the sum of two parts:
 \begin{itemize}
-\item $\overline X_\beta-\gamma$ multiplied by the probability that
+\item $\overline X_\beta-y$ multiplied by the probability that
   $\mu_\alpha \le \overline X_\beta$;
 \item $\overline X_\beta$ multiplied by the probability that $\mu_\alpha\le
-  \gamma$.
+  y$.
 \end{itemize}.
-\[ V_{\overline X=\overline X_\alpha} \le (\overline X_\beta-\gamma)\exp\left(-2n(\overline X_\alpha-\overline X_\beta)^2\right)+\overline X_\beta\exp\left(-2n(\overline X_\alpha-\gamma)^2\right) \]
+\[ V_{\overline X=\overline X_\alpha} \le (\overline X_\beta-y)\exp\left(-2n(\overline X_\alpha-\overline X_\beta)^2\right)+\overline X_\beta\exp\left(-2n(\overline X_\alpha-y)^2\right) \]
 
 \vspace{\baselineskip}
 
-The minimum of $V^*$ is achieved when $\frac {dV^*} {d\gamma}=0$, that
-is, when $\gamma$ is the root of the following equation:
-\[ 4\overline X_\beta n(\overline X_\alpha-\gamma)=\exp\left(-2n\left(\frac {\overline X_\alpha-\overline X_\beta}
-    {\overline X_\alpha-\gamma}\right)^2\right) \]
-If a root in the interval  $0\le\gamma\le\beta$ exists, then the
+The minimum of $V^*$ is achieved when $\frac {dV^*} {dy}=0$, that
+is, when $y$ is the root of the following equation:
+\[ 4\overline X_\beta n(\overline X_\alpha-y)=\exp\left(-2n\left(\frac {\overline X_\alpha-\overline X_\beta}
+    {\overline X_\alpha-y}\right)^2\right) \]
+If a root in the interval  $0\le y\le\beta$ exists, then the
 number of samples is bounded as
 \[n\le\frac 1 {4\overline X_\beta(\overline X_\alpha-\overline X_\beta)}\]
 by observing that the right-hand side 
@@ -282,18 +301,18 @@ second-best sample means are close.
 
 The derivation for the other case
 (sampling an item that can be better than the current best) is
-obtained by substitution $1-\overline X, 1-\overline X_\alpha, 1-\gamma$ instead of
-$\overline X_\alpha, \overline X_\beta, \gamma$:
+obtained by substitution $1-\overline X, 1-\overline X_\alpha, 1-y$ instead of
+$\overline X_\alpha, \overline X_\beta, y$:
 
-\[ V_{\overline X\ne\overline X_\alpha} \le (\gamma-\overline X_\alpha)\exp\left(-2n(\overline X_\alpha-\overline
-  X)^2\right)+(1-\overline X_\alpha)\exp\left(-2n(\gamma-\overline X)^2\right) \]
+\[ V_{\overline X\ne\overline X_\alpha} \le (y-\overline X_\alpha)\exp\left(-2n(\overline X_\alpha-\overline
+  X)^2\right)+(1-\overline X_\alpha)\exp\left(-2n(y-\overline X)^2\right) \]
 
 The anticipated influence of the improved
 VOI estimate would be that the selected item will be a less discovered
 one and further from the current best or second-best.
 
-A closed-form solution for $\gamma$ cannot be obtained, but given
-$\overline X_\alpha, \overline X_\beta, n$, the value of $\gamma$ can be efficiently
+A closed-form solution for $y$ cannot be obtained, but given
+$\overline X_\alpha, \overline X_\beta, n$, the value of $y$ can be efficiently
 computed. It should be determined empirically whether the improved
 estimate has justified influence on the performance of the algorithm.
 
