@@ -129,8 +129,8 @@ maximum possible increase in the reward:
 \begin{equation}
   \Lambda_i^p \le \left\{
   \begin{array}{l l}
-    \Pr(\IE[X_i] \le \overline X_\beta)\overline X_\beta & \mbox{if $i=\alpha$} \\
-    \Pr(\IE[X_i] \ge \overline X_\alpha)(1-\overline X_\alpha) & \mbox{otherwise}
+    \overline X_\beta \Pr(\IE[X_i] \le \overline X_\beta) & \mbox{if $i=\alpha$} \\
+    (1-\overline X_\alpha)\Pr(\IE[X_i] \ge \overline X_\alpha) & \mbox{otherwise}
   \end{array} \right.
 \label{eqn:thm-vopi}
 \end{equation}
@@ -166,10 +166,10 @@ estimate of the arm pulled fewer times so far should be higher.
 \begin{equation}
   \Lambda_i^b \le \left\{
   \begin{array}{l l}
-    \Pr(\overline X_i'\le\overline X_\beta)\overline X_\beta\frac N {N+n_i}
-       \le N\Pr(\overline X_i'\le\overline X_\beta)\frac {\overline X_\beta} {n_i} & \mbox{if $i=\alpha$} \\
-    \Pr(\overline X_i'\ge\overline X_\alpha)(1-\overline  X_\alpha)\frac N {N+n_i}
-       \le N\Pr(\overline X_i'\ge\overline X_\alpha)\frac {(1-\overline  X_\alpha)} {n_i} & \mbox{otherwise}
+    \overline X_\beta\frac N {N+n_i}\Pr(\overline X_i'\le\overline X_\beta)
+    \le N\frac {\overline X_\beta} {n_i}\Pr(\overline X_i'\le\overline X_\beta) & \mbox{if $i=\alpha$} \\
+    (1-\overline  X_\alpha)\frac N {N+n_i}\Pr(\overline X_i'\ge\overline X_\alpha)
+       \le N\frac {(1-\overline  X_\alpha)} {n_i}\Pr(\overline X_i'\ge\overline X_\alpha) & \mbox{otherwise}
   \end{array} \right.
 \label{eqn:thm-be}
 \end{equation}
@@ -218,8 +218,8 @@ An upper bound on the intrinsic value of perfect information is obtained by subs
 \begin{equation}
   \Lambda_i^p \le \hat\Lambda_i^p=\left\{
   \begin{array}{l l}
-    \exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right)\overline X_\beta & \mbox{if $i=\alpha$} \\
-    \exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)(1-\overline  X_\alpha)  &  \mbox{otherwise}
+    \overline X_\beta\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{if $i=\alpha$} \\
+    (1-\overline  X_\alpha)\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)(1-\overline  X_\alpha)  &  \mbox{otherwise}
   \end{array} \right.
 \label{eqn:bound-perf-hoeffding}
 \end{equation}
@@ -228,9 +228,9 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \begin{equation}
   \Lambda_i^b \le \hat\Lambda_i^b=\left\{
   \begin{array}{l l}
-    C \exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)\frac {\overline X_\beta} {n_i}
+    C \frac {\overline X_\beta} {n_i}\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)
       & \mbox{if $i=\alpha$} \\
-    C \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)\frac {(1-\overline  X_\alpha)} {n_i}
+    C \frac {(1-\overline  X_\alpha)} {n_i} \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)
       &  \mbox{otherwise}
   \end{array} \right.
 \label{eqn:bound-blnk-hoeffding}
@@ -282,11 +282,11 @@ and a viable stopping condition is
 \begin{equation}
 \begin{array}{c r r l l}
 &\frac 1 N \Lambda_\alpha^b
-\le\Pr(\overline X_\alpha'\le\overline X_\beta)\frac {\overline  X_\beta} {n_\alpha}&\le& c
+\le\frac {\overline  X_\beta} {n_\alpha}\Pr(\overline X_\alpha'\le\overline X_\beta)&\le& c
 &\nonumber\\
 \mbox{and}&&&&\nonumber\\
 &\frac 1 N \max_i\Lambda_i^b
-\le \max_i\Pr(\overline X_i'\ge\overline X_\alpha)\frac {(1-\overline  X_\alpha)} {n_i}&\le& c
+\le \max_i\frac {(1-\overline  X_\alpha)} {n_i}\Pr(\overline X_i'\ge\overline X_\alpha)&\le& c
  & \forall i: i\ne\alpha
 \end{array}
 \label{eqn:stopping-blnk}
@@ -298,15 +298,19 @@ the sampling policy.
 
 \subsection{Sample Redistribution in Trees}
 
-Monte-Carlo tree search \cite{Chaslot.montecarlo} selects at each search step an action
-that appears to be the best based on outcomes of \textit{search rollouts}. Two different
-criteria are employed in action selection during a rollout:
+Monte-Carlo tree search \cite{Chaslot.montecarlo} selects at each
+search step an action that appears to be the best based on outcomes
+of \textit{search rollouts}. Two different criteria are employed in
+action selection during a rollout:
 \begin{itemize}
-\item at the first step, the simple regret of selecting an action must be minimized;
-\item starting with the second step of a rollout, the expected reward of the rollout
- must be made as close as possible to the optimum reward, so that the value of the
- action at the first step of the rollout is evaluated correctly. Thus, starting with
- the second step, the cumulative regret must be minimized.
+\item at the first step, the simple regret of selecting an action
+must be minimized;
+\item starting with the second step of a rollout, the expected reward
+of the rollout
+ must be made as close as possible to the optimum reward, so that the
+ value of the action at the first step of the rollout is evaluated
+ correctly. Thus, starting with the second step, the cumulative regret
+ must be minimized.
 \end{itemize}
 
 A natural approach would be to apply an algorithm that minimizes the
@@ -326,26 +330,65 @@ One way to account for this re-use would be to incroprorate the
 `future' value of information into a VOI estimate. However, this 
 approach appears to be complicated. Alternatively, one can behave
 myopically in search tree depth:
-\begin{itemize}
+\begin{enumerate}
 \item estimate VOI as though the information is discarded after each step;
 \item stop early if the VOI is below a certain threshold
    (see Section~\ref{sec:control-termination-condition});
 \item save the unused sample budget for search in future state, such that
    if the nominal budget is $N$, and the unused budget in the last state
    is $N_u$, the search budget in the next state will be $N+N_u$.
-\end{itemize}
-In this approach, the cost of a sample in the current state is the VOI
-of increasing the budget of a future state by one sample. It is unclear
-whether this cost can be accurately estimated, but supposedly a fixed value
-for a given problem type and algorithm implementation would work. Indeed,
-the empirical evaluation (Section~\ref{sec:emp-go}) confirms that a learned
-fixed cost and sample redistribution substantially improve performance of
-the VOI-based sampling policy in game tree search.
+\end{enumerate}
+In this approach, the cost of a sample in the current state is the
+VOI of increasing the budget of a future state by one sample.  It is
+unclear whether this cost can be accurately estimated, but supposedly a
+fixed value for a given problem type and algorithm implementation would
+work. Indeed, the empirical evaluation (Section~\ref{sec:emp-go})
+confirms that a learned fixed cost and sample redistribution
+substantially improve the performance of the VOI-based sampling policy
+in game tree search.
+
 
 \section{Empirical Evaluation}
 \label{sec:empirical-evaluation}
 
+The experiments compare the UCT algorithm \cite{Kocsis.uct} with modified
+versions of UCT in which the samples at the first step are selected according
+to their VOI estimates. Three blinkered VOI estimates were used for the comparison:
+\begin{description}
+\item[VCT:] based on Hoeffding inequality (\ref{eqn:conc-hoeffding});
+\item[ECT:] based on Hoeffding inequality with midpoint (see Appendix~\ref{app:better-hoeffding-bound});
+\item[BCT:] based on empirical Bernstein inequality (\ref{eqn:conc-empbernstein}).
+\end{description}
+For simplicity, the bounds on probability for unlimited number of samples were used in the estimate formulas. The estimates where computed as follows:
+\begin{eqnarray}\
+  \Lambda_i^{VCT}& =&\left\{
+  \begin{array}{l l}
+    \frac {\overline X_\beta} {n_i}\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i\right)
+      & \mbox{if $i=\alpha$} \\
+    \frac {(1-\overline  X_\alpha)} {n_i}\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i\right)
+      &  \mbox{otherwise}
+  \end{array}  \right.\nonumber\\
+  \Lambda_i^{ECT}& =&\min\left(\Lambda_i^{VCT}, \min_y\left\{
+  \begin{array}{l l}
+    \frac {\overline X_\beta-y} {n_i}\exp\left(-2 n_i(\overline X_i-\overline X_\beta)^2\right)
+    +\frac {\overline X_\beta} {n_i}\exp\left(-2 n_i(\overline X_i-y)^2\right)
+      & \mbox{if $i=\alpha$} \\
+\frac {y-\overline X_\alpha} {n_i}\exp\left(-2 n_i(\overline X_\alpha-\overline
+  X_i)^2\right)+\frac {1-\overline X_\alpha} {n_i}\exp\left(-2 n_i(y-\overline X_i)^2\right)
+      &  \mbox{otherwise}
+  \end{array} \right.\right) \nonumber\\
+  \Lambda_i^{BCT}& =&\min\left(\Lambda_i^{VCT},\left\{
+  \begin{array}{l l}
+    2\frac {\overline X_\beta} {n_i}\exp\left(- \frac {(\overline X_i - \overline X_\beta)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_i - \overline X_\beta) + 2 \overline X_i(1-\overline X_i)} \right)
+      & \mbox{if $i=\alpha$} \\
+    2\frac {(1-\overline  X_\alpha)} {n_i}\exp\left(- \frac {(\overline X_\alpha - \overline X_i)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_\alpha - \overline X_i) + 2 \overline X_i(1-\overline X_i)} \right)
+      &  \mbox{otherwise}
+  \end{array} \right.\right)
+\label{eqn:emp-estimates}
+\end{eqnarray}
+
 \subsection{Selecting The Best Arm}
+\label{sec:emp-arm}
 
 Figure~\ref{fig:random-instances}
 
@@ -418,7 +461,7 @@ $X_\alpha$ is more than the probability that $\IE[X_i]\le\overline
 X_i+\delta$ \textit{and} $\overline X_i'\ge \IE[X_i]+\overline X_\alpha - \overline
   X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$;
 therefore, the probability that $\overline X_i'$ is \textit{greater}
-than than $X_\alpha$ is less than the probability that $\IE[X_i]\ge\overline
+than $X_\alpha$ is less than the probability that $\IE[X_i]\ge\overline
 X_i+\delta$ \textit{or} $\overline X_i'\le \IE[X_i]+\overline X_\alpha - \overline
   X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$.
 Using the union bound,
