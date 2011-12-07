@@ -1,0 +1,184 @@
+\documentclass{article}
+\usepackage{algpseudocode}
+\usepackage[ruled]{algorithm}
+\usepackage{url}
+\usepackage{framed}
+\usepackage{amsfonts,amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+\usepackage{geometry}
+
+\geometry{margin=1.2in}
+
+\newcommand {\mean} {\ensuremath {\mathop{\mathrm{mean}}}}
+\newcommand {\median} {\ensuremath {\mathop{\mathrm{median}}}}
+\newcommand {\N} {\ensuremath {\mathcal{N}}}
+\newcommand {\IE} {\ensuremath {\mathbb{E}}}
+\newcommand {\cov} {\ensuremath {\mathop{\mathrm{cov}}}}
+\newcommand {\BEL} {\ensuremath {\mathop{\mathrm{BEL}}}}
+
+\newtheorem{lemma}{Lemma}
+
+\title{VOI-based Monte Carlo Sampling}
+\author {David Tolpin, Solomon Eyal Shimony \\
+Department of Computer Science, \\
+Ben-Gurion University of the Negev, Beer Sheva, Israel \\
+\{tolpin,shimony\}@cs.bgu.ac.il}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Upper bounds for the VOI are provided for pure exploration in the
+Multi-armed Bandit Problem. Sampling policies based on the upper
+bounds are suggested.
+\end{abstract}
+
+\section{Introduction and Definitions}
+
+Taking a sequence of samples in order to minimize the
+regret of a decision based on the samples is abstracted by the
+{\em Multi-armed Bandit Problem.} In the Multi-armed Bandit problem
+we have a set of $K$ arms. Each arm can be pulled multiple
+times. When the $i$th arm is pulled, a random reward $X_i$ from an
+unknown stationary distribution is returned.  The reward is bounded
+between 0 and 1.
+
+The simple regret of a sampling policy for the Multi-armed Bandit
+Problem is the expected difference between the best expected reward
+$\mu_*$ and the expected reward $\mu_j$ of the arm with the best sample mean
+$\overline X_j=\max_i\overline X_i$:
+\begin{equation}
+\label{eq:simple-regret}
+\IE[R]=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\end{equation}
+where $\Delta_j=\mu_*-\mu_j$.
+Strategies that minimize the simple regret are called pure exploration
+strategies \cite{Bubeck.pure}. Principles of rational metareasoning
+\cite{Russel.right} suggest that at each step the arm with the great
+value of information (VOI) must be pulled, and the sampling must be
+stopped and a decision must be made when no arm has positive VOI. 
+
+To estimate the VOI of pulling an arm, either a certain 
+distribution of the rewards should be assumed (and updated based on
+observed rewards), or a distribution-independent bound on the VOI can be
+used as the VOI estimate. In this paper, we use {\em concentration inequalities}
+to derive distribution-independent bounds on the VOI.
+
+\section{Some Concentration Inequalities}
+
+Let $X_1, \ldots, X_n$ be i.i.d. random variables with values from $[0,1]$,
+$X=\frac 1 n \sum_{i=1}^n X_i$. Then 
+\begin{description}
+\item[Hoeffding's inequality \rm{\cite{Hoeffding.ineq}}:] 
+\begin{equation}
+\Pr(X-\IE[X] \ge a) \le \exp ( -2na^2)
+\label{eq:conc-hoeffding}
+\end{equation}
+\item[Empirical Bernstein's inequality
+  \rm{\cite{MaurerPontil.benrstein}}:]\footnote{see
+    Appendix~\ref{app:deriv-conc-empbernstein} for derivation}
+\begin{eqnarray}
+\Pr(X-\IE[X] \ge a) &\le& 2\exp \left( - \frac {na^2} {\frac {14} {3}
+                          \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\nonumber\\
+                    &\le& 2\exp \left( - \frac {na^2} {10a+2\overline\sigma_n^2}\right)
+\label{eq:conc-empbernstein}
+\end{eqnarray}
+where sample variance $\overline\sigma_n^2$ is
+\begin{equation}
+\overline\sigma_n^2=\frac 1 {n(n-1)} \sum_{1\le i < j\le n}(X_i-X_j)^2
+\label{eq:sample-variance}
+\end{equation}
+\end{description}
+Bounds (\ref{eq:conc-hoeffding}, \ref{eq:conc-empbernstein}) are symmetrical
+around the mean. Bound~(\ref{eq:conc-empbernstein}) is tighter than
+(\ref{eq:conc-hoeffding}) for small $a$ and $\overline\sigma_n^2$. 
+
+
+\section{Upper Bounds on Value of Information}
+
+The intrinsic VOI of pulling an arm is the expected decrease
+in the regret compared to selecting an arm without pulling any arm at
+all. The intrinsic VOI can be estimated as the intrinsic 
+value of perfect information $\Lambda_i$ about the mean reward of the $i$th arm. Two
+cases are possible:
+\begin{itemize}
+\item the arm ($\alpha$) with the highest sample mean is pulled, and the 
+mean of the arm is lower than the sample mean the second-best arm ($\beta$);
+\item another arm is pulled, and the mean of the arm is higher
+than the current highest sample mean ($\alpha$).
+\end{itemize}
+\begin{eqnarray}
+\Lambda_\alpha&=&\int_0^{\overline X_\beta}p(\IE[X_\alpha]=x)(\overline X_\beta-x)dx\nonumber\\
+\Lambda_{i|i\ne\alpha}&=&\int_{\overline X_\alpha}^1p(\IE[X_i]=x)(x-\overline X_\alpha)dx
+\end{eqnarray}
+Using the concentration inequalities, $\Lambda_i$ can be bounded from
+above as the probability that a different arm is selected times the
+maximum possible increase in the reward:
+\begin{eqnarray}
+\Lambda_\alpha&\le&\Pr(\IE[X_\alpha]\le\overline X_\beta)\overline X_\beta\nonumber\\
+\Lambda_{i|i\ne \alpha}&\le&\Pr(\IE[X_i]\ge\overline
+X_\alpha)(1-\overline X_\alpha)
+\label{eq:lambda-general-bounds}
+\end{eqnarray}
+
+The probabilities in bounds~(\ref{eq:lambda-general-bounds}) can be
+bounded from above by the concentration
+inequalities~(\ref{eq:conc-hoeffding}, \ref{eq:conc-empbernstein});
+thus upper bounds on $\Lambda$ corresponding to each of the
+concentration inequalities are obtained. For the Hoeffding's
+inequality~(\ref{eq:conc-hoeffding}):
+\begin{eqnarray}
+\Lambda_\alpha&\le&\hat\Lambda_\alpha^h=\overline X_\beta \exp\left(-2n(\overline  X_\alpha - \overline X_\beta)^2\right)\nonumber\\
+\Lambda_{i|i\ne \alpha}&\le&\hat\Lambda_{i|i\ne \alpha}^h=(1-\overline X_\alpha) \exp\left(-2n(\overline X_\alpha - \overline X_i)^2\right)
+\label{eq:lambda-hoeffding-bounds}
+\end{eqnarray}
+For the empirical Bernstein's inequality~(\ref{eq:conc-empbernstein}):
+\begin{eqnarray}
+\Lambda_\alpha&\le&\hat\Lambda_\alpha^h=2\overline X_\beta \exp\left(-\frac {n(\overline X_\alpha - \overline X_\beta)^2} {10(\overline X_\alpha - \overline X_\beta)+2\overline\sigma_{\alpha,n}^2}\right)\nonumber\\
+\Lambda_{i|i\ne \alpha}&\le&\hat\Lambda_{i|i\ne \alpha}^h=2(1-\overline X_\alpha) \exp\left(-\frac {n(\overline X_\alpha - \overline X_i)^2} {10(\overline X_\alpha - \overline X_i)+2\overline\sigma_{i,n}^2}\right)
+\label{eq:lambda-bernstein-bounds}
+\end{eqnarray}
+and a tighter bound can be constructed as $\hat\Lambda^{h,b}=\min(\hat\Lambda^h,\hat\Lambda^b)$.
+
+
+\section{VOI-based Sampling Control}
+
+\subsection{Selection Criterion}
+
+Following the principles of rational metareasoning, an arm with the highest upper bound $\hat
+\Lambda$ on the perfect value of information should be pulled at each
+step. This way, arms known to have a low VOI  would be pulled less frequently.
+
+\subsection{Termination Condition}
+
+The upper bounds~(\ref{eq:lambda-hoeffding-bounds}, \ref{eq:lambda-bernstein-bounds}) decrease exponentially with the
+number of pulls $n$. When the upper bound of the VOI for all arms
+becomes lower than a threshold $\lambda$, which can be chosen based on
+resource constraints, the sampling should be stopped, and an arm should
+be chosen.
+
+\appendix
+
+\section{Empirical Bernstein Inequality}
+\label{app:deriv-conc-empbernstein}
+
+Theorem~4 in~\cite{MaurerPontil.benrstein} states that
+\[\Pr\left(\IE[X]-\overline X_n \ge \sqrt { \frac {2\overline\sigma_n^2 \ln 2/\delta} n } + \frac {7 \ln 2/\delta} {3(n-1)}\right)\le \delta,\]
+Therefore
+\[\Pr\left(\IE[X]-\overline X_n \ge \sqrt { \left(\frac {7 \ln 2/\delta} {3(n-1)}\right)^2+\frac {2\overline\sigma_n^2 \ln 2/\delta} n } + \frac {7 \ln 2/\delta} {3(n-1)}\right)\le
+\delta.\]
+$a=\sqrt { \left(\frac {7 \ln 2/\delta} {3(n-1)}\right)^2+\frac {2\overline\sigma_n^2 \ln 2/\delta} n } + \frac {7 \ln 2/\delta} {3(n-1)}$ is a root of
+square equation
+\[a^2-a\frac {14 \ln 2/\delta} {3(n-1)} -\frac {2\overline\sigma_n^2 \ln 2/\delta} n=0\]
+which, solved for $\delta\triangleq\Pr(\IE[X]-\overline X_n\ge a)$,
+gives
+\[\Pr(\IE[X]-\overline X_n\ge a)\le 2\exp \left( - \frac {na^2} {\frac {14} {3} \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\]
+Other derivations, giving slightly different results, are possible.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

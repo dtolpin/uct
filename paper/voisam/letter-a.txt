@@ -1,0 +1,13 @@
+Hi Eyal,
+
+just sharing thoughts:
+
+I don't quite understand how to achieve natural PAC (that is, Pr(VOI>X)<p) bounds for VOI. Since VOI is based on probabilities, the `outer' probabilities can be intergrated into the VOI estimate, so the estimate/bound is still a single number. I'll think about that.
+
+The *upper* bound on VOI can be obtained (as I mentioned) from the Hoeffding inequality based *solely on the means*. The lower bound based solely on the means cannot be better than 0.
+
+The *lower* bound on VOI can be improved (that is, a non-trivial lower bound can be found) based on the sample distribution. If a certain arm has samples which are better than the current best, then, again, probability inequalities (like Hoeffding/Bernstein) can be used to state that VO(P)I is `at least' such and such. Thus arms who have lower variance (less samples on the other side of the best) will have smaller lower bound on VO(P)I.
+
+A next issue is ordering arms based on lower/upper bound. And proving things about algorithm performance.
+
+David
