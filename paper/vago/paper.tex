@@ -262,6 +262,7 @@ performance comparable to the performance of some state-of-the-art
 heuristic algorithms.
 
 \subsection{Termination Condition}
+\label{sec:control-termination-condition}
 
 The simplest termination condition for a sampling policy is the
 budget---a fixed number of samples performed before a decision is
@@ -297,10 +298,49 @@ the sampling policy.
 
 \subsection{Sample Redistribution in Trees}
 
-UCT forwards samples to the next search stage when the winner at the
-current state is known with high confidence. VOI-based termination
-condition can be used to stop the sampling in the current state early
-and save the remaining samples for re-use in a later search state.
+Monte-Carlo tree search \cite{Chaslot.montecarlo} selects at each search step an action
+that appears to be the best based on outcomes of \textit{search rollouts}. Two different
+criteria are employed in action selection during a rollout:
+\begin{itemize}
+\item at the first step, the simple regret of selecting an action must be minimized;
+\item starting with the second step of a rollout, the expected reward of the rollout
+ must be made as close as possible to the optimum reward, so that the value of the
+ action at the first step of the rollout is evaluated correctly. Thus, starting with
+ the second step, the cumulative regret must be minimized.
+\end{itemize}
+
+A natural approach would be to apply an algorithm that minimizes the
+simple regret in Multi-armed bandits at the first step, and the
+cumulative regret (solves the exploration-exploitation trade-off)
+during the rest of the rollout.  However, this approach assumes that
+the information obtained from rollouts in the current state is
+discarded after an action is selected. In practice, most successful
+Monte-Carlo tree search algorithms re-use rollouts originating from an
+earlier search state and passing through the current search state;
+thus, the value of information of a rollout is determined not just by
+the influence on the choice of the action at the current state, but
+also by the influence on the choice at future search states, provided
+the rollout passes through the search states which will be visited.
+
+One way to account for this re-use would be to incroprorate the
+`future' value of information into a VOI estimate. However, this 
+approach appears to be complicated. Alternatively, one can behave
+myopically in search tree depth:
+\begin{itemize}
+\item estimate VOI as though the information is discarded after each step;
+\item stop early if the VOI is below a certain threshold
+   (see Section~\ref{sec:control-termination-condition});
+\item save the unused sample budget for search in future state, such that
+   if the nominal budget is $N$, and the unused budget in the last state
+   is $N_u$, the search budget in the next state will be $N+N_u$.
+\end{itemize}
+In this approach, the cost of a sample in the current state is the VOI
+of increasing the budget of a future state by one sample. It is unclear
+whether this cost can be accurately estimated, but supposedly a fixed value
+for a given problem type and algorithm implementation would work. Indeed,
+the empirical evaluation (Section~\ref{sec:emp-go}) confirms that a learned
+fixed cost and sample redistribution substantially improve performance of
+the VOI-based sampling policy in game tree search.
 
 \section{Empirical Evaluation}
 \label{sec:empirical-evaluation}
@@ -318,6 +358,7 @@ Figure~\ref{fig:random-instances}
 
 
 \subsection{Playing Go Against UCT}
+\label{sec:emp-go}
 
 Figure~\ref{fig:uct-against-vct}, Figure~\ref{fig:uct-against-ect},
 Figure~\ref{fig:uct-against-bct}, Figure~\ref{fig:best-winning-rate}.
