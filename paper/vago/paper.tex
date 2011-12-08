@@ -340,12 +340,12 @@ myopically in search tree depth:
 \end{enumerate}
 In this approach, the cost of a sample in the current state is the
 VOI of increasing the budget of a future state by one sample.  It is
-unclear whether this cost can be accurately estimated, but supposedly a
-fixed value for a given problem type and algorithm implementation would
-work. Indeed, the empirical evaluation (Section~\ref{sec:emp-go})
-confirms that a learned fixed cost and sample redistribution
-substantially improve the performance of the VOI-based sampling policy
-in game tree search.
+unclear whether this cost can be accurately estimated, but supposedly
+a fixed value for a given problem type and algorithm implementation
+would work. Indeed, the empirical evaluation (Section~\ref{sec:emp-go})
+confirms that stopping and sample redistribution based on a learned
+fixed cost  substantially improve the performance of the VOI-based
+sampling policy in game tree search.
 
 
 \section{Empirical Evaluation}
@@ -390,8 +390,6 @@ For simplicity, the bounds on probability for unlimited number of samples were u
 \subsection{Selecting The Best Arm}
 \label{sec:emp-arm}
 
-Figure~\ref{fig:random-instances}
-
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{flat.pdf}
@@ -399,6 +397,25 @@ Figure~\ref{fig:random-instances}
 \label{fig:random-instances}
 \end{figure}
 
+The sampling policies are first compared on random multi-armed bandit 
+problem instances, where the Monte Carlo Tree Search algorithm
+is reduced to the sample selection policy at the first step: UCT is 
+actually UCB1. In the problem of pure exploration in multi-armed bandits
+\cite{Bubeck.pure}, the smaller is the exploration factor, the higher
+is the expected simple regret; indeed, UCT exhibits the lowest simple
+regret in the experiments for the default exploration factor $Cp=\frac
+{\sqrt 2} 2$ \cite{Kocsis.uct}.
+
+Figure~\ref{fig:random-instances} shows experiment results for
+randomly-generated multi-armed bandits with 32 Bernoulli arms, with
+the mean rewards of the arms distributed uniformly in the range $[0,
+  1]$, for a range of sample budgets $32..2048$, with multiplicative
+step of $2$. The experiment for each number of samples was repeated
+20000 times. UCT is worse than any of the VOI-aware sampling policies,
+for example, for 384 samples the simple regret of UCT is $\approx 40$
+times greater than of VCT, and $\approx 100$ times greater than of
+ECT. On average, it takes $2.5$ times as many samples for UCT to reach
+the regret of VCT.
 
 \subsection{Playing Go Against UCT}
 \label{sec:emp-go}
