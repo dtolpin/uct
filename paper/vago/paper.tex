@@ -297,6 +297,7 @@ influence of the sample cost $c$ on the performance of
 the sampling policy.
 
 \subsection{Sample Redistribution in Trees}
+\label{sec:control-redistribution}
 
 Monte-Carlo tree search \cite{Chaslot.montecarlo} selects at each
 search step an action that appears to be the best based on outcomes
@@ -451,30 +452,49 @@ a strong player. On the other hand, additional
 features of more advanced engines would obstruct the Monte Carlo
 sampling phenomena which are the subject of the experiment.
 
-
-Figure~\ref{fig:uct-against-vct}, Figure~\ref{fig:uct-against-ect},
-Figure~\ref{fig:uct-against-bct}, Figure~\ref{fig:best-winning-rate}.
-
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{vct-wins.pdf}
 \caption{Go: winning rate --- UCT against VCT}
 \label{fig:uct-against-vct}
 \end{figure}
-
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{ect-wins.pdf}
 \caption{Go: winning rate --- UCT against ECT}
 \label{fig:uct-against-ect}
 \end{figure}
-
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.8]{bct-wins.pdf}
 \caption{Go: winning rate --- UCT against BCT}
 \label{fig:uct-against-bct}
 \end{figure}
+The engines were compared on the 9x9 board, for 5000, 7000, 1000, and
+15000 samples (game simulations) per ply, each experiment was repeated
+1000 times. Figures~\ref{fig:uct-against-vct}--\ref{fig:uct-against-bct} show the
+winning rate of UCT against VCT, ECT, BCT, correspondingly, vs. the
+stopping threshold (if the maximum VOI of a sample is below the
+threshold, the simulation is stopped, and a move is chosen). Each curve
+in the figures corresponds to a certain number of samples per ply. The
+lower the curve, the better is the corresponding policy compared to UCT.
+
+As the results show, without sample redistribution UCT is as good as
+better as the VOI-aware policies for lower numbers of samples per ply
+(5000, 7000), and the advantage of VOI-aware policies for larger
+number of samples is rather modest (e.g., ECT wins in 55\% of games for
+10000 samples per ply). For the stopping threshold of $10^-6$,
+however, the VOI-aware policies are almost always better than UCT
+(only VCT for 5000 samples wins in less than 50\% of games), with
+stronger policies (ECT, VCT) reaching the winning rate of 67\%.
+
+In agreement with intuition
+(Section~\ref{sec:control-redistribution}), VOI-based stopping and sample
+redistribution is most influential for medium numbers of samples per
+ply. When the maximum number of samples is too low, early stopping would
+result in poorly selected moves. On the other hand, when the maximum
+number of samples is sufficiently high, the VOI of increasing the
+maximum number of samples in a future state is low.
 
 \begin{figure}[h]
 \centering
@@ -482,6 +502,7 @@ Figure~\ref{fig:uct-against-bct}, Figure~\ref{fig:best-winning-rate}.
 \caption{Go: best winning rate comparison}
 \label{fig:best-winning-rate}
 \end{figure}
+Figure~\ref{fig:best-winning-rate} 
 
 \section{Summary and Future Work}
 
