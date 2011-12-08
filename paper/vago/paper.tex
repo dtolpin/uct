@@ -415,10 +415,37 @@ step of $2$. The experiment for each number of samples was repeated
 for example, for 384 samples the simple regret of UCT is $\approx 40$
 times greater than of VCT, and $\approx 100$ times greater than of
 ECT. On average, it takes $2.5$ times as many samples for UCT to reach
-the regret of VCT.
+the regret of VCT. Different numbers of arms and distributions of
+means give similar results.
 
 \subsection{Playing Go Against UCT}
 \label{sec:emp-go}
+
+One search domain in which Monte-Carlo tree search based on the UCT
+sampling policy has been particularly successful is playing the Go
+game \cite{Gelly.mogo}. This series of experiments compares
+the winning rate of VOI-aware policies (VCT, ECT, BCT) against UCT 
+in Go and investigates the effect of early stopping and sample
+redistribution. 
+
+For the experiments, a modified version of Pachi \cite{Braudis.pachi},
+a state of the art Go program, was used:
+\begin{itemize}
+\item The UCT engine of Pachi was extended with VOI-aware sampling
+  policies at the first step. 
+\item The stopping condition for the VOI-aware policies was
+  modified and based solely on the sample cost, specified as
+  a constant parameter. 
+\item The time-allocation mode based on the fixed number of samples
+  was modified such that 
+  \begin{enumerate}
+    \item the same number of samples is available to
+      the agent at each step, independently of the number of pre-simulated
+      games;  
+    \item if samples were unused at the current step,
+      they become available at the next step.
+  \end{enumerate}
+\end{itemize}
 
 Figure~\ref{fig:uct-against-vct}, Figure~\ref{fig:uct-against-ect},
 Figure~\ref{fig:uct-against-bct}, Figure~\ref{fig:best-winning-rate}.
