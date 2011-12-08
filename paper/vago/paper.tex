@@ -81,12 +81,12 @@ to derive distribution-independent bounds on the VOI.
 Let $X_1, \ldots, X_n$ be i.i.d. random variables with values from $[0,1]$,
 $X=\frac 1 n \sum_{i=1}^n X_i$. Then 
 \begin{description}
-\item[Hoeffding's inequality \rm{\cite{Hoeffding.ineq}}:] 
+\item[Hoeffding inequality \rm{\cite{Hoeffding.ineq}}:] 
 \begin{equation}
 \Pr(X-\IE[X] \ge a) \le \exp ( -2na^2)
 \label{eqn:conc-hoeffding}
 \end{equation}
-\item[Empirical Bernstein's inequality
+\item[Empirical Bernstein inequality
   \rm{\cite{MaurerPontil.benrstein}} \textrm{(derived in Appendix~\ref{app:deriv-conc-empbernstein})}:]
 \begin{eqnarray}
 \Pr(X-\IE[X] \ge a) &\le& 2\exp \left( - \frac {na^2} {\frac {14} {3}
@@ -203,11 +203,11 @@ Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 \vspace{-1.5\baselineskip}
 \begin{eqnarray}
 \Pr(\overline X_i' \le \overline X_\beta|i=\alpha) &
-   \le & 2\exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}(\overline X_i - \overline X_\beta)\right)^2 n_i \right)
-   \le 2\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i \right) \nonumber\\
+   \le & \exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}(\overline X_i - \overline X_\beta)\right)^2 n_i \right)
+   \le \exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i \right) \nonumber\\
 \Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha) &
-   \le & 2\exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha - \overline X_i)\right)^2 n_i \right)
-    \le 2\exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i \right)
+   \le & \exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha - \overline X_i)\right)^2 n_i \right)
+    \le \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i \right)
 \label{eqn:probound-blnk-hoeffding}
 \end{eqnarray}
 \label{lemma:hoeffding-prob-bounds}
@@ -228,14 +228,14 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \begin{equation}
   \Lambda_i^b \le \hat\Lambda_i^b=\left\{
   \begin{array}{l l}
-    C \frac {\overline X_\beta} {n_i}\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)
+    N \frac {\overline X_\beta} {n_i}\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)
       & \mbox{{\rm if} $i=\alpha$} \\
-    C \frac {(1-\overline  X_\alpha)} {n_i} \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)
+    N \frac {(1-\overline  X_\alpha)} {n_i} \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)
       &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-blnk-hoeffding}
 \end{equation}
-where $C=2N$. The bound is generally tighter when $N$ is small relative to $n_i$,
+The bound is generally tighter when $N$ is small relative to $n_i$,
 and the estimate $\hat\Lambda_i^b$ can be viewed as a relaxation of the myopic VOI
 estimate to longer sequences of actions, such
 that the VOI estimate is positive for some of the actions.
@@ -479,8 +479,8 @@ threshold, the simulation is stopped, and a move is chosen). Each curve
 in the figures corresponds to a certain number of samples per ply. The
 lower the curve, the better is the corresponding policy compared to UCT.
 
-As the results show, without sample redistribution UCT is as good as
-better as the VOI-aware policies for lower numbers of samples per ply
+As the results show, without sample redistribution UCT is as good as or
+better than the VOI-aware policies for lower numbers of samples per ply
 (5000, 7000), and the advantage of VOI-aware policies for larger
 number of samples is rather modest (e.g., ECT wins in 55\% of games for
 10000 samples per ply). For the stopping threshold of $10^{-6}$,
@@ -537,28 +537,25 @@ if and only if the mean $\overline X_i^+$ of $N$ samples from $n_i+1$
 to $N$ is at least $\overline X_\alpha+(\overline X_\alpha-\overline
 X_i)\frac {n_i} N$.
 
-For any $\delta$, the probability that $\overline X_i'$ is \textit{not
-greater} than
-$X_\alpha$ is more than the probability that $\IE[X_i]\le\overline
-X_i+\delta$ \textit{and} $\overline X_i'\ge \IE[X_i]+\overline X_\alpha - \overline
-  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$;
-therefore, the probability that $\overline X_i'$ is \textit{greater}
+For any $\delta$, the probability that $\overline X_i'$ is greater
 than $X_\alpha$ is less than the probability that $\IE[X_i]\ge\overline
-X_i+\delta$ \textit{or} $\overline X_i'\le \IE[X_i]+\overline X_\alpha - \overline
-  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$.
-Using the union bound,
+X_i+\delta$ \emph{or} $\overline X_i'\le \IE[X_i]+\overline X_\alpha - \overline
+  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$, thus
+less than the maximum of probabilities of the two events:
 \begin{equation}
 \Pr(\overline X_i'\ge \overline X_\alpha)\le
-  \Pr(\IE[X_i]-\overline X_i \ge \delta) +
-  \Pr(\overline X_i^+ - \IE[X_i] \ge \overline X_\alpha - \overline
-  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N)
+  \max\left(\Pr(\IE[X_i]-\overline X_i \ge \delta),\,
+  \Pr\left(\overline X_i^+ - \IE[X_i] \ge \overline X_\alpha - \overline
+  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N\right)\right)
 \end{equation}
 Bounding the probabilities on the right side using the Hoeffding
 inequality, obtain:
 \begin{equation}
-\Pr(\overline X_i'\ge \overline X_\alpha)\le
-  \exp(-2\delta^2n_i)+\exp\left(-2\left((\overline X_\alpha - \overline
-  X_i)\left(1+\frac {n_i} N\right) - \delta\right)^2N\right)
+\Pr(\overline X_i'\ge \overline X_\alpha)\le 
+\max\left(\exp(-2\delta^2n_i),\,
+          \exp\left(-2\left((\overline X_\alpha 
+          - \overline X_i)\left(1+\frac {n_i} N\right)
+          - \delta\right)^2N\right)\right)
 \end{equation}
 $\delta^2n = -2\left((\overline X_\alpha - \overline X_i)
 (1+\frac {n_i} N) - \delta\right)^2N$ when
@@ -567,9 +564,10 @@ $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha
 therefore
 \begin{eqnarray}
 \Pr(\overline X_i'\ge \overline X_\alpha) 
-& \le & 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}(\overline X_\alpha - \overline X_i)\right)^2 n_i\right)\nonumber \\
-& \le & 2\exp(-2(\sqrt 2 - 1)^2(\overline X_\alpha - \overline X_i)^2n_i)
- \le 2\exp(-1.37(\overline X_\alpha - \overline X_i)^2n_i)
+& \le & \exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
+                          (\overline X_\alpha - \overline X_i)\right)^2 n_i\right)\nonumber \\
+& \le & \exp(-2(\sqrt 2 - 1)^2(\overline X_\alpha - \overline X_i)^2n_i)
+ \le \exp(-1.37(\overline X_\alpha - \overline X_i)^2n_i)
 \end{eqnarray}
 Derivation for the case $i=\alpha$ is similar.
 \end{proof}
