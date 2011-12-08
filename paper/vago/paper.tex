@@ -255,7 +255,7 @@ established in Theorems~\ref{thm:vopi},~\ref{thm:be} can be used
 as VOI estimates. Blinkered VOI estimates~(\ref{eqn:thm-be},
  \ref{eqn:bound-blnk-hoeffding}) can be viewed
 as approximations of VOI estimates for myopic or
-receding horison policies. As illustrated by the empirical evaluation
+receding horizon policies. As illustrated by the empirical evaluation
 (Section~\ref{sec:empirical-evaluation}), estimates based on upper
 bounds on the VOI result in rational sampling policies, and exhibit
 performance comparable to the performance of some state-of-the-art
@@ -327,7 +327,7 @@ the influence on the choice of the action at the current state, but
 also by the influence on the choice at future search states, provided
 the rollout passes through the search states which will be visited.
 
-One way to account for this re-use would be to incroprorate the
+One way to account for this re-use would be to incorporate the
 `future' value of information into a VOI estimate. However, this 
 approach appears to be complicated. Alternatively, one can behave
 myopically in search tree depth:
@@ -507,7 +507,7 @@ different VOI-aware policies depending on the number of samples per
 ply by comparing the best achieved winning rates against UCT (again,
 the lower the bar, the better is the policy). Both ECT (based on the
 Hoeffding inequality with midpoint) and BCT (based on the empirical
-Benrstein inequality) are better than VCT. The difference between ECT
+Bernstein inequality) are better than VCT. The difference between ECT
 and VCT is most prominent for smaller number of samples, and the
 winning rate of ECT increases relatively slowly with the number of
 samples. In contrast, BCT is worse than ECT and only slightly better
