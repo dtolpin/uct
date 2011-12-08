@@ -129,8 +129,8 @@ maximum possible increase in the reward:
 \begin{equation}
   \Lambda_i^p \le \left\{
   \begin{array}{l l}
-    \overline X_\beta \Pr(\IE[X_i] \le \overline X_\beta) & \mbox{if $i=\alpha$} \\
-    (1-\overline X_\alpha)\Pr(\IE[X_i] \ge \overline X_\alpha) & \mbox{otherwise}
+    \overline X_\beta \Pr(\IE[X_i] \le \overline X_\beta) & \mbox{{\rm if} $i=\alpha$} \\
+    (1-\overline X_\alpha)\Pr(\IE[X_i] \ge \overline X_\alpha) & \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:thm-vopi}
 \end{equation}
@@ -167,9 +167,9 @@ estimate of the arm pulled fewer times so far should be higher.
   \Lambda_i^b \le \left\{
   \begin{array}{l l}
     \overline X_\beta\frac N {N+n_i}\Pr(\overline X_i'\le\overline X_\beta)
-    \le N\frac {\overline X_\beta} {n_i}\Pr(\overline X_i'\le\overline X_\beta) & \mbox{if $i=\alpha$} \\
+    \le N\frac {\overline X_\beta} {n_i}\Pr(\overline X_i'\le\overline X_\beta) & \mbox{{\rm if} $i=\alpha$} \\
     (1-\overline  X_\alpha)\frac N {N+n_i}\Pr(\overline X_i'\ge\overline X_\alpha)
-       \le N\frac {(1-\overline  X_\alpha)} {n_i}\Pr(\overline X_i'\ge\overline X_\alpha) & \mbox{otherwise}
+       \le N\frac {(1-\overline  X_\alpha)} {n_i}\Pr(\overline X_i'\ge\overline X_\alpha) & \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:thm-be}
 \end{equation}
@@ -218,8 +218,8 @@ An upper bound on the intrinsic value of perfect information is obtained by subs
 \begin{equation}
   \Lambda_i^p \le \hat\Lambda_i^p=\left\{
   \begin{array}{l l}
-    \overline X_\beta\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{if $i=\alpha$} \\
-    (1-\overline  X_\alpha)\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)(1-\overline  X_\alpha)  &  \mbox{otherwise}
+    \overline X_\beta\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{{\rm if} $i=\alpha$} \\
+    (1-\overline  X_\alpha)\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)(1-\overline  X_\alpha)  &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-perf-hoeffding}
 \end{equation}
@@ -229,9 +229,9 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
   \Lambda_i^b \le \hat\Lambda_i^b=\left\{
   \begin{array}{l l}
     C \frac {\overline X_\beta} {n_i}\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)
-      & \mbox{if $i=\alpha$} \\
+      & \mbox{{\rm if} $i=\alpha$} \\
     C \frac {(1-\overline  X_\alpha)} {n_i} \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)
-      &  \mbox{otherwise}
+      &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-blnk-hoeffding}
 \end{equation}
@@ -364,25 +364,25 @@ For simplicity, the bounds on probability for unlimited number of samples were u
   \Lambda_i^{VCT}& =&\left\{
   \begin{array}{l l}
     \frac {\overline X_\beta} {n_i}\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i\right)
-      & \mbox{if $i=\alpha$} \\
+      & \mbox{{\rm if} $i=\alpha$} \\
     \frac {(1-\overline  X_\alpha)} {n_i}\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i\right)
-      &  \mbox{otherwise}
+      &  \mbox{\rm otherwise}
   \end{array}  \right.\nonumber\\
   \Lambda_i^{ECT}& =&\min\left(\Lambda_i^{VCT}, \min_y\left\{
   \begin{array}{l l}
     \frac {\overline X_\beta-y} {n_i}\exp\left(-2 n_i(\overline X_i-\overline X_\beta)^2\right)
     +\frac {\overline X_\beta} {n_i}\exp\left(-2 n_i(\overline X_i-y)^2\right)
-      & \mbox{if $i=\alpha$} \\
+      & \mbox{{\rm if} $i=\alpha$} \\
 \frac {y-\overline X_\alpha} {n_i}\exp\left(-2 n_i(\overline X_\alpha-\overline
   X_i)^2\right)+\frac {1-\overline X_\alpha} {n_i}\exp\left(-2 n_i(y-\overline X_i)^2\right)
-      &  \mbox{otherwise}
+      &  \mbox{\rm otherwise}
   \end{array} \right.\right) \nonumber\\
   \Lambda_i^{BCT}& =&\min\left(\Lambda_i^{VCT},\left\{
   \begin{array}{l l}
     2\frac {\overline X_\beta} {n_i}\exp\left(- \frac {(\overline X_i - \overline X_\beta)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_i - \overline X_\beta) + 2 \overline X_i(1-\overline X_i)} \right)
-      & \mbox{if $i=\alpha$} \\
+      & \mbox{{\rm if} $i=\alpha$} \\
     2\frac {(1-\overline  X_\alpha)} {n_i}\exp\left(- \frac {(\overline X_\alpha - \overline X_i)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_\alpha - \overline X_i) + 2 \overline X_i(1-\overline X_i)} \right)
-      &  \mbox{otherwise}
+      &  \mbox{\rm otherwise}
   \end{array} \right.\right)
 \label{eqn:emp-estimates}
 \end{eqnarray}
@@ -572,8 +572,8 @@ Bounds (\ref{eqn:bound-perf-hoeffding}, \ref{eqn:bound-blnk-hoeffding}) have the
 \begin{equation}
   \Lambda_i \le \hat\Lambda_i=\left\{
   \begin{array}{l l}
-    \exp\left(- \gamma(\overline X_i - \overline X_\beta)^2 n_i \right)(\overline X_\beta-B) & \mbox{if $i=\alpha$} \\
-    \exp\left(- \gamma(\overline X_\alpha - \overline X_i)^2 n_i \right)(A-\overline  X_\alpha)  &  \mbox{otherwise}
+    \exp\left(- \gamma(\overline X_i - \overline X_\beta)^2 n_i \right)(\overline X_\beta-B) & \mbox{{\rm if} $i=\alpha$} \\
+    \exp\left(- \gamma(\overline X_\alpha - \overline X_i)^2 n_i \right)(A-\overline  X_\alpha)  &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-generic-hoeffding}
 \end{equation}
