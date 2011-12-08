@@ -486,7 +486,7 @@ number of samples is rather modest (e.g., ECT wins in 55\% of games for
 10000 samples per ply). For the stopping threshold of $10^-6$,
 however, the VOI-aware policies are almost always better than UCT
 (only VCT for 5000 samples wins in less than 50\% of games), with
-stronger policies (ECT, VCT) reaching the winning rate of 67\%.
+stronger policies (ECT, VCT) reaching the winning rate of 66\%.
 
 In agreement with intuition
 (Section~\ref{sec:control-redistribution}), VOI-based stopping and sample
@@ -502,7 +502,19 @@ maximum number of samples in a future state is low.
 \caption{Go: best winning rate comparison}
 \label{fig:best-winning-rate}
 \end{figure}
-Figure~\ref{fig:best-winning-rate} 
+Figure~\ref{fig:best-winning-rate} presents relative performance of
+different VOI-aware policies depending on the number of samples per
+ply by comparing the best achieved winning rates against UCT (again,
+the lower the bar, the better is the policy). Both ECT (based on the
+Hoeffding inequality with midpoint) and BCT (based on the empirical
+Benrstein inequality) are better than VCT. The difference between ECT
+and VCT is most prominent for smaller number of samples, and the
+winning rate of ECT increases relatively slowly with the number of
+samples. In contrast, BCT is worse than ECT and only slightly better
+than VCT for smaller number of samples, but the winning rate rapidly
+increases with the number of samples, and for 10000 and 15000 samples
+per ply BCT is the best of the policies with the winning rate reaching
+67\%.
 
 \section{Summary and Future Work}
 
