@@ -144,8 +144,8 @@ value of perfect information $\Lambda_i^p$ about the mean reward of the $i$th ar
 cases are possible:
 \begin{itemize}
 \item the arm ($\alpha$) with the highest sample mean is pulled, and the 
-mean of the arm is lower than the sample mean the second-best arm ($\beta$);
-\item another arm is pulled, and the mean of the arm is higher
+mean of the arm becomes lower than the sample mean of the second-best arm ($\beta$);
+\item another arm is pulled, and the mean of the arm becomes higher
 than the current highest sample mean ($\alpha$).
 \end{itemize}
 $\Lambda_i^p$ can be bounded from above as the probability that a
@@ -209,8 +209,8 @@ samples.
 \begin{proof}
 The proof is similar to the proof of Theorem~\ref{thm:vopi}, with
 $\overline X'_i$ substituted instead of $\IE[X_i]$, and, if
-$i\ne\alpha$, the upper bound on $X_i'$ is $X_\alpha+(1-X_\alpha)
-\frac N {N+n_i}$; if $i=\alpha$, the lower bound on $X_i'$ is
+$i\ne\alpha$, an upper bound on $X_i'$ is $X_\alpha+(1-X_\alpha)
+\frac N {N+n_i}$; if $i=\alpha$, a lower bound on $X_i'$ is
 $X_\beta - X_\beta \frac N {N+n_i}$.
 \end{proof}
 
@@ -419,7 +419,7 @@ For simplicity, the bounds on probability for unlimited number of samples were u
 \subsection{Selecting The Best Arm}
 \label{sec:emp-arm}
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[scale=0.8]{flat.pdf}
 \caption{Random instances: regret vs. number of samples}
@@ -480,19 +480,19 @@ a strong player. On the other hand, additional
 features of more advanced engines would obstruct the Monte Carlo
 sampling phenomena which are the subject of the experiment.
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[scale=0.8]{vct-wins.pdf}
 \caption{Go: winning rate --- UCT against VCT}
 \label{fig:uct-against-vct}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[scale=0.8]{ect-wins.pdf}
 \caption{Go: winning rate --- UCT against ECT}
 \label{fig:uct-against-ect}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[scale=0.8]{bct-wins.pdf}
 \caption{Go: winning rate --- UCT against BCT}
@@ -524,7 +524,7 @@ result in poorly selected moves. On the other hand, when the maximum
 number of samples is sufficiently high, the VOI of increasing the
 maximum number of samples in a future state is low.
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[scale=0.8]{bests-bw.pdf}
 \caption{Go: best winning rate comparison}
@@ -547,8 +547,6 @@ per ply BCT is the best of the policies with the winning rate reaching
 \section{Summary and Future Work}
 
 \textit{TODO}
-
-\clearpage
 
 \appendix
 
