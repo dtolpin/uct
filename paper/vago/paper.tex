@@ -22,7 +22,7 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{lmm}{Lemma}
 
-\title{VOI-aware Monte Carlo Sampling in Trees}
+\title{VOI-aware Monte-Carlo Sampling in Trees}
 \author {David Tolpin, Solomon Eyal Shimony \\
 Department of Computer Science, \\
 Ben-Gurion University of the Negev, Beer Sheva, Israel \\
@@ -76,8 +76,8 @@ to derive distribution-independent bounds on the VOI.
 
 Efficient algorithms for Multi-Armed Bandits based on
 distribution-independent bounds, in particular UCB1, are introduced in
-\cite{Auer.ucb}. The UCT algorithm, an extension of UCB1 to Monte
-Carlo Tree Search is described in \cite{Kocsis.uct}, and a successful
+\cite{Auer.ucb}. The UCT algorithm, an extension of UCB1 to
+Monte-Carlo Tree Search is described in \cite{Kocsis.uct}, and a successful
 application of UCT to playing the Go game is discussed in
 \cite{Gelly.mogo}.
 
@@ -97,10 +97,10 @@ The principles of bounded rationality appear in
 \cite{Horvitz.reasoningabout}. \cite{Russell.right} provided a formal
 description of rational metareasoning and case studies of applications
 in several problem domains. One obstacle to straightforward
-application of the principles of rational metareasoning to Monte Carlo
+application of the principles of rational metareasoning to Monte-Carlo
 sampling is the metagreedy assumption, according to which samples must
 be selected as though at most one sample can be taken before an action
-is chosen. In Monte Carlo sampling, the value of information of any
+is chosen. In Monte-Carlo sampling, the value of information of any
 single sample in a given search state is often zero, so a different
 approximating assumption must be used instead.
 
@@ -136,7 +136,7 @@ around the mean. Bound~(\ref{eqn:conc-empbernstein}) is tighter than
 The intrinsic VOI $\Lambda_i$ of pulling an arm is the expected decrease
 in the regret compared to selecting an arm without pulling any arm at
 all. The \textit{myopic} VOI estimate is of limited applicability to
-Monte Carlo sampling, since the effect of a single sample is small,
+Monte-Carlo sampling, since the effect of a single sample is small,
 and the myopic VOI estimate will often be non-positive, resulting in premature
 termination of the search. However, $\Lambda_i$ can be estimated as the intrinsic 
 value of perfect information $\Lambda_i^p$ about the mean reward of the $i$th arm. Two
@@ -424,7 +424,7 @@ For simplicity, the bounds on probability for unlimited number of samples were u
 \end{figure}
 
 The sampling policies are first compared on random multi-armed bandit 
-problem instances, where the Monte Carlo Tree Search algorithm
+problem instances, where the Monte-Carlo Tree Search algorithm
 is reduced to the sample selection policy at the first step: UCT is 
 actually UCB1. In the problem of pure exploration in multi-armed bandits
 \cite{Bubeck.pure}, the smaller is the exploration factor, the higher
@@ -474,7 +474,7 @@ a state of the art Go program, was used:
 \end{itemize}
 While the UCT engine is not the most powerful engine of Pachi, it is still
 a strong player. On the other hand, additional
-features of more advanced engines would obstruct the Monte Carlo
+features of more advanced engines would obstruct the Monte-Carlo
 sampling phenomena which are the subject of the experiment.
 
 \begin{figure}[t]
@@ -543,16 +543,16 @@ per ply BCT is the best of the policies with the winning rate reaching
 
 \section{Summary and Future Work}
 
-This work suggested Monte Carlo sampling policies in which sample
+This work suggested Monte-Carlo sampling policies in which sample
 selection and termination are based on upper bounds on the value of
 information. A simplified model of accounting for future value of
 information of a sample, based on early termination and sample
-redistribution, was proposed for Monte Carlo sampling in
+redistribution, was proposed for Monte-Carlo sampling in
 trees. Empirical evaluation showed that the policies outperform
 heuristic algorithms for simple regret minimization in multi-armed
 bandits, as well as for tree search.
 
-Monte Carlo tree search still remains a largely unexplored field of
+Monte-Carlo tree search still remains a largely unexplored field of
 application of VOI-aware algorithms. More elaborated VOI estimates,
 taking into consideration re-use of samples in future search states
 should be considered. The policies introduced in the paper differ from
