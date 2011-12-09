@@ -143,15 +143,14 @@ termination of the search. However, $\Lambda_i$ can be estimated as the intrinsi
 value of perfect information $\Lambda_i^p$ about the mean reward of the $i$th arm. Two
 cases are possible:
 \begin{itemize}
-\item the arm ($\alpha$) with the highest sample mean is pulled, and the 
-mean of the arm becomes lower than the sample mean of the second-best arm ($\beta$);
-\item another arm is pulled, and the mean of the arm becomes higher
-than the current highest sample mean ($\alpha$).
+\item the arm $\alpha$ with the highest sample mean is pulled, and the 
+true mean of the arm is lower than the sample mean of the second-best arm $\beta$;
+\item another arm is pulled, and the true mean of the arm is higher
+than the sample mean of the best arm $\alpha$.
 \end{itemize}
 $\Lambda_i^p$ can be bounded from above as the probability that a
 different arm is selected, multiplied by the
 maximum possible increase in the reward:
-
 \begin{thm} The intrinsic value of perfect information $\Lambda_i^p$ about the $i$th arm is
   bounded from above as
 \begin{equation}
@@ -399,11 +398,11 @@ For simplicity, the bounds on probability for unlimited number of samples were u
   \end{array}  \right.\nonumber\\
   \Lambda_i^{ECT}& =&\min\left(\Lambda_i^{VCT}, \min_y\left\{
   \begin{array}{l l}
-    \frac {\overline X_\beta-y} {n_i}\exp\left(-2 n_i(\overline X_i-\overline X_\beta)^2\right)
-    +\frac {\overline X_\beta} {n_i}\exp\left(-2 n_i(\overline X_i-y)^2\right)
+    \frac {\overline X_\beta-y} {n_i}\exp\left(-2 (\overline X_i-\overline X_\beta)^2n_i\right)
+    +\frac {\overline X_\beta} {n_i}\exp\left(-2 (\overline X_i-y)^2n_i\right)
       & \mbox{{\rm if} $i=\alpha$} \\
-\frac {y-\overline X_\alpha} {n_i}\exp\left(-2 n_i(\overline X_\alpha-\overline
-  X_i)^2\right)+\frac {1-\overline X_\alpha} {n_i}\exp\left(-2 n_i(y-\overline X_i)^2\right)
+\frac {y-\overline X_\alpha} {n_i}\exp\left(-2(\overline X_\alpha-\overline X_i)^2n_i\right)
+    +\frac {1-\overline X_\alpha} {n_i}\exp\left(-2 (y-\overline X_i)^2n_i\right)
       &  \mbox{\rm otherwise}
   \end{array} \right.\right) \nonumber\\
   \Lambda_i^{BCT}& =&\min\left(\Lambda_i^{VCT},\left\{
@@ -632,8 +631,8 @@ Bounds (\ref{eqn:bound-perf-hoeffding}, \ref{eqn:bound-blnk-hoeffding}) have the
 \begin{equation}
   \Lambda_i \le \hat\Lambda_i=\left\{
   \begin{array}{l l}
-    \exp\left(- \gamma(\overline X_i - \overline X_\beta)^2 n_i \right)(\overline X_\beta-B) & \mbox{{\rm if} $i=\alpha$} \\
-    \exp\left(- \gamma(\overline X_\alpha - \overline X_i)^2 n_i \right)(A-\overline  X_\alpha)  &  \mbox{\rm otherwise}
+    (\overline X_\beta-B)\exp\left(- \gamma(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{{\rm if} $i=\alpha$} \\
+    (A-\overline  X_\alpha)\exp\left(- \gamma(\overline X_\alpha - \overline X_i)^2 n_i \right)  &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-generic-hoeffding}
 \end{equation}
@@ -647,22 +646,22 @@ $B < y < \overline X_\beta$ and computing the bound as the sum of two parts:
 \end{itemize}.
 \begin{equation}
 \Lambda_{i|i=\alpha} \le \hat \Lambda_{i|i=\alpha} =
- (\overline X_\beta-y)\exp\left(-\gamma n_i(\overline X_i-\overline X_\beta)^2\right)
- +(\overline X_\beta-B)\exp\left(-\gamma n_i(\overline X_i-y)^2\right)
+ (\overline X_\beta-y)\exp\left(-\gamma (\overline X_i-\overline X_\beta)^2n_i\right)
+ +(\overline X_\beta-B)\exp\left(-\gamma (\overline X_i-y)^2n_i\right)
 \label{eqn:bound-twopart-hoeffding-alpha}
 \end{equation}
 If $y$ that minimizes $\hat\Lambda_{i|i=\alpha}$ exists, the minimum is achieved when
  $\frac {d\hat\Lambda_{i|i=\alpha}} {dy}=0$, that
 is, when $y$ is the root of the following equation:
 \begin{equation}
-2\gamma n_i(\overline X_\beta-B)(\overline X_i-y)=\exp\left(-\gamma n_i\left(\frac {\overline X_i-\overline X_\beta}
-    {\overline X_i-y}\right)^2\right)
+  2\gamma (\overline X_\beta-B)(\overline X_i-y)n_i = \exp\left(-\gamma \left(\frac {\overline X_i-\overline X_\beta}
+    {\overline X_i-y}\right)^2n_i\right)
 \end{equation}
 The derivation for the case $i\ne \alpha$ is obtained by substitution $1-A, 1-\overline X_i, 1-\overline X_\alpha, 1-y$ instead of
 $B, \overline X_i, \overline X_\beta, y$ into (\ref{eqn:bound-twopart-hoeffding-alpha}):
 \begin{equation}
-\Lambda_{i|i\ne\alpha} \le \hat\Lambda_{i|i\ne\alpha} = (y-\overline X_\alpha)\exp\left(-\gamma n_i(\overline X_\alpha-\overline
-  X_i)^2\right)+(A-\overline X_\alpha)\exp\left(-\gamma n_i(y-\overline X_i)^2\right)
+\Lambda_{i|i\ne\alpha} \le \hat\Lambda_{i|i\ne\alpha} = (y-\overline X_\alpha)\exp\left(-\gamma(\overline X_\alpha-\overline
+  X_i)^2 n_i\right)+(A-\overline X_\alpha)\exp\left(-\gamma (y-\overline X_i)^2n_i\right)
 \label{eqn:bound-twopart-hoeffding-rest}
 \end{equation}
 A closed-form solution for $y$ cannot be obtained, but given
