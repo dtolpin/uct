@@ -53,18 +53,18 @@ between 0 and 1.
 
 The simple regret of a sampling policy for the Multi-armed Bandit
 Problem is the expected difference between the best expected reward
-$\mu_*$ and the expected reward $\mu_j$ of the arm with the best sample mean
-$\overline X_j=\max_i\overline X_i$:
+$\max\limits_i\IE[X_i]$ and the expected reward $\IE[X_j]$ of the arm
+with the best sample mean $\overline X_j=\max\limits_i\overline X_i$:
 \begin{equation}
 \label{eqn:simple-regret}
 \IE[R]=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
 \end{equation}
-where $\Delta_j=\mu_*-\mu_j$.
-Strategies that minimize the simple regret are called pure exploration
-strategies \cite{Bubeck.pure}. Principles of rational metareasoning
+where $\Delta_j=\max\limits_i\IE[X_i]-\IE[X_j]$.  Strategies that
+minimize the simple regret are called pure exploration strategies
+\cite{Bubeck.pure}. Principles of rational metareasoning
 \cite{Russell.right} suggest that at each step the arm with the great
 value of information (VOI) must be pulled, and the sampling must be
-stopped and a decision must be made when no arm has positive VOI. 
+stopped and a decision must be made when no arm has positive VOI.
 
 To estimate the VOI of pulling an arm, either a certain 
 distribution of the rewards should be assumed (and updated based on
@@ -81,7 +81,7 @@ Monte-Carlo Tree Search is described in \cite{Kocsis.uct}, and a successful
 application of UCT to playing the Go game is discussed in
 \cite{Gelly.mogo}.
 
-Pure exploration in multi-armed bandit problems is explored in
+Pure exploration in Multi-armed bandits is explored in
 \cite{Bubeck.pure}. On the one hand, the paper proves certain upper
 and lower bounds for UCB1 and uniform sampling, showing that an upper
 bound on the simple regret is exponential in the number of samples for
@@ -111,14 +111,14 @@ $X=\frac 1 n \sum_{i=1}^n X_i$. Then
 \begin{description}
 \item[Hoeffding inequality \rm{\cite{Hoeffding.ineq}}:] 
 \begin{equation}
-\Pr(X-\IE[X] \ge a) \le \exp ( -2na^2)
+\Pr(X-\IE[X] \ge a) \le \exp ( -2a^2n)
 \label{eqn:conc-hoeffding}
 \end{equation}
 \item[Empirical Bernstein inequality \rm{(derived in Appendix~\ref{app:deriv-conc-empbernstein})}:]
 \begin{eqnarray}
-\Pr(X-\IE[X] \ge a) &\le& 2\exp \left( - \frac {na^2} {\frac {14} {3}
+\Pr(X-\IE[X] \ge a) &\le& 2\exp \left( - \frac {a^2n} {\frac {14} {3}
                           \frac {n} {n-1}a+2\overline\sigma_n^2}\right)\nonumber\\
-                    &\le& 2\exp \left( - \frac {na^2} {10a+2\overline\sigma_n^2}\right)
+                    &\le& 2\exp \left( - \frac {a^2n} {10a+2\overline\sigma_n^2}\right)
 \label{eqn:conc-empbernstein}
 \end{eqnarray}
 where sample variance $\overline\sigma_n^2$ is
@@ -174,7 +174,7 @@ maximum possible increase in the reward:
 \end{proof}
 
 The search time is finite, and in a simple case the \textit{search
-  budget} specified as the maximum number of samples.
+  budget} is specified as the maximum number of samples.
 An estimate based on the perfect intrinsic VOI does not take in
 consideration the remaining number of samples. Given two arms
 with the same intrinsic perfect VOI, the VOI
@@ -245,7 +245,7 @@ An upper bound on the intrinsic value of perfect information is obtained by subs
   \Lambda_i^p \le \hat\Lambda_i^p=\left\{
   \begin{array}{l l}
     \overline X_\beta\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{{\rm if} $i=\alpha$} \\
-    (1-\overline  X_\alpha)\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)(1-\overline  X_\alpha)  &  \mbox{\rm otherwise}
+    (1-\overline  X_\alpha)\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)  &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-perf-hoeffding}
 \end{equation}
@@ -342,16 +342,16 @@ of the rollout
 
 A natural approach would be to apply an algorithm that minimizes the
 simple regret in Multi-armed bandits at the first step, and the
-cumulative regret (solves the exploration-exploitation trade-off)
-during the rest of the rollout.  However, this approach assumes that
-the information obtained from rollouts in the current state is
-discarded after an action is selected. In practice, most successful
-Monte-Carlo tree search algorithms re-use rollouts originating from an
-earlier search state and passing through the current search state;
-thus, the value of information of a rollout is determined not just by
-the influence on the choice of the action at the current state, but
-also by the influence on the choice at future search states, provided
-the rollout passes through the search states which will be visited.
+cumulative regret during the rest of the rollout.  However, this
+approach assumes that the information obtained from rollouts in the
+current state is discarded after an action is selected. In practice,
+most successful Monte-Carlo tree search algorithms re-use rollouts
+originating from an earlier search state and passing through the
+current search state; thus, the value of information of a rollout is
+determined not just by the influence on the choice of the action at
+the current state, but also by the influence on the choice at future
+search states, provided the rollout passes through the search states
+which will be visited.
 
 One way to account for this re-use would be to incorporate the
 `future' value of information into a VOI estimate. However, this 
@@ -423,17 +423,17 @@ For simplicity, the bounds on probability for unlimited number of samples were u
 \label{fig:random-instances}
 \end{figure}
 
-The sampling policies are first compared on random multi-armed bandit 
+The sampling policies are first compared on random Multi-armed bandit 
 problem instances, where the Monte-Carlo Tree Search algorithm
 is reduced to the sample selection policy at the first step: UCT is 
-actually UCB1. In the problem of pure exploration in multi-armed bandits
+actually UCB1. In the problem of pure exploration in Multi-armed bandits
 \cite{Bubeck.pure}, the smaller is the exploration factor, the higher
 is the expected simple regret; indeed, UCT exhibits the lowest simple
 regret in the experiments for the default exploration factor $Cp=\frac
 {\sqrt 2} 2$ \cite{Kocsis.uct}.
 
 Figure~\ref{fig:random-instances} shows experiment results for
-randomly-generated multi-armed bandits with 32 Bernoulli arms, with
+randomly-generated Multi-armed bandits with 32 Bernoulli arms, with
 the mean rewards of the arms distributed uniformly in the range $[0,
   1]$, for a range of sample budgets $32..2048$, with multiplicative
 step of $2$. The experiment for each number of samples was repeated
@@ -548,8 +548,8 @@ selection and termination are based on upper bounds on the value of
 information. A simplified model of accounting for future value of
 information of a sample, based on early termination and sample
 redistribution, was proposed for Monte-Carlo sampling in
-trees. Empirical evaluation showed that the policies outperform
-heuristic algorithms for simple regret minimization in multi-armed
+trees. Empirical evaluation showed that these policies outperform
+heuristic algorithms for simple regret minimization in Multi-armed
 bandits, as well as for tree search.
 
 Monte-Carlo tree search still remains a largely unexplored field of
