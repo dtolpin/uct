@@ -377,15 +377,20 @@ sampling policy in game tree search.
 \section{Empirical Evaluation}
 \label{sec:empirical-evaluation}
 
-The experiments compare the UCT algorithm \cite{Kocsis.uct} with modified
-versions of UCT in which the samples at the first step are selected according
-to their VOI estimates. Three blinkered VOI estimates were used for the comparison:
+The experiments compare the UCT algorithm \cite{Kocsis.uct} with
+modified versions of UCT in which the samples at the first step are
+selected according to their VOI estimates. Three blinkered VOI
+estimates were used for the comparison:
 \begin{description}
 \item[VCT:] based on Hoeffding inequality (\ref{eqn:conc-hoeffding});
-\item[ECT:] based on Hoeffding inequality with midpoint (see Appendix~\ref{app:better-hoeffding-bound});
-\item[BCT:] based on empirical Bernstein inequality (\ref{eqn:conc-empbernstein}).
+\item[ECT:] based on Hoeffding inequality with midpoint (see
+Appendix~\ref{app:better-hoeffding-bound});
+\item[BCT:] based on empirical Bernstein inequality
+(\ref{eqn:conc-empbernstein}).
 \end{description}
-For simplicity, the bounds on probability for unlimited number of samples were used in the estimate formulas. The estimates where computed as follows:
+For simplicity, the bounds on probability for an unlimited number
+of samples were used in the estimate formulas. The estimates where
+computed as follows:
 \begin{eqnarray}\
   \Lambda_i^{VCT}& =&\left\{
   \begin{array}{l l}
