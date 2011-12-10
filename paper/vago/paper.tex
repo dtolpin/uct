@@ -229,11 +229,11 @@ Hoeffding inequality (\ref{eqn:conc-hoeffding}):
 \vspace{-1.5\baselineskip}
 \begin{eqnarray}
 \Pr(\overline X_i' \le \overline X_\beta|i=\alpha) &
-   \le & \exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}(\overline X_i - \overline X_\beta)\right)^2 n_i \right)
-   \le \exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i \right) \nonumber\\
+   \le & 2\exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}(\overline X_i - \overline X_\beta)\right)^2 n_i \right)
+   \le 2\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i \right) \nonumber\\
 \Pr(\overline X_i' \ge \overline X_\alpha|i\ne\alpha) &
-   \le & \exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha - \overline X_i)\right)^2 n_i \right)
-    \le \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i \right)
+   \le & 2\exp\left(- 2\left(\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha - \overline X_i)\right)^2 n_i \right)
+    \le 2\exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i \right)
 \label{eqn:probound-blnk-hoeffding}
 \end{eqnarray}
 \label{lemma:hoeffding-prob-bounds}
@@ -244,8 +244,8 @@ An upper bound on the intrinsic value of perfect information is obtained by subs
 \begin{equation}
   \Lambda_i^p \le \hat\Lambda_i^p=\left\{
   \begin{array}{l l}
-    \overline X_\beta\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{{\rm if} $i=\alpha$} \\
-    (1-\overline  X_\alpha)\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)  &  \mbox{\rm otherwise}
+    \overline X_\beta\cdot \exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i \right) & \mbox{{\rm if} $i=\alpha$} \\
+    (1-\overline  X_\alpha)\cdot \exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i \right)  &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-perf-hoeffding}
 \end{equation}
@@ -254,9 +254,9 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \begin{equation}
   \Lambda_i^b \le \hat\Lambda_i^b=\left\{
   \begin{array}{l l}
-    N \frac {\overline X_\beta} {n_i}\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)
+    N\frac {\overline X_\beta} {n_i}\cdot 2\exp\left(- 1.37(\overline X_i - \overline X_\beta)^2 n_i\right)
       & \mbox{{\rm if} $i=\alpha$} \\
-    N \frac {(1-\overline  X_\alpha)} {n_i} \exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)
+    N\frac {(1-\overline  X_\alpha)} {n_i}\cdot 2\exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i\right)
       &  \mbox{\rm otherwise}
   \end{array} \right.
 \label{eqn:bound-blnk-hoeffding}
@@ -389,25 +389,25 @@ For simplicity, the bounds on probability for unlimited number of samples were u
 \begin{eqnarray}\
   \Lambda_i^{VCT}& =&\left\{
   \begin{array}{l l}
-    \frac {\overline X_\beta} {n_i}\exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i\right)
+    \frac {\overline X_\beta} {n_i} \cdot \exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i\right)
       & \mbox{{\rm if} $i=\alpha$} \\
-    \frac {(1-\overline  X_\alpha)} {n_i}\exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i\right)
+    \frac {(1-\overline  X_\alpha)} {n_i}\cdot \exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i\right)
       &  \mbox{\rm otherwise}
   \end{array}  \right.\nonumber\\
   \Lambda_i^{ECT}& =&\min\left(\Lambda_i^{VCT}, \min_y\left\{
   \begin{array}{l l}
-    \frac {\overline X_\beta-y} {n_i}\exp\left(-2 (\overline X_i-\overline X_\beta)^2n_i\right)
-    +\frac {\overline X_\beta} {n_i}\exp\left(-2 (\overline X_i-y)^2n_i\right)
+    \frac {\overline X_\beta-y} {n_i}\cdot \exp\left(-2 (\overline X_i-\overline X_\beta)^2n_i\right)
+    +\frac {\overline X_\beta} {n_i}\cdot \exp\left(-2 (\overline X_i-y)^2n_i\right)
       & \mbox{{\rm if} $i=\alpha$} \\
-\frac {y-\overline X_\alpha} {n_i}\exp\left(-2(\overline X_\alpha-\overline X_i)^2n_i\right)
-    +\frac {1-\overline X_\alpha} {n_i}\exp\left(-2 (y-\overline X_i)^2n_i\right)
+\frac {y-\overline X_\alpha} {n_i}\cdot \exp\left(-2(\overline X_\alpha-\overline X_i)^2n_i\right)
+    +\frac {1-\overline X_\alpha} {n_i}\cdot \exp\left(-2 (y-\overline X_i)^2n_i\right)
       &  \mbox{\rm otherwise}
   \end{array} \right.\right) \nonumber\\
   \Lambda_i^{BCT}& =&\min\left(\Lambda_i^{VCT},\left\{
   \begin{array}{l l}
-    2\frac {\overline X_\beta} {n_i}\exp\left(- \frac {(\overline X_i - \overline X_\beta)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_i - \overline X_\beta) + 2 \overline X_i(1-\overline X_i)} \right)
+    \frac {\overline X_\beta} {n_i}\cdot 2\exp\left(- \frac {(\overline X_i - \overline X_\beta)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_i - \overline X_\beta) + 2 \overline X_i(1-\overline X_i)} \right)
       & \mbox{{\rm if} $i=\alpha$} \\
-    2\frac {(1-\overline  X_\alpha)} {n_i}\exp\left(- \frac {(\overline X_\alpha - \overline X_i)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_\alpha - \overline X_i) + 2 \overline X_i(1-\overline X_i)} \right)
+    \frac {(1-\overline  X_\alpha)} {n_i}\cdot 2\exp\left(- \frac {(\overline X_\alpha - \overline X_i)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_\alpha - \overline X_i) + 2 \overline X_i(1-\overline X_i)} \right)
       &  \mbox{\rm otherwise}
   \end{array} \right.\right)
 \label{eqn:emp-estimates}
@@ -575,27 +575,29 @@ to $N$ is at least $\overline X_\alpha+(\overline X_\alpha-\overline
 X_i)\frac {n_i} N$.
 
 For any $\delta$, the probability that $\overline X_i'$ is greater
-than $\overline X_\alpha$ is less than the probability that $\IE[X_i]\ge\overline
-X_i+\delta$ \emph{or} $\overline X_i^+\ge \IE[X_i]+\overline X_\alpha - \overline
-  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$, thus
-less than the maximum of probabilities of the two events:
+than $\overline X_\alpha$ is less than the probability that
+$\IE[X_i]\ge\overline X_i+\delta$
+\emph{or} $\overline X_i^+\ge \IE[X_i]+\overline X_\alpha
+- \overline X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N$,
+thus, by the union bound, less than the sum of the probabilities:
 \begin{equation}
 \Pr(\overline X_i'\ge \overline X_\alpha)\le
-  \max\left(\Pr(\IE[X_i]-\overline X_i \ge \delta),\,
-  \Pr\left(\overline X_i^+ - \IE[X_i] \ge \overline X_\alpha - \overline
-  X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N\right)\right)
+  \Pr(\IE[X_i]-\overline X_i \ge \delta)+
+  \Pr\left(\overline X_i^+ - \IE[X_i] \ge \overline X_\alpha
+           - \overline X_i - \delta +(\overline X_\alpha - \overline X_i)\frac {n_i} N\right)
 \end{equation}
-Bounding the probabilities on the right side using the Hoeffding
+Bounding the probabilities on the right-hand side using the Hoeffding
 inequality, obtain:
 \begin{equation}
 \Pr(\overline X_i'\ge \overline X_\alpha)\le 
-\max\left(\exp(-2\delta^2n_i),\,
-          \exp\left(-2\left((\overline X_\alpha 
-          - \overline X_i)\left(1+\frac {n_i} N\right)
-          - \delta\right)^2N\right)\right)
+    \exp(-2\delta^2n_i)+
+         \exp\left(-2\left((\overline X_\alpha 
+         - \overline X_i)\left(1+\frac {n_i} N\right)
+         - \delta\right)^2N\right)
 \label{eqn:app-hoeffding-le-maxexp}
 \end{equation}
-The maximum is equal to either of the arguments when the arguments are equal. Let
+Find $\delta$ for which the two terms on the right-hand side of
+(\ref{eqn:app-hoeffding-le-maxexp}) are equal:
 \begin{equation}
 \exp(-\delta^2n) = \exp(-2\left((\overline X_\alpha - \overline X_i)(1+\frac {n_i} N) - \delta\right)^2N)\label{eqn:app-hoeffding-eq-exp}
 \end{equation}
@@ -604,10 +606,10 @@ Solve (\ref{eqn:app-hoeffding-eq-exp}) for $\delta$: $\delta=\frac {1+\frac {n_i
 (\ref{eqn:app-hoeffding-le-maxexp}) and obtain
 \begin{eqnarray}
 \Pr(\overline X_i'\ge \overline X_\alpha) 
-& \le & \exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
+& \le & 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
                           (\overline X_\alpha - \overline X_i)\right)^2 n_i\right)\nonumber \\
-& \le & \exp(-2(\sqrt 2 - 1)^2(\overline X_\alpha - \overline X_i)^2n_i)
- \le \exp(-1.37(\overline X_\alpha - \overline X_i)^2n_i)
+& \le & 2\exp(-2(\sqrt 2 - 1)^2(\overline X_\alpha - \overline X_i)^2n_i)
+ \le 2\exp(-1.37(\overline X_\alpha - \overline X_i)^2n_i)
 \end{eqnarray}
 Derivation for the case $i=\alpha$ is similar.
 \end{proof}
