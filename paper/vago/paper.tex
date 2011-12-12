@@ -21,6 +21,7 @@
 \newtheorem{dfn}{Definition}
 \newtheorem{thm}{Theorem}
 \newtheorem{lmm}{Lemma}
+\newtheorem{crl}{Corollary}
 
 \title{VOI-aware Monte-Carlo Sampling in Trees}
 \author {David Tolpin, Solomon Eyal Shimony \\
@@ -62,15 +63,16 @@ with the best sample mean $\overline X_j=\max\limits_i\overline X_i$:
 where $\Delta_j=\max\limits_i\IE[X_i]-\IE[X_j]$.  Strategies that
 minimize the simple regret are called pure exploration strategies
 \cite{Bubeck.pure}. Principles of rational metareasoning
-\cite{Russell.right} suggest that at each step the arm with the great
-value of information (VOI) must be pulled, and the sampling must be
-stopped and a decision must be made when no arm has positive VOI.
+\cite{Russell.right} suggest that at each step the arm with the
+greatest value of information (VOI) estimate must be pulled, and the
+sampling must be stopped and a decision must be made when no arm has
+positive VOI estimate.
 
-To estimate the VOI of pulling an arm, either a certain 
-distribution of the rewards should be assumed (and updated based on
-observed rewards), or a distribution-independent bound on the VOI can be
-used as the VOI estimate. In this paper, we use {\em concentration inequalities}
-to derive distribution-independent bounds on the VOI.
+To estimate the VOI of pulling an arm, either a certain distribution
+of the rewards should be assumed (and updated based on observed
+rewards), or a distribution-independent bound on the VOI can be used
+as the VOI estimate. In this paper, we use {\em concentration
+  inequalities} to derive distribution-independent bounds on the VOI.
 
 \section{Related Work}
 
@@ -214,10 +216,10 @@ $X_\beta - X_\beta \frac N {N+n_i}$.
 
 The probabilities in equations (\ref{eqn:thm-vopi}, \ref{eqn:thm-be})
 can be bounded from above using concentration inequalities. In
-particular, Lemma~\ref{lemma:hoeffding-prob-bounds} (proved in 
+particular, Theorem~\ref{thm:hoeffding-prob-bounds} (proved in 
 Appendix~\ref{app:hoeffding-prob-bounds-proof}) is based on the
 Hoeffding inequality (\ref{eqn:conc-hoeffding}):
-\begin{lmm} The probabilities in equations (\ref{eqn:thm-vopi},
+\begin{thm} The probabilities in equations (\ref{eqn:thm-vopi},
 \ref{eqn:thm-be}) are bounded from above as
 \begin{eqnarray}
 \Pr(\IE[X_i] \le \overline X_\beta|i=\alpha)&
@@ -236,10 +238,10 @@ Hoeffding inequality (\ref{eqn:conc-hoeffding}):
     \le 2\exp\left(- 1.37(\overline X_\alpha - \overline X_i)^2 n_i \right)
 \label{eqn:probound-blnk-hoeffding}
 \end{eqnarray}
-\label{lemma:hoeffding-prob-bounds}
-\end{lmm}
+\label{thm:hoeffding-prob-bounds}
+\end{thm}
 
-An upper bound on the intrinsic value of perfect information is obtained by substituting
+\begin{crl} An upper bound on the intrinsic value of perfect information is obtained by substituting
 (\ref{eqn:probound-perf-hoeffding}) into (\ref{eqn:thm-vopi}):
 \begin{equation}
   \Lambda_i^p \le \hat\Lambda_i^p=\left\{
@@ -249,6 +251,9 @@ An upper bound on the intrinsic value of perfect information is obtained by subs
   \end{array} \right.
 \label{eqn:bound-perf-hoeffding}
 \end{equation}
+\label{crl:bound-perf-hoeffding}
+\end{crl}
+\begin{crl}
 An upper bound on the blinkered VOI estimate with ordering independent of $N$ is obtained
 by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \begin{equation}
@@ -261,12 +266,11 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
   \end{array} \right.
 \label{eqn:bound-blnk-hoeffding}
 \end{equation}
-The bound is generally tighter when $N$ is small relative to $n_i$,
-and the estimate $\hat\Lambda_i^b$ can be viewed as a relaxation of the myopic VOI
-estimate to longer sequences of actions, such
-that the VOI estimate is positive for some of the actions.
-
-Better bounds can be obtained through tighter estimates on the
+\label{crl:bound-blnk-hoeffding}
+\end{crl}
+Estimate $\hat\Lambda_i^b$ can be viewed as a relaxation of the myopic VOI
+estimate to longer sequences of actions, such that the VOI estimate is
+positive for some of the actions. Better bounds can be obtained through tighter estimates on the
 probabilities, for example, based on the empirical Bernstein inequality
 (\ref{eqn:conc-empbernstein}) or through a more careful application of
 the Hoeffding inequality (Appendix~\ref{app:better-hoeffding-bound}).
@@ -330,14 +334,13 @@ search step an action that appears to be the best based on outcomes
 of \textit{search rollouts}. Two different criteria are employed in
 action selection during a rollout:
 \begin{itemize}
-\item at the first step, the simple regret of selecting an action
-must be minimized;
-\item starting with the second step of a rollout, the expected reward
-of the rollout
- must be made as close as possible to the optimum reward, so that the
- value of the action at the first step of the rollout is evaluated
- correctly. Thus, starting with the second step, the cumulative regret
- must be minimized.
+\item at the first step, the value of partial
+information should be maximized to minimize the \textit{simple} regret
+of the selection at the current root node;
+\item as the goal of sampling in deeper tree nodes is estimating the
+value of a node, rather than selection, it makes sense to minimize
+the \textit{cumulative} regret of the rollouts from the second step
+onwards.
 \end{itemize}
 
 A natural approach would be to apply an algorithm that minimizes the
@@ -383,7 +386,7 @@ selected according to their VOI estimates. Three blinkered VOI
 estimates were used for the comparison:
 \begin{description}
 \item[VCT:] based on Hoeffding inequality (\ref{eqn:conc-hoeffding});
-\item[ECT:] based on Hoeffding inequality with midpoint (see
+\item[ECT:] based on Hoeffding inequality with an intermediate point (see
 Appendix~\ref{app:better-hoeffding-bound});
 \item[BCT:] based on empirical Bernstein inequality
 (\ref{eqn:conc-empbernstein}).
@@ -453,8 +456,8 @@ means give similar results.
 \label{sec:emp-go}
 
 One search domain in which Monte-Carlo tree search based on the UCT
-sampling policy has been particularly successful is playing the Go
-game \cite{Gelly.mogo}. This series of experiments compares
+sampling policy has been particularly successful is playing the game Go
+\cite{Gelly.mogo}. This series of experiments compares
 the winning rate of UCT against VOI-aware policies (VCT, ECT, BCT)
 in Go and investigates the effect of early stopping and sample
 redistribution. 
@@ -536,7 +539,7 @@ Figure~\ref{fig:best-winning-rate} presents relative performance of
 different VOI-aware policies depending on the number of samples per
 ply by comparing the best achieved winning rates against UCT (again,
 the lower the bar, the better is the policy). Both ECT (based on the
-Hoeffding inequality with midpoint) and BCT (based on the empirical
+Hoeffding inequality with an intermediate point) and BCT (based on the empirical
 Bernstein inequality) are better than VCT. The difference between ECT
 and VCT is most prominent for smaller number of samples, and the
 winning rate of ECT increases relatively slowly with the number of
@@ -566,7 +569,7 @@ decisions are made. Consistent application of principles of rational
 metareasoning at all steps of a rollout may further improve the
 sampling policies.
 
-\section{Proof of Lemma~\ref{lemma:hoeffding-prob-bounds}}
+\section{Proof of Theorem~\ref{thm:hoeffding-prob-bounds}}
 \label{app:hoeffding-prob-bounds-proof}
 
 \begin{proof}[]
@@ -655,8 +658,11 @@ Bounds (\ref{eqn:bound-perf-hoeffding}, \ref{eqn:bound-blnk-hoeffding}) have the
   \end{array} \right.
 \label{eqn:bound-generic-hoeffding}
 \end{equation}
-where $A$ is the upper bound on the posterior sample mean $\overline X_i'$ if $i\ne \alpha$, $B$ is the lower bound on $\overline X_i'$ if $i=\alpha$. For $i=\alpha$, the bound can be improved by selecting a midpoint
-$B < y < \overline X_\beta$ and computing the bound as the sum of two parts:
+where $A$ is the upper bound on the posterior sample mean $\overline
+X_i'$ if $i\ne \alpha$, $B$ is the lower bound on $\overline X_i'$ if
+$i=\alpha$. For $i=\alpha$, the bound can be improved by selecting an
+intermediate point $B < y < \overline X_\beta$ and computing the bound
+as the sum of two parts: 
 \begin{itemize}
 \item $\overline X_\beta-y$ multiplied by the probability that
   $\overline X_i' \le \overline X_\beta$;
