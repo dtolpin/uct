@@ -139,14 +139,14 @@ The intrinsic VOI $\Lambda_i$ of pulling an arm is the expected decrease
 in the regret compared to selecting an arm without pulling any arm at
 all. The \textit{myopic} VOI estimate is of limited applicability to
 Monte-Carlo sampling, since the effect of a single sample is small,
-and the myopic VOI estimate will often be non-positive, resulting in premature
+and the myopic VOI estimate will often be zero, resulting in premature
 termination of the search. However, $\Lambda_i$ can be estimated as the intrinsic 
 value of perfect information $\Lambda_i^p$ about the mean reward of the $i$th arm. Two
 cases are possible:
 \begin{itemize}
 \item the arm $\alpha$ with the highest sample mean is pulled, and the 
-true mean of the arm is lower than the sample mean of the second-best arm $\beta$;
-\item another arm is pulled, and the true mean of the arm is higher
+actual arm value is lower than the sample mean of the second-best arm $\beta$;
+\item another arm is pulled, and the actual arm value is higher
 than the sample mean of the best arm $\alpha$.
 \end{itemize}
 $\Lambda_i^p$ can be bounded from above as the probability that a
@@ -187,7 +187,7 @@ estimate of the arm pulled fewer times so far should be higher.
   remaining budget.
 \end{dfn}
 
-\begin{thm} Denote the current number of samples of the $i$th arm as
+\begin{thm} Denote the current number of samples of the $i$th arm by
   $n_i$. The blinkered estimate $\Lambda_i^b$ of intrinsic value of
   information of pulling the $i$th arm for the remaining budget of $N$
   samples is bounded from above as
@@ -268,10 +268,12 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \end{equation}
 \label{crl:bound-blnk-hoeffding}
 \end{crl}
-Estimate $\hat\Lambda_i^b$ can be viewed as a relaxation of the myopic VOI
-estimate to longer sequences of actions, such that the VOI estimate is
-positive for some of the actions. Better bounds can be obtained through tighter estimates on the
-probabilities, for example, based on the empirical Bernstein inequality
+Bound~\ref{eqn:bound-blnk-hoeffding} is generally tighter when $N$ is
+small relative to $n_i$. Estimate $\hat\Lambda_i^b$ can be viewed as a
+relaxation of the myopic assumption such that sequences consisting
+of more than one action are taken into considertion. Better bounds can
+be obtained through tighter estimates on the probabilities, for
+example, based on the empirical Bernstein inequality
 (\ref{eqn:conc-empbernstein}) or through a more careful application of
 the Hoeffding inequality (Appendix~\ref{app:better-hoeffding-bound}).
 
@@ -348,7 +350,7 @@ simple regret in Multi-armed bandits at the first step, and the
 cumulative regret during the rest of the rollout.  However, this
 approach assumes that the information obtained from rollouts in the
 current state is discarded after an action is selected. In practice,
-most successful Monte-Carlo tree search algorithms re-use rollouts
+many successful Monte-Carlo tree search algorithms re-use rollouts
 originating from an earlier search state and passing through the
 current search state; thus, the value of information of a rollout is
 determined not just by the influence on the choice of the action at
@@ -435,8 +437,8 @@ The sampling policies are first compared on random Multi-armed bandit
 problem instances, where the Monte-Carlo Tree Search algorithm
 is reduced to the sample selection policy at the first step: UCT is 
 actually UCB1. In the problem of pure exploration in Multi-armed bandits
-\cite{Bubeck.pure}, the smaller is the exploration factor, the higher
-is the expected simple regret; indeed, UCT exhibits the lowest simple
+\cite{Bubeck.pure}, the smaller the exploration factor, the higher
+the expected simple regret is; indeed, UCT exhibits the lowest simple
 regret in the experiments for the default exploration factor $Cp=\frac
 {\sqrt 2} 2$ \cite{Kocsis.uct}.
 
