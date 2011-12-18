@@ -69,9 +69,13 @@ greatest value of information (VOI) estimate must be pulled, and the
 sampling must be stopped and a decision must be made when no arm has
 positive VOI estimate.
 
-In order to estimate the VOI of pulling an arm, a sampling model is needed.
-The generic sampling model used is: the actual value of an arm has a certain distribution.
-Pulling an arm is an i.i.d. noisy measurement of the actual value of the arm.
+In order to estimate the VOI of pulling an arm, a sampling model is
+needed.  The generic sampling model used is: 
+\begin{itemize}
+\item The actual value of an arm has a certain distribution.
+\item Pulling an arm is an i.i.d. noisy measurement of the actual
+  value of the arm.
+\end{itemize}
 In \cite{HayRussell.MCTS}, Section 4, two instances of this model are
 examined:
 \begin{enumerate}[a)]
@@ -80,13 +84,13 @@ examined:
 \item normally distributed prior of the value, with normally
   distributed sampling.
 \end{enumerate}
-
 Here we examine the same general setting (i.i.d. samples), but instead
 of using a specific distribution model, use {\em concentration
-  inequalities} to derive distribution-independent bounds on the
-VOI. Our bounds are applicable to any distribution that conforms to
-our assumptions, including the case of normally distributed prior of
-the value, with normally distributed sampling.
+inequalities} to derive distribution-independent bounds on the
+VOI. Our bounds are applicable to any bounded distribution. Similar
+bounds can be derived for certain unbounded distributions, such as the
+normally distributed prior of the value with normally disributed
+sampling, a subject of future work.
 
 \section{Related Work}
 
