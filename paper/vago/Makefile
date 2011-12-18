@@ -13,4 +13,4 @@ paper.pdf: paper.tex paper.bbl bests-bw.pdf bests-colorful.pdf \
 
 
 clean:
-	rm paper.pdf *.log *.aux *.bbl *.blg
+	rm -f paper.pdf *.bbl *.log *.aux *.blg
