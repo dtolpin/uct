@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage{enumerate}
 \usepackage{algpseudocode}
 \usepackage[ruled]{algorithm}
 \usepackage{url}
@@ -68,11 +69,24 @@ greatest value of information (VOI) estimate must be pulled, and the
 sampling must be stopped and a decision must be made when no arm has
 positive VOI estimate.
 
-To estimate the VOI of pulling an arm, either a certain distribution
-of the rewards should be assumed (and updated based on observed
-rewards), or a distribution-independent bound on the VOI can be used
-as the VOI estimate. In this paper, we use {\em concentration
-  inequalities} to derive distribution-independent bounds on the VOI.
+In order to estimate the VOI of pulling an arm, a sampling model is needed.
+The generic sampling model used is: the actual value of an arm has a certain distribution.
+Pulling an arm is an i.i.d. noisy measurement of the actual value of the arm.
+In \cite{HayRussell.MCTS}, Section 4, two instances of this model are
+examined:
+\begin{enumerate}[a)]
+\item uniformly distributed prior of the value, with Bernouli
+  sampling, and 
+\item normally distributed prior of the value, with normally
+  distributed sampling.
+\end{enumerate}
+
+Here we examine the same general setting (i.i.d. samples), but instead
+of using a specific distribution model, use {\em concentration
+  inequalities} to derive distribution-independent bounds on the
+VOI. Our bounds are applicable to any distribution that conforms to
+our assumptions, including the case of normally distributed prior of
+the value, with normally distributed sampling.
 
 \section{Related Work}
 
