@@ -207,7 +207,7 @@ rate (see Appendix~\ref{app:derivations-finite-ucb}):
 \IE r_{ucb} \le 2\sum_{j=1}^K \Delta_jn^{\frac {-\alpha \Delta_j^2} 8}
 \end{equation}
 \item An asymptotic upper bound on the simple regret for the
-$\varepsilon$-greedy allocation scheme non-monotonically depends on
+$\varepsilon$-greedy allocation scheme depends \emph{non-monotonically} on
 $\varepsilon$. The lowest bound is achieved for $\varepsilon=\frac 1
 2$, and for a large number of arms the bound for the $\frac 1
 2$-greedy scheme approaches the square of the bound for uniform
@@ -275,6 +275,8 @@ experiments are:
 \item[RND:] uniform \underline{r}a\underline{nd}om samping;
 \item[UCT:] \underline{U}pper \underline{C}onfidence Bounds applied to
   \underline{T}rees \cite{Kocsis.uct};
+\item[RCT:] U\underline{CT} with the first step replaced with uniform
+  \underline{r}andom sampling;
 \item[GCT:] U\underline{CT} with the first step
   replaced with $\frac 1 2$-\underline{g}reedy sampling;
 \item[QCT:] U\underline{CT} with the first step
