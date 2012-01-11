@@ -226,19 +226,19 @@ Appendix~\ref{app:derivations-asym-ucb}).
 The {\bf two-stage} Monte Carlo tree search sampling
 scheme selects an action at the current root node according to an
 algorithm that minimizes the simple regret, such as $\frac 1 2$-greedy or
-UQB, and then selects actions according to UCB. Such two-stage
+UQB, and then selects actions according to UCB. This scheme
 outperforms the UCT sampling scheme that selects actions based on
 UCB only.
 
-Such sampling scheme is significantly less sensitive to the tuning of
-the exploration factor ($C_p$ in \cite{Kocsis.uct}) of UCT, since the
-conflict \cite{Bubeck.pure} between the need for a larger value of
-$C_p$ on the first step (simple regret) and a smaller value for the
-rest of the rollout (cumulative regret) is resolved. In fact, a
-sampling scheme that uses UCB at all steps but a larger value of $C_p$
-for the first step than for the rest of the steps, outperforms
-UCT. The pseudocode of the two-stage rollout is in
-Algorithm~\ref{alg:two-stage-mcts}.
+Additionaly, such two-stage sampling scheme is significantly less
+sensitive to the tuning of the exploration factor ($C_p$ in
+\cite{Kocsis.uct}) of UCT, since the conflict \cite{Bubeck.pure}
+between the need for a larger value of $C_p$ on the first step (simple
+regret) and a smaller value for the rest of the rollout (cumulative
+regret) is resolved. In fact, a sampling scheme that uses UCB at all
+steps but a larger value of $C_p$ for the first step than for the rest
+of the steps, outperforms UCT. The pseudocode of the two-stage rollout
+is in Algorithm~\ref{alg:two-stage-mcts}.
 
 \begin{algorithm}[t]
 \caption{Two-stage Monte-Carlo tree search sampling}
