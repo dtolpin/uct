@@ -20,7 +20,7 @@
 
 \newtheorem{lemma}{Lemma}
 
-\title{Doing Better Than UCT: \\ Rational Monte Carlo Sampling in Trees}
+\title{Rational Monte Carlo Sampling in Trees}
 \author {David Tolpin, Solomon Eyal Shimony \\
 Department of Computer Science, \\
 Ben-Gurion University of the Negev, Beer Sheva, Israel \\
@@ -46,7 +46,6 @@ on a myopic version of perfect value of information.
 Finite-time and asymptotic analysis of
 the policies is provided, and the algorithms are compared empirically.
 \end{abstract}
-
 
 \section{Introduction and definitions}
 
@@ -108,7 +107,6 @@ However, the simple and the cumulative regret cannot be minimized simultaneously
 moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
 cumulative regret, the greater the simple regret.
 
-
 UCT performance can thus be improved by combining UCB with a sampling
 scheme that minimizes the simple regret of selecting an action at the
 current root node. Indeed, the algorithm must select an action with
@@ -127,40 +125,78 @@ minimize the \textbf{cumulative} regret of the rollouts from the second
 step onwards. 
 \end{itemize}
 
-The ultimate goal of this ongoing work is ``optimal'' sampling
-in the meta-reasoning sense. Nevertheless, this task is daunting for
-the following reasons:
+We begin with introduction of several sampling schemes with
+better bounds for the simple regret on sets (Section~\ref{sec:sampling-on-sets}). We then
+extend the resutls to sampling in trees by combining the proposed sampling
+schemes on the first step of a rollout with UCT during the rest of the
+rollout (Section~\ref{sec:sampling-in-trees}). Finally, we empirically
+evaluate the performance of the proposed sampling schemes on sets of
+Bernoulli arms (Section~\ref{sec:emp-mab}), in randomly generated
+trees (Section~\ref{sec:emp-mcts}), and on the sailing domain
+(Section~\ref{sec:emp-sailing}). Finally, we describe future research
+directions and provide preliminary results for a sampling scheme
+explicitly based on the value of information of a rollout (Section~\ref{sec:summary}).
+
+\section{Related Work}
+\label{sec:related-work}
+
+Efficient algorithms for Multi-Armed Bandits based on
+distribution-independent bounds, in particular UCB1, are introduced in
+\cite{Auer.ucb}. The UCT algorithm, an extension of UCB1 to
+Monte-Carlo Tree Search is described in \cite{Kocsis.uct}. Pure
+exploration in Multi-armed bandits is explored in
+\cite{Bubeck.pure}. On the one hand, the paper proves certain upper
+and lower bounds for UCB1 and uniform sampling, showing that an upper
+bound on the simple regret is exponential in the number of samples for
+uniform sampling, while only polynomial for UCB1. On the other hand,
+empirical performance of UCB1 appears to be better than of uniform
+sampling. 
+
+The principles of bounded rationality appear in
+\cite{Horvitz.reasoningabout}. \cite{Russell.right} provided a formal
+description of rational metareasoning and case studies of applications
+in several problem domains. One obstacle to straightforward
+application of the principles of rational metareasoning to Monte-Carlo
+sampling is the metagreedy assumption, according to which samples must
+be selected as though at most one sample can be taken before an action
+is chosen. In Monte-Carlo sampling, the value of information of any
+single sample in a given search state is often zero, so a different
+approximating assumption must be used instead.
+
+\section{Main Results}
+\label{sec:results}
+
+The ultimate goal is ``optimal'' sampling in the meta-reasoning
+sense. Nevertheless, this task is daunting for the following reasons:
 \begin{itemize}
-\item Defining the cost of a sample is not easy, and even if we simply use time-cost
-as an approximation, we get an intractable meta-reasoning problem.
-\item Applying the standard myopic and subtree independence assumptions, we run into
-serious problems. Even in the standard selection problem \cite{TolpinShimony.blinkered}, we get a non-concave
-utility function and premature stopping of the algorithm. This is due to the fact
-that the value of information of a single measurement (analogous
-to a sample in MCTS) is frequently less than its
-time-cost, even though this is not true for multiple measurements.
-When applying the selection problem to MCTS, the situation is exacerbated. 
-The utility of an action is usually bounded, and thus in many cases a single sample
-may be insufficient to change the current best action, {\em regardless} of its
-outcome. As a result, we frequently
-get a {\em zero} ``myopic'' value of information for a single sample.
+\item Defining the cost of a sample is not easy, and even if we simply
+  use time-cost as an approximation, we get an intractable
+  meta-reasoning problem.
+\item Applying the standard myopic and subtree independence
+  assumptions, we run into serious problems. Even in the standard
+  selection problem \cite{TolpinShimony.blinkered}, we get a
+  non-concave utility function and premature stopping of the
+  algorithm. This is due to the fact that the value of information of
+  a single measurement (analogous to a sample in MCTS) is frequently
+  less than its time-cost, even though this is not true for multiple
+  measurements.  When applying the selection problem to MCTS, the
+  situation is exacerbated.  The utility of an action is usually
+  bounded, and thus in many cases a single sample may be insufficient
+  to change the current best action, {\em regardless} of its
+  outcome. As a result, we frequently get a {\em zero} ``myopic''
+  value of information for a single sample.
 \end{itemize}
 
 As the ultimate task is extremely difficult
-to achieve, and even harder to analyze, we begin with
-simple schemes more amenable to analysis. We then
-develop a crude value of information (VOI)
-based scheme. Although the latter is a somewhat ad-hoc attempt to
-estimate value of information of a sample, it already appears (empirically) to do
-better than UCT as well as better than all the simpler schemes we propose.
+to achieve, and even harder to analyze, we introduce
+simple schemes more amenable to analysis, and compare
+them to UCB (on sets) and UCT (in trees).
 
-\section{Main Results}
-
-\subsection{Doing better than UCB}
+\subsection{Sampling on Sets}
+\label{sec:sampling-on-sets}
 
 \begin{enumerate}
-\item The $\varepsilon$-greedy allocation scheme has exponential convergence
-rate of the simple regret $\IE r$ (see Appendix~\ref{app:derivations-finite-eps}):
+\item The $\varepsilon$-greedy allocation scheme has exponential convergencerate of the simple regret $\IE r$ (see Appendix~\ref{app:derivations-finite-eps}):
 \begin{equation}
   \IE r_\varepsilon\le\sum_{j=1}^K\Delta_j\left(\frac {n\varepsilon} K + \frac {4\sqrt e}
 {\Delta_j^2}\right)e^{-\Delta_j^2n\varepsilon/8K}
@@ -170,12 +206,12 @@ rate (see Appendix~\ref{app:derivations-finite-ucb}):
 \begin{equation}
 \IE r_{ucb} \le 2\sum_{j=1}^K \Delta_jn^{\frac {-\alpha \Delta_j^2} 8}
 \end{equation}
-\item A tighter upper regret bound for the $\varepsilon$-greedy allocation scheme depends on
-$\varepsilon$. The lowest bound is
-achieved for $\varepsilon=\frac 1
-2$, and for a large number of arms the bound for the $\frac 1 2$-greedy scheme approaches the square of the
-bound for uniform sampling (see
-Appendix~\ref{app:derivations-asym-eps}).
+\item An asymptotic upper bound on the simple regret for the
+$\varepsilon$-greedy allocation scheme non-monotonically depends on
+$\varepsilon$. The lowest bound is achieved for $\varepsilon=\frac 1
+2$, and for a large number of arms the bound for the $\frac 1
+2$-greedy scheme approaches the square of the bound for uniform
+sampling (see Appendix~\ref{app:derivations-asym-eps}).
 
 \item Another improved allocation scheme for minimizing the simple regret,
 called \textbf{UQB} here, is obtained by substituting $\sqrt{\cdot}$
@@ -184,8 +220,8 @@ superpolynomial convergence rate (see
 Appendix~\ref{app:derivations-asym-ucb}).
 \end{enumerate}
 
-
-\subsection{Doing better than UCT}
+\subsection{Sampling in Trees}
+\label{sec:sampling-in-trees}
 
 The {\bf two-stage} Monte Carlo tree search sampling
 scheme selects an action at the current root node according to an
@@ -227,11 +263,12 @@ Algorithm~\ref{alg:two-stage-mcts}.
 \end{algorithm}
 
 \section{Empirical Evaluation}
+\label{sec:emp}
 
 The results were empirically verified on Multi-armed Bandit instances
-(Section~\ref{seq:emp-mab}), on search trees
-(Section~\ref{seq:emp-mcts}), and on the sailing domain
-(Section~\ref{seq:emp-sailing}), as defined in \cite{Kocsis.uct}. The
+(Section~\ref{sec:emp-mab}), on search trees
+(Section~\ref{sec:emp-mcts}), and on the sailing domain
+(Section~\ref{sec:emp-sailing}), as defined in \cite{Kocsis.uct}. The
 experiments confirmed the hypotheses. The algorithms used in the
 experiments are:
 \begin{description}
@@ -245,21 +282,22 @@ experiments are:
 \end{description}
 
 \subsection{Simple regret in multi-armed bandits}
-\label{seq:emp-mab}
+\label{sec:emp-mab}
 
-Figure~\ref{fig:mab-simple-regret} presents a comparison of simple
-regret minimization algorithms for Multi-armed
-bandits. Figure~\ref{fig:mab-simple-regret}.a shows the search tree
+Figure~\ref{fig:mab-simple-regret} presents a comparison of MCTS sampling
+schemes on Multi-armed bandits. Figure~\ref{fig:mab-simple-regret}.a shows the search tree
 corresponding to a problem instance. Each arm returns a random reward
 drawn from a Bernoulli distribution. The search selects an arm
 and compares the expected reward, unknown to the algorithm during the
-sampling, to the expected reward of the best arm.
+sampling, to the expected reward of the best arm. For such problem
+instances, the MCTS sampling schemes coincide with the selection
+algorithms employed at the first step of a rollout.
 
 Figure~\ref{fig:mab-simple-regret}.b shows the regret
 vs. the number of samples, averaged
 over $10^4$ experiments for randomly generated instances of 32 arms. 
 
-For smaller numbers of samples, $\frac 1 2$-greedy achieves the best
+For smaller numbers of samples, GCT achieves the best
 performance; for large number of samples, QCT outperforms GCT. QCT is
 better than UCT everywhere except for very small numbers of samples. A
 combination of GCT and QCT dominates UCT over the whole range.
@@ -281,7 +319,7 @@ combination of GCT and QCT dominates UCT over the whole range.
 \end{figure}
 
 \subsection{Monte Carlo tree search}
-\label{seq:emp-mcts}
+\label{sec:emp-mcts}
 
 The second set of experiments was performed on randomly generated
 trees crafted in such a way that uniform random sampling selects a
@@ -322,7 +360,7 @@ the number of arms.
 \end{figure}
 
 \subsection{The sailing domain}
-\label{seq:emp-sailing}
+\label{sec:emp-sailing}
 
 Figures~\ref{fig:sailing-cost-vs-nsamples}--\ref{fig:sailing-rcq-vs-factor}
 show results of experiments on the sailing
@@ -432,6 +470,7 @@ the first step.
 \end{figure}
 
 \section{Summary and Future Work}
+\label{sec:summary}
 
 The Monte Carlo tree search algorithms presented in the paper differ
 from UCT at the first step of the rollout, when the `simple' selection
@@ -462,17 +501,18 @@ with an unknown mean and/or variance. Alternatively, the value of
 information can be estimated from the set of samples, and the need to
 assume a particular shape of the distribution can be lifted. In one
 realization of the latter approach the VOI of performing an action is
-estimated as \emph{the value of perfect information learned from the outcome
-of earlier samples of the action divided by the number of
-samples}. Early experiments with this approach showed the best
+estimated as \emph{the value of perfect information learned from the
+  outcome of earlier samples of the action divided by the number of
+  samples}. Early experiments with this approach showed the best
 performance for sets of Bernoulli arms, and even a more prominent
 improvement for mixed arms (e.g. Bernoulli, triangularly distributed,
-and fixed arms) (Figure~\ref{fig:flat-trilevel-vct}):
-\textbf{VCT}, the algorithm which selects an action with the maximum VOI estimate on
-the first step exhibits lower average regret than other algorithms.
-Sample-based VOI estimation requires keeping more information than an
-algorithm based only on the sample
-mean, but the overhead is small and justified by the improvement.
+and fixed arms) (Figure~\ref{fig:flat-trilevel-vct} shows results for
+different algorithms for 32 randomly generated arms): \textbf{VCT},
+the algorithm which selects a rollout with the maximum VOI estimate
+exhibits lower average regret than other algorithms. Sample-based VOI
+estimation requires keeping more information than an algorithm based
+only on the sample mean, but the overhead is small and justified by
+the improvement.
 
 \section*{Acknowledgments}
 
