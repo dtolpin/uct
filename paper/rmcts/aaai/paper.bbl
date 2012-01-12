@@ -1,0 +1,63 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Auer, Cesa-Bianchi, and
+  Fischer}{2002}]{Auer.ucb}
+Auer, P.; Cesa-Bianchi, N.; and Fischer, P.
+\newblock 2002.
+\newblock Finite-time analysis of the multiarmed bandit problem.
+\newblock {\em Mach. Learn.} 47:235--256.
+
+\bibitem[\protect\citeauthoryear{Bubeck, Munos, and Stoltz}{2011}]{Bubeck.pure}
+Bubeck, S.; Munos, R.; and Stoltz, G.
+\newblock 2011.
+\newblock Pure exploration in finitely-armed and continuous-armed bandits.
+\newblock {\em Theor. Comput. Sci.} 412(19):1832--1852.
+
+\bibitem[\protect\citeauthoryear{Eyerich \bgroup et al.\egroup
+  }{2010}]{Eyerich.ctp}
+Eyerich, P.; Keller, T.; Helmert, M.; and ludwigs-universität Freiburg, A.
+\newblock 2010.
+\newblock High-quality policies for the canadian travelers problem.
+\newblock In {\em In Proc. AAAI 2010},  51--58.
+
+\bibitem[\protect\citeauthoryear{Hagerup and R\"{u}b}{1990}]{Hagerup.chernoff}
+Hagerup, T., and R\"{u}b, C.
+\newblock 1990.
+\newblock A guided tour of {C}hernoff bounds.
+\newblock {\em Inf. Process. Lett.} 33:305--308.
+
+\bibitem[\protect\citeauthoryear{Horvitz}{1987}]{Horvitz.reasoningabout}
+Horvitz, E.~J.
+\newblock 1987.
+\newblock Reasoning about beliefs and actions under computational resource
+  constraints.
+\newblock In {\em Proceedings of the 1987 Workshop on Uncertainty in Artificial
+  Intelligence},  429--444.
+
+\bibitem[\protect\citeauthoryear{Kocsis and Szepesv{\'a}ri}{2006}]{Kocsis.uct}
+Kocsis, L., and Szepesv{\'a}ri, C.
+\newblock 2006.
+\newblock Bandit based monte-carlo planning.
+\newblock In {\em ECML},  282--293.
+
+\bibitem[\protect\citeauthoryear{Russell and Norvig}{2003}]{Russell.aima}
+Russell, S.~J., and Norvig, P.
+\newblock 2003.
+\newblock {\em Artificial Intelligence: A Modern Approach}.
+\newblock Pearson Education.
+
+\bibitem[\protect\citeauthoryear{Russell and Wefald}{1991}]{Russell.right}
+Russell, S., and Wefald, E.
+\newblock 1991.
+\newblock {\em Do the right thing: studies in limited rationality}.
+\newblock Cambridge, MA, USA: MIT Press.
+
+\bibitem[\protect\citeauthoryear{Tolpin and
+  Shimony}{2010}]{TolpinShimony.blinkered}
+Tolpin, D., and Shimony, S.~E.
+\newblock 2010.
+\newblock Semi-myopic measurement selection for optimization under uncertainty.
+\newblock Technical Report 10-01, Lynne and William Frankel Center for Computer
+  Science at Ben Gurion University of the Negev, Israel.
+
+\end{thebibliography}
