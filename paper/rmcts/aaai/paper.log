@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.11)  12 JAN 2012 14:09
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.11)  15 JAN 2012 13:19
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -309,95 +309,80 @@ File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=793.pdf, id=63, 400.49625pt x 258.9675pt>
-File: costs-size=6-nsamples=793.pdf Graphic file (type pdf)
-
-<use costs-size=6-nsamples=793.pdf>
-<costs-size=6-nsamples=1585.pdf, id=64, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=63, 400.49625pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
-<costs-size=3-nsamples=397.pdf, id=65, 400.49625pt x 255.95625pt>
-File: costs-size=3-nsamples=397.pdf Graphic file (type pdf)
-
-<use costs-size=3-nsamples=397.pdf>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
  <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=66, 400.49625pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=64, 400.49625pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
-<rcq-size=6-nsamples=397.pdf, id=67, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=397.pdf, id=65, 400.49625pt x 251.94125pt>
 File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=793.pdf, id=68, 400.49625pt x 257.96375pt>
-File: rcq-size=6-nsamples=793.pdf Graphic file (type pdf)
-
-<use rcq-size=6-nsamples=793.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=69, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=1585.pdf, id=66, 400.49625pt x 251.94125pt>
 File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=1585.pdf>
-<flat-trilevel-vct-k=64.pdf, id=70, 545.03625pt x 394.47375pt>
+<flat-trilevel-vct-k=64.pdf, id=67, 545.03625pt x 394.47375pt>
 File: flat-trilevel-vct-k=64.pdf Graphic file (type pdf)
 
 <use flat-trilevel-vct-k=64.pdf> [4 <./twolevel-tree.pdf> <./tree-identity-k=16
 -uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf> <./costs-size=6-group=median.pdf> 
 <./costs-size=6-group=minimum.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5 <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=793.pdf> <./cost
-s-size=6-nsamples=1585.pdf> <./costs-size=3-nsamples=397.pdf> <./costs-size=10-
-nsamples=397.pdf>]
-Overfull \hbox (21.98653pt too wide) in alignment at lines 559--566
+Overfull \hbox (21.98653pt too wide) in alignment at lines 542--549
  [][][] []
  []
 
-[6 <./flat-trilevel-vct-k=64.pdf> <./rcq-size=6-nsamples=397.pdf> <./rcq-size=6
--nsamples=793.pdf> <./rcq-size=6-nsamples=1585.pdf>]
-Underfull \hbox (badness 4328) in paragraph at lines 637--639
+[5 <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1585.pdf> <./cost
+s-size=10-nsamples=397.pdf>]
+Underfull \hbox (badness 4328) in paragraph at lines 620--622
 []\OT1/ptm/m/n/10 ( Bubeck, Munos, and Stoltz 2011) es-tab-lishes for
  []
 
-
-Overfull \hbox (6.09642pt too wide) in alignment at lines 732--741
+[6 <./flat-trilevel-vct-k=64.pdf> <./rcq-size=6-nsamples=397.pdf> <./rcq-size=6
+-nsamples=1585.pdf>]
+Overfull \hbox (6.09642pt too wide) in alignment at lines 715--724
  [][][] []
  []
 
 [7] (./paper.bbl
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¤ in font ptmr7t!
-) [8] (./paper.aux) ) 
+) [8
+
+] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2898 strings out of 495061
- 37942 string characters out of 1182621
+ 2883 strings out of 495061
+ 37460 string characters out of 1182621
  100628 words of memory out of 3000000
- 6008 multiletter control sequences out of 15000+50000
+ 5996 multiletter control sequences out of 15000+50000
  24845 words of font info for 60 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  27i,11n,22p,276b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</us
-r/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/tex
-mf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/
-fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/
-public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
-nts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8
-.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/s
-hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-te
-xlive/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public
-/amsfonts/cm/cmsy5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
-/cmsy7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb><
-/usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/s
-hare/texmf-texlive/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/t
-exmf-texlive/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-te
-xlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/ur
-w/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-
-Output written on paper.pdf (8 pages, 428739 bytes).
+{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/sh
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/publ
+ic/amsfonts/cm/cmmi6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/
+cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb
+></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texliv
+e/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
+fonts/cm/cmsy5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cms
+y7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr
+/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf
+-texlive/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-texliv
+e/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/ti
+mes/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (8 pages, 404268 bytes).
 PDF statistics:
- 281 PDF objects out of 1000 (max. 8388607)
+ 254 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 87 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 72 words of extra memory for PDF output out of 10000 (max. 10000000)
 
