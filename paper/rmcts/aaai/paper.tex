@@ -28,34 +28,39 @@
 \newcommand {\cov} {\ensuremath {\mathop{\mathrm{cov}}}}
 \newcommand {\BEL} {\ensuremath {\mathop{\mathrm{BEL}}}}
 
-\title{Rational Monte Carlo Sampling in Trees}
+\title{Simple-Regret Based MCTS}
 \author {David Tolpin, Solomon Eyal Shimony \\
 Department of Computer Science, \\
 Ben-Gurion University of the Negev, Beer Sheva, Israel \\
 \{tolpin,shimony\}@cs.bgu.ac.il}
-
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-UCT, a state-of-the art algorithm for Monte Carlo tree sampling
-(MCTS), is based on UCB, a sampling policy for the Multi-armed Bandit
-Problem (MAB) that minimizes the accumulated regret. However, MCTS
-differs from MAB in that only the final choice, rather than all arm
-pulls, brings a reward, that is, the simple regret, as opposite to the
-cumulative regret, must be minimized. This ongoing work aims at applying
-meta-reasoning techniques to MCTS, which is non-trivial.
-We begin by introducing policies for
-multi-armed bandits with lower simple regret than UCB, and an
-algorithm for MCTS which combines cumulative and simple regret
-minimization and outperforms UCT. We also develop a sampling scheme loosely based
-on a myopic version of perfect value of information.
-Finite-time and asymptotic analysis of
-the policies is provided, and the algorithms are compared empirically.
+UCT, a state-of-the art algorithm for Monte Carlo tree search (MCTS)
+in games and Markov decision processes, is based on UCB, a sampling
+policy for the Multi-armed Bandit problem (MAB) that asymptotically
+minimizes the cumulative regret.  However, search differs from MAB in
+that in MCTS it is usually only the final ``arm pull'' (the actual
+move selection) that collects a reward, rather than all ``arm pulls''.
+Therefore, it makes more sense to minimize the simple regret, as
+opposed to the cumulative regret. We begin by introducing policies for
+multi-armed bandits with lower finite-time and asymptotic simple
+regret than UCB, using it to develop an algorithm (USRT) for MCTS
+which outperforms UCT empirically.
+
+We then observe that optimizing the sampling process is itself a
+meta-reasoning problem, a solution of which can use value of
+information (VOI) techniques.  Although the theory of VOI for search
+exists, applying it to MCTS is non-trivial, as typical myopic
+assumptions fail. Lacking a working VOI theory for MCTS, we
+nevertheless propose a sampling scheme that is ``aware'' of VOI,
+achieving an algorithm that in empirical evaluation outperforms USRT,
+as well as UCT.
 \end{abstract}
 
-\section{Introduction and definitions}
+\section{Introduction}
 
 Monte-Carlo tree sampling, and especially a version based on the
 UCT formula \cite{Kocsis.uct} appears in numerous search applications,
@@ -66,8 +71,58 @@ trading off exploration and exploitation''. While the latter statement may be
 correct for the multi-armed bandit and for the UCB method \cite{Auer.ucb},
 we argue that it is inappropriate for search. The problem is not that
 UCT does not work; rather, we argue that a simple reconsideration from basic
-principles can result in schemes that outperform UCT. This is demonstrated both
-theoretically and empirically.
+principles can result in schemes that outperform UCT.
+
+The core issue is that in search (especially for adversarial search
+and for ``games against nature'' - optimizing behavior under
+uncertainty) the goal is typically to either find a good (or optimal)
+strategy, or even to find the best first action of such a policy. Once
+such an action is discovered, it is not beneficial to further sample
+that action, ``exploitation'' is thus meaningless for search
+problems. Finding a good first action is closer to the pure
+exploration variant, as seen in the selection problem
+\cite{Bubeck.pure,TolpinShimony.blinkered}. In the selection problem,
+it is much better to minimize the {\em simple} regret.  However, the
+simple and the cumulative regret cannot be minimized simultaneously;
+moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
+cumulative regret, the greater the simple regret.
+
+We begin with introduction of several sampling schemes with better
+bounds for the simple regret on sets. We then extend the resutls to
+sampling in trees by combining the proposed sampling schemes on the
+first step of a rollout with UCT during the rest of the
+rollout. Finally, we empirically evaluate the performance of the
+proposed sampling schemes on sets of Bernoulli arms, in randomly
+generated trees, and on the sailing domain.
+
+\section{Related Work}
+\label{sec:related-work}
+
+Efficient algorithms for Multi-Armed Bandits based on
+distribution-independent bounds, in particular UCB1, are introduced in
+\cite{Auer.ucb}. The UCT algorithm, an extension of UCB1 to
+Monte-Carlo Tree Search is described in \cite{Kocsis.uct}. Pure
+exploration in Multi-armed bandits is explored in
+\cite{Bubeck.pure}. On the one hand, the paper proves certain upper
+and lower bounds for UCB1 and uniform sampling, showing that an upper
+bound on the simple regret is exponential in the number of samples for
+uniform sampling, while only polynomial for UCB1. On the other hand,
+empirical performance of UCB1 appears to be better than of uniform
+sampling. 
+
+The principles of bounded rationality appear in
+\cite{Horvitz.reasoningabout}. \cite{Russell.right} provided a formal
+description of rational metareasoning and case studies of applications
+in several problem domains. One obstacle to straightforward
+application of the principles of rational metareasoning to Monte-Carlo
+sampling is the metagreedy assumption, according to which samples must
+be selected as though at most one sample can be taken before an action
+is chosen. In Monte-Carlo sampling, the value of information of any
+single sample in a given search state is often zero, so a different
+approximating assumption must be used instead.
+
+\section{Monte Carlo Search for Simple Regret Minimization}
+\label{sec:results}
 
 In the Multi-armed Bandit problem we have a set of $K$ arms. Each arm can be pulled
 multiple times. When the $i$th arm is pulled, a random reward $X_i$
@@ -100,22 +155,7 @@ approximately). The UCB algorithm (that attempts to minimize the cumulative regr
 \cite{Auer.ucb} had been extended into the tree search sampling scheme
 known as UCT \cite{Kocsis.uct}.
 
-UCT-driven search achieves good results in many search problems. At each
-search step, the algorithm allocates Monte Carlo rollouts to choose
-the best action, thereby (approximately) minimizing the cumulative regret. 
-The core issue is that in search (especially for adversarial search
-and for ``games against nature'' - optimizing behavior under uncertainty) the goal is typically
-to either find a good (or optimal) strategy, or even to find the best first
-action of such a policy. Once such an action is discovered, it is not beneficial
-to further sample that action, ``exploitation'' is thus meaningless for
-search problems. Finding a good first action is closer to the pure exploration
-variant, as seen in the selection problem \cite{Bubeck.pure,TolpinShimony.blinkered}. In the selection
-problem, it is much better to minimize the {\em simple} regret.
-However, the simple and the cumulative regret cannot be minimized simultaneously;
-moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
-cumulative regret, the greater the simple regret.
-
-UCT performance can thus be improved by combining UCB with a sampling
+UCT performance can be improved by combining UCB with a sampling
 scheme that minimizes the simple regret of selecting an action at the
 current root node. Indeed, the algorithm must select an action with
 the minimum regret \emph{given the assumption that after performing the selected action
@@ -132,72 +172,7 @@ a node, rather than selection, it makes sense to
 minimize the \textbf{cumulative} regret of the rollouts from the second
 step onwards. 
 \end{itemize}
-
-We begin with introduction of several sampling schemes with
-better bounds for the simple regret on sets. We then
-extend the resutls to sampling in trees by combining the proposed sampling
-schemes on the first step of a rollout with UCT during the rest of the
-rollout. Finally, we empirically
-evaluate the performance of the proposed sampling schemes on sets of
-Bernoulli arms, in randomly generated
-trees, and on the sailing domain
-. Finally, we describe future research
-directions and provide preliminary results for a sampling scheme
-explicitly based on the value of information of a rollout.
-
-\section{Related Work}
-\label{sec:related-work}
-
-Efficient algorithms for Multi-Armed Bandits based on
-distribution-independent bounds, in particular UCB1, are introduced in
-\cite{Auer.ucb}. The UCT algorithm, an extension of UCB1 to
-Monte-Carlo Tree Search is described in \cite{Kocsis.uct}. Pure
-exploration in Multi-armed bandits is explored in
-\cite{Bubeck.pure}. On the one hand, the paper proves certain upper
-and lower bounds for UCB1 and uniform sampling, showing that an upper
-bound on the simple regret is exponential in the number of samples for
-uniform sampling, while only polynomial for UCB1. On the other hand,
-empirical performance of UCB1 appears to be better than of uniform
-sampling. 
-
-The principles of bounded rationality appear in
-\cite{Horvitz.reasoningabout}. \cite{Russell.right} provided a formal
-description of rational metareasoning and case studies of applications
-in several problem domains. One obstacle to straightforward
-application of the principles of rational metareasoning to Monte-Carlo
-sampling is the metagreedy assumption, according to which samples must
-be selected as though at most one sample can be taken before an action
-is chosen. In Monte-Carlo sampling, the value of information of any
-single sample in a given search state is often zero, so a different
-approximating assumption must be used instead.
-
-\section{Main Results}
-\label{sec:results}
-
-The ultimate goal is ``optimal'' sampling in the meta-reasoning
-sense. Nevertheless, this task is daunting for the following reasons:
-\begin{itemize}
-\item Defining the cost of a sample is not easy, and even if we simply
-  use time-cost as an approximation, we get an intractable
-  meta-reasoning problem.
-\item Applying the standard myopic and subtree independence
-  assumptions, we run into serious problems. Even in the standard
-  selection problem \cite{TolpinShimony.blinkered}, we get a
-  non-concave utility function and premature stopping of the
-  algorithm. This is due to the fact that the value of information of
-  a single measurement (analogous to a sample in MCTS) is frequently
-  less than its time-cost, even though this is not true for multiple
-  measurements.  When applying the selection problem to MCTS, the
-  situation is exacerbated.  The utility of an action is usually
-  bounded, and thus in many cases a single sample may be insufficient
-  to change the current best action, {\em regardless} of its
-  outcome. As a result, we frequently get a {\em zero} ``myopic''
-  value of information for a single sample.
-\end{itemize}
-
-As the ultimate task is extremely difficult
-to achieve, and even harder to analyze, we introduce
-simple schemes more amenable to analysis, and compare
+Here, we introduce simple schemes more amenable to analysis, and compare
 them to UCB (on sets) and UCT (in trees).
 
 \subsection{Sampling on Sets}
