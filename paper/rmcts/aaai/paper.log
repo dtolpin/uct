@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.25)  20 JAN 2012 13:08
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.25)  20 JAN 2012 15:10
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -266,9 +266,9 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 138.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 207.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 206.
  [2]
-Underfull \hbox (badness 1824) in paragraph at lines 328--330
+Underfull \hbox (badness 1824) in paragraph at lines 343--345
 []\OT1/ptm/m/n/10 U$[]$ with the first step re-placed with uni-form
  []
 
@@ -278,73 +278,67 @@ File: onelevel-tree.pdf Graphic file (type pdf)
 <flat-trilevel-k=64-uqb=8.pdf, id=23, 400.49625pt x 292.09125pt>
 File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
 
-<use flat-trilevel-k=64-uqb=8.pdf> [3 <./onelevel-tree.pdf> <./flat-trilevel-k=
-64-uqb=8.pdf>] <twolevel-tree.pdf, id=56, 266.9975pt x 204.765pt>
+<use flat-trilevel-k=64-uqb=8.pdf> [3]
+<twolevel-tree.pdf, id=27, 266.9975pt x 204.765pt>
 File: twolevel-tree.pdf Graphic file (type pdf)
-
-<use twolevel-tree.pdf>
-<tree-identity-k=16-uqb=8.pdf, id=57, 400.49625pt x 285.065pt>
+ <use twolevel-tree.pdf>
+<tree-identity-k=16-uqb=8.pdf, id=28, 400.49625pt x 285.065pt>
 File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=16-uqb=8.pdf>
-<tree-identity-k=64-uqb=8.pdf, id=58, 404.51125pt x 285.065pt>
+<tree-identity-k=64-uqb=8.pdf, id=29, 404.51125pt x 285.065pt>
 File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=64-uqb=8.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<costs-size=6-group=median.pdf, id=59, 400.49625pt x 251.94125pt>
+<costs-size=6-group=median.pdf, id=30, 400.49625pt x 251.94125pt>
 File: costs-size=6-group=median.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=median.pdf>
-<costs-size=6-group=minimum.pdf, id=60, 400.49625pt x 251.94125pt>
+<costs-size=6-group=minimum.pdf, id=31, 400.49625pt x 251.94125pt>
 File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=minimum.pdf>
-<costs-size=6-nsamples=397.pdf, id=61, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=397.pdf, id=32, 400.49625pt x 251.94125pt>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=1585.pdf, id=62, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=33, 400.49625pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
  <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=63, 400.49625pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=34, 400.49625pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
-<rcq-size=6-nsamples=397.pdf, id=64, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=397.pdf, id=35, 400.49625pt x 251.94125pt>
 File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=65, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=1585.pdf, id=36, 400.49625pt x 251.94125pt>
 File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
-<use rcq-size=6-nsamples=1585.pdf>
-<flat-trilevel-vct-k=64.pdf, id=66, 545.03625pt x 394.47375pt>
-File: flat-trilevel-vct-k=64.pdf Graphic file (type pdf)
-
-<use flat-trilevel-vct-k=64.pdf> [4 <./twolevel-tree.pdf> <./tree-identity-k=16
--uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf>] [5 <./costs-size=6-group=median.p
-df> <./costs-size=6-group=minimum.pdf> <./costs-size=6-nsamples=397.pdf> <./cos
-ts-size=6-nsamples=1585.pdf> <./costs-size=10-nsamples=397.pdf>] [6
-
- <./flat-trilevel-vct-k=64.pdf> <./rcq-size=6-nsamples=397.pdf> <./rcq-size=6-n
-samples=1585.pdf>] (./paper.bbl
+<use rcq-size=6-nsamples=1585.pdf> [4 <./onelevel-tree.pdf> <./flat-trilevel-k=
+64-uqb=8.pdf> <./twolevel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf> <./tree-id
+entity-k=64-uqb=8.pdf>] [5 <./costs-size=6-group=median.pdf> <./costs-size=6-gr
+oup=minimum.pdf> <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=158
+5.pdf> <./costs-size=10-nsamples=397.pdf> <./rcq-size=6-nsamples=397.pdf> <./rc
+q-size=6-nsamples=1585.pdf>] (./paper.bbl
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¤ in font ptmr7t!
-) [7
+) [6
 
 
 ] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2876 strings out of 495061
- 37016 string characters out of 1182620
- 97883 words of memory out of 3000000
- 5991 multiletter control sequences out of 15000+50000
+ 2870 strings out of 495061
+ 36844 string characters out of 1182620
+ 97865 words of memory out of 3000000
+ 5986 multiletter control sequences out of 15000+50000
  22753 words of font info for 47 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  27i,11n,22p,276b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -361,9 +355,9 @@ pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/ur
 w/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
 xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (7 pages, 344008 bytes).
+Output written on paper.pdf (6 pages, 334708 bytes).
 PDF statistics:
- 231 PDF objects out of 1000 (max. 8388607)
+ 216 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 72 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

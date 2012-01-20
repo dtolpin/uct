@@ -16,7 +16,7 @@
 \newtheorem{lemma}{Lemma}
 \frenchspacing
 \pdfinfo{
-/Title (Rational Monte Carlo Sampling in Trees)
+/Title (MCTS Based on Simple Regret)
 /Subject (AAAI Publications)
 /Author (AAAI Press)}
 
@@ -87,7 +87,7 @@ that action, ``exploitation'' is thus meaningless for search
 problems. Finding a good first action is closer to the pure
 exploration variant, as seen in the selection problem
 \cite{Bubeck.pure,TolpinShimony.blinkered}. In the selection problem,
-it is much better to minimize the {\em simple} regret.  However, the
+it is much better to minimize the \emph{simple} regret.  However, the
 simple and the cumulative regret cannot be minimized simultaneously;
 moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
 cumulative regret, the greater the simple regret.
@@ -148,13 +148,12 @@ where $\Delta_j=\mu_*-\mu_j$.
 
 Strategies that minimize the simple regret are called pure exploration
 strategies \cite{Bubeck.pure}. Such strategies are used to select the
-best arm, and, by extension, the best action in Monte Carlo tree
-search. Monte Carlo tree search is used to solve Markov Decision
-Processes (MDP) approximately. An MDP is defined by the set of states
-$S$, the set of actions $A$, the transition table $T(s, a, s')$, the
-reward table $R(s, a, s')$, the initial state $s$ and the goal state
-$t$: $(S, A, T, R, s, t)$ \cite{Russell.aima}.  Monte Carlo tree
-search explores an MDP by \emph{rollouts}---trajectories from the
+best arm, and, by extension, the best action in MCTS. MCTS is used to
+solve Markov Decision Processes (MDP) approximately. An MDP is defined
+by the set of states $S$, the set of actions $A$, the transition table
+$T(s, a, s')$, the reward table $R(s, a, s')$, the initial state $s$
+and the goal state $t$: $(S, A, T, R, s, t)$ \cite{Russell.aima}.
+MCTS explores an MDP by \emph{rollouts}---trajectories from the
 current state to a state in which a termination condition is satisfied
 (either the goal state, or a cutoff state for which the reward is
 evaluated approximately). The UCB algorithm (that attempts to minimize
@@ -195,8 +194,8 @@ is daunting for the following reasons:
   measurements.  When applying the selection problem to MCTS, the
   situation is exacerbated.  The utility of an action is usually
   bounded, and thus in many cases a single sample may be insufficient
-  to change the current best action, {\em regardless} of its
-  outcome. As a result, we frequently get a {\em zero} ``myopic''
+  to change the current best action, \emph{regardless} of its
+  outcome. As a result, we frequently get a \emph{zero} ``myopic''
   value of information for a single sample.
 \end{itemize}
 As the ultimate goal is extremely difficult
@@ -234,7 +233,7 @@ We first consider $\varepsilon$-greedy sampling as a straightforward
 generalization of uniform sampling:
 \begin{dfn} The \textbf{$\mathbf{\varepsilon}$-greedy} sampling scheme
 pulls the empirically best arm with probability $\varepsilon$ and any other
-arm with equal probability $\frac {1-\varepsilon} {K-1}$. 
+arm with probability $\frac {1-\varepsilon} {K-1}$. 
 \end{dfn}
 
 \begin{thm} Simple regret of the  $\varepsilon$-greedy
@@ -265,11 +264,15 @@ number of pulls so far. \end{dfn}
 \end{thm}
 \begin{proof}[Proof sketch:] TODO
 \end{proof}
+
 \subsection{Sampling in Trees}
 \label{sec:sampling-in-trees}
 
-We suggest an improvement on the UCT algorithm, which combines
-different sampling schemes on the first step and during the rest of a rollout:
+The UCT sampling scheme \cite{Kocsis.uct} is a widely used generalization
+of UCB for MCTS.  UCT applies the UCB sampling
+scheme at each step of a rollout.  We suggest an improvement on UCT,
+which combines different sampling schemes on the first step and during
+the rest of a rollout:
 \begin{dfn}
 The {\bf two-stage MCTS sampling scheme} selects an action at the
 current root node according to an algorithm that minimizes the simple
@@ -277,16 +280,15 @@ regret, such as $\frac 1 2$-greedy or $UCB_{\sqrt{\cdot}}$, and then
 selects actions according to $UCB$.
 \end{dfn}
 
-This scheme outperforms the UCT sampling scheme that selects actions based on
-UCB only. Additionaly, such two-stage sampling scheme is significantly less
-sensitive to the tuning of the exploration factor $\alpha$ of UCT,
-since the conflict \cite{Bubeck.pure}
-between the need for a larger value of $\alpha$ on the first step (simple
-regret) and a smaller value for the rest of the rollout (cumulative
-regret) is resolved. In fact, a sampling scheme that uses UCB at all
-steps but a larger value of $\alpha$ for the first step than for the rest
-of the steps, outperforms UCT. The pseudocode of the two-stage rollout
-is in Algorithm~\ref{alg:two-stage-mcts}.
+Such two-stage sampling scheme outperforms UCT, and, additionally, is
+significantly less sensitive to the tuning of the exploration factor
+$\alpha$ of UCT, since the conflict between the need for a larger
+value of $\alpha$ on the first step (simple regret) and a smaller
+value for the rest of the rollout (cumulative regret)
+\cite{Bubeck.pure} is resolved. In fact, a sampling scheme that uses
+UCB at all steps but a larger value of $\alpha$ for the first step
+than for the rest of the steps, outperforms UCT. The pseudocode of the
+two-stage rollout is in Algorithm~\ref{alg:two-stage-mcts}.
 
 \begin{algorithm}[t]
 \caption{Two-stage Monte-Carlo tree search sampling}
@@ -312,7 +314,20 @@ is in Algorithm~\ref{alg:two-stage-mcts}.
 
 \subsection{VOI-aware Sampling}
 
-TODO
+A further improvement can be achieved by computing or estimating the VOI
+of the rollouts and choosing a rollout that maximizes the VOI. VOI of
+a rollout can be computed when the sample distribution of an
+action is known up to the parameters, such as the normal distribution
+with an unknown mean and/or variance. Alternatively, the value of
+information can be estimated from the set of samples, and the need to
+assume a particular shape of the distribution can be lifted. In one
+realization of the latter approach the VOI of performing an action is
+estimated as an \emph{upper bound on the value of perfect information about
+an arm, divided by the number of pulls of the arm}. 
+\begin{equation}
+\end{equation}
+Early experiments with this approach demonstrated significantly lower
+simple regret on a wide range of problems.
 
 \section{Empirical Evaluation}
 \label{sec:emp}
@@ -366,8 +381,8 @@ combination of GCT and QCT dominates UCT over the whole range.
     \includegraphics[scale=0.5]{flat-trilevel-k=64-uqb=8.pdf}\\
     b. regret vs. number of samples
   \end{minipage}
-  \label{fig:mab-simple-regret}
   \caption{Simple regret in MAB}
+  \label{fig:mab-simple-regret}
 \end{figure}
 
 \subsection{Monte Carlo tree search}
@@ -502,41 +517,6 @@ from UCT at the first step of the rollout, when the `simple' selection
 regret is minimized instead of the cumulative regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
 better general performance of the proposed algorithms.
-
-The improvement is inspired by the notion of value of information (VOI),
-but VOI is used implicitly in the analysis of the algorithm, rather
-than computed or learned explicitly in order to plan the rollouts. A
-further improvement can be achieved by computing or estimating the VOI
-of the rollouts and choosing a rollout that maximizes the VOI. Using VOI
-to guide Monte Carlo sampling instead of relying on the sample means
-of different actions  is particularly beneficial when different
-actions have qualitatively different distributions: for example, when the
-distribution variance varies significantly between the actions.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.35,trim=0 0 0 16pt,clip]{flat-trilevel-vct-k=64.pdf}\\
-  \caption{VOI-based action selection (VCT) vs. other algorithms}
-  \label{fig:flat-trilevel-vct}
-\end{figure}
-VOI of a rollout can be computed when the sample distribution of an
-action is known up to the parameters, such as the normal distribution
-with an unknown mean and/or variance. Alternatively, the value of
-information can be estimated from the set of samples, and the need to
-assume a particular shape of the distribution can be lifted. In one
-realization of the latter approach the VOI of performing an action is
-estimated as \emph{the value of perfect information learned from the
-  outcome of earlier samples of the action divided by the number of
-  samples}. Early experiments with this approach showed the best
-performance for sets of Bernoulli arms, and even a more prominent
-improvement for mixed arms (e.g. Bernoulli, triangularly distributed,
-and fixed arms) (Figure~\ref{fig:flat-trilevel-vct} shows results for
-different algorithms for 32 randomly generated arms): \textbf{VCT},
-the algorithm which selects a rollout with the maximum VOI estimate
-exhibits lower average regret than other algorithms. Sample-based VOI
-estimation requires keeping more information than an algorithm based
-only on the sample mean, but the overhead is small and justified by
-the improvement.
 
 \section*{Acknowledgments}
 
