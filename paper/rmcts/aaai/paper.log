@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.25)  19 JAN 2012 16:37
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.25)  20 JAN 2012 13:08
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -197,195 +197,173 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 Package color Info: Driver file: pdftex.def on input line 130.
 )
 \c@lemma=\count109
+\c@dfn=\count110
+\c@thm=\count111
+\c@lmm=\count112
+\c@crl=\count113
  (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 37.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 41.
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count110
+\scratchcounter=\count114
 \scratchdimen=\dimen118
 \scratchbox=\box30
-\nofMPsegments=\count111
-\nofMParguments=\count112
+\nofMPsegments=\count115
+\nofMParguments=\count116
 \everyMPshowfont=\toks30
-\MPscratchCnt=\count113
+\MPscratchCnt=\count117
 \MPscratchDim=\dimen119
-\MPnumerator=\count114
+\MPnumerator=\count118
 \everyMPtoPDFconversion=\toks31
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 39.
-LaTeX Font Info:    Try loading font information for U+msa on input line 39.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 43.
+LaTeX Font Info:    Try loading font information for U+msa on input line 43.
  (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 39.
+LaTeX Font Info:    Try loading font information for U+msb on input line 43.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 39.
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 39.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 43.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 43.
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 39.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 43.
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 39.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 43.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 41.
-
-Underfull \hbox (badness 1132) in paragraph at lines 109--123
-\OT1/ptm/m/n/10 prob-lems. At each search step, the al-go-rithm al-lo-cates
- []
-
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
+ [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 
 ]
-Underfull \hbox (badness 1308) in paragraph at lines 183--185
-\OT1/ptm/m/n/10 The ul-ti-mate goal is ``op-ti-mal'' sam-pling in the meta-
- []
-
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 138.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 209.
-[2]
-Underfull \hbox (badness 1824) in paragraph at lines 290--292
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 207.
+ [2]
+Underfull \hbox (badness 1824) in paragraph at lines 328--330
 []\OT1/ptm/m/n/10 U$[]$ with the first step re-placed with uni-form
  []
 
-<onelevel-tree.pdf, id=23, 181.67876pt x 105.39375pt>
+<onelevel-tree.pdf, id=22, 181.67876pt x 105.39375pt>
 File: onelevel-tree.pdf Graphic file (type pdf)
  <use onelevel-tree.pdf>
-<flat-trilevel-k=64-uqb=8.pdf, id=24, 400.49625pt x 292.09125pt>
+<flat-trilevel-k=64-uqb=8.pdf, id=23, 400.49625pt x 292.09125pt>
 File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
 
-<use flat-trilevel-k=64-uqb=8.pdf>
-<twolevel-tree.pdf, id=25, 266.9975pt x 204.765pt>
+<use flat-trilevel-k=64-uqb=8.pdf> [3 <./onelevel-tree.pdf> <./flat-trilevel-k=
+64-uqb=8.pdf>] <twolevel-tree.pdf, id=56, 266.9975pt x 204.765pt>
 File: twolevel-tree.pdf Graphic file (type pdf)
- <use twolevel-tree.pdf>
-<tree-identity-k=16-uqb=8.pdf, id=26, 400.49625pt x 285.065pt>
+
+<use twolevel-tree.pdf>
+<tree-identity-k=16-uqb=8.pdf, id=57, 400.49625pt x 285.065pt>
 File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=16-uqb=8.pdf>
-<tree-identity-k=64-uqb=8.pdf, id=27, 404.51125pt x 285.065pt>
+<tree-identity-k=64-uqb=8.pdf, id=58, 404.51125pt x 285.065pt>
 File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=64-uqb=8.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Underfull \vbox (badness 4353) has occurred while \output is active []
-
- [3 <./onelevel-tree.pdf> <./flat-trilevel-k=64-uqb=8.pdf>]
-<costs-size=6-group=median.pdf, id=60, 400.49625pt x 251.94125pt>
+<costs-size=6-group=median.pdf, id=59, 400.49625pt x 251.94125pt>
 File: costs-size=6-group=median.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=median.pdf>
-<costs-size=6-group=minimum.pdf, id=61, 400.49625pt x 251.94125pt>
+<costs-size=6-group=minimum.pdf, id=60, 400.49625pt x 251.94125pt>
 File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=minimum.pdf>
-<costs-size=6-nsamples=397.pdf, id=62, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=397.pdf, id=61, 400.49625pt x 251.94125pt>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=1585.pdf, id=63, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=62, 400.49625pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
  <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=64, 400.49625pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=63, 400.49625pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
-<rcq-size=6-nsamples=397.pdf, id=65, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=397.pdf, id=64, 400.49625pt x 251.94125pt>
 File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=66, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=1585.pdf, id=65, 400.49625pt x 251.94125pt>
 File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=1585.pdf>
-<flat-trilevel-vct-k=64.pdf, id=67, 545.03625pt x 394.47375pt>
+<flat-trilevel-vct-k=64.pdf, id=66, 545.03625pt x 394.47375pt>
 File: flat-trilevel-vct-k=64.pdf Graphic file (type pdf)
 
 <use flat-trilevel-vct-k=64.pdf> [4 <./twolevel-tree.pdf> <./tree-identity-k=16
--uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf> <./costs-size=6-group=median.pdf> 
-<./costs-size=6-group=minimum.pdf>]
-Overfull \hbox (21.98653pt too wide) in alignment at lines 548--555
- [][][] []
- []
+-uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf>] [5 <./costs-size=6-group=median.p
+df> <./costs-size=6-group=minimum.pdf> <./costs-size=6-nsamples=397.pdf> <./cos
+ts-size=6-nsamples=1585.pdf> <./costs-size=10-nsamples=397.pdf>] [6
 
-[5 <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1585.pdf> <./cost
-s-size=10-nsamples=397.pdf>]
-Underfull \hbox (badness 4328) in paragraph at lines 626--628
-[]\OT1/ptm/m/n/10 ( Bubeck, Munos, and Stoltz 2011) es-tab-lishes for
- []
-
-[6 <./flat-trilevel-vct-k=64.pdf> <./rcq-size=6-nsamples=397.pdf> <./rcq-size=6
--nsamples=1585.pdf>]
-Overfull \hbox (6.09642pt too wide) in alignment at lines 721--730
- [][][] []
- []
-
-[7] (./paper.bbl
+ <./flat-trilevel-vct-k=64.pdf> <./rcq-size=6-nsamples=397.pdf> <./rcq-size=6-n
+samples=1585.pdf>] (./paper.bbl
 Missing character: There is no Ã in font ptmr7t!
 Missing character: There is no ¤ in font ptmr7t!
-) [8
+) [7
+
 
 ] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2886 strings out of 495061
- 37537 string characters out of 1182620
- 100897 words of memory out of 3000000
- 5999 multiletter control sequences out of 15000+50000
- 24845 words of font info for 60 fonts, out of 3000000 for 9000
+ 2876 strings out of 495061
+ 37016 string characters out of 1182620
+ 97883 words of memory out of 3000000
+ 5991 multiletter control sequences out of 15000+50000
+ 22753 words of font info for 47 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  27i,11n,22p,276b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/sh
-are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/font
-s/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/publ
-ic/amsfonts/cm/cmmi6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/
-cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb
-></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
-/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texliv
-e/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1
-/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
-fonts/cm/cmsy5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cms
-y7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr
-/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share
-/texmf-texlive/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf
--texlive/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-texliv
-e/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/ti
-mes/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (8 pages, 404482 bytes).
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/pub
+lic/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pfb
+></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
+e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texl
+ive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texmf-texlive/fonts/ty
+pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/ur
+w/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb>
+</usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
+xlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (7 pages, 344008 bytes).
 PDF statistics:
- 254 PDF objects out of 1000 (max. 8388607)
+ 231 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  72 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -4,42 +4,42 @@ The style file: aaai.bst
 Database file #1: refs.bib
 You've used 9 entries,
             2568 wiz_defined-function locations,
-            643 strings with 6167 characters,
-and the built_in function-call counts, 3729 in all, are:
-= -- 401
+            639 strings with 6101 characters,
+and the built_in function-call counts, 3836 in all, are:
+= -- 411
 > -- 131
-< -- 4
-+ -- 43
+< -- 5
++ -- 42
 - -- 42
 * -- 282
-:= -- 598
+:= -- 606
 add.period$ -- 45
 call.type$ -- 9
 change.case$ -- 55
 chr.to.int$ -- 9
 cite$ -- 9
-duplicate$ -- 155
-empty$ -- 275
+duplicate$ -- 166
+empty$ -- 288
 format.name$ -- 60
-if$ -- 786
+if$ -- 824
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 10
 newline$ -- 57
 num.names$ -- 27
-pop$ -- 53
+pop$ -- 57
 preamble$ -- 1
 purify$ -- 66
 quote$ -- 0
-skip$ -- 122
+skip$ -- 132
 stack$ -- 0
-substring$ -- 207
-swap$ -- 43
-text.length$ -- 4
+substring$ -- 209
+swap$ -- 52
+text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 64
 warning$ -- 0
 while$ -- 31
-width$ -- 13
+width$ -- 14
 write$ -- 126

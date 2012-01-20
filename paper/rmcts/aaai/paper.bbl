@@ -20,12 +20,6 @@ Eyerich, P.; Keller, T.; Helmert, M.; and ludwigs-universität Freiburg, A.
 \newblock High-quality policies for the canadian travelers problem.
 \newblock In {\em In Proc. AAAI 2010},  51--58.
 
-\bibitem[\protect\citeauthoryear{Hagerup and R\"{u}b}{1990}]{Hagerup.chernoff}
-Hagerup, T., and R\"{u}b, C.
-\newblock 1990.
-\newblock A guided tour of {C}hernoff bounds.
-\newblock {\em Inf. Process. Lett.} 33:305--308.
-
 \bibitem[\protect\citeauthoryear{Horvitz}{1987}]{Horvitz.reasoningabout}
 Horvitz, E.~J.
 \newblock 1987.
@@ -59,5 +53,11 @@ Tolpin, D., and Shimony, S.~E.
 \newblock Semi-myopic measurement selection for optimization under uncertainty.
 \newblock Technical Report 10-01, Lynne and William Frankel Center for Computer
   Science at Ben Gurion University of the Negev, Israel.
+
+\bibitem[\protect\citeauthoryear{Vermorel and Mohri}{2005}]{Vermorel.bandits}
+Vermorel, J., and Mohri, M.
+\newblock 2005.
+\newblock Multi-armed bandit algorithms and empirical evaluation.
+\newblock In {\em ECML},  437--448.
 
 \end{thebibliography}
