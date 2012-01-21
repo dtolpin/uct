@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 16:13
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 17:45
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -298,22 +298,22 @@ File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<costs-size=6-group=median.pdf, id=30, 400.49625pt x 251.94125pt>
+<costs-size=6-group=median.pdf, id=30, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=median.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=median.pdf>
-<costs-size=6-group=minimum.pdf, id=31, 400.49625pt x 251.94125pt>
+<costs-size=6-group=minimum.pdf, id=31, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=minimum.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<costs-size=6-nsamples=397.pdf, id=32, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=397.pdf, id=32, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=1585.pdf, id=33, 400.49625pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=33, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
@@ -322,18 +322,18 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=34, 400.49625pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=34, 443.6575pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<rcq-size=6-nsamples=397.pdf, id=35, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=397.pdf, id=35, 436.63126pt x 251.94125pt>
 File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=36, 400.49625pt x 251.94125pt>
+<rcq-size=6-nsamples=1585.pdf, id=36, 436.63126pt x 251.94125pt>
 File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=1585.pdf>
@@ -380,9 +380,9 @@ pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/ur
 w/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
 xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (6 pages, 342714 bytes).
+Output written on paper.pdf (6 pages, 344981 bytes).
 PDF statistics:
- 228 PDF objects out of 1000 (max. 8388607)
+ 234 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

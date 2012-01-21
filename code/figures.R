@@ -12,7 +12,7 @@ draw.regrets <- function(regrets_file, log="xy", legend.position='topright', xla
 	values <- unlist(regrets[,-1])
 	ylim <- range(values[values>0])
 
-	plot(x=regrets[1], type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main)
+	plot(x=regrets[,1], type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main)
         for(i in (2:ncol(regrets))) {
           lines(x=regrets[,1], y=regrets[,i],
                 type="o", pch=i-1)

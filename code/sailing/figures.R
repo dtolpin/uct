@@ -1,40 +1,45 @@
 draw.costs.of.factor <- function(costs_file, legend.position='bottomright', log="x",main=NA) {
-  costs <- read.table(costs_file, header=T)
-  algorithms <- names(costs)[-1]
-  xlim <- range(costs$FACTOR)
-  ylim <- range(costs[algorithms])
-  plot(x=costs$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, xaxs='i',
+  costs <- read.table(costs_file, header=F)
+  names <- as.matrix(costs[1,])[-1]
+  costs <- as.matrix(costs[-1,])
+  costs <- matrix(as.numeric(costs), nrow=nrow(costs), ncol=ncol(costs))
+
+  fctr <- costs[,1]
+  fctr <- fctr*fctr*4
+  xlim <- range(fctr)
+  ylim <- range(unlist(costs[,-1]))
+  plot(x=fctr, type='n', log=log, xlim=xlim, ylim=ylim, xaxs='i',
        xlab='exploration factor', ylab='cost',
        main=if(is.na(main)) do.call(paste,as.list(unlist(strsplit(costs_file,
                             "-|\\.txt",fixed=FALSE)))[-1])
             else main)
-  i <- 1
-  for(alg in algorithms) {
-    lines(x=costs$FACTOR, y=costs[[alg]],
-          type="o", pch=i)
-    i <- i+1
+
+  for(i in (2:ncol(costs))) {
+    lines(x=fctr, y=costs[,i],
+          type="o", pch=i-1)
   }
-  legend(x=legend.position, legend=algorithms, pch=1:length(algorithms), bg='white')
+  legend(x=legend.position, legend=names, pch=1:length(names), bg='white')
 }
 
 draw.costs.of.nsamples <- function(costs_file, legend.position='right', log="x", main=NA) {
-  costs <- read.table(costs_file, header=T)
-  algorithms <- names(costs)[-1]
-  xlim <- range(costs$SAMPLES)
-  ylim <- range(costs[algorithms])
-  print(costs)
-  plot(x=costs$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, xaxs='i',
+  costs <- read.table(costs_file, header=F)
+  names <- as.matrix(costs[1,])[-1]
+  costs <- as.matrix(costs[-1,])
+  costs <- matrix(as.numeric(costs), nrow=nrow(costs), ncol=ncol(costs))
+
+  smpls <- costs[,1]
+  xlim <- range(smpls)
+  ylim <- range(unlist(costs[,-1]))
+  plot(x=smpls, type='n', log=log, xlim=xlim, ylim=ylim, xaxs='i',
        xlab='samples per node', ylab='cost',
        main=if(is.na(main)) do.call(paste,as.list(unlist(strsplit(costs_file,
                             "-|\\.txt",fixed=FALSE)))[-1])
             else main)
-  i <- 1
-  for(alg in algorithms) {
-    lines(x=costs$SAMPLES, y=costs[[alg]],
-          type="o", pch=i)
-    i <- i+1
+  for(i in (2:ncol(costs))) {
+    lines(x=smpls, y=costs[,i],
+          type="o", pch=i-1)
   }
-  legend(x=legend.position, legend=algorithms, pch=1:length(algorithms), bg='white')
+  legend(x=legend.position, legend=names, pch=1:length(names), bg='white')
 }
   
 draw.rcq <- function() {
