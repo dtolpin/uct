@@ -224,7 +224,7 @@ exponentially decreasing in the number of samples (see
 UCB($\alpha$) yields a lower simple regret than uniform
 sampling. 
 
-We introduce here two sampling schemes with superpolynomially
+We introduce here two sampling schemes with super-polynomially
 decreasing upper bounds on the simple regret. The bounds
 suggest that these schemes achieve a lower simple regret
 than uniform sampling; indeed, this is confirmed
@@ -251,34 +251,34 @@ with probability at least $1-\pi$.
 
 \begin{proof}[Proof outline:] 
 
-Bound the probability $P_j$ that a non-optimal arm $j$ is selected. Split the interval
- $[\mu_j, \mu_*]$ at $\mu_j+\delta_j$. By Chernoff-Hoeffding bound:
+Bound the probability $P_i$ that a non-optimal arm $i$ is selected. Split the interval
+ $[\mu_i, \mu_*]$ at $\mu_i+\delta_i$. By Chernoff-Hoeffding bound:
 \begin{eqnarray}
-P_j&\le&\Pr[\overline X_j>\mu_j+\delta_j]+\Pr[\overline X_*<\mu_*-(\Delta_j-\delta_j)]\nonumber\\
-   &\le&\exp\left(-2\delta_j^2n_j\right)+\exp\left(-2(\Delta_j-\delta_j)^2n_*\right)
+P_i&\le&\Pr[\overline X_i>\mu_i+\delta_i]+\Pr[\overline X_*<\mu_*-(\Delta_i-\delta_i)]\nonumber\\
+   &\le&\exp\left(-2\delta_i^2n_i\right)+\exp\left(-2(\Delta_i-\delta_i)^2n_*\right)
 \end{eqnarray}
-Observe that, in probability, $\overline X_j \rightarrow \mu_j$ as $n\rightarrow\infty$, 
-therefore $n_*\rightarrow n\varepsilon$, $n_j\rightarrow\frac
+Observe that, in probability, $\overline X_i \rightarrow \mu_i$ as $n\rightarrow\infty$, 
+therefore $n_*\rightarrow n\varepsilon$, $n_i\rightarrow\frac
 {n(1-\varepsilon)} {K-1}$ as $n\rightarrow \infty$. Conclude that for
 any $0<\pi<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
-all non-optimal arms $j$:
+all non-optimal arms $i$:
 \begin{equation}
-P_j \le \gamma \left(\exp\left(-\frac {2\delta_j^2n(1-\varepsilon)}{K-1}\right)
-+\exp\left(-2(\Delta_j-\delta_j)^2n\varepsilon\right)\right)
+P_i \le \gamma \left(\exp\left(-\frac {2\delta_i^2n(1-\varepsilon)}{K-1}\right)
++\exp\left(-2(\Delta_i-\delta_i)^2n\varepsilon\right)\right)
 \label{eqn:epsgreedy-probbound}
 \end{equation}
 Require
 \begin{eqnarray}
-\exp\left(-\frac {2\delta_j^2n(1-\varepsilon)}{K-1}\right)
-&=&\exp\left(-2(\Delta_j-\delta_j)^2n\varepsilon\right)\nonumber\\
-\frac {\delta_j} {\Delta_j-\delta_j}&=&\sqrt{\frac {(K-1)\varepsilon} {1-\varepsilon}}
+\exp\left(-\frac {2\delta_i^2n(1-\varepsilon)}{K-1}\right)
+&=&\exp\left(-2(\Delta_i-\delta_i)^2n\varepsilon\right)\nonumber\\
+\frac {\delta_i} {\Delta_i-\delta_i}&=&\sqrt{\frac {(K-1)\varepsilon} {1-\varepsilon}}
 \label{eqn:epsgreedy-constant-varepsilon}
 \end{eqnarray}
 Substitute (\ref{eqn:epsgreedy-probbound}) together with
 (\ref{eqn:epsgreedy-constant-varepsilon}) into
 (\ref{eqn:simple-regret}) and obtain
 \begin{equation}
-\IE r_{\varepsilon\mbox{-}greedy}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_j^2n\varepsilon}
+\IE r_{\varepsilon\mbox{-}greedy}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_i^2n\varepsilon}
   {\left(1+\sqrt{\frac {(K-1)\varepsilon}
         {1-\varepsilon}}\right)^2}\right)
 \end{equation}
@@ -290,17 +290,16 @@ random sampling ($\varepsilon=\frac 1 K$):
 \begin{crl}
 For uniform random sampling, 
 \begin{equation}
-\IE r_{uniform}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {\Delta_j^2n} {K}\right)
+\IE r_{uniform}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {\Delta_i^2n} {K}\right)
 \end{equation}
 For $\frac 1 2$-greedy sampling,
 \begin{eqnarray}
-\IE r_{\frac 1 2\mbox{-}greedy}&\le& 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_j^2n}
+\IE r_{\frac 1 2\mbox{-}greedy}&\le& 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_i^2n}
   {\left(1+\sqrt{(K-1)}\right)^2}\right)\nonumber\\
   &\approx& 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac
-    {2\Delta_j^2n} {K}\right)\mbox{ for large K}\nonumber\\
+    {2\Delta_i^2n} {K}\right)\mbox{ for large K}\nonumber\\
 \end{eqnarray}
 \end{crl}
-
 
 $\varepsilon$-greedy is based solely on sampling the empirically best
 arm with a higher probability then the rest of the arms, and ignores
@@ -320,17 +319,38 @@ b_i=\overline X_i+\sqrt {\frac {\alpha \sqrt n} {n_i}}
 where, as before, $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn}
-This scheme also exhibits a superpolynomially decreasing simple regret:
+This scheme also exhibits a super-polynomially decreasing simple regret:
 \begin{thm}  For any $0<\pi<1$  and $\gamma>1$ there exists $N$ such that for
   any number of samples $n>N$ the simple regret of the  UCB$_{\sqrt{\cdot}}$($\alpha$)
 sampling scheme is  bounded from above as
 \begin{equation}
-\IE r_{ucb\sqrt{\cdot}} \le \gamma\sum_{i=1}^K\Delta_i\exp\left(-2\alpha\sqrt{n}\right)
+\IE r_{ucb\sqrt{\cdot}} \le
+2\gamma\sum_{i=1}^K\Delta_i\exp\left(-\frac {\alpha\sqrt{n}} 2\right)
 \end{equation}
 with probability at least $1-\pi$.
 \end{thm}
 
-\begin{proof}[Proof outline:] TODO
+\begin{proof}[Proof outline:] Bound the probability $P_i$ that a
+  non-optimal arm $i$ is chosen. Split the interval $[\mu_i, \mu_*]$
+  at $\mu_i+\frac {\Delta_i} 2$. By Chernoff-Hoeffding bound:
+\begin{eqnarray}
+P_i&\le&Pr\left[\overline X_i>\mu_i+\frac {\Delta_i} 2\right]+\Pr\left[\overline X_*<\mu_*-\frac {\Delta_i}
+  2\right]\nonumber \\
+   &\le&\exp\left(-\frac {\Delta_i^2n_i} 2\right)+\exp\left(-\frac {\Delta_i^2n_*} 2\right)
+\end{eqnarray}
+Observe that, in probability, $n_i\to \frac {\alpha \sqrt n}
+{\Delta_i^2}$, $n_i\le n_*$ as $n\to\infty$. Conclude that for
+any $0<\pi<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
+all non-optimal arms $i$:
+\begin{equation}
+P_i \le 2\gamma \exp\left(-\frac {\alpha \sqrt n} 2\right)
+\label{eqn:usbsqrt-probbound}
+\end{equation}
+Substitute (\ref{eqn:usbsqrt-probbound}) into
+(\ref{eqn:simple-regret}) and obtain
+\begin{equation}
+\IE r_{ucb\sqrt{\cdot}} \le 2\gamma\sum_{i=1}^K\Delta_i\exp\left(-\frac {\alpha\sqrt{n}} 2\right)
+\end{equation}
 \end{proof}
 
 \subsection{Sampling in Trees}

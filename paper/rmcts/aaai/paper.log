@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 23:29
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 JAN 2012 00:33
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -268,60 +268,53 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 206.
  [2]
-Overfull \hbox (8.20317pt too wide) detected at line 267
+Overfull \hbox (3.32817pt too wide) detected at line 269
 \OML/cmm/m/it/10 P[] \OMS/cmsy/m/n/10 ^^T \OML/cmm/m/it/10 ^^M []
  []
 
-! Missing delimiter (. inserted).
-<to be read again> 
-                   }
-l.276   \left
-             ({1+\sqrt{\frac {(K-1)\varepsilon}
-? make
-Type <return> to proceed, S to scroll future error messages,
-R to run without stopping, Q to run quietly,
-I to insert something, E to edit your file,
-1 or ... or 9 to ignore the next 1 to 9 tokens of input,
-H for help, X to quit.
-? 
-! Extra }, or forgotten \right.
-<recently read> }
-                 
-l.276   \left
-             ({1+\sqrt{\frac {(K-1)\varepsilon}
-? 
-! Emergency stop.
-<recently read> }
-                 
-l.276   \left
-             ({1+\sqrt{\frac {(K-1)\varepsilon}
-End of file on the terminal!
+[3]
+Underfull \hbox (badness 1062) in paragraph at lines 452--457
+\OT1/ptm/m/n/10 out-per-forms $[]$-greedy. A com-bi-na-tion of $[]$-greedy and
+ []
 
- 
-Here is how much of TeX's memory you used:
- 2781 strings out of 495061
- 34648 string characters out of 1182622
- 96685 words of memory out of 3000000
- 5916 multiletter control sequences out of 15000+50000
- 21029 words of font info for 45 fonts, out of 3000000 for 9000
- 28 hyphenation exceptions out of 8191
- 27i,11n,22p,276b,257s stack positions out of 5000i,500n,10000p,200000b,50000s
-!  ==> Fatal error occurred, no output PDF file produced!
-hic file (type pdf)
+<onelevel-tree.pdf, id=27, 181.67876pt x 105.39375pt>
+File: onelevel-tree.pdf Graphic file (type pdf)
+ <use onelevel-tree.pdf>
+<flat-trilevel-k=64-uqb=8.pdf, id=28, 400.49625pt x 251.94125pt>
+File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
+
+<use flat-trilevel-k=64-uqb=8.pdf> [4 <./onelevel-tree.pdf> <./flat-trilevel-k=
+64-uqb=8.pdf>] <twolevel-tree.pdf, id=69, 266.9975pt x 204.765pt>
+File: twolevel-tree.pdf Graphic file (type pdf)
+
+<use twolevel-tree.pdf>
+<tree-identity-k=16-uqb=8.pdf, id=70, 400.49625pt x 251.94125pt>
+File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
+
+<use tree-identity-k=16-uqb=8.pdf>
+<tree-identity-k=64-uqb=8.pdf, id=71, 400.49625pt x 265.99374pt>
+File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
+
+<use tree-identity-k=64-uqb=8.pdf>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<costs-size=6-group=median.pdf, id=72, 450.68375pt x 251.94125pt>
+File: costs-size=6-group=median.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=median.pdf>
-<costs-size=6-group=minimum.pdf, id=72, 450.68375pt x 251.94125pt>
+<costs-size=6-group=minimum.pdf, id=73, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=minimum.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<costs-size=6-nsamples=397.pdf, id=73, 443.6575pt x 251.94125pt>
+<costs-size=6-nsamples=397.pdf, id=74, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=1585.pdf, id=74, 443.6575pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=75, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
@@ -330,54 +323,57 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=75, 443.6575pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=76, 443.6575pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<rcq-size=6-nsamples=397.pdf, id=76, 436.63126pt x 251.94125pt>
+<rcq-size=6-nsamples=397.pdf, id=77, 436.63126pt x 251.94125pt>
 File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=77, 436.63126pt x 251.94125pt>
+<rcq-size=6-nsamples=1585.pdf, id=78, 436.63126pt x 251.94125pt>
 File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
-<use rcq-size=6-nsamples=1585.pdf> [5 <./twolevel-tree.pdf> <./tree-identity-k=
-16-uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf> <./costs-size=6-group=median.pdf
-> <./costs-size=6-group=minimum.pdf> <./costs-size=6-nsamples=397.pdf> <./costs
--size=6-nsamples=1585.pdf>]
+<use rcq-size=6-nsamples=1585.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(./paper.bbl) [6 <./costs-size=10-nsamples=397.pdf> <./rcq-size=6-nsamples=397.
-pdf> <./rcq-size=6-nsamples=1585.pdf>] (./paper.aux) ) 
+(./paper.bbl [5 <./twolevel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf> <./tree-
+identity-k=64-uqb=8.pdf>] [6 <./costs-size=6-group=median.pdf> <./costs-size=6-
+group=minimum.pdf> <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1
+585.pdf> <./costs-size=10-nsamples=397.pdf> <./rcq-size=6-nsamples=397.pdf> <./
+rcq-size=6-nsamples=1585.pdf>]) [7
+
+] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2872 strings out of 495061
- 36896 string characters out of 1182622
- 101665 words of memory out of 3000000
- 5988 multiletter control sequences out of 15000+50000
+ 2873 strings out of 495061
+ 36919 string characters out of 1182622
+ 100674 words of memory out of 3000000
+ 5989 multiletter control sequences out of 15000+50000
  22753 words of font info for 47 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  27i,11n,22p,276b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive
-/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfo
-nts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex
-10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texm
-f-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fo
-nts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/pub
-lic/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/
-cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pf
-b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/shar
-e/texmf-texlive/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texm
-f-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type
-1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.
-pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (6 pages, 362650 bytes).
+{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/sh
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/pub
+lic/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pf
+b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texliv
+e/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/typ
+e1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texlive/fonts/type1/public/am
+sfonts/cm/cmsy9.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbo
+ls/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/
+share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive
+/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/tim
+es/utmri8a.pfb>
+Output written on paper.pdf (7 pages, 371871 bytes).
 PDF statistics:
- 234 PDF objects out of 1000 (max. 8388607)
+ 243 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
