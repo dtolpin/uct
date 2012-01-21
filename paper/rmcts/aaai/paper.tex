@@ -140,8 +140,8 @@ Problem is the expected difference between the best expected reward
 $\mu_*$ and the expected reward $\mu_j$ of the empirically best arm
 $\overline X_j=\max_i\overline X_i$:
 \begin{equation}
-\label{eq:simple-regret}
 \IE r=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\label{eqn:simple-regret}
 \end{equation}
 where $\Delta_j=\mu_*-\mu_j$.
 \end{dfn}
@@ -233,22 +233,74 @@ by experiments.
 We first consider $\varepsilon$-greedy sampling as a straightforward
 generalization of uniform sampling:
 \begin{dfn} The \textbf{$\mathbf{\varepsilon}$-greedy} sampling scheme
-pulls the empirically best arm with probability $\varepsilon$ and any other
+pulls the empirically best arm with probability
+$0<\varepsilon<1$ and any other
 arm with probability $\frac {1-\varepsilon} {K-1}$. 
 \end{dfn}
 This sampling scheme exhibits an exponentially decreasing simple regret:
-\begin{thm} For any $\pi>0$  and $\gamma>0$ there exists $N$ such that for
+\begin{thm} For any $0<\pi<10$  and $\gamma>1$ there exists $N$ such that for
   any number of samples $n>N$ the simple regret of the  $\varepsilon$-greedy
 sampling scheme is  bounded from above as
 \begin{equation}
-\IE r_{\varepsilon\mbox{-}greedy}\le (1+\gamma) \sum_{i=1}^K\Delta_i\exp(\cdot)
+\IE r_{\varepsilon\mbox{-}greedy}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_j^2n\varepsilon}
+  {\left(1+\sqrt{\frac {(K-1)\varepsilon}
+        {1-\varepsilon}}\right)^2}\right)
 \end{equation}
 with probability at least $1-\pi$.
-the bound is minimized for $\varepsilon=\frac 1 2$.
 \end{thm}
 
-\begin{proof}[Proof outline:] TODO
+\begin{proof}[Proof outline:] 
+
+Bound the probability $P_j$ that a non-optimal arm $j$ is selected. Split the interval
+ $[\mu_j, \mu_*]$ at $\mu_j+\delta_j$. By Chernoff-Hoeffding bound:
+\begin{eqnarray}
+P_j&\le&\Pr[\overline X_j>\mu_j+\delta_j]+\Pr[\overline X_*<\mu_*-(\Delta_j-\delta_j)]\nonumber\\
+   &\le&\exp\left(-2\delta_j^2n_j\right)+\exp\left(-2(\Delta_j-\delta_j)^2n_*\right)
+\end{eqnarray}
+Observe that, in probability, $\overline X_j \rightarrow \mu_j$ as $n\rightarrow\infty$, 
+therefore $n_*\rightarrow n\varepsilon$, $n_j\rightarrow\frac
+{n(1-\varepsilon)} {K-1}$ as $n\rightarrow \infty$. Conclude that for
+any $0<\pi<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
+all non-optimal arms $j$:
+\begin{equation}
+P_j \le \gamma \left(\exp\left(-\frac {2\delta_j^2n(1-\varepsilon)}{K-1}\right)
++\exp\left(-2(\Delta_j-\delta_j)^2n\varepsilon\right)\right)
+\label{eqn:epsgreedy-probbound}
+\end{equation}
+Require
+\begin{eqnarray}
+\exp\left(-\frac {2\delta_j^2n(1-\varepsilon)}{K-1}\right)
+&=&\exp\left(-2(\Delta_j-\delta_j)^2n\varepsilon\right)\nonumber\\
+\frac {\delta_j} {\Delta_j-\delta_j}&=&\sqrt{\frac {(K-1)\varepsilon} {1-\varepsilon}}
+\label{eqn:epsgreedy-constant-varepsilon}
+\end{eqnarray}
+Substitute (\ref{eqn:epsgreedy-probbound}) together with
+(\ref{eqn:epsgreedy-constant-varepsilon}) into
+(\ref{eqn:simple-regret}) and obtain
+\begin{equation}
+\IE r_{\varepsilon\mbox{-}greedy}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_j^2n\varepsilon}
+  {\left(1+\sqrt{\frac {(K-1)\varepsilon}
+        {1-\varepsilon}}\right)^2}\right)
+\end{equation}
 \end{proof}
+
+In particular, as the number of arms $K$ grows, the bound for $\frac 1
+2$-greedy sampling ($\varepsilon=\frac 1 2$) becomes considerably tighter than for uniform
+random sampling ($\varepsilon=\frac 1 K$):
+\begin{crl}
+For uniform random sampling, 
+\begin{equation}
+\IE r_{uniform}\le 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {\Delta_j^2n} {K}\right)
+\end{equation}
+For $\frac 1 2$-greedy sampling,
+\begin{eqnarray}
+\IE r_{\frac 1 2\mbox{-}greedy}&\le& 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac {2\Delta_j^2n}
+  {\left(1+\sqrt{(K-1)}\right)^2}\right)\nonumber\\
+  &\approx& 2\gamma \sum_{i=1}^K\Delta_i\exp\left(-\frac
+    {2\Delta_j^2n} {K}\right)\mbox{ for large K}\nonumber\\
+\end{eqnarray}
+\end{crl}
+
 
 $\varepsilon$-greedy is based solely on sampling the empirically best
 arm with a higher probability then the rest of the arms, and ignores
@@ -269,11 +321,11 @@ where, as before, $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn}
 This scheme also exhibits a superpolynomially decreasing simple regret:
-\begin{thm}  For any $\pi>0$  and $\gamma>0$ there exists $N$ such that for
-  any number of samples $n>N$ the simple regret of the  UCB$_{\sqrt{}}$($\alpha$)
+\begin{thm}  For any $0<\pi<1$  and $\gamma>1$ there exists $N$ such that for
+  any number of samples $n>N$ the simple regret of the  UCB$_{\sqrt{\cdot}}$($\alpha$)
 sampling scheme is  bounded from above as
 \begin{equation}
-\IE r_{ucb\sqrt{\cdot}} \le (1+\gamma)\sum_{i=1}^K\Delta_i\exp\left(-2\alpha\sqrt{n}\right)
+\IE r_{ucb\sqrt{\cdot}} \le \gamma\sum_{i=1}^K\Delta_i\exp\left(-2\alpha\sqrt{n}\right)
 \end{equation}
 with probability at least $1-\pi$.
 \end{thm}
@@ -541,7 +593,7 @@ further improvement in the sampling performance can be
 achieved. However, application of the theory of rational metareasoning
 to Monte Carlo Tree Search is an open problem \cite{HayRussell.MCTS},
 and both a solid theoretical model and empirically efficient VOI
-estimates still need to be developed.
+estimates need to be developed.
 
 \section*{Acknowledgments}
 
