@@ -52,7 +52,7 @@ move selection) that collects a reward, rather than all ``arm pulls''.
 Therefore, it makes more sense to minimize the simple regret, as
 opposed to the cumulative regret. We begin by introducing policies for
 multi-armed bandits with lower finite-time and asymptotic simple
-regret than UCB, using it to develop an algorithm (USRT) for MCTS
+regret than UCB, using it to develop a two-stage scheme (SR+CR) for MCTS
 which outperforms UCT empirically.
 
 We then observe that optimizing the sampling process is itself a
@@ -61,8 +61,8 @@ information (VOI) techniques.  Although the theory of VOI for search
 exists, applying it to MCTS is non-trivial, as typical myopic
 assumptions fail. Lacking a working VOI theory for MCTS, we
 nevertheless propose a sampling scheme that is ``aware'' of VOI,
-achieving an algorithm that in empirical evaluation outperforms USRT,
-as well as UCT.
+achieving an algorithm that in empirical evaluation outperforms 
+both UCT and the other proposed algorithms.
 \end{abstract}
 
 \section{Introduction}
@@ -360,10 +360,11 @@ Figure~\ref{fig:mab-simple-regret}.b shows the regret
 vs. the number of samples, averaged over $10^4$ experiments for
 randomly generated instances of 32 arms. 
 
-For smaller numbers of samples, GCT achieves the best
-performance; for larger numbers of samples, QCT outperforms GCT. QCT is
-better than UCT everywhere except for very small numbers of samples. A
-combination of GCT and QCT dominates UCT over the whole range.
+For smaller numbers of samples, $\frac 1 2$-greedy achieves the best
+performance; for larger numbers of samples, UCB$_{\sqrt{\cdot}}$
+outperforms $\frac 1 2$-greedy. A combination of $\frac 1
+2$-greedy  and UCB$_{\sqrt{\cdot}}$ dominates UCB over the
+whole range.
 
 \begin{figure}[h!]
   \begin{minipage}[c]{1.0\linewidth}
@@ -399,10 +400,11 @@ Figure~\ref{fig:mcts-regret} shows a sketch of the search tree
 number of samples for trees with root degree 16
 (Figure~\ref{fig:mcts-regret}.b) and 64 (Figure~\ref{fig:mcts-regret}.c). The
 dependencies look differently from Multi-armed bandit instances, but
-the algorithms exhibit a similar relative performance: either GCT or QCT
-is always better than UCT, QCT dominates UCT everywhere
-except for small numbers of instances. The advantage of QCT grows with
-the number of arms.
+the algorithms exhibit a similar relative performance: either $\frac 1
+2$-greedy+UCT or UCB$_{\sqrt{\cdot}}$+UCT
+gives the lowest regret, UCB$_{\sqrt{\cdot}}$+UCT dominates UCT everywhere
+except for small numbers of instances. The advantage of both $\frac 1
+2$-greedy+UCT and UCB$_{\sqrt{\cdot}}$+UCT grows with the number of arms.
 
 \begin{figure}[h!]
   \begin{minipage}[c]{1.0\linewidth}
@@ -435,10 +437,10 @@ domain. Figure~\ref{fig:sailing-cost-vs-nsamples} shows the regret
 vs. the number of samples, computed for a range of values of
 $\alpha$. Figure~\ref{fig:sailing-cost-vs-nsamples}.a shows the median
 cost, and Figure~\ref{fig:sailing-cost-vs-nsamples}.b --- the minimum
-costs. UCT is always worse than either $\frac 1 2$-greedy (GCT) or
-QCT, and is sensitive to the value of $\alpha$: the median cost is
-much higher than the minimum cost for UCT. For both $\frac 1 2$-greedy
-and QCT, the difference is significantly less prominent.
+costs. UCT is always worse than either $\frac 1 2$-greedy+UCT or
+UCB$_{\sqrt{\cdot}}$+UCT, and is sensitive to the value of $\alpha$: the median cost is
+much higher than the minimum cost for UCT. For both $\frac 1 2$-greedy+UCT
+and UCB$_{\sqrt{\cdot}}$+UCT, the difference is significantly less prominent.
 
 \begin{figure}[h!]
   \begin{minipage}[b]{1.0\linewidth}
@@ -457,8 +459,8 @@ and QCT, the difference is significantly less prominent.
 \end{figure}
 
 Figure~\ref{fig:sailing-cost-vs-factor} shows the regret vs. the
-exploration factor for different numbers of samples. QCT is always better than
-UCT, and $\frac 1 2$-greedy is better than UCT expect for a small range of
+exploration factor for different numbers of samples. UCB$_{\sqrt{\cdot}}$+UCT is always better than
+UCT, and $\frac 1 2$-greedy+UCT is better than UCT expect for a small range of
 values of the exploration factor $\alpha$. 
 
 \begin{figure}[h!]
@@ -487,11 +489,11 @@ increases.
   \label{fig:sailing-lake-size}
 \end{figure}
 
-Figure~\ref{fig:sailing-rcq-vs-factor} compares QCT with UCT with a
-different exploration factor at the root (CCT). $\alpha$ for the rest of
+Figure~\ref{fig:sailing-rcq-vs-factor} compares UCB$_{\sqrt{\cdot}}$+UCT with UCT with a
+different exploration factor at the root (UCB+UCT). $\alpha$ for the rest of
 the steps was chosen to ensure the best performance from earlier
 experiments on the domain. Both algorithms exhibit similar dependency,
-but as the number of samples grows, QCT achieves smaller average
+but as the number of samples grows, UCB$_{\sqrt{\cdot}}$+UCT achieves smaller average
 regrets and is less sensitive to the choice of the value for $\alpha$ at
 the first step.
 \begin{figure}[h!]

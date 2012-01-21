@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 17:45
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 18:20
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -267,16 +267,20 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 138.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 206.
-
+ [2]
 Underfull \hbox (badness 1721) in paragraph at lines 259--261
 []\OT1/ptm/b/n/10 Theorem 2. []\OT1/ptm/m/it/10 Sim-ple re-gret of the UCB$[]$(
 $\OML/cmm/m/it/10 $\OT1/ptm/m/it/10 ) sam-pling
  []
 
-[2] <onelevel-tree.pdf, id=22, 181.67876pt x 105.39375pt>
-File: onelevel-tree.pdf Graphic file (type pdf)
 
-<use onelevel-tree.pdf>
+Underfull \hbox (badness 1062) in paragraph at lines 363--368
+\OT1/ptm/m/n/10 out-per-forms $[]$-greedy. A com-bi-na-tion of $[]$-greedy and
+ []
+
+<onelevel-tree.pdf, id=22, 181.67876pt x 105.39375pt>
+File: onelevel-tree.pdf Graphic file (type pdf)
+ <use onelevel-tree.pdf>
 <flat-trilevel-k=64-uqb=8.pdf, id=23, 400.49625pt x 251.94125pt>
 File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
 
@@ -291,7 +295,7 @@ File: twolevel-tree.pdf Graphic file (type pdf)
 File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=16-uqb=8.pdf>
-<tree-identity-k=64-uqb=8.pdf, id=29, 404.51125pt x 251.94125pt>
+<tree-identity-k=64-uqb=8.pdf, id=29, 400.49625pt x 265.99374pt>
 File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=64-uqb=8.pdf>
@@ -340,13 +344,9 @@ File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Underfull \vbox (badness 2951) has occurred while \output is active []
-
-
-(./paper.bbl [4 <./onelevel-tree.pdf> <./flat-trilevel-k=64-uqb=8.pdf> <./twole
-vel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf>
-]
+[4 <./onelevel-tree.pdf> <./flat-trilevel-k=64-uqb=8.pdf> <./twolevel-tree.pdf>
+ <./tree-identity-k=16-uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf>]
+(./paper.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5 <./costs-size=6-group=median.pdf> <./costs-size=6-group=minimum.pdf> <./cos
@@ -362,7 +362,7 @@ Missing character: There is no ¤ in font ptmr7t!
 Here is how much of TeX's memory you used:
  2867 strings out of 495061
  36791 string characters out of 1182622
- 98596 words of memory out of 3000000
+ 99596 words of memory out of 3000000
  5983 multiletter control sequences out of 15000+50000
  22753 words of font info for 47 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
@@ -380,9 +380,9 @@ pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/ur
 w/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
 xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (6 pages, 344981 bytes).
+Output written on paper.pdf (6 pages, 343388 bytes).
 PDF statistics:
- 234 PDF objects out of 1000 (max. 8388607)
+ 230 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
