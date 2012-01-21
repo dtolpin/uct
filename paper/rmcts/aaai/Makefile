@@ -8,7 +8,7 @@ all: paper.pdf
 	mv $<-cropped $<
 	pdf2svg $< $@
 
-.PHONY: figures clean
+.PHONY: clean
 
 paper.pdf: paper.tex refs.bib figures
 	pdflatex paper
@@ -16,25 +16,30 @@ paper.pdf: paper.tex refs.bib figures
 	pdflatex paper
 	pdflatex paper
 
-figures: \
-	figurescosts-size=10-nsamples=397.pdf \
-	costs-size=3-nsamples=397.pdf \
-	costs-size=6-group=median.pdf \
-	costs-size=6-group=minimum.pdf \
-	costs-size=6-nsamples=1585.pdf \
-	costs-size=6-nsamples=199.pdf \
-	costs-size=6-nsamples=397.pdf \
-	costs-size=6-nsamples=793.pdf \
-	flat-trilevel-k=64-uqb=8.pdf \
-	flat-trilevel-vct-k=64.pdf \
+figures: costs-size\=6-group\=median.pdf \
+	costs-size\=6-group\=minimum.pdf \
+	costs-size\=10-nsamples\=397.pdf \
+	costs-size\=6-nsamples\=1585.pdf \
+	costs-size\=6-nsamples\=397.pdf \
+	flat-trilevel-k\=64-uqb\=8.pdf \
 	onelevel-tree.pdf \
-	rcq-size=6-nsamples=1585.pdf \
-	rcq-size=6-nsamples=199.pdf \
-	rcq-size=6-nsamples=397.pdf \
-	rcq-size=6-nsamples=793.pdf \
-	tree-identity-k=16-uqb=8.pdf \
-	tree-identity-k=64-uqb=8.pdf \
-	twolevel-tree.pdf
+	rcq-size\=6-nsamples\=1585.pdf \
+	rcq-size\=6-nsamples\=397.pdf \
+	tree-identity-k\=16-uqb\=8.pdf \
+	tree-identity-k\=64-uqb\=8.pdf \
+	twolevel-tree.pdf \
+	costs-size\=6-group\=median.svg \
+	costs-size\=6-group\=minimum.svg \
+	costs-size\=10-nsamples\=397.svg \
+	costs-size\=6-nsamples\=1585.svg \
+	costs-size\=6-nsamples\=397.svg \
+	flat-trilevel-k\=64-uqb\=8.svg \
+	onelevel-tree.svg \
+	rcq-size\=6-nsamples\=1585.svg \
+	rcq-size\=6-nsamples\=397.svg \
+	tree-identity-k\=16-uqb\=8.svg \
+	tree-identity-k\=64-uqb\=8.svg \
+	twolevel-tree.svg
 
 clean:
 	rm *.bbl paper.pdf *.log *.aux

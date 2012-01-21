@@ -2,19 +2,22 @@ ALGORITHMS <- c('rnd', 'ucb', 'sve')
 
 
 draw.regrets <- function(regrets_file, log="xy", legend.position='topright', xlab=expression(N[samples]), main=NA) {
-	regrets <- read.table(regrets_file, header=T)
-	xlim <- range(regrets$nsamples)
-	values <- unlist(regrets[-1])
+	regrets <- read.table(regrets_file, header=F)
+
+        names <- as.matrix(regrets[1,])
+        regrets <- as.matrix(regrets[-1,])
+        regrets <- matrix(as.numeric(regrets), nrow=nrow(regrets), ncol=ncol(regrets))
+
+        xlim <- range(regrets[,1])
+	values <- unlist(regrets[,-1])
 	ylim <- range(values[values>0])
-	plot(x=regrets$nsamples, type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main)
-	i <- 1
-	for(alg in algs) {
-		y <- regrets[[alg]]
-		lines(x=regrets$nsamples, y=regrets[[alg]],
-			  type="o", pch=i)
-		i <- i+1
+
+	plot(x=regrets[1], type='n', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='Regret', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main)
+        for(i in (2:ncol(regrets))) {
+          lines(x=regrets[,1], y=regrets[,i],
+                type="o", pch=i-1)
 	}
-	legend(x=legend.position, legend=sapply(names(regrets)[-1], function(n) substring(n, 3)), pch=1:length(names(regrets)[-1]))
+	legend(x=legend.position, legend=sapply(names[-1], function(n) substring(n, 3)), pch=1:length(names[-1]))
 }
 
 draw.experiment <- function(prefix="") {

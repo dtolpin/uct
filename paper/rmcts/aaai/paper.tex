@@ -214,13 +214,13 @@ b_i=\overline X_i+\sqrt {\frac {\alpha \ln n} {n_i}}
 where $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn} The best known upper bound on the simple
-regret of $UCB(\alpha)$ is polynomially decreasing in the number of samples
+regret of UCB($\alpha$) is polynomially decreasing in the number of samples
 (see \cite{Bubeck.pure}, Theorems~2,3).
 
 An upper bound on the simple regret of uniform sampling is
 exponentially decreasing in the number of samples (see
 \cite{Bubeck.pure}, Proposition~1). However, empirically
-$UCB(\alpha)$ yields a lower simple regret than uniform
+UCB($\alpha$) yields a lower simple regret than uniform
 sampling. 
 
 We introduce here two sampling schemes with exponentially
@@ -256,7 +256,7 @@ where, as before, $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn}
 
-\begin{thm} Simple regret of the $UCB_{\sqrt{}}(\alpha)$ sampling
+\begin{thm} Simple regret of the UCB$_{\sqrt{}}$($\alpha$) sampling
   scheme is asymptotically bounded from above as.
 \begin{equation}
 \IE r_{ucb\sqrt{\cdot}} \le ...
@@ -275,8 +275,8 @@ during the rest of a rollout:
 \begin{dfn}
 The \textbf{SR+CR MCTS sampling scheme} selects an action at the
 current root node according to a scheme suitable for minimizing 
-simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or $UCB_{\sqrt{\cdot}}$, and
-then selects actions according to $UCB$, minimizing cumulative regret (\textbf{CR}).
+simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot}}$, and
+then selects actions according to UCB, minimizing cumulative regret (\textbf{CR}).
 \end{dfn}
 
 Such two-stage sampling scheme outperforms UCT, and, additionally, is
@@ -339,20 +339,10 @@ significantly lower simple regret on a wide range of problems.
 \label{sec:emp}
 
 The results were empirically verified on Multi-armed Bandit instances,
-on search trees, and on the sailing domain, as defined in \cite{Kocsis.uct}. The
-experiments confirmed the hypotheses. The algorithms used in the
-experiments are:
-\begin{description}
-\item[RND:] uniform \underline{r}a\underline{nd}om samping;
-\item[UCT:] \underline{U}pper \underline{C}onfidence Bounds applied to
-  \underline{T}rees \cite{Kocsis.uct};
-\item[RCT:] U\underline{CT} with the first step replaced with uniform
-  \underline{r}andom sampling;
-\item[GCT:] U\underline{CT} with the first step
-  replaced with $\frac 1 2$-\underline{g}reedy sampling;
-\item[QCT:] U\underline{CT} with the first step
-  replaced with U\underline{Q}B.
-\end{description}
+on search trees, and on the sailing domain, as defined in
+\cite{Kocsis.uct}. In most cases, the experiments showed lower average
+simple regret for $\frac 1 2$-greedy an UCB$_{\sqrt{\cdot}}$ than for
+UCB on sets, and for the SR+CR scheme than for UCT in trees.
 
 \subsection{Simple regret in multi-armed bandits}
 \label{sec:emp-mab}
@@ -423,13 +413,13 @@ the number of arms.
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
     \centering
-    \includegraphics[scale=0.4]{tree-identity-k=16-uqb=8.pdf}\\ 
+    \includegraphics[scale=0.5]{tree-identity-k=16-uqb=8.pdf}\\ 
     b. 16 arms
     \vspace{1em}
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
     \centering
-    \includegraphics[scale=0.4]{tree-identity-k=64-uqb=8.pdf} \\
+    \includegraphics[scale=0.5]{tree-identity-k=64-uqb=8.pdf} \\
     c. 64 arms
   \end{minipage}
   \label{fig:mcts-regret}
