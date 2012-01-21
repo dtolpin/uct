@@ -13,12 +13,19 @@ Bubeck, S.; Munos, R.; and Stoltz, G.
 \newblock Pure exploration in finitely-armed and continuous-armed bandits.
 \newblock {\em Theor. Comput. Sci.} 412(19):1832--1852.
 
-\bibitem[\protect\citeauthoryear{Eyerich \bgroup et al.\egroup
-  }{2010}]{Eyerich.ctp}
-Eyerich, P.; Keller, T.; Helmert, M.; and ludwigs-universität Freiburg, A.
+\bibitem[\protect\citeauthoryear{Eyerich, Keller, and
+  Helmert}{2010}]{Eyerich.ctp}
+Eyerich, P.; Keller, T.; and Helmert, M.
 \newblock 2010.
 \newblock High-quality policies for the canadian travelers problem.
 \newblock In {\em In Proc. AAAI 2010},  51--58.
+
+\bibitem[\protect\citeauthoryear{Hay and Russell}{2011}]{HayRussell.MCTS}
+Hay, N., and Russell, S.~J.
+\newblock 2011.
+\newblock Metareasoning for monte carlo tree search.
+\newblock Technical Report UCB/EECS-2011-119, EECS Department, University of
+  California, Berkeley.
 
 \bibitem[\protect\citeauthoryear{Horvitz}{1987}]{Horvitz.reasoningabout}
 Horvitz, E.~J.

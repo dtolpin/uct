@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 18:20
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  21 JAN 2012 20:52
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -267,28 +267,19 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 138.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 206.
- [2]
-Underfull \hbox (badness 1721) in paragraph at lines 259--261
-[]\OT1/ptm/b/n/10 Theorem 2. []\OT1/ptm/m/it/10 Sim-ple re-gret of the UCB$[]$(
-$\OML/cmm/m/it/10 $\OT1/ptm/m/it/10 ) sam-pling
- []
-
-
-Underfull \hbox (badness 1062) in paragraph at lines 363--368
+ [2] [3]
+Underfull \hbox (badness 1062) in paragraph at lines 380--385
 \OT1/ptm/m/n/10 out-per-forms $[]$-greedy. A com-bi-na-tion of $[]$-greedy and
  []
 
-<onelevel-tree.pdf, id=22, 181.67876pt x 105.39375pt>
+<onelevel-tree.pdf, id=25, 181.67876pt x 105.39375pt>
 File: onelevel-tree.pdf Graphic file (type pdf)
  <use onelevel-tree.pdf>
-<flat-trilevel-k=64-uqb=8.pdf, id=23, 400.49625pt x 251.94125pt>
+<flat-trilevel-k=64-uqb=8.pdf, id=26, 400.49625pt x 251.94125pt>
 File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
 
 <use flat-trilevel-k=64-uqb=8.pdf>
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[3] <twolevel-tree.pdf, id=27, 266.9975pt x 204.765pt>
+<twolevel-tree.pdf, id=27, 266.9975pt x 204.765pt>
 File: twolevel-tree.pdf Graphic file (type pdf)
  <use twolevel-tree.pdf>
 <tree-identity-k=16-uqb=8.pdf, id=28, 400.49625pt x 251.94125pt>
@@ -298,26 +289,22 @@ File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
 <tree-identity-k=64-uqb=8.pdf, id=29, 400.49625pt x 265.99374pt>
 File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
 
-<use tree-identity-k=64-uqb=8.pdf>
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<costs-size=6-group=median.pdf, id=30, 450.68375pt x 251.94125pt>
+<use tree-identity-k=64-uqb=8.pdf> [4 <./onelevel-tree.pdf> <./flat-trilevel-k=
+64-uqb=8.pdf> <./twolevel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf> <./tree-id
+entity-k=64-uqb=8.pdf>]
+<costs-size=6-group=median.pdf, id=115, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=median.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=median.pdf>
-<costs-size=6-group=minimum.pdf, id=31, 450.68375pt x 251.94125pt>
+<costs-size=6-group=minimum.pdf, id=116, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=minimum.pdf>
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<costs-size=6-nsamples=397.pdf, id=32, 443.6575pt x 251.94125pt>
+<costs-size=6-nsamples=397.pdf, id=117, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=1585.pdf, id=33, 443.6575pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=118, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
@@ -326,61 +313,50 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=34, 443.6575pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=119, 443.6575pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<rcq-size=6-nsamples=397.pdf, id=35, 436.63126pt x 251.94125pt>
+<rcq-size=6-nsamples=397.pdf, id=120, 436.63126pt x 251.94125pt>
 File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=36, 436.63126pt x 251.94125pt>
+<rcq-size=6-nsamples=1585.pdf, id=121, 436.63126pt x 251.94125pt>
 File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use rcq-size=6-nsamples=1585.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[4 <./onelevel-tree.pdf> <./flat-trilevel-k=64-uqb=8.pdf> <./twolevel-tree.pdf>
- <./tree-identity-k=16-uqb=8.pdf> <./tree-identity-k=64-uqb=8.pdf>]
-(./paper.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5 <./costs-size=6-group=median.pdf> <./costs-size=6-group=minimum.pdf> <./cos
-ts-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1585.pdf> <./costs-size=10
--nsamples=397.pdf> <./rcq-size=6-nsamples=397.pdf> <./rcq-size=6-nsamples=1585.
-pdf>]
-Missing character: There is no Ã in font ptmr7t!
-Missing character: There is no ¤ in font ptmr7t!
-)
-[6
-
-] (./paper.aux) ) 
+[5 <./costs-size=6-group=median.pdf> <./costs-size=6-group=minimum.pdf> <./cost
+s-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1585.pdf> <./costs-size=10-
+nsamples=397.pdf>] (./paper.bbl) [6 <./rcq-size=6-nsamples=397.pdf> <./rcq-size
+=6-nsamples=1585.pdf>] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2867 strings out of 495061
- 36791 string characters out of 1182622
- 99596 words of memory out of 3000000
- 5983 multiletter control sequences out of 15000+50000
+ 2870 strings out of 495061
+ 36835 string characters out of 1182622
+ 98649 words of memory out of 3000000
+ 5986 multiletter control sequences out of 15000+50000
  22753 words of font info for 47 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  27i,11n,22p,276b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/sh
-are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/font
-s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/pub
-lic/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
-/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pfb
-></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
-e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texl
-ive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texmf-texlive/fonts/ty
-pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/ur
-w/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb>
-</usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
-xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (6 pages, 343388 bytes).
+{/usr/share/texmf-texlive/fonts/enc/dvips
+/base/8r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pf
+b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-te
+xlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/
+type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public
+/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
+cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/t
+exmf-texlive/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-t
+exlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/u
+rw/times/utmbi8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb
+></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (6 pages, 346831 bytes).
 PDF statistics:
  230 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

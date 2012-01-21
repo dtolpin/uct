@@ -93,7 +93,7 @@ moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
 cumulative regret, the greater the simple regret.
 
 We begin with introduction of several sampling schemes with better
-bounds for the simple regret on sets. We then extend the resutls to
+bounds for the simple regret on sets. We then extend the results to
 sampling in trees by combining the proposed sampling schemes on the
 first step of a rollout with UCT during the rest of the
 rollout. Finally, we empirically evaluate the performance of the
@@ -210,6 +210,7 @@ them to UCB (on sets) and UCT (in trees).
 upper confidence bound $b_i$ on the reward:
 \begin{equation}
 b_i=\overline X_i+\sqrt {\frac {\alpha \ln n} {n_i}}
+\label{eqn:ucb}
 \end{equation}
 where $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
@@ -223,7 +224,7 @@ exponentially decreasing in the number of samples (see
 UCB($\alpha$) yields a lower simple regret than uniform
 sampling. 
 
-We introduce here two sampling schemes with exponentially
+We introduce here two sampling schemes with superpolynomially
 decreasing upper bounds on the simple regret. The bounds
 suggest that these schemes achieve a lower simple regret
 than uniform sampling; indeed, this is confirmed
@@ -235,18 +236,30 @@ generalization of uniform sampling:
 pulls the empirically best arm with probability $\varepsilon$ and any other
 arm with probability $\frac {1-\varepsilon} {K-1}$. 
 \end{dfn}
-
-\begin{thm} Simple regret of the  $\varepsilon$-greedy
-sampling scheme is asymptotically bounded from above as
+This sampling scheme exhibits an exponentially decreasing simple regret:
+\begin{thm} For any $\pi>0$  and $\gamma>0$ there exists $N$ such that for
+  any number of samples $n>N$ the simple regret of the  $\varepsilon$-greedy
+sampling scheme is  bounded from above as
 \begin{equation}
-\IE r_{\varepsilon\mbox{-}greedy}\le...
+\IE r_{\varepsilon\mbox{-}greedy}\le (1+\gamma) \sum_{i=1}^K\Delta_i\exp(\cdot)
 \end{equation}
+with probability at least $1-\pi$.
 the bound is minimized for $\varepsilon=\frac 1 2$.
 \end{thm}
 
-\begin{proof}[Proof sketch:] TODO
+\begin{proof}[Proof outline:] TODO
 \end{proof}
 
+$\varepsilon$-greedy is based solely on sampling the empirically best
+arm with a higher probability then the rest of the arms, and ignores
+information about empirical means of other arms. On the other hand,
+UCB distributes samples in accordance with empirical means, but, in order to
+minimize cumulative regret, chooses the empirically best arm too often.
+Intuitively, a better scheme for simple regret minimization would
+distribute samples in a way similar to UCB, but would sample the best arm
+less. This can be achieved by replacing $\log(\cdot)$ in
+Equation~\ref{eqn:ucb} with a faster growing sublinear function, for
+example, $\sqrt\cdot$.
 \begin{dfn} Scheme $\mathbf{UCB_{\sqrt{\cdot}}(\alpha)}$ repeatedly pulls arm $i$ that
 maximizes $b_i$:
 \begin{equation}
@@ -255,14 +268,17 @@ b_i=\overline X_i+\sqrt {\frac {\alpha \sqrt n} {n_i}}
 where, as before, $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn}
-
-\begin{thm} Simple regret of the UCB$_{\sqrt{}}$($\alpha$) sampling
-  scheme is asymptotically bounded from above as.
+This scheme also exhibits a superpolynomially decreasing simple regret:
+\begin{thm}  For any $\pi>0$  and $\gamma>0$ there exists $N$ such that for
+  any number of samples $n>N$ the simple regret of the  UCB$_{\sqrt{}}$($\alpha$)
+sampling scheme is  bounded from above as
 \begin{equation}
-\IE r_{ucb\sqrt{\cdot}} \le ...
+\IE r_{ucb\sqrt{\cdot}} \le (1+\gamma)\sum_{i=1}^K\Delta_i\exp\left(-2\alpha\sqrt{n}\right)
 \end{equation}
+with probability at least $1-\pi$.
 \end{thm}
-\begin{proof}[Proof sketch:] TODO
+
+\begin{proof}[Proof outline:] TODO
 \end{proof}
 
 \subsection{Sampling in Trees}
@@ -275,8 +291,8 @@ during the rest of a rollout:
 \begin{dfn}
 The \textbf{SR+CR MCTS sampling scheme} selects an action at the
 current root node according to a scheme suitable for minimizing 
-simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot}}$, and
-then selects actions according to UCB, minimizing cumulative regret (\textbf{CR}).
+the simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot}}$, and
+then selects actions according to UCB, minimizing the cumulative regret (\textbf{CR}).
 \end{dfn}
 
 Such two-stage sampling scheme outperforms UCT, and, additionally, is
@@ -312,6 +328,7 @@ two-stage rollout is in Algorithm~\ref{alg:two-stage-mcts}.
 \end{algorithm}
 
 \subsection{VOI-aware Sampling}
+\label{sec:voi-sampling}
 
 A further improvement can be achieved by computing or estimating the
 value of information (VOI) of the rollouts and choosing a rollout that
@@ -333,14 +350,14 @@ VOI_i&\approx&\frac {1-\overline X_\alpha} {n_i+1}
              \beta&=&\arg\max_{i,\,i\ne\alpha} \overline X_i\nonumber
 \end{eqnarray}
 Early experiments with this approach demonstrated
-significantly lower simple regret on a wide range of problems.
+a significantly lower simple regret on a wide range of problems.
 
 \section{Empirical Evaluation}
 \label{sec:emp}
 
 The results were empirically verified on Multi-armed Bandit instances,
 on search trees, and on the sailing domain, as defined in
-\cite{Kocsis.uct}. In most cases, the experiments showed lower average
+\cite{Kocsis.uct}. In most cases, the experiments showed a lower average
 simple regret for $\frac 1 2$-greedy an UCB$_{\sqrt{\cdot}}$ than for
 UCB on sets, and for the SR+CR scheme than for UCT in trees.
 
@@ -503,18 +520,28 @@ the first step.
   \vspace{1em}
   \includegraphics[scale=0.45]{rcq-size=6-nsamples=1585.pdf}\\
   d. 1585 rollouts\\
-  \caption{The sailing domain, log vs. sqrt, $6\times 6$ lake}
+  \caption{The sailing domain, UCB vs. UCB$_{\sqrt{\cdot}}$, $6\times 6$ lake}
   \label{fig:sailing-rcq-vs-factor}
 \end{figure}
 
 \section{Summary and Future Work}
 \label{sec:summary}
 
-The MTCS SR+CR scheme presented in the paper differs
+The MCTS SR+CR scheme presented in the paper differs
 from UCT at the first step of the rollout, when the `simple' selection
 regret is minimized instead of the cumulative regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
 better general performance of the proposed scheme.
+
+The improvement is inspired by the notion of value of information
+(VOI), but VOI is used implicitly in the analysis of the algorithm,
+rather than computed or learned explicitly in order to plan the
+rollouts. Preliminary results on VOI-aware sampling suggest that a
+further improvement in the sampling performance can be
+achieved. However, application of the theory of rational metareasoning
+to Monte Carlo Tree Search is an open problem \cite{HayRussell.MCTS},
+and both a solid theoretical model and empirically efficient VOI
+estimates still need to be developed.
 
 \section*{Acknowledgments}
 
@@ -523,7 +550,7 @@ Science Foundation grant 305/09, by the Lynne and William Frankel
 Center for Computer Sciences, and by the Paul Ivanier Center for
 Robotics Research and Production Management.
 
- \bibliographystyle{aaai}
+\bibliographystyle{aaai}
 \bibliography{refs}
 
 
