@@ -268,16 +268,15 @@ number of pulls so far. \end{dfn}
 \subsection{Sampling in Trees}
 \label{sec:sampling-in-trees}
 
-The UCT sampling scheme \cite{Kocsis.uct} is a widely used generalization
-of UCB for MCTS.  UCT applies the UCB sampling
-scheme at each step of a rollout.  We suggest an improvement on UCT,
-which combines different sampling schemes on the first step and during
-the rest of a rollout:
+UCT \cite{Kocsis.uct} is a generalization of UCB for MCTS.  UCT
+applies UCB at each step of a rollout.  We suggest an improvement on
+UCT, which combines different sampling schemes on the first step and
+during the rest of a rollout:
 \begin{dfn}
-The {\bf two-stage MCTS sampling scheme} selects an action at the
-current root node according to an algorithm that minimizes the simple
-regret, such as $\frac 1 2$-greedy or $UCB_{\sqrt{\cdot}}$, and then
-selects actions according to $UCB$.
+The \textbf{SR+CR MCTS sampling scheme} selects an action at the
+current root node according to a scheme suitable for minimizing 
+simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or $UCB_{\sqrt{\cdot}}$, and
+then selects actions according to $UCB$, minimizing cumulative regret (\textbf{CR}).
 \end{dfn}
 
 Such two-stage sampling scheme outperforms UCT, and, additionally, is
@@ -314,20 +313,27 @@ two-stage rollout is in Algorithm~\ref{alg:two-stage-mcts}.
 
 \subsection{VOI-aware Sampling}
 
-A further improvement can be achieved by computing or estimating the VOI
-of the rollouts and choosing a rollout that maximizes the VOI. VOI of
-a rollout can be computed when the sample distribution of an
-action is known up to the parameters, such as the normal distribution
-with an unknown mean and/or variance. Alternatively, the value of
-information can be estimated from the set of samples, and the need to
-assume a particular shape of the distribution can be lifted. In one
-realization of the latter approach the VOI of performing an action is
-estimated as an \emph{upper bound on the value of perfect information about
-an arm, divided by the number of pulls of the arm}. 
-\begin{equation}
-\end{equation}
-Early experiments with this approach demonstrated significantly lower
-simple regret on a wide range of problems.
+A further improvement can be achieved by computing or estimating the
+value of information (VOI) of the rollouts and choosing a rollout that
+maximizes the VOI. VOI of a rollout can be computed when the sample
+distribution of an action is known up to the parameters, such as the
+normal distribution with an unknown mean and/or
+variance. Alternatively, the value of information can be estimated
+from the set of samples, and the need to assume a particular shape of
+the distribution can be lifted. In one realization of the latter
+approach the VOI of performing an action is estimated as an
+\emph{upper bound on the value of perfect information about an arm,
+divided by the number of pulls of the arm}.
+\begin{eqnarray}
+VOI_\alpha&\approx&\frac {\overline X_\beta} {n_\alpha+1}
+\exp\left(-2(\overline X_\alpha - \overline X_\beta)^2 n_\alpha\right)\\
+VOI_i&\approx&\frac {1-\overline X_\alpha} {n_i+1}
+\exp\left(-2(\overline X_\alpha - \overline X_i)^2 n_i\right),\; i\ne\alpha\nonumber\\
+\mbox{where }\alpha&=&\arg\max_i \overline X_i\nonumber\\
+             \beta&=&\arg\max_{i,\,i\ne\alpha} \overline X_i\nonumber
+\end{eqnarray}
+Early experiments with this approach demonstrated
+significantly lower simple regret on a wide range of problems.
 
 \section{Empirical Evaluation}
 \label{sec:emp}
@@ -369,7 +375,7 @@ performance; for larger numbers of samples, QCT outperforms GCT. QCT is
 better than UCT everywhere except for very small numbers of samples. A
 combination of GCT and QCT dominates UCT over the whole range.
 
-\begin{figure}[t]
+\begin{figure}[h!]
   \begin{minipage}[c]{1.0\linewidth}
     \centering
     \includegraphics[scale=1.0]{onelevel-tree.pdf}\\
@@ -444,7 +450,7 @@ QCT, and is sensitive to the value of $\alpha$: the median cost is
 much higher than the minimum cost for UCT. For both $\frac 1 2$-greedy
 and QCT, the difference is significantly less prominent.
 
-\begin{figure}[t]
+\begin{figure}[h!]
   \begin{minipage}[b]{1.0\linewidth}
     \centering
     \includegraphics[scale=0.45]{costs-size=6-group=median.pdf}\\
@@ -465,7 +471,7 @@ exploration factor for different numbers of samples. QCT is always better than
 UCT, and $\frac 1 2$-greedy is better than UCT expect for a small range of
 values of the exploration factor $\alpha$. 
 
-\begin{figure}[t]
+\begin{figure}[h!]
   \centering
   \includegraphics[scale=0.45]{costs-size=6-nsamples=397.pdf}\\
   a. 397 rollouts\\
@@ -480,7 +486,7 @@ Figure~\ref{fig:sailing-lake-size} shows the cost vs. the exploration
 factor for lakes of different sizes. The relative difference between
 the sampling schemes becomes more prominent when the lake size
 increases.
-\begin{figure}[t]
+\begin{figure}[h!]
    \centering
    \includegraphics[scale=0.45]{costs-size=6-nsamples=397.pdf}\\
    b. $6\times 6$ lake \\
@@ -498,7 +504,7 @@ experiments on the domain. Both algorithms exhibit similar dependency,
 but as the number of samples grows, QCT achieves smaller average
 regrets and is less sensitive to the choice of the value for $\alpha$ at
 the first step.
-\begin{figure}[t]
+\begin{figure}[h!]
   \centering
   \includegraphics[scale=0.45]{rcq-size=6-nsamples=397.pdf}\\
   b. 397 rollouts\\
@@ -512,11 +518,11 @@ the first step.
 \section{Summary and Future Work}
 \label{sec:summary}
 
-The Monte Carlo tree search algorithms presented in the paper differ
+The MTCS SR+CR scheme presented in the paper differs
 from UCT at the first step of the rollout, when the `simple' selection
 regret is minimized instead of the cumulative regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
-better general performance of the proposed algorithms.
+better general performance of the proposed scheme.
 
 \section*{Acknowledgments}
 
@@ -525,9 +531,7 @@ Science Foundation grant 305/09, by the Lynne and William Frankel
 Center for Computer Sciences, and by the Paul Ivanier Center for
 Robotics Research and Production Management.
 
-\clearpage
-
-\bibliographystyle{aaai}
+ \bibliographystyle{aaai}
 \bibliography{refs}
 
 
