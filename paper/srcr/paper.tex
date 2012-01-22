@@ -206,7 +206,7 @@ them to UCB (on sets) and UCT (in trees).
 \subsection{Sampling on Sets}
 \label{sec:sampling-on-sets}
 
-\begin{dfn} Scheme $\mathbf{UCB(\alpha)}$ repeatedly pulls arm $i$ that maximizes 
+\begin{dfn} Scheme $\mathbf{UCB(\alpha)}$ pulls arm $i$ that maximizes 
 upper confidence bound $b_i$ on the reward:
 \begin{equation}
 b_i=\overline X_i+\sqrt {\frac {\alpha \ln n} {n_i}}
@@ -238,7 +238,7 @@ $0<\varepsilon<1$ and any other
 arm with probability $\frac {1-\varepsilon} {K-1}$. 
 \end{dfn}
 This sampling scheme exhibits an exponentially decreasing simple regret:
-\begin{thm} For any $0<\pi<10$  and $\gamma>1$ there exists $N$ such that for
+\begin{thm} For any $0<\eta<1$  and $\gamma>1$ there exists $N$ such that for
   any number of samples $n>N$ the simple regret of the  $\varepsilon$-greedy
 sampling scheme is  bounded from above as
 \begin{equation}
@@ -246,7 +246,7 @@ sampling scheme is  bounded from above as
   {\left(1+\sqrt{\frac {(K-1)\varepsilon}
         {1-\varepsilon}}\right)^2}\right)
 \end{equation}
-with probability at least $1-\pi$.
+with probability at least $1-\eta$.
 \end{thm}
 
 \begin{proof}[Proof outline:] 
@@ -260,7 +260,7 @@ P_i&\le&\Pr[\overline X_i>\mu_i+\delta_i]+\Pr[\overline X_*<\mu_*-(\Delta_i-\del
 Observe that, in probability, $\overline X_i \rightarrow \mu_i$ as $n\rightarrow\infty$, 
 therefore $n_*\rightarrow n\varepsilon$, $n_i\rightarrow\frac
 {n(1-\varepsilon)} {K-1}$ as $n\rightarrow \infty$. Conclude that for
-any $0<\pi<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
+any $0<\eta<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
 all non-optimal arms $i$:
 \begin{equation}
 P_i \le \gamma \left(\exp\left(-\frac {2\delta_i^2n(1-\varepsilon)}{K-1}\right)
@@ -320,14 +320,14 @@ where, as before, $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn}
 This scheme also exhibits a super-polynomially decreasing simple regret:
-\begin{thm}  For any $0<\pi<1$  and $\gamma>1$ there exists $N$ such that for
+\begin{thm}  For any $0<\eta<1$  and $\gamma>1$ there exists $N$ such that for
   any number of samples $n>N$ the simple regret of the  UCB$_{\sqrt{\cdot}}$($\alpha$)
 sampling scheme is  bounded from above as
 \begin{equation}
 \IE r_{ucb\sqrt{\cdot}} \le
 2\gamma\sum_{i=1}^K\Delta_i\exp\left(-\frac {\alpha\sqrt{n}} 2\right)
 \end{equation}
-with probability at least $1-\pi$.
+with probability at least $1-\eta$.
 \end{thm}
 
 \begin{proof}[Proof outline:] Bound the probability $P_i$ that a
@@ -340,7 +340,7 @@ P_i&\le&Pr\left[\overline X_i>\mu_i+\frac {\Delta_i} 2\right]+\Pr\left[\overline
 \end{eqnarray}
 Observe that, in probability, $n_i\to \frac {\alpha \sqrt n}
 {\Delta_i^2}$, $n_i\le n_*$ as $n\to\infty$. Conclude that for
-any $0<\pi<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
+any $0<\eta<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
 all non-optimal arms $i$:
 \begin{equation}
 P_i \le 2\gamma \exp\left(-\frac {\alpha \sqrt n} 2\right)
@@ -441,15 +441,12 @@ schemes on Multi-armed bandits. Figure~\ref{fig:mab-simple-regret}.a shows the s
 corresponding to a problem instance. Each arm returns a random reward
 drawn from a Bernoulli distribution. The search selects an arm
 and compares the expected reward, unknown to the algorithm during the
-sampling, to the expected reward of the best arm. For such problem
-instances, the MCTS sampling schemes coincide with the selection
-algorithms employed at the first step of a rollout.
+sampling, to the expected reward of the best arm.
 
 Figure~\ref{fig:mab-simple-regret}.b shows the regret
 vs. the number of samples, averaged over $10^4$ experiments for
-randomly generated instances of 32 arms. 
-
-For smaller numbers of samples, $\frac 1 2$-greedy achieves the best
+randomly generated instances of 32 arms. For smaller numbers of
+samples, $\frac 1 2$-greedy achieves the best
 performance; for larger numbers of samples, UCB$_{\sqrt{\cdot}}$
 outperforms $\frac 1 2$-greedy. A combination of $\frac 1
 2$-greedy  and UCB$_{\sqrt{\cdot}}$ dominates UCB over the
@@ -513,14 +510,14 @@ except for small numbers of instances. The advantage of both $\frac 1
     \includegraphics[scale=0.5]{tree-identity-k=64-uqb=8.pdf} \\
     c. 64 arms
   \end{minipage}
+  \caption{MCTS in random trees}
   \label{fig:mcts-regret}
-  \caption{MCTS: a path to the best arm}
 \end{figure}
 
 \subsection{The sailing domain}
 \label{sec:emp-sailing}
 
-Figures~\ref{fig:sailing-cost-vs-nsamples}--\ref{fig:sailing-rcq-vs-factor}
+Figures~\ref{fig:sailing-cost-vs-nsamples}--\ref{fig:sailing-lake-size}
 show results of experiments on the sailing
 domain. Figure~\ref{fig:sailing-cost-vs-nsamples} shows the regret
 vs. the number of samples, computed for a range of values of
@@ -578,22 +575,20 @@ increases.
   \label{fig:sailing-lake-size}
 \end{figure}
 
-Figure~\ref{fig:sailing-rcq-vs-factor} compares UCB$_{\sqrt{\cdot}}$+UCT with UCT with a
-different exploration factor at the root (UCB+UCT). $\alpha$ for the rest of
-the steps was chosen to ensure the best performance from earlier
-experiments on the domain. Both algorithms exhibit similar dependency,
-but as the number of samples grows, UCB$_{\sqrt{\cdot}}$+UCT achieves smaller average
-regrets and is less sensitive to the choice of the value for $\alpha$ at
-the first step.
+\subsection{VOI-aware MCTS}
+
+Finally, the VOI-aware sampling scheme was empirically compared to
+other sampling schemes (UCT, $\frac 1 2$-greedy+UCT,
+UCT$_{\sqrt{\cdot}}$+UCT). Again, the experiments were performed on
+randomly generated trees with structure shown in
+Figure~\ref{fig:mcts-regret}.a. Figure~\ref{fig:mcts-regret-voi} shows
+the results for 32 arms. VOI+UCT, the scheme based on a VOI estimate,
+outperforms all other sampling schemes in this example. 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.45]{rcq-size=6-nsamples=397.pdf}\\
-  b. 397 rollouts\\
-  \vspace{1em}
-  \includegraphics[scale=0.45]{rcq-size=6-nsamples=1585.pdf}\\
-  d. 1585 rollouts\\
-  \caption{The sailing domain, UCB vs. UCB$_{\sqrt{\cdot}}$, $6\times 6$ lake}
-  \label{fig:sailing-rcq-vs-factor}
+  \includegraphics[scale=0.45]{tree-identity-k=32-uqb=8+voi.pdf}\\
+  \caption{MCTS in random trees, VOI+UCT vs. other schemes.}
+  \label{fig:mcts-regret-voi}
 \end{figure}
 
 \section{Summary and Future Work}

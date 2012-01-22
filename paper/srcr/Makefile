@@ -28,6 +28,7 @@ figures: costs-size\=6-group\=median.pdf \
 	tree-identity-k\=16-uqb\=8.pdf \
 	tree-identity-k\=64-uqb\=8.pdf \
 	twolevel-tree.pdf \
+	tree-identity-k\=32-uqb\=8+voi.pdf \
 	costs-size\=6-group\=median.svg \
 	costs-size\=6-group\=minimum.svg \
 	costs-size\=10-nsamples\=397.svg \
@@ -39,7 +40,8 @@ figures: costs-size\=6-group\=median.pdf \
 	rcq-size\=6-nsamples\=397.svg \
 	tree-identity-k\=16-uqb\=8.svg \
 	tree-identity-k\=64-uqb\=8.svg \
-	twolevel-tree.svg
+	twolevel-tree.svg \
+	tree-identity-k\=32-uqb\=8+voi.svg
 
 clean:
 	rm *.bbl paper.pdf *.log *.aux

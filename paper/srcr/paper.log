@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 JAN 2012 00:37
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.11)  22 JAN 2012 23:39
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -221,7 +221,7 @@ LaTeX Font Info:    Try loading font information for OT1+ptm on input line 41.
 (/usr/share/texmf-texlive/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+(/usr/share/texmf/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count114
 \scratchdimen=\dimen118
@@ -272,49 +272,42 @@ Overfull \hbox (3.32817pt too wide) detected at line 269
 \OML/cmm/m/it/10 P[] \OMS/cmsy/m/n/10 ^^T \OML/cmm/m/it/10 ^^M []
  []
 
-[3]
-Underfull \hbox (badness 1062) in paragraph at lines 452--457
-\OT1/ptm/m/n/10 out-per-forms $[]$-greedy. A com-bi-na-tion of $[]$-greedy and
- []
-
-<onelevel-tree.pdf, id=27, 181.67876pt x 105.39375pt>
+[3] <onelevel-tree.pdf, id=27, 181.67876pt x 105.39375pt>
 File: onelevel-tree.pdf Graphic file (type pdf)
- <use onelevel-tree.pdf>
+
+<use onelevel-tree.pdf>
 <flat-trilevel-k=64-uqb=8.pdf, id=28, 400.49625pt x 251.94125pt>
 File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
 
 <use flat-trilevel-k=64-uqb=8.pdf> [4 <./onelevel-tree.pdf> <./flat-trilevel-k=
-64-uqb=8.pdf>] <twolevel-tree.pdf, id=69, 266.9975pt x 204.765pt>
+64-uqb=8.pdf>] <twolevel-tree.pdf, id=73, 266.9975pt x 204.765pt>
 File: twolevel-tree.pdf Graphic file (type pdf)
 
 <use twolevel-tree.pdf>
-<tree-identity-k=16-uqb=8.pdf, id=70, 400.49625pt x 251.94125pt>
+<tree-identity-k=16-uqb=8.pdf, id=74, 400.49625pt x 251.94125pt>
 File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=16-uqb=8.pdf>
-<tree-identity-k=64-uqb=8.pdf, id=71, 400.49625pt x 265.99374pt>
+<tree-identity-k=64-uqb=8.pdf, id=75, 400.49625pt x 265.99374pt>
 File: tree-identity-k=64-uqb=8.pdf Graphic file (type pdf)
 
 <use tree-identity-k=64-uqb=8.pdf>
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<costs-size=6-group=median.pdf, id=72, 450.68375pt x 251.94125pt>
+<costs-size=6-group=median.pdf, id=76, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=median.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=median.pdf>
-<costs-size=6-group=minimum.pdf, id=73, 450.68375pt x 251.94125pt>
+<costs-size=6-group=minimum.pdf, id=77, 450.68375pt x 251.94125pt>
 File: costs-size=6-group=minimum.pdf Graphic file (type pdf)
 
 <use costs-size=6-group=minimum.pdf>
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<costs-size=6-nsamples=397.pdf, id=74, 443.6575pt x 251.94125pt>
+<costs-size=6-nsamples=397.pdf, id=78, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=6-nsamples=1585.pdf, id=75, 443.6575pt x 251.94125pt>
+<costs-size=6-nsamples=1585.pdf, id=79, 443.6575pt x 251.94125pt>
 File: costs-size=6-nsamples=1585.pdf Graphic file (type pdf)
 
 <use costs-size=6-nsamples=1585.pdf>
@@ -323,36 +316,32 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 File: costs-size=6-nsamples=397.pdf Graphic file (type pdf)
 <use costs-size=6-nsamples=397.pdf>
-<costs-size=10-nsamples=397.pdf, id=76, 443.6575pt x 251.94125pt>
+<costs-size=10-nsamples=397.pdf, id=80, 443.6575pt x 251.94125pt>
 File: costs-size=10-nsamples=397.pdf Graphic file (type pdf)
 
 <use costs-size=10-nsamples=397.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<rcq-size=6-nsamples=397.pdf, id=77, 436.63126pt x 251.94125pt>
-File: rcq-size=6-nsamples=397.pdf Graphic file (type pdf)
+<tree-identity-k=32-uqb=8+voi.pdf, id=81, 400.49625pt x 251.94125pt>
+File: tree-identity-k=32-uqb=8+voi.pdf Graphic file (type pdf)
 
-<use rcq-size=6-nsamples=397.pdf>
-<rcq-size=6-nsamples=1585.pdf, id=78, 436.63126pt x 251.94125pt>
-File: rcq-size=6-nsamples=1585.pdf Graphic file (type pdf)
-
-<use rcq-size=6-nsamples=1585.pdf>
+<use tree-identity-k=32-uqb=8+voi.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(./paper.bbl [5 <./twolevel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf> <./tree-
-identity-k=64-uqb=8.pdf>] [6 <./costs-size=6-group=median.pdf> <./costs-size=6-
-group=minimum.pdf> <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1
-585.pdf> <./costs-size=10-nsamples=397.pdf> <./rcq-size=6-nsamples=397.pdf> <./
-rcq-size=6-nsamples=1585.pdf>]) [7
+[5 <./twolevel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf> <./tree-identity-k=64
+-uqb=8.pdf> <./costs-size=6-group=median.pdf> <./costs-size=6-group=minimum.pdf
+>] (./paper.bbl [6 <./costs-size=6-nsamples=397.pdf> <./costs-size=6-nsamples=1
+585.pdf> <./costs-size=10-nsamples=397.pdf> <./tree-identity-k=32-uqb=8+voi.pdf
+>]) [7
 
 ] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2873 strings out of 495061
- 36919 string characters out of 1182622
- 100674 words of memory out of 3000000
- 5989 multiletter control sequences out of 15000+50000
+ 2868 strings out of 495061
+ 36755 string characters out of 1182621
+ 100675 words of memory out of 3000000
+ 5985 multiletter control sequences out of 15000+50000
  22753 words of font info for 47 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  27i,11n,22p,276b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -371,9 +360,9 @@ ls/msbm10.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/
 share/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive
 /fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on paper.pdf (7 pages, 371871 bytes).
+Output written on paper.pdf (7 pages, 372742 bytes).
 PDF statistics:
- 243 PDF objects out of 1000 (max. 8388607)
+ 256 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
 

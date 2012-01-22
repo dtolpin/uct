@@ -17,7 +17,7 @@ Bubeck, S.; Munos, R.; and Stoltz, G.
   Helmert}{2010}]{Eyerich.ctp}
 Eyerich, P.; Keller, T.; and Helmert, M.
 \newblock 2010.
-\newblock High-quality policies for the canadian travelers problem.
+\newblock High-quality policies for the {C}anadian traveler's problem.
 \newblock In {\em In Proc. AAAI 2010},  51--58.
 
 \bibitem[\protect\citeauthoryear{Hay and Russell}{2011}]{HayRussell.MCTS}
@@ -38,7 +38,7 @@ Horvitz, E.~J.
 \bibitem[\protect\citeauthoryear{Kocsis and Szepesv{\'a}ri}{2006}]{Kocsis.uct}
 Kocsis, L., and Szepesv{\'a}ri, C.
 \newblock 2006.
-\newblock Bandit based monte-carlo planning.
+\newblock Bandit based {M}onte-{C}arlo planning.
 \newblock In {\em ECML},  282--293.
 
 \bibitem[\protect\citeauthoryear{Russell and Norvig}{2003}]{Russell.aima}
@@ -54,12 +54,12 @@ Russell, S., and Wefald, E.
 \newblock Cambridge, MA, USA: MIT Press.
 
 \bibitem[\protect\citeauthoryear{Tolpin and
-  Shimony}{2010}]{TolpinShimony.blinkered}
+  Shimony}{2011}]{TolpinShimony.blinkered}
 Tolpin, D., and Shimony, S.~E.
-\newblock 2010.
-\newblock Semi-myopic measurement selection for optimization under uncertainty.
-\newblock Technical Report 10-01, Lynne and William Frankel Center for Computer
-  Science at Ben Gurion University of the Negev, Israel.
+\newblock 2011.
+\newblock Semimyopic measurement selection for optimization under uncertainty.
+\newblock {\em Systems, Man, and Cybernetics, Part B: Cybernetics, IEEE
+  Transactions on} PP(99):1 --15.
 
 \bibitem[\protect\citeauthoryear{Vermorel and Mohri}{2005}]{Vermorel.bandits}
 Vermorel, J., and Mohri, M.
