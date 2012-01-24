@@ -1,4 +1,3 @@
-%File: formatting-instruction.tex
 \documentclass[letterpaper]{article}
 \usepackage{aaai}
 \usepackage{times}
@@ -106,7 +105,7 @@ principles is also suggested, another contribution
 of this paper.
 Finally, the performance of the
 proposed sampling schemes is evaluated on sets of Bernoulli arms, in randomly
-generated 2-level trees, and on the sailing domain, showing where the proposed schemes show improved
+generated 2-level trees, and on the sailing domain, showing where the proposed schemes have improved
 performance, the third contribution of this paper.
 
 \section{Background and Related Work}
@@ -115,8 +114,9 @@ performance, the third contribution of this paper.
 Monte-Carlo tree search was initially suggested as a scheme for
 finding approximately optimal policies for Markov Decision Processes
 (MDP).  An MDP is defined by the set of states $S$, the set of actions
-$A$, the transition table $T(s, a, s')$, the reward table $R(s, a,
-s')$, the initial state $s$ and the goal state $t$: $(S, A, T, R, s,
+$A$ (also called {\em moves} in this paper),
+the transition distribution $T(s, a, s')$, the reward function $R(s, a,
+s')$, the initial state $s$ and an optional goal state $t$: $(S, A, T, R, s,
 t)$ \cite{Russell.aima}.  Several MCTS schemes explore an MDP by
 performing \emph{rollouts}---trajectories from the current state to a
 state in which a termination condition is satisfied (either the goal
@@ -125,15 +125,32 @@ approximately).
 
 \subsection{Multi-armed bandits and UCT}
 
-
 In the Multi-armed Bandit problem \cite{Vermorel.bandits} we have a set
 of $K$ arms (see Figure~\ref{fig:mab-simple-regret}.a). Each arm can
-be pulled multiple times (sometimes a cost is
-associated with each pulling action). When the $i$th arm
+be pulled multiple times. Sometimes a cost is
+associated with each pulling action. When the $i$th arm
 is pulled, a random reward $X_i$ from an unknown stationary
-distribution is encountered.  The reward is bounded between 0 and 1.
-In the cumulative setting, all encountered rewards are collected
-by the agent. In the simple (selection) setting, the agent gets to
+distribution is encountered.  The reward is usually bounded between 0 and 1.
+In the cumulative setting (the focus of much of the research literature on Multi-armed bandits),
+all encountered rewards are collected by the agent. 
+The UCB scheme was shown to be near-optimal in this respect \cite{Auer.ucb}:
+
+\begin{dfn} Scheme $\mathbf{UCB(c)}$ pulls arm $i$ that maximizes 
+upper confidence bound $b_i$ on the reward:
+\begin{equation}
+b_i=\overline X_i+\sqrt {\frac {c \log (n)} {n_i}}
+\label{eqn:ucb}
+\end{equation}
+where $\overline X_i$ is the average reward obtained from arm $i$,
+$n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
+number of pulls so far. \end{dfn} 
+
+The UCT algorithm, an extension of UCB
+to Monte-Carlo Tree Search is described in \cite{Kocsis.uct}, and
+shown to outperform many state of the art search algorithms in both
+MDP and adversarial search \cite{Eyerich.ctp}. 
+
+In the simple regret (selection) setting, the agent gets to
 collect only the reward of the last pull.
 
 \begin{dfn}
@@ -148,59 +165,39 @@ $\overline X_j=\max_i\overline X_i$:
 where $\Delta_j=\mu_*-\mu_j$.
 \end{dfn}
 
-%Strategies that minimize the simple regret are called pure exploration
-%strategies \cite{Bubeck.pure}. 
-
-Much of research literature on Multi-armed bandits centered
-on minimizing the cumulative regret. The
-UCB scheme (see below) was shown to be near-optimal in minimizing the cumulative regret \cite{Auer.ucb}. 
-
-\begin{dfn} Scheme $\mathbf{UCB(c)}$ pulls arm $i$ that maximizes 
-upper confidence bound $b_i$ on the reward:
-\begin{equation}
-b_i=\overline X_i+\sqrt {\frac {c \ln n} {n_i}}
-\label{eqn:ucb}
-\end{equation}
-where $\overline X_i$ is the average reward obtained from arm $i$,
-$n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
-number of pulls so far. \end{dfn} The best known upper bound on the simple
-regret of UCB($c$) is polynomially decreasing in the number of samples
-(see \cite{Bubeck.pure}, Theorems~2,3).
-
-An upper bound on the simple regret of uniform sampling is
+Strategies that minimize the simple regret are called pure exploration
+strategies \cite{Bubeck.pure}. An upper bound on the simple regret of uniform sampling is
 exponentially decreasing in the number of samples (see
-\cite{Bubeck.pure}, Proposition~1). However, empirically
-UCB($c$) yields a lower simple regret than uniform
+\cite{Bubeck.pure}, Proposition~1). For UCB($c$) the best known respective upper bound on the simple
+regret of UCB($c$) is only polynomially decreasing in the number of samples
+(see \cite{Bubeck.pure}, Theorems~2,3). However, empirically
+UCB($c$) appears to yield a lower simple regret than uniform
 sampling. 
 
-The UCT algorithm, an extension of UCB
-to Monte-Carlo Tree Search is described in \cite{Kocsis.uct}, and
-shown to outperform many state of the art search algorithms in both
-MDP and adversarial search \cite{Eyerich.ctp}. Pure exploration in
-Multi-armed bandits is examined in \cite{Bubeck.pure}. On the one
-hand, the \cite{Bubeck.pure} prove certain upper and lower bounds for
-UCB and uniform sampling, showing that an upper bound on the simple
-regret is exponential in the number of samples for uniform sampling,
-while only polynomial for UCB. On the other hand, empirical
-performance of UCB appears to be better than that of uniform sampling.
+%Pure exploration in
+%Multi-armed bandits is examined in \cite{Bubeck.pure}. On the one
+%hand, the \cite{Bubeck.pure} prove certain upper and lower bounds for
+%UCB and uniform sampling, showing that an upper bound on the simple
+%regret is exponential in the number of samples for uniform sampling,
+%while only polynomial for UCB. On the other hand, empirical
+%performance of UCB appears to be better than that of uniform sampling.
 
 \subsection{Metareasoning}
 
-A completely different direction of controlling sampling can use the
+A completely different scheme for control of sampling can use the
 principles of bounded rationality \cite{Horvitz.reasoningabout}
 and metareasoning ---  \cite{Russell.right} provided a formal
 description of rational metareasoning and case studies of applications
 in several problem domains. In search, under myopic and sub-tree independence assumptions,
 one maintains a current best move  $\alpha $ at the root, 
 and finds the expected gain from finding another move 
-$\beta $ to be better than the current best \cite{Russell.aima}. The ``cost'' of search
+$\beta $ to be better than the current best \cite{Russell.right}. The ``cost'' of search
 actions can also be factored in.
 Ideally, an ``optimal'' sampling scheme, to be used
 for selecting what to sample, both at the root node \cite{HayRussell.MCTS} and elsewhere,
 can be developed using metareasoning.
 However, this task is daunting for the following reasons:
 \begin{itemize}
-\item Defining the cost of a sample is not trivial.
 \item The method is in general intractable, necessitating simplifying assumptions.
  However, using the standard metareasoning myopic assumption,
     where samples would be selected as though at most one sample
@@ -219,6 +216,7 @@ However, this task is daunting for the following reasons:
 %  value of information for a single sample.
 \item Rational metareasoning requires a known distribution model, which may be
   difficult to obtain.
+\item Defining the time-cost of a sample is not trivial.
 \end{itemize}
 
 As the above ultimate goal is extremely difficult
@@ -249,7 +247,7 @@ $0<\varepsilon<1$ and any other
 arm with probability $\frac {1-\varepsilon} {K-1}$. 
 \end{dfn}
 This sampling scheme exhibits an exponentially decreasing simple regret:
-\begin{thm} For any $0<\eta<1$  and $\gamma>1$ there exists $N$ such that for
+\begin{thm} For every $0<\eta<1$  and $\gamma>1$ there exists $N$ such that for
   any number of samples $n>N$ the simple regret of the  $\varepsilon$-greedy
 sampling scheme is  bounded from above as
 \begin{equation}
@@ -322,8 +320,8 @@ distribute samples in a way similar to UCB, but would sample the best arm
 less. This can be achieved by replacing $\log(\cdot)$ in
 Equation~\ref{eqn:ucb} with a faster growing sublinear function, for
 example, $\sqrt\cdot$.
-\begin{dfn} Scheme $\mathbf{UCB_{\sqrt{\cdot}}(c)}$ repeatedly pulls arm $i$ that
-maximizes $b_i$:
+\begin{dfn} Scheme $\mathbf{UCB_{\sqrt{\cdot}}(c)}$ pulls arm $i$ that
+maximizes $b_i$, where:
 \begin{equation}
 b_i=\overline X_i+\sqrt {\frac {c \sqrt n} {n_i}}
 \end{equation}
@@ -331,7 +329,7 @@ where, as before, $\overline X_i$ is the average reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn}
 This scheme also exhibits a super-polynomially decreasing simple regret:
-\begin{thm}  For any $0<\eta<1$  and $\gamma>1$ there exists $N$ such that for
+\begin{thm}  For every $0<\eta<1$  and $\gamma>1$ there exists $N$ such that for
   any number of samples $n>N$ the simple regret of the  UCB$_{\sqrt{\cdot}}$($c$)
 sampling scheme is  bounded from above as
 \begin{equation}
@@ -367,10 +365,10 @@ Substitute (\ref{eqn:usbsqrt-probbound}) into
 \subsection{Sampling in Trees}
 \label{sec:sampling-in-trees}
 
-UCT \cite{Kocsis.uct} is a generalization of UCB for MCTS.  UCT
+As mentioned above,
+UCT \cite{Kocsis.uct} is an extension of UCB for MCTS, that
 applies UCB($c$) at each step of a rollout.  At the root node,
-the goal of sampling in MCTS is
-usually finding the first action to perform. Search is re-started,
+the sampling in MCTS is usually aimed at finding the first move to perform. Search is re-started,
 either from scratch or using some previously collected information,
 after observing the actual outcome (in MDPs) or the opponent's move
 (in adversarial games). Once one move is shown to be the best
@@ -379,9 +377,9 @@ samples of the best move is low. Therefore, one should be able to do
 better than UCT by optimizing {\em simple regret}, rather than {\em
   cumulative regret}, at the root node.
 
-For nodes deeper in the search tree the situation is not as clear, but here the task appears different.
+Nodes deeper in the search tree are a different matter.
 In order to support an optimal move choice at the root, a precise {\em value} of the search
-tree nodes is beneficial. For these internal nodes optimizing simple regret is not the answer, and 
+tree nodes is beneficial. For these internal nodes, optimizing simple regret is not the answer, and 
 cumulative regret optimization seems more reasonable. Lacking a complete metareasoning for sampling,
 which would indicate the optimal way to sample both root nodes and internal nodes,
 our suggested improvement to UCT thus combines different sampling schemes on the first step and
@@ -393,22 +391,14 @@ the simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot
 then selects actions according to UCB, minimizing the cumulative regret (\textbf{CR}).
 \end{dfn}
 
-We will denote realizations of SR+CR as \emph{Alg}+UCT, where
-\emph{Alg} is the sampling scheme employed at the first step of a
-rollout (e.g. $\frac 1 2$-greedy+UCT). Such two-stage sampling scheme
-outperforms UCT, and, additionally, is
-significantly less sensitive to the tuning of the exploration factor
-$c$ of UCB($c$), since the contradiction between the need for a larger
-value of $c$ on the first step (simple regret) and a smaller
-value for the rest of the rollout (cumulative regret)
-\cite{Bubeck.pure} is resolved. In fact, a sampling scheme that uses
-UCB($c$) at all steps but a larger value of $c$ for the first step
-than for the rest of the steps, outperforms UCT. The pseudocode of the
-two-stage rollout is in
+The pseudocode of this two-stage rollout is in
 Algorithm~\ref{alg:two-stage-mcts}: \textsc{FirstAction} selects the first
 step of a layout (line~\ref{alg:srcr-first-action}), and
 \textsc{NextAction} (line~\ref{alg:srcr-next-action}) selects steps during
 the rest of the layout (usually using UCB).
+We denote such two-step realizations of SR+CR as \emph{Alg}+UCT, where
+\emph{Alg} is the sampling scheme employed at the first step of a
+rollout (e.g. $\frac 1 2$-greedy+UCT).
 
 \begin{algorithm}[h!]
 \caption{Two-stage Monte-Carlo tree search sampling}
@@ -428,6 +418,17 @@ the rest of the layout (usually using UCB).
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+We expect such two-stage sampling schemes to
+outperform UCT and be
+significantly less sensitive to the tuning of the exploration factor
+$c$ of UCB($c$). That is since the contradiction between the need for a larger
+value of $c$ on the first step (simple regret) and a smaller
+value for the rest of the rollout (cumulative regret)
+\cite{Bubeck.pure} is resolved. In fact, a sampling scheme that uses
+UCB($c$) at all steps but a larger value of $c$ for the first step
+than for the rest of the steps, outperforms UCT. 
+
 
 \subsection{VOI-aware Sampling}
 \label{sec:voi-sampling}
@@ -474,7 +475,8 @@ These VOI estimates are used in the ``VOI-aware'' sampling scheme as follows: sa
 action that has maximum estimated VOI. We judged these estimates to be too crude
 to be used as ``stopping criteria'' that can be used to cut off sampling,
 leaving this issue for future research.
-Early experiments with this approach demonstrate a significantly lower simple regret.
+Unfortunately, this scheme appears too complicated to be amenable to a formal
+analysis. Early experiments with this approach demonstrate a significantly lower simple regret.
 
 \section{Empirical Evaluation}
 \label{sec:emp}
@@ -524,18 +526,12 @@ whole range.
 \label{sec:emp-mcts}
 
 The second set of experiments was performed on randomly generated
-trees crafted in such a way that uniform random sampling selects a
-direction at the root randomly. The degree of the root is a parameter of
-the tree generator. The degree of all nodes at distance 1 from the
-root is 2, and all nodes at distance 2 from the roots are leaves. The
-average reward of two children of each node at distance 1 is
-0.5. Thus, a uniform sampling scheme results in the same average reward for
-all edges at the root, and an adaptive sampling scheme, such as UCT,
-has to be used.
+2-level max-max trees crafted so as to deliberately deceive uniform sampling
+(Figure~\ref{fig:mcts-regret}.a), necessitating  an adaptive sampling scheme, 
+such as UCT. That is due to the switch nodes, each with 2 children with anti-symmetric
+values, which would cause a uniform sampling scheme to incorrectly give them all a value of 0.5.
 
-Figure~\ref{fig:mcts-regret} shows a sketch of the search tree
-(Figure~\ref{fig:mcts-regret}.a) and the dependency of the regret vs. the
-number of samples for trees with root degree 16
+Simple regret vs. the number of samples are shown for trees with root degree 16
 (Figure~\ref{fig:mcts-regret}.b) and 64 (Figure~\ref{fig:mcts-regret}.c).
 The algorithms exhibit a similar relative performance: either $\frac 1
 2$-greedy+UCT or UCB$_{\sqrt{\cdot}}$+UCT
@@ -609,6 +605,7 @@ values of the exploration factor.
   c. 1585 rollouts
   \caption{The sailing domain, $6\times 6$ lake, cost vs. factor}
   \label{fig:sailing-cost-vs-factor}
+  \vspace{-1.5em}
 \end{figure}
 
 Figure~\ref{fig:sailing-lake-size} shows the cost vs. the exploration
@@ -634,12 +631,14 @@ UCT$_{\sqrt{\cdot}}$+UCT). Again, the experiments were performed on
 randomly generated trees with structure shown in
 Figure~\ref{fig:mcts-regret}.a. Figure~\ref{fig:mcts-regret-voi} shows
 the results for 32 arms. VOI+UCT, the scheme based on a VOI estimate,
-outperforms all other sampling schemes in this example. 
+outperforms all other sampling schemes in this example. Similar performance improvements
+(not shown) also occur for the sailing domain.
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.45]{tree-identity-k=32-uqb=8+voi.pdf}\\
   \caption{MCTS in random trees, including VOI+UCT.}
-  \label{fig:mcts-regret-voi}
+  \label{fig:mcts-regret-voi} 
+  \vspace{-1.5em}
 \end{figure}
 
 \section{Summary and Future Work}
@@ -668,7 +667,14 @@ which despite its simplicity already shows a marked improvement in minimizing re
 However, application of the theory of rational metareasoning
 to Monte Carlo Tree Search is an open problem \cite{HayRussell.MCTS},
 and both a solid theoretical model and empirically efficient VOI
-estimates need to be developed.
+estimates need to be developed. 
+
+Finding a better sampling scheme for non-root nodes,
+as well as the root node, should also be possible.
+Although cumulative regret does reasonably
+well there, it is far from optimal, as meta-reasoning principles imply that an optimal scheme
+for these nodes must be asymmetrical (e.g. it is not helpful to find out that the
+value of the current best action is even better than previously believed).
 
 %\section*{Acknowledgments}
 
