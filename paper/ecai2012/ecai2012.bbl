@@ -1,0 +1,62 @@
+\begin{thebibliography}{10}
+
+\bibitem{kn:Adams85}
+L.~Adams, `{m-Step} preconditioned {Gradient} methods', {\em SIAM Journal of
+  Scientific and Statistical Computing}, {\bf 6},  452--463, (1985).
+
+\bibitem{kn:Atkin}
+P.~Atkin.
+\newblock Performance maximisation.
+\newblock INMOS Technical Note 17.
+
+\bibitem{kn:daCunha92b}
+R.D. {da Cunha} and T.R. Hopkins, {\em The Parallel Solution of Partial
+  Differential Equations on Transputer Networks},  96--109, Transputing for
+  Numerical and Neural Network Applications, IOS Press, Amsterdam, 1992.
+\newblock Also as Report No. 17/92, Computing Laboratory, University of Kent at
+  Canterbury, U.K.
+
+\bibitem{kn:daCunha92a}
+R.D. {da Cunha} and T.R. Hopkins, {\em The Parallel Solution of Systems of
+  Linear Equations using Iterative Methods on Transputer Networks},  1--13,
+  Transputing for Numerical and Neural Network Applications, IOS Press,
+  Amsterdam, 1992.
+\newblock Also as Report No. 16/92, Computing Laboratory, University of Kent at
+  Canterbury, U.K.
+
+\bibitem{kn:deCarlini91}
+U.~{de Carlini} and U.~Villano, {\em Transputers and parallel architectures --
+  message-passing distributed systems}, Ellis Horwood, Chichester, 1991.
+
+\bibitem{kn:Eisenstat81}
+S.C. Eisenstat, `Efficient implementation of a class of preconditioned
+  {Conjugate Gradient} methods', {\em SIAM Journal of Scientific and
+  Statistical Computing}, {\bf 2},  1--4, (1981).
+
+\bibitem{kn:Golub89}
+G.H. Golub and C.F. {Van Loan}, {\em Matrix Computations}, Johns Hopkins
+  University Press, Baltimore, 2nd edn., 1989.
+
+\bibitem{kn:Johnson83}
+O.G. Johnson, C.A. Micchelli, and G.~Paul, `Polynomial preconditioners for
+  {Conjugate Gradient} calculations', {\em SIAM Journal of Numerical Analysis},
+  {\bf 20},  362--376, (1983).
+
+\bibitem{kn:Modi88}
+J.J. Modi, {\em Parallel Algorithms and Matrix Computation}, Oxford University
+  Press, Oxford, 1988.
+
+\bibitem{kn:Saad85}
+Y.~Saad, `Practical use of polynomial preconditionings for the {Conjugate
+  Gradient} method', {\em SIAM Journal of Scientific and Statistical
+  Computing}, {\bf 6},  865--881, (1985).
+
+\bibitem{kn:Schofield89}
+C.F. Schofield, {\em Optimising {FORTRAN} programs}, Ellis Horwood Publishing,
+  Chichester, 1989.
+
+\bibitem{kn:Smith85}
+G.D. Smith, {\em Numerical Solution of Partial Differential Equations: Finite
+  Difference Methods}, Oxford University Press, Oxford, 3rd edn., 1985.
+
+\end{thebibliography}
