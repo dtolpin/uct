@@ -489,10 +489,11 @@ a state of the art Go program, was used:
   policies at the first step. 
 \item The stopping condition for the VOI-aware policies was
   modified and based solely on the sample cost, specified as
-  a constant parameter. 
+  a constant parameter. The heuristic stopping condition for the
+  original UCT policy was left unchanged.
 \item The time-allocation mode based on the fixed number of samples
-  was modified for both the original UCT policy and the VOI-aware
-  policies such that 
+  was modified for \textit{both the original UCT policy and the VOI-aware
+  policies} such that 
   \begin{enumerate}
     \item the same number of samples is available to
       the agent at each step, independently of the number of pre-simulated

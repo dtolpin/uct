@@ -1,7 +1,12 @@
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=pdflatex 2007.11.29)  15 DEC 2011 09:54
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2011.4.7)  28 JAN 2012 01:23
 entering extended mode
-**\input ecai2012.tex
-(./ecai2012.tex (./ecai2012.cls
+ %&-line parsing enabled.
+**ecai2012.tex
+(./ecai2012.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, loaded.
+(./ecai2012.cls
 
 LaTeX Warning: You have requested document class `ecai2012',
                but the document class provides `ecai2008'.
@@ -23,35 +28,34 @@ Document Class: ecai2008 2002/03/06 v01 ECAI-2004 document class
 \c@pageone=\count87
 \c@theorem=\count88
 \c@theoremlistno=\count89
-) (/sw/share/texmf-dist/tex/latex/psnfss/times.sty
-Package: times 2004/09/15 PSNFSS-v9.2 (SPQR) 
+) (/usr/share/texmf-texlive/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 )
-(/sw/share/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/sw/share/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/sw/share/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-(/sw/share/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/sw/share/texmf-dist/tex/latex/graphics/graphics.cfg
-File: graphics.cfg 2005/02/03 v1.3 graphics configuration of teTeX/TeXLive
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 80.
+Package graphics Info: Driver file: dvips.def on input line 91.
 
-(/sw/share/texmf-dist/tex/latex/graphics/pdftex.def
-File: pdftex.def 2002/06/19 v0.03k graphics/color for pdftex
-\Gread@gobject=\count90
+(/usr/share/texmf-texlive/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
 ))
 \Gin@req@height=\dimen105
 \Gin@req@width=\dimen106
 )
-(/sw/share/texmf-dist/tex/latex/base/latexsym.sty
+(/usr/share/texmf-texlive/tex/latex/base/latexsym.sty
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 \symlasy=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
@@ -73,42 +77,8 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
 LaTeX Font Info:    ... okay on input line 9.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 9.
 
-(/sw/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+(/usr/share/texmf-texlive/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
-)
-(/sw/share/texmf-dist/tex/context/base/supp-pdf.tex
-(/sw/share/texmf-dist/tex/context/base/supp-mis.tex
-loading : Context Support Macros / Miscellaneous (2004.10.26)
-\protectiondepth=\count91
-\scratchcounter=\count92
-\scratchtoks=\toks15
-\scratchdimen=\dimen107
-\scratchskip=\skip43
-\scratchmuskip=\muskip10
-\scratchbox=\box26
-\scratchread=\read1
-\scratchwrite=\write3
-\zeropoint=\dimen108
-\onepoint=\dimen109
-\onebasepoint=\dimen110
-\minusone=\count93
-\thousandpoint=\dimen111
-\onerealpoint=\dimen112
-\emptytoks=\toks16
-\nextbox=\box27
-\nextdepth=\dimen113
-\everyline=\toks17
-\!!counta=\count94
-\!!countb=\count95
-\recursecounter=\count96
-)
-loading : Context Support Macros / PDF (2004.03.26)
-\nofMPsegments=\count97
-\nofMParguments=\count98
-\MPscratchCnt=\count99
-\MPscratchDim=\dimen114
-\MPnumerator=\count100
-\everyMPtoPDFconversion=\toks18
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 17.
@@ -121,7 +91,8 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 17.
 LaTeX Font Info:    Try loading font information for U+lasy on input line 17.
- (/sw/share/texmf-dist/tex/latex/base/ulasy.fd
+
+(/usr/share/texmf-texlive/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -136,57 +107,29 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 20.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <9> on input line 23.
-[1{/sw/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+[1
 
 
 ]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 174.
-
-
-! LaTeX Error: Unknown graphics extension: .ps.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.211 ...ncludegraphics[height=3.5in]{ecaif01.ps}}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
+File: ecaif01.ps Graphic file (type eps)
+ <ecaif01.ps>
 LaTeX Font Info:    Try loading font information for OT1+pcr on input line 243.
 
-(/sw/share/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+ (/usr/share/texmf-texlive/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [2] [3] (./ecai2012.bbl)
-[4] (./ecai2012.aux)
+) [2]
+[3] (./ecai2012.bbl [4]) [5
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+] (./ecai2012.aux) ) 
 Here is how much of TeX's memory you used:
- 1101 strings out of 94500
- 13359 string characters out of 1176113
- 65483 words of memory out of 1500000
- 4284 multiletter control sequences out of 10000+50000
- 27246 words of font info for 57 fonts, out of 1200000 for 2000
- 580 hyphenation exceptions out of 8191
- 25i,10n,19p,231b,303s stack positions out of 5000i,500n,6000p,200000b,5000s
-PDF statistics:
- 58 PDF objects out of 65536
- 0 named destinations out of 20000
- 1 words of extra memory for PDF output out of 65536
-</sw/share/texmf-dist/fonts/type1/bluesky/cm/cmmi5.pfb></sw/share/texmf-dist/
-fonts/type1/bluesky/cm/cmsy6.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/c
-mex10.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/cmmi6.pfb>{/sw/share/tex
-mf-dist/fonts/enc/dvips/psnfss/8r.enc}</sw/share/texmf-dist/fonts/type1/urw/tim
-es/utmri8a.pfb></sw/share/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></sw/sh
-are/texmf-dist/fonts/type1/bluesky/cm/cmr9.pfb></sw/share/texmf-dist/fonts/type
-1/bluesky/cm/cmmi9.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/cmsy8.pfb><
-/sw/share/texmf-dist/fonts/type1/bluesky/latex/lasy8.pfb></sw/share/texmf-dist/
-fonts/type1/bluesky/cm/cmsy9.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/c
-mr6.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/cmr8.pfb></sw/share/texmf-
-dist/fonts/type1/urw/times/utmr8a.pfb></sw/share/texmf-dist/fonts/type1/urw/tim
-es/utmb8a.pfb>
-Output written on ecai2012.pdf (4 pages, 123424 bytes).
+ 731 strings out of 495062
+ 8860 string characters out of 1182645
+ 64256 words of memory out of 3000000
+ 3942 multiletter control sequences out of 15000+50000
+ 14799 words of font info for 45 fonts, out of 3000000 for 9000
+ 28 hyphenation exceptions out of 8191
+ 25i,10n,19p,208b,303s stack positions out of 5000i,500n,10000p,200000b,50000s
+
+Output written on ecai2012.dvi (5 pages, 29044 bytes).
