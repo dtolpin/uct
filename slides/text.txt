@@ -44,3 +44,32 @@ average rewards are low. The algorithm has given amazingly good
 results in Computer Go agents (MoGo, Fuego, Pachi) as well as in 
 some other domains. There is an ongoing effort to adapt UCT to
 many different search domains.
+
+However, there is a problem with UCT. While it is true that during
+most of the rollout it is desirable to choose `best' moves most of 
+the time, the first step is different: discovering that a certain
+move/action is bad, is not less important than that it is good:
+consider a problem with two actions (and with normally distributed
+uncertainty about the utilities) it makes sense to sample the action
+with greater uncertainty, whether its average reward is higher or
+lower.
+
+Thus, while UCB, an algorithm that maximizes cumulative reward
+is suitable for selections starting with the second step of a
+simulation layout, an algorithm that optimizes simple reward (that is,
+the true utility of the action with the highest average reward) is
+better for the first step. An improved version of UCT would look like
+the following algorithm:
+
+code of the algorithm here
+
+
+What are the options for the sampling scheme at the first step?
+
+ - epsilon-greedy sampling (not so bad)
+ - a modified version of UCB (worse for cumulative, better for simple
+ - reward)
+ - sampling based on estimating of VOI for each action, and selecting
+   the action with the greatest VOI estimate for sampling.
+
+
