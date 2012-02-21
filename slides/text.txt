@@ -20,6 +20,32 @@ popularity is growing and success is amazing in several areas:
 adaptive MCTS, and, in particular UCT (with various improvements
 and variations).
 
+MCTS incrementally builds a subtree of the entire game tree in memory.
+The algorithms starts with only the root of the tree and repeats the
+following 4 steps until it runs out of computation time:
+
+Selection: 
+  Starting from the root, the algorithm selects in each stored node the
+  branch it wants to explore further until it reaches a stored leaf (This is not
+  necessarily a leaf of the game tree). The selection strategy is a parameter of
+  the MCTS approach.
+
+Expansion: 
+  One (or more) leafs are added to the stored tree as child(ren) of
+  the leaf reached in the previous step.
+
+Simulation: 
+   A sample game starting from the added leaf is played (using a
+   simple and fast game-playing strategy) until conclusion. The value of the
+   reached result (i.e. of the reached game tree leaf) is recorded. MCTS does
+   not require an evaluation heuristic, as each game is simulated to conclusion.
+
+Backpropagation: 
+   The estimates of the expected values
+   (and selection counter) of each recorded node P on the explored path
+   is updated according to the recorded result. The backpropagation strategy
+   is also a parameter of the MCTS approach.
+
 The main idea of MCTS is to assess the utility of a move by averaging
 outcomes of a number of random rollouts (search simulations) starting
 with the move. To increase the chance that such estimate approximates
@@ -67,19 +93,135 @@ code of the algorithm here
 What are the options for the sampling scheme at the first step?
 
  - epsilon-greedy sampling (not so bad)
- - a modified version of UCB (worse for cumulative, better for simple
- - reward)
+ - a modified version of UCB (worse for cumulative,
+   better for simple reward)
  - sampling based on estimating of VOI for each action, and selecting
    the action with the greatest VOI estimate for sampling.
 
 
-In the first two options, the shape of sample selection function is
-guessed, but certain bounds on the simple regret can be proved
+In the first two options, the selection criterion is chosen
+heuristically, but certain bounds on the simple regret can be proved
 (for example, exponentially decreasing regret for epsilon-greedy
 sampling vs. polymonially decreasing for the unmodified UCB). 
 
 The third option is based on principles of rational metareasoning,
-and allows to design, rather than to guess, sampling
+and allows to design, rather than guess, selection
 criteria. Unfortunately, the VOI-based schemes seem to be too
 complicated for non-trivial theoretical analysis.
 
+Heuristic sampling schemes for simple regrets
+
+Epsilon-greedy sampling scheme :
+
+pulls the empirically best
+arm with probability epsilon, and any other arm with probability
+1-epsilon/K-1. 
+
+This sampling scheme exhibits an exponentially decreas-
+ing simple regret, and for a given number of arms there
+is an optimal value of epsilon, which can be estimated
+from bounds on regrets.
+
+In particular, the case when epsilon = 1/K is uniform
+random sampling. The performance of uniform random
+sampling is unsurprisingly rather poor. However, epsilon=1/2
+performs results in a significantly tighter upper bound on
+the simple regret, and as we will see in the experiments,
+performs much better in practice (and better than UCB!)
+
+UCB-root sampling scheme :
+
+  is obtained by replacing log in the formula for UCB with
+  a faster growing sublinear function, namely square root.
+
+This scheme also has a superpolynomially decreasing upper
+bound on the simple rerget.
+
+VOI-aware sampling
+
+Instead of guessing the sample selection criterion, we
+can derive it from an estimate of the value of information
+of rollouts. Since, in our approach, we don't want to
+rely on features of probability distribution, we'll
+base our estimate on:
+
+ 1. A bound on the robability that a series of rollouts
+    starting with a particular action will make another action
+    appear better than the current best action.
+
+ 2. A bound on the gain that may be incurred if such a
+    change occurs.
+
+And come up with estimates for VOI of sampling a particular
+action, as follows:
+
+
+....
+
+Empirical Evaluation
+
+We performed experiments on Multi-armed Bandit instances,
+on search trees, and on the sailing domain. The experiments
+generally show better results for SRCR than for pure UCT,
+with the best advantage achieved for VOI-aware sampling.
+On the other hand, UCT is certainly not as bad as it would follow
+from known upper bounds on the simple regret. 
+
+Multi-armed bandit instances
+
+Figure 1 shows the search tree
+corresponding to a problem instance. Each arm returns a random reward
+drawn from a Bernoulli distribution. The search selects an arm
+and compares the expected reward, unknown to the algorithm during the
+sampling, to the expected reward of the best arm.
+
+Figure 2 shows the regret
+vs. the number of samples, averaged over $10000$ experiments for
+randomly generated instances of 32 arms. For smaller numbers of
+samples, $\frac 1 2$-greedy achieves the best
+performance; for larger numbers of samples, UCB$_{\sqrt{\cdot}}$
+outperforms $\frac 1 2$-greedy. A combination of $\frac 1
+2$-greedy  and UCB$_{\sqrt{\cdot}}$ dominates UCB over the
+whole range.
+
+
+Monte-Carlo tree search
+
+The second set of experiments was performed on randomly generated
+2-level max-max trees crafted so as to deliberately deceive uniform sampling
+(Figure 1), necessitating  an adaptive sampling scheme, 
+such as UCT. That is due to the switch nodes, each with 2 children with anti-symmetric
+values, which would cause a uniform sampling scheme to incorrectly give them all a value of 0.5.
+
+Simple regret vs. the number of samples are shown for trees with root degree 32
+in Figure 2.
+The algorithms exhibit a similar relative performance: either $\frac 1
+2$-greedy+UCT or UCB$_{\sqrt{\cdot}}$+UCT
+gives the lowest regret, UCB$_{\sqrt{\cdot}}$+UCT dominates UCT everywhere
+except for small numbers of instances. The advantage of both $\frac 1
+2$-greedy+UCT and UCB$_{\sqrt{\cdot}}$+UCT grows with the number of
+arms. Additionally,  VOI+UCT, the scheme based on a VOI estimate,
+outperforms all other sampling schemes in this example (similar
+results are obtained for multi-armed bandits and the sailing domain).
+
+Summary and Future work
+
+We introduced an improved MCTS sampling scheme, SRCR, which combines
+an algorithm for maximizing the simple regret on the first step with
+UCT during the rest of the layout. The experiments showed that such
+scheme outperforms SRCR on a range of problems. 
+
+Although SR+CR is inspired by the notion of VOI, the VOI is used there
+implicitly in the analysis of the algorithm, rather than computed or
+learned explicitly in order to plan the rollouts. Ideally, using VOI
+to control sampling ab-initio should do even better, but the theory
+for doing that is still not up to speed. Instead we suggest a
+``VOI-aware'' sampling scheme based on crude probability and value
+estimates, which despite its simplicity already shows a marked
+improvement in minimizing regret.
+
+While SRCR is better than plain UCT, on some kinds of problems
+UCT performs better than one would expect from the theoretical
+analysis. Understanding the reasons why UCT is good, in particular in 
+games such as Go, would help in developing high quality adaptive
+MCTS algorithms.
