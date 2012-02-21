@@ -1,0 +1,46 @@
+Search problems are often hard to solve in practice because 
+ - both the search space is large; 
+ - and good heuristics are unknown.
+If the search space is relatively small, the problem can be solved
+using alpha-beta pruning. If good heuristics are available, only
+a small part of the search space is considered before a solution
+is found. Otherwise, traditional search algorithms get lost.
+
+Examples of such challenging problems are some computer games, such as 
+Computer Go (the search space size is ~10^170), Poker (~10^80), and
+many generalization of the shortest path problem, such as 
+Canadian Traveller Problem. For comparison, the search space of chess
+is `merely' (10^50), and efficient pruning techniques/evaluation
+functions exist.
+
+Until recently, the computer was a poor Go player, and many POMDPs
+were solved by a human better than the computer (such as driving,
+or playing  strategy games). However, there is an approach which
+popularity is growing and success is amazing in several areas:
+adaptive MCTS, and, in particular UCT (with various improvements
+and variations).
+
+The main idea of MCTS is to assess the utility of a move by averaging
+outcomes of a number of random rollouts (search simulations) starting
+with the move. To increase the chance that such estimate approximates
+the true value, `adaptive' MCTS is used, such that seemingly good
+moves are sampled more frequently (but bad moves are still checked
+occasionally to explore new search directions). 
+
+This formulation of adaptive sampling reminds the Multi-armed Bandits
+problem: given a set of arms, each returning a random reward [in a
+common setting - from an unknown stationary bounded distribution],  
+pull arms in such a way that the total reward is maximized. This
+problem is well-known and thoroughly explored: there is a family
+algorithms which are said to `solve exploitation/exploration reward'
+no matter what the actual reward distributions of the arms are. One
+such algorithm is called UCB1 (or simply UCB).
+
+UCT, an algorithm for adaptive MCTS, is based on UCB, namely, it
+applies UCB in each node of the rollout, and (in the case of computer
+games) mostly simulates moves which look good so far, but occasionally
+explores new directions by trying underexplored nodes even if their
+average rewards are low. The algorithm has given amazingly good
+results in Computer Go agents (MoGo, Fuego, Pachi) as well as in 
+some other domains. There is an ongoing effort to adapt UCT to
+many different search domains.
