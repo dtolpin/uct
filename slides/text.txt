@@ -73,3 +73,13 @@ What are the options for the sampling scheme at the first step?
    the action with the greatest VOI estimate for sampling.
 
 
+In the first two options, the shape of sample selection function is
+guessed, but certain bounds on the simple regret can be proved
+(for example, exponentially decreasing regret for epsilon-greedy
+sampling vs. polymonially decreasing for the unmodified UCB). 
+
+The third option is based on principles of rational metareasoning,
+and allows to design, rather than to guess, sampling
+criteria. Unfortunately, the VOI-based schemes seem to be too
+complicated for non-trivial theoretical analysis.
+
