@@ -189,19 +189,30 @@ VOI_i&\approx&\frac {1-\overline X_\alpha} {n_i+1}
 \end{eqnarray*}
 \end{frame}
 
-\begin{frame}{Doing better than UCT on sets}
+\begin{frame}{Simple regret in MAB}
+
 \begin{figure}[h]
-\centering
-\includegraphics[scale=0.8]{onelevel-tree.pdf}
+  \begin{minipage}[c]{0.4\linewidth}
+    \centering
+    \includegraphics[scale=0.65]{onelevel-tree.pdf}\\
+    {\tiny Fig. 1: Search tree}
+  \end{minipage}
+  \begin{minipage}[c]{0.4\linewidth}
+    \centering
+    \includegraphics[scale=0.4]{flat-trilevel-k=64-uqb=8.pdf}\\
+    {\tiny Fig. 2: Regret vs number of samples}
+  \end{minipage}
+  \label{fig:mab-simple-regret}
 \end{figure}
-When an arm is selected based on the {\bf sample mean}:
 \begin{itemize}
-\item Regret of UCB decreases {\it polynomially} with $n$.
-\item Regret of $\epsilon$-greedy decreases {\it exponentially} with
-  $n$.
-\item Regret of UVB: $\max V_i$, $V_{i_{best}}=\frac {1-1/k}
-  {n_{i_{best}}},\quad V_{i_{other}}=\frac {1/k} {n_{i_{other}}}$
-  decreases exponentially with $n$, faster than $\epsilon$-greedy.
+\item For smaller numbers of
+samples, $\frac 1 2$-greedy achieves the best
+performance.
+\item For larger numbers of samples, UCB$_{\sqrt{\cdot}}$
+outperforms $\frac 1 2$-greedy. 
+\item A combination of $\frac 1
+2$-greedy  and UCB$_{\sqrt{\cdot}}$ dominates UCB over the
+whole range.
 \end{itemize}
 \end{frame}
 

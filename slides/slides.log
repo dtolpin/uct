@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 06:54
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 07:59
 entering extended mode
  %&-line parsing enabled.
 **slides.tex
@@ -855,31 +855,39 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <10.95> not available
 ] [16
 
 ]
-<onelevel-tree.pdf, id=432, 268.00125pt x 105.39375pt>
+<onelevel-tree.pdf, id=432, 183.68625pt x 76.285pt>
 File: onelevel-tree.pdf Graphic file (type pdf)
  <use onelevel-tree.pdf>
+<flat-trilevel-k=64-uqb=8.pdf, id=433, 400.49625pt x 251.94125pt>
+File: flat-trilevel-k=64-uqb=8.pdf Graphic file (type pdf)
+
+<use flat-trilevel-k=64-uqb=8.pdf>
+Overfull \hbox (37.2816pt too wide) in paragraph at lines 217--217
+ [][] 
+ []
+
 [17
 
- <./onelevel-tree.pdf>] <onelevel-64.pdf, id=477, 722.7pt x 433.62pt>
+ <./onelevel-tree.pdf> <./flat-trilevel-k=64-uqb=8.pdf>]
+<onelevel-64.pdf, id=505, 722.7pt x 433.62pt>
 File: onelevel-64.pdf Graphic file (type pdf)
-
-<use onelevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 215--215
+ <use onelevel-64.pdf>
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 226--226
  [] 
  []
 
 [18
 
- <./onelevel-64.pdf>] <twolevel-tree.pdf, id=508, 266.9975pt x 161.60374pt>
+ <./onelevel-64.pdf>] <twolevel-tree.pdf, id=536, 272.01625pt x 190.7125pt>
 File: twolevel-tree.pdf Graphic file (type pdf)
 
 <use twolevel-tree.pdf> [19
 
  <./twolevel-tree.pdf>]
-<twolevel-64.pdf, id=554, 722.7pt x 433.62pt>
+<twolevel-64.pdf, id=588, 722.7pt x 433.62pt>
 File: twolevel-64.pdf Graphic file (type pdf)
  <use twolevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 237--237
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 248--248
  [] 
  []
 
@@ -914,10 +922,10 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 13348 strings out of 495061
- 232310 string characters out of 1182622
+ 13355 strings out of 495061
+ 232513 string characters out of 1182622
  315685 words of memory out of 3000000
- 16113 multiletter control sequences out of 15000+50000
+ 16118 multiletter control sequences out of 15000+50000
  16727 words of font info for 62 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  45i,14n,51p,343b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -936,9 +944,9 @@ nts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
 10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr
 /share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share
 /texmf-texlive/fonts/type1/public/amsfonts/symbols/msam7.pfb>
-Output written on slides.pdf (26 pages, 411231 bytes).
+Output written on slides.pdf (26 pages, 431886 bytes).
 PDF statistics:
- 802 PDF objects out of 1000 (max. 8388607)
- 55 named destinations out of 1000 (max. 500000)
- 53 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 836 PDF objects out of 1000 (max. 8388607)
+ 56 named destinations out of 1000 (max. 500000)
+ 58 words of extra memory for PDF output out of 10000 (max. 10000000)
 
