@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 06:47
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 06:54
 entering extended mode
  %&-line parsing enabled.
 **slides.tex
@@ -876,7 +876,7 @@ File: twolevel-tree.pdf Graphic file (type pdf)
 <use twolevel-tree.pdf> [19
 
  <./twolevel-tree.pdf>]
-<twolevel-64.pdf, id=553, 722.7pt x 433.62pt>
+<twolevel-64.pdf, id=554, 722.7pt x 433.62pt>
 File: twolevel-64.pdf Graphic file (type pdf)
  <use twolevel-64.pdf>
 Overfull \hbox (17.92212pt too wide) in paragraph at lines 237--237
@@ -885,7 +885,19 @@ Overfull \hbox (17.92212pt too wide) in paragraph at lines 237--237
 
 [20
 
- <./twolevel-64.pdf>]
+ <./twolevel-64.pdf>] [21
+
+] [22
+
+] [23
+
+] [24
+
+] [25
+
+] [26
+
+]
 \tf@nav=\write5
 \openout5 = `slides.nav'.
 
@@ -902,11 +914,11 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 13330 strings out of 495061
- 232140 string characters out of 1182622
+ 13348 strings out of 495061
+ 232310 string characters out of 1182622
  315685 words of memory out of 3000000
- 16108 multiletter control sequences out of 15000+50000
- 16421 words of font info for 61 fonts, out of 3000000 for 9000
+ 16113 multiletter control sequences out of 15000+50000
+ 16727 words of font info for 62 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  45i,14n,51p,343b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/sh
@@ -915,17 +927,18 @@ exlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/font
 s/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/pub
 lic/amsfonts/cm/cmmi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
 /cm/cmss10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss12.
-pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/sh
-are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texmf-te
-xlive/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fon
-ts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texmf-texlive/fonts/type1/p
-ublic/amsfonts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
-nts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
-8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam7.pfb>
-Output written on slides.pdf (20 pages, 369761 bytes).
+pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/s
+hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texmf-texlive/fonts
+/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fonts/type1/pu
+blic/amsfonts/cm/cmssi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
+nts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr
+/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam7.pfb>
+Output written on slides.pdf (26 pages, 411231 bytes).
 PDF statistics:
- 645 PDF objects out of 1000 (max. 8388607)
- 43 named destinations out of 1000 (max. 500000)
+ 802 PDF objects out of 1000 (max. 8388607)
+ 55 named destinations out of 1000 (max. 500000)
  53 words of extra memory for PDF output out of 10000 (max. 10000000)
 
