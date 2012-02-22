@@ -243,35 +243,44 @@ arms.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{UCB vs. $\epsilon$-greedy vs UVB}
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.45]{onelevel-64.pdf}
-
-64 Bernoulli arms, randomly generated
+\begin{frame}{Sailing domain}
+\begin{itemize}
+\item A square lake.
+\item A sailboat has to find the shortest path between corners.
+\item The wind changes randomly.
+\end{itemize}
+\begin{figure}[h!]
+  \begin{minipage}[b]{0.45\linewidth}
+    \centering
+    \includegraphics[scale=0.32]{costs-size=6-group=median.pdf}\\
+    {\scriptsize Fig. 1: Median cost}
+  \end{minipage}
+  \begin{minipage}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.32]{costs-size=6-group=minimum.pdf}\\
+    {\scriptsize Fig. 2: Minimum cost}
+  \end{minipage}
+  \label{fig:sailing-cost-vs-nsamples}
 \end{figure}
+\begin{itemize}
+\item UCT is always worse than $\frac 1 2$-greedy+UCT or
+UCB$_{\sqrt{\cdot}}$+UCT. 
+\item UCT is sensitive to the value of $c$: the median cost is
+much higher than the minimum cost.
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Doing Better Than UCT on Trees}
-Uniform sampling is useless in this tree:
+\begin{frame}{VOI-aware MCTS}
 \begin{figure}[h]
-\centering
-\includegraphics[scale=0.8]{twolevel-tree.pdf}
+  \centering
+  \includegraphics[scale=0.6]{tree-identity-k=32-uqb=8+voi.pdf}\\
 \end{figure}
-Rational sampling:
 \begin{itemize}
-\item first, choose an action that maximizes VOI (UVB);
-\item then, choose actions that maximize average reward (UCB).
+\item The experiments were performed on
+randomly generated trees.
+\item VOI+UCT, the scheme based on a VOI estimate,
+outperforms all other sampling schemes in this example.
 \end{itemize}
-\end{frame}{}
-
-\begin{frame}{UVT vs. VCT (UVB+UCT) vs. UCT}
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.45]{twolevel-64.pdf}
-
-64 Bernoulli arms, randomly generated
-\end{figure}
 \end{frame}
 
 \begin{frame}{Summary}
