@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 07:59
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 08:08
 entering extended mode
  %&-line parsing enabled.
 **slides.tex
@@ -666,7 +666,11 @@ Package: framed 2007/10/04 v 0.95: framed or shaded text with page breaks
 \fb@frh=\dimen179
 \FrameRule=\dimen180
 \FrameSep=\dimen181
-) (./slides.aux)
+) (./slides.aux
+
+LaTeX Warning: Label `fig:mab-simple-regret' multiply defined.
+
+)
 \openout1 = `slides.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
@@ -683,8 +687,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
-
-(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+ (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count159
 \scratchdimen=\dimen182
@@ -869,33 +872,49 @@ Overfull \hbox (37.2816pt too wide) in paragraph at lines 217--217
 [17
 
  <./onelevel-tree.pdf> <./flat-trilevel-k=64-uqb=8.pdf>]
-<onelevel-64.pdf, id=505, 722.7pt x 433.62pt>
+<twolevel-tree.pdf, id=505, 272.01625pt x 190.7125pt>
+File: twolevel-tree.pdf Graphic file (type pdf)
+ <use twolevel-tree.pdf>
+<tree-identity-k=16-uqb=8.pdf, id=506, 400.49625pt x 251.94125pt>
+File: tree-identity-k=16-uqb=8.pdf Graphic file (type pdf)
+
+<use tree-identity-k=16-uqb=8.pdf>
+Overfull \hbox (37.2816pt too wide) in paragraph at lines 244--244
+ [][] 
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{fig:mab-simpl
+e-regret}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.244 \end{frame}
+                  [18
+
+ <./twolevel-tree.pdf> <./tree-identity-k=16-uqb=8.pdf>]
+<onelevel-64.pdf, id=579, 722.7pt x 433.62pt>
 File: onelevel-64.pdf Graphic file (type pdf)
  <use onelevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 226--226
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 253--253
  [] 
  []
 
-[18
+[19
 
- <./onelevel-64.pdf>] <twolevel-tree.pdf, id=536, 272.01625pt x 190.7125pt>
+ <./onelevel-64.pdf>]
 File: twolevel-tree.pdf Graphic file (type pdf)
+ <use twolevel-tree.pdf> [20
 
-<use twolevel-tree.pdf> [19
-
- <./twolevel-tree.pdf>]
-<twolevel-64.pdf, id=588, 722.7pt x 433.62pt>
+]
+<twolevel-64.pdf, id=636, 722.7pt x 433.62pt>
 File: twolevel-64.pdf Graphic file (type pdf)
  <use twolevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 248--248
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 275--275
  [] 
  []
 
-[20
+[21
 
- <./twolevel-64.pdf>] [21
-
-] [22
+ <./twolevel-64.pdf>] [22
 
 ] [23
 
@@ -904,6 +923,8 @@ Overfull \hbox (17.92212pt too wide) in paragraph at lines 248--248
 ] [25
 
 ] [26
+
+] [27
 
 ]
 \tf@nav=\write5
@@ -920,12 +941,15 @@ Overfull \hbox (17.92212pt too wide) in paragraph at lines 248--248
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 13355 strings out of 495061
- 232513 string characters out of 1182622
+ 13364 strings out of 495061
+ 232707 string characters out of 1182622
  315685 words of memory out of 3000000
- 16118 multiletter control sequences out of 15000+50000
+ 16124 multiletter control sequences out of 15000+50000
  16727 words of font info for 62 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  45i,14n,51p,343b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -944,9 +968,9 @@ nts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
 10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr
 /share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share
 /texmf-texlive/fonts/type1/public/amsfonts/symbols/msam7.pfb>
-Output written on slides.pdf (26 pages, 431886 bytes).
+Output written on slides.pdf (27 pages, 450012 bytes).
 PDF statistics:
- 836 PDF objects out of 1000 (max. 8388607)
- 56 named destinations out of 1000 (max. 500000)
- 58 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 884 PDF objects out of 1000 (max. 8388607)
+ 58 named destinations out of 1000 (max. 500000)
+ 63 words of extra memory for PDF output out of 10000 (max. 10000000)
 

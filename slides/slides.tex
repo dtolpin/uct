@@ -195,12 +195,12 @@ VOI_i&\approx&\frac {1-\overline X_\alpha} {n_i+1}
   \begin{minipage}[c]{0.4\linewidth}
     \centering
     \includegraphics[scale=0.65]{onelevel-tree.pdf}\\
-    {\tiny Fig. 1: Search tree}
+    {\scriptsize Fig. 1: Search tree}
   \end{minipage}
   \begin{minipage}[c]{0.4\linewidth}
     \centering
     \includegraphics[scale=0.4]{flat-trilevel-k=64-uqb=8.pdf}\\
-    {\tiny Fig. 2: Regret vs number of samples}
+    {\scriptsize Fig. 2: Regret vs \# of samples (32 arms)}
   \end{minipage}
   \label{fig:mab-simple-regret}
 \end{figure}
@@ -213,6 +213,33 @@ outperforms $\frac 1 2$-greedy.
 \item A combination of $\frac 1
 2$-greedy  and UCB$_{\sqrt{\cdot}}$ dominates UCB over the
 whole range.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Monte Carlo tree search}
+
+\begin{figure}[h]
+  \begin{minipage}[c]{0.4\linewidth}
+    \centering
+    \includegraphics[scale=0.45]{twolevel-tree.pdf}\\
+    {\scriptsize Fig. 1: Search tree}
+  \end{minipage}
+  \begin{minipage}[c]{0.4\linewidth}
+    \centering
+    \includegraphics[scale=0.4]{tree-identity-k=16-uqb=8.pdf}\\
+    {\scriptsize Fig. 2: Regret vs \# of samples (16 switches)}
+  \end{minipage}
+  \label{fig:mab-simple-regret}
+\end{figure}
+\begin{itemize}
+\item Either $\frac 1
+2$-greedy+UCT or UCB$_{\sqrt{\cdot}}$+UCT
+gives the lowest regret.
+\item UCB$_{\sqrt{\cdot}}$+UCT dominates UCT everywhere
+except for small numbers of instances. 
+\item The advantage of both $\frac 1
+2$-greedy+UCT and UCB$_{\sqrt{\cdot}}$+UCT grows with the number of
+arms.
 \end{itemize}
 \end{frame}
 
