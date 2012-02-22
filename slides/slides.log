@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  31 MAY 2011 23:31
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 06:19
 entering extended mode
  %&-line parsing enabled.
 **slides.tex
@@ -666,8 +666,7 @@ Package: framed 2007/10/04 v 0.95: framed or shaded text with page breaks
 \fb@frh=\dimen179
 \FrameRule=\dimen180
 \FrameSep=\dimen181
-)
-No file slides.aux.
+) (./slides.aux)
 \openout1 = `slides.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
@@ -684,6 +683,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
 LaTeX Font Info:    ... okay on input line 27.
+
 (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count159
@@ -749,6 +749,8 @@ Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
 LaTeX Info: Redefining \ref on input line 27.
 LaTeX Info: Redefining \pageref on input line 27.
+ (./slides.out)
+(./slides.out)
 \@outlinefile=\write4
 \openout4 = `slides.out'.
 
@@ -799,8 +801,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (/usr/share/texmf-texlive/tex/latex/translator/translator-theorem-dictionary-En
 glish.dict
 Dictionary: translator-theorem-dictionary, Language: English 
-)
-No file slides.nav.
+) (./slides.nav)
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 (Font)              size <5> substituted on input line 31.
@@ -808,47 +809,65 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for U+msa on input line 46.
+LaTeX Font Info:    Try loading font information for U+msa on input line 49.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 46.
+LaTeX Font Info:    Try loading font information for U+msb on input line 49.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 ) [2
 
+] [3
+
+] [4
+
+] [5
+
 ]
-<onelevel-tree.pdf, id=71, 268.00125pt x 105.39375pt>
-File: onelevel-tree.pdf Graphic file (type pdf)
- <use onelevel-tree.pdf>
-[3
 
- <./onelevel-tree.pdf>] <onelevel-64.pdf, id=118, 722.7pt x 433.62pt>
-File: onelevel-64.pdf Graphic file (type pdf)
-
-<use onelevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 71--71
- [] 
- []
-
-[4
-
- <./onelevel-64.pdf>] <twolevel-tree.pdf, id=149, 266.9975pt x 161.60374pt>
-File: twolevel-tree.pdf Graphic file (type pdf)
-
-<use twolevel-tree.pdf> [5
-
- <./twolevel-tree.pdf>]
-<twolevel-64.pdf, id=194, 722.7pt x 433.62pt>
-File: twolevel-64.pdf Graphic file (type pdf)
- <use twolevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 93--93
- [] 
- []
+LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <10.95> not available
+(Font)              Font shape `OT1/cmr/m/sc' tried instead on input line 128.
 
 [6
+
+] [7
+
+] [8
+
+] [9
+
+] <onelevel-tree.pdf, id=253, 268.00125pt x 105.39375pt>
+File: onelevel-tree.pdf Graphic file (type pdf)
+
+<use onelevel-tree.pdf> [10
+
+ <./onelevel-tree.pdf>]
+<onelevel-64.pdf, id=300, 722.7pt x 433.62pt>
+File: onelevel-64.pdf Graphic file (type pdf)
+ <use onelevel-64.pdf>
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 172--172
+ [] 
+ []
+
+[11
+
+ <./onelevel-64.pdf>] <twolevel-tree.pdf, id=331, 266.9975pt x 161.60374pt>
+File: twolevel-tree.pdf Graphic file (type pdf)
+
+<use twolevel-tree.pdf> [12
+
+ <./twolevel-tree.pdf>]
+<twolevel-64.pdf, id=375, 722.7pt x 433.62pt>
+File: twolevel-64.pdf Graphic file (type pdf)
+ <use twolevel-64.pdf>
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 194--194
+ [] 
+ []
+
+[13
 
  <./twolevel-64.pdf>]
 \tf@nav=\write5
@@ -867,28 +886,30 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 13182 strings out of 495061
- 229523 string characters out of 1182622
- 312691 words of memory out of 3000000
- 16000 multiletter control sequences out of 15000+50000
- 15814 words of font info for 59 fonts, out of 3000000 for 9000
+ 13297 strings out of 495061
+ 231541 string characters out of 1182622
+ 314685 words of memory out of 3000000
+ 16089 multiletter control sequences out of 15000+50000
+ 16421 words of font info for 61 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 45i,14n,51p,343b,531s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-te
-xlive/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts
-/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-texlive/fonts/type1/publi
-c/amsfonts/cm/cmss10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/
-cm/cmss12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss8.pf
-b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/s
-hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texmf
--texlive/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texmf-texlive/fo
-nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/p
-ublic/amsfonts/cm/cmsy8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
-ts/symbols/msam10.pfb>
-Output written on slides.pdf (6 pages, 245971 bytes).
+ 45i,14n,51p,343b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/sh
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/pub
+lic/amsfonts/cm/cmmi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmss10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss12.
+pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/sh
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texmf-te
+xlive/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fon
+ts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texmf-texlive/fonts/type1/p
+ublic/amsfonts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
+nts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
+8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+
+Output written on slides.pdf (13 pages, 313817 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
- 13 named destinations out of 1000 (max. 500000)
+ 460 PDF objects out of 1000 (max. 8388607)
+ 29 named destinations out of 1000 (max. 500000)
  53 words of extra memory for PDF output out of 10000 (max. 10000000)
 

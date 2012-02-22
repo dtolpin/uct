@@ -11,8 +11,18 @@
 \headcommand {\beamer@framepages {5}{5}}
 \headcommand {\slideentry {0}{0}{6}{6/6}{}{0}}
 \headcommand {\beamer@framepages {6}{6}}
-\headcommand {\beamer@partpages {1}{6}}
-\headcommand {\beamer@subsectionpages {1}{6}}
-\headcommand {\beamer@sectionpages {1}{6}}
-\headcommand {\beamer@documentpages {6}}
-\headcommand {\def \inserttotalframenumber {6}}
+\headcommand {\slideentry {0}{0}{7}{7/9}{}{0}}
+\headcommand {\beamer@framepages {7}{9}}
+\headcommand {\slideentry {0}{0}{8}{10/10}{}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\slideentry {0}{0}{9}{11/11}{}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\slideentry {0}{0}{10}{12/12}{}{0}}
+\headcommand {\beamer@framepages {12}{12}}
+\headcommand {\slideentry {0}{0}{11}{13/13}{}{0}}
+\headcommand {\beamer@framepages {13}{13}}
+\headcommand {\beamer@partpages {1}{13}}
+\headcommand {\beamer@subsectionpages {1}{13}}
+\headcommand {\beamer@sectionpages {1}{13}}
+\headcommand {\beamer@documentpages {13}}
+\headcommand {\def \inserttotalframenumber {11}}
