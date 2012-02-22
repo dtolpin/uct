@@ -168,6 +168,27 @@ $UCB_{\sqrt{\cdot}}$ ($\sqrt{\cdot}$ instead of $\log$):
 \end{itemize}
 \end{frame}
 
+\begin{frame}{VOI-aware sampling}
+
+\begin{itemize}
+\item Chooses an action with the maximum VOI estimate.
+\item Estimates the VOI based on bounds on:
+  \begin{itemize}
+  \item the probability that one or more rollouts will make another
+    action appear better than the current best;
+  \item the gain that may be incurred if such a change occurs.
+  \end{itemize}
+\end{itemize}
+\begin{eqnarray*}
+VOI_\alpha&\approx&\frac {\overline X_\beta} {n_\alpha+1}
+\exp\left(-2(\overline X_\alpha - \overline X_\beta)^2 n_\alpha\right)\\
+VOI_i&\approx&\frac {1-\overline X_\alpha} {n_i+1}
+\exp\left(-2(\overline X_\alpha - \overline X_i)^2 n_i\right),\; i\ne\alpha\nonumber\\
+\mbox{where }&&\alpha=\arg\max_i \overline X_i,\quad
+             \beta=\arg\max_{i,\,i\ne\alpha} \overline X_i\nonumber
+\end{eqnarray*}
+\end{frame}
+
 \begin{frame}{Doing better than UCT on sets}
 \begin{figure}[h]
 \centering
