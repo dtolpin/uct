@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 06:19
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 06:42
 entering extended mode
  %&-line parsing enabled.
 **slides.tex
@@ -826,48 +826,62 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 
 ] [5
 
+] [6
+
 ]
-
-LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <10.95> not available
-(Font)              Font shape `OT1/cmr/m/sc' tried instead on input line 128.
-
-[6
-
-] [7
+[7
 
 ] [8
 
 ] [9
 
-] <onelevel-tree.pdf, id=253, 268.00125pt x 105.39375pt>
+]
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <10.95> not available
+(Font)              Font shape `OT1/cmr/m/sc' tried instead on input line 129.
+
+[10
+
+] [11
+
+] [12
+
+] [13
+
+] [14
+
+] [15
+
+]
+<onelevel-tree.pdf, id=405, 268.00125pt x 105.39375pt>
 File: onelevel-tree.pdf Graphic file (type pdf)
+ <use onelevel-tree.pdf>
+[16
 
-<use onelevel-tree.pdf> [10
-
- <./onelevel-tree.pdf>]
-<onelevel-64.pdf, id=300, 722.7pt x 433.62pt>
+ <./onelevel-tree.pdf>] <onelevel-64.pdf, id=451, 722.7pt x 433.62pt>
 File: onelevel-64.pdf Graphic file (type pdf)
- <use onelevel-64.pdf>
-Overfull \hbox (17.92212pt too wide) in paragraph at lines 172--172
- [] 
- []
 
-[11
-
- <./onelevel-64.pdf>] <twolevel-tree.pdf, id=331, 266.9975pt x 161.60374pt>
-File: twolevel-tree.pdf Graphic file (type pdf)
-
-<use twolevel-tree.pdf> [12
-
- <./twolevel-tree.pdf>]
-<twolevel-64.pdf, id=375, 722.7pt x 433.62pt>
-File: twolevel-64.pdf Graphic file (type pdf)
- <use twolevel-64.pdf>
+<use onelevel-64.pdf>
 Overfull \hbox (17.92212pt too wide) in paragraph at lines 194--194
  [] 
  []
 
-[13
+[17
+
+ <./onelevel-64.pdf>] <twolevel-tree.pdf, id=482, 266.9975pt x 161.60374pt>
+File: twolevel-tree.pdf Graphic file (type pdf)
+
+<use twolevel-tree.pdf> [18
+
+ <./twolevel-tree.pdf>]
+<twolevel-64.pdf, id=526, 722.7pt x 433.62pt>
+File: twolevel-64.pdf Graphic file (type pdf)
+ <use twolevel-64.pdf>
+Overfull \hbox (17.92212pt too wide) in paragraph at lines 216--216
+ [] 
+ []
+
+[19
 
  <./twolevel-64.pdf>]
 \tf@nav=\write5
@@ -886,10 +900,10 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 13297 strings out of 495061
- 231541 string characters out of 1182622
+ 13312 strings out of 495061
+ 231686 string characters out of 1182622
  314685 words of memory out of 3000000
- 16089 multiletter control sequences out of 15000+50000
+ 16092 multiletter control sequences out of 15000+50000
  16421 words of font info for 61 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  45i,14n,51p,343b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -907,9 +921,9 @@ ublic/amsfonts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
 nts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
 8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb>
 
-Output written on slides.pdf (13 pages, 313817 bytes).
+Output written on slides.pdf (19 pages, 352085 bytes).
 PDF statistics:
- 460 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
+ 615 PDF objects out of 1000 (max. 8388607)
+ 41 named destinations out of 1000 (max. 500000)
  53 words of extra memory for PDF output out of 10000 (max. 10000000)
 

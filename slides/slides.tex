@@ -52,18 +52,19 @@ Search problems are often hard too solve in practice when:
 
 {\bf M}onte {\bf C}arlo {\bf T}ree {\bf S}earch helps in large search spaces.
 \begin{itemize}
-\item Starts with the root only.
-\item Repeats:
+\item<+-> Starts with the root only.
+\item<+-> Repeats:
   \begin{enumerate}
     \item \textbf{Selection:} select a branch to explore.
-    \item \textbf{Expansion:} adds children of the leaf to the stored
+    \item<+-> \textbf{Expansion:} adds children of the leaf to the stored
       tree.
-    \item \textbf{Simulation:} continues search (using a simple
+    \item<+-> \textbf{Simulation:} continues search (using a simple
       strategy) until a goal state is reached.
-    \item \textbf{Backpropagation:} values of each stored node 
+    \item<+-> \textbf{Backpropagation:} values of each stored node 
       are updated.
   \end{enumerate}
 \end{itemize}
+\vspace{1em}
 \textbf{Adaptive} MCTS samples `good' moves more frequently,\\
 but sometimes {\bf explores} new directions.
 \end{frame}
@@ -145,6 +146,27 @@ Sampling schemes for miniminizing the simple regret:
 
 \end{frame}
 
+
+\begin{frame}{Heuristic sampling schemes}
+
+\onslide<+->
+$\varepsilon$-greedy:
+\begin{itemize} 
+\item Pulls the empirically best arm with probability $\varepsilon$.
+\item Any other arm with probability $\frac {1-epsilon} {K-1}$.
+\item Exhibits exponentially decreasing simple regret.
+\item Uniform sampling when $\varepsilon=\frac 1 K$, much better when
+  $\varepsilon=\frac 1 2$.
+\end{itemize}
+\vspace{1em}
+\onslide<+->
+$UCB_{\sqrt{\cdot}}$ ($\sqrt{\cdot}$ instead of $\log$): 
+\begin{itemize}
+\item Pulls arm $i$ that maximizes
+  $b_i=\overline X_i+\sqrt {\frac {c \sqrt n} {n_i}}$. 
+\item Exhibits superpolynomially decreasing simple regret.
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Doing better than UCT on sets}
 \begin{figure}[h]

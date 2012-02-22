@@ -110,13 +110,13 @@ and allows to design, rather than guess, selection
 criteria. Unfortunately, the VOI-based schemes seem to be too
 complicated for non-trivial theoretical analysis.
 
-Heuristic sampling schemes for simple regrets
+\begin{frame}{Heuristic sampling schemes}
 
-Epsilon-greedy sampling scheme :
-
-pulls the empirically best
-arm with probability epsilon, and any other arm with probability
-1-epsilon/K-1. 
+$\varepsilon$-greedy:
+\begin{itemize} 
+\item Pulls the empirically best arm with probability $\varepsilon$.
+\item Any other arm with probability $\frac {1-epsilon} {K-1}$.
+\end{itemize}
 
 This sampling scheme exhibits an exponentially decreas-
 ing simple regret, and for a given number of arms there
