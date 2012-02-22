@@ -1,10 +1,11 @@
 Search problems are often hard to solve in practice because 
  - both the search space is large; 
  - and good heuristics are unknown.
-If the search space is relatively small, the problem can be solved
-using alpha-beta pruning. If good heuristics are available, only
-a small part of the search space is considered before a solution
-is found. Otherwise, traditional search algorithms get lost.
+If the search space is relatively small (chess), the problem can be
+solved using alpha-beta pruning. If good heuristics are available
+(CSP, Timetabling), only a small part of the search space is
+considered before a solution is found. Otherwise, traditional search
+algorithms get lost.
 
 Examples of such challenging problems are some computer games, such as 
 Computer Go (the search space size is ~10^170), Poker (~10^80), and
