@@ -108,7 +108,7 @@ However, the first step of a rollout is different:
 
 {\bf S}imple {\bf R}egret followed by {\bf C}umulative {\bf R}egret.
 \begin{itemize}
-\item Maximizes {\bf simple regret} at the {\bf first step}.
+\item Minimizes {\bf simple regret} at the {\bf first step}.
 \item Continues with UCT from the {\bf second step on}.
 \end{itemize}
 \vspace{1em}
@@ -153,7 +153,7 @@ Sampling schemes for miniminizing the simple regret:
 $\varepsilon$-greedy:
 \begin{itemize} 
 \item Pulls the empirically best arm with probability $\varepsilon$.
-\item Any other arm with probability $\frac {1-epsilon} {K-1}$.
+\item Any other arm with probability $\frac {1-\varepsilon} {K-1}$.
 \item Exhibits exponentially decreasing simple regret.
 \item Uniform sampling when $\varepsilon=\frac 1 K$, much better when
   $\varepsilon=\frac 1 2$.
