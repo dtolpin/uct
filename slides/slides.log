@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 09:40
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.7)  22 FEB 2012 09:43
 entering extended mode
  %&-line parsing enabled.
 **slides.tex
@@ -916,12 +916,6 @@ File: tree-identity-k=32-uqb=8+voi.pdf Graphic file (type pdf)
 
 ] [23
 
-] [24
-
-] [25
-
-] [26
-
 ]
 \tf@nav=\write5
 \openout5 = `slides.nav'.
@@ -942,8 +936,8 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 13351 strings out of 495061
- 232839 string characters out of 1182622
+ 13345 strings out of 495061
+ 232782 string characters out of 1182622
  315686 words of memory out of 3000000
  16113 multiletter control sequences out of 15000+50000
  13060 words of font info for 48 fonts, out of 3000000 for 9000
@@ -963,9 +957,9 @@ ublic/amsfonts/cm/cmssi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
 nts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy
 8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb>
 </usr/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam7.pfb>
-Output written on slides.pdf (26 pages, 454858 bytes).
+Output written on slides.pdf (23 pages, 438137 bytes).
 PDF statistics:
- 912 PDF objects out of 1000 (max. 8388607)
- 57 named destinations out of 1000 (max. 500000)
+ 835 PDF objects out of 1000 (max. 8388607)
+ 51 named destinations out of 1000 (max. 500000)
  68 words of extra memory for PDF output out of 10000 (max. 10000000)
 
