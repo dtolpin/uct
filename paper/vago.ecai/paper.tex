@@ -37,10 +37,10 @@
 
 \begin{abstract}
 Upper bounds for the VOI are provided for pure exploration in the
-Multi-armed Bandit Problem. A sampling policy based on the upper
-bounds is suggested. Empirical evaluation of the policy and
-comparison to the UCB1 and UCT policies is provided
-on random problem instances as well as on the Go game.
+MCTS. A sampling policy based on the upper bounds is
+suggested. Empirical evaluation of the policy and comparison to UCB1
+and UCT is performed on random bandit instances as well as on Computer
+Go.
 \end{abstract}
 
 
@@ -192,7 +192,7 @@ Estimate $\hat\Lambda_i^b$ can be viewed as a
 relaxation of the myopic assumption such that sequences consisting
 of more than one action are taken into considertion.
 
-\subsection{VOI-based Sample Allocation}
+\section{VOI-based Sample Allocation}
 
 Following the principles of rational metareasoning, an arm with
 the highest VOI should be pulled at each step. The upper bounds
@@ -206,10 +206,6 @@ heuristic algorithms.
 \section{Empirical Evaluation}
 \label{sec:empirical-evaluation}
 
-The experiments compare the UCT algorithm \cite{Kocsis.uct} with
-a modified version of UCT in which the samples at the first step are
-selected according to their VOI estimates.
-
 \subsection{Selecting The Best Arm}
 \label{sec:emp-arm}
 
@@ -221,32 +217,28 @@ selected according to their VOI estimates.
 \end{figure}
 
 The sampling policies are first compared on random Multi-armed bandit 
-problem instance. Figure~\ref{fig:random-instances} shows experiment results for
+problem instances. Figure~\ref{fig:random-instances} shows results for
 randomly-generated Multi-armed bandits with 32 Bernoulli arms, with
 the mean rewards of the arms distributed uniformly in the range $[0,
-  1]$, for a range of sample budgets $32..2048$, with multiplicative
+  1]$, for a range of sample budgets $32..1024$, with multiplicative
 step of $2$. The experiment for each number of samples was repeated
-20000 times. UCT is always considerably worse than the VOI-aware sampling policy.
+10000 times. UCB1 is always considerably worse than the
+VOI-aware sampling policy.
 
 \subsection{Playing Go Against UCT}
 \label{sec:emp-go}
 
-One search domain in which Monte-Carlo tree search based on the UCT
-sampling policy has been particularly successful is playing the game Go
-\cite{Gelly.mogo}. This series of experiments compares
-the winning rate of UCT against VOI-aware policies (VCT, ECT, BCT)
-in Go and investigates the effect of early stopping and sample
-redistribution. 
-
-A modified version of Pachi \cite{Braudis.pachi}, a state of the art
+The policies were also compared on Computer Go, a  search domain
+in which UCT-based MCTS has been particularly successful
+\cite{Gelly.mogo}. A modified version of Pachi \cite{Braudis.pachi}, a state of the art
 Go program, was used for the experiments. The UCT engine was extended
 with a VOI-aware sampling policy, and a time allocation mode ensuring
 that both the original UCT policy and the VOI-aware policy use the
-same average number of samples per node was added. While the UCT
+same average number of samples per node was added. (While the UCT
 engine is not the most powerful engine of Pachi, it is still a strong
-player. On the other hand, additional features of more advanced
-engines would obstruct the Monte-Carlo sampling phenomena which are
-the subject of the experiment.
+player; on the other hand, additional features of more advanced
+engines would obstruct the MCTS phenomena which are the subject of
+the experiment.)
 \begin{figure}[t]
 \centering
 \includegraphics[scale=0.5]{vct-wins.pdf}
@@ -254,10 +246,10 @@ the subject of the experiment.
 \label{fig:vct-against-uct}
 \end{figure}
 The engines were compared on the 9x9 board, for 5000, 7000, 1000, and
-15000 samples (game simulations) per ply, each experiment was repeated
+15000 samples per ply, each experiment was repeated
 1000 times. Figure~\ref{fig:vct-against-uct}
 shows the winning rate of VOI+UCT against UCT vs. the number of
-samples. For most numbers of samples per node, VO+UCT outperforms UCT.
+samples. For most numbers of samples per node, VOI+UCT outperforms UCT.
 
 \section{Summary and Future Work}
 
