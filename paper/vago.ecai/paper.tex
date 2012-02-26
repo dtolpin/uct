@@ -25,10 +25,10 @@
 \newtheorem{crl}{Corollary}
 
 \title{VOI-aware MCTS}
-\author {David Tolpin, Solomon Eyal Shimony \\
-Department of Computer Science, \\
-Ben-Gurion University of the Negev, Beer Sheva, Israel \\
-\{tolpin,shimony\}@cs.bgu.ac.il}
+%\author {David Tolpin, Solomon Eyal Shimony \\
+%Department of Computer Science, \\
+%Ben-Gurion University of the Negev, Beer Sheva, Israel \\
+%\{tolpin,shimony\}@cs.bgu.ac.il}
 
 \begin{document}
 
@@ -173,14 +173,9 @@ consideration the remaining number of samples. Given two arms
 with the same intrinsic perfect VOI, the VOI
 estimate of the arm pulled fewer times so far should be higher.
 
-\begin{dfn} The \textbf{blinkered estimate} of intrinsic VOI information of the
-  $i$th arm is the intrinsic VOI of pulling the $i$th arm for the
-  remaining budget.
-\end{dfn}
-
 \begin{thm} Denote the current number of samples of the $i$th arm by
-  $n_i$. The blinkered estimate $\Lambda_i^b$ of intrinsic value of
-  information of pulling the $i$th arm for the remaining budget of $N$
+  $n_i$. The intrinsic value of
+  information $\Lambda_i^b$ of pulling the $i$th arm for the remaining budget of $N$
   samples is bounded from above as
 \begin{equation}
   \Lambda_i^b \le \left\{
@@ -209,7 +204,7 @@ The probabilities in equations (\ref{eqn:thm-vopi}, \ref{eqn:thm-be})
 can be bounded from above using concentration inequalities. In
 particular, Theorem~\ref{thm:hoeffding-prob-bounds} (proved in 
 Appendix~\ref{app:hoeffding-prob-bounds-proof}) is based on the
-Hoeffding inequality (\ref{eqn:conc-hoeffding}):
+Hoeffding inequality \cite{Hoeffding.ineq}.
 \begin{thm} The probabilities in equations (\ref{eqn:thm-vopi},
 \ref{eqn:thm-be}) are bounded from above as
 \begin{eqnarray}
@@ -265,8 +260,8 @@ relaxation of the myopic assumption such that sequences consisting
 of more than one action are taken into considertion. Better bounds can
 be obtained through tighter estimates on the probabilities, for
 example, based on the empirical Bernstein inequality
-(\ref{eqn:conc-empbernstein}) or through a more careful application of
-the Hoeffding inequality (Appendix~\ref{app:better-hoeffding-bound}).
+ or through a more careful application of
+the Hoeffding inequality.
 
 \section{VOI-based Sampling Control}
 
@@ -374,45 +369,8 @@ sampling policy in game tree search.
 \label{sec:empirical-evaluation}
 
 The experiments compare the UCT algorithm \cite{Kocsis.uct} with
-modified versions of UCT in which the samples at the first step are
-selected according to their VOI estimates. Three blinkered VOI
-estimates were used for the comparison:
-\begin{description}
-\item[VCT:] based on Hoeffding inequality (\ref{eqn:conc-hoeffding});
-\item[ECT:] based on Hoeffding inequality with an intermediate point (see
-Appendix~\ref{app:better-hoeffding-bound});
-\item[BCT:] based on empirical Bernstein inequality
-(\ref{eqn:conc-empbernstein}).
-\end{description}
-For simplicity, the bounds on probability for an unlimited number
-of samples were used in the estimate formulas. The estimates where
-computed as follows:
-\begin{eqnarray}\
-  \Lambda_i^{VCT}& =&\left\{
-  \begin{array}{l l}
-    \frac {\overline X_\beta} {n_i} \cdot \exp\left(- 2(\overline X_i - \overline X_\beta)^2 n_i\right)
-      & \mbox{{\rm if} $i=\alpha$} \\
-    \frac {(1-\overline  X_\alpha)} {n_i}\cdot \exp\left(- 2(\overline X_\alpha - \overline X_i)^2 n_i\right)
-      &  \mbox{\rm otherwise}
-  \end{array}  \right.\nonumber\\
-  \Lambda_i^{ECT}& =&\min\left(\Lambda_i^{VCT}, \min_y\left\{
-  \begin{array}{l l}
-    \frac {\overline X_\beta-y} {n_i}\cdot \exp\left(-2 (\overline X_i-\overline X_\beta)^2n_i\right)
-    +\frac {\overline X_\beta} {n_i}\cdot \exp\left(-2 (\overline X_i-y)^2n_i\right)
-      & \mbox{{\rm if} $i=\alpha$} \\
-\frac {y-\overline X_\alpha} {n_i}\cdot \exp\left(-2(\overline X_\alpha-\overline X_i)^2n_i\right)
-    +\frac {1-\overline X_\alpha} {n_i}\cdot \exp\left(-2 (y-\overline X_i)^2n_i\right)
-      &  \mbox{\rm otherwise}
-  \end{array} \right.\right) \nonumber\\
-  \Lambda_i^{BCT}& =&\min\left(\Lambda_i^{VCT},\left\{
-  \begin{array}{l l}
-    \frac {\overline X_\beta} {n_i}\cdot 2\exp\left(- \frac {(\overline X_i - \overline X_\beta)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_i - \overline X_\beta) + 2 \overline X_i(1-\overline X_i)} \right)
-      & \mbox{{\rm if} $i=\alpha$} \\
-    \frac {(1-\overline  X_\alpha)} {n_i}\cdot 2\exp\left(- \frac {(\overline X_\alpha - \overline X_i)^2 n_i} {\frac {14} 3 \frac {n_i} {n_i-1}(\overline X_\alpha - \overline X_i) + 2 \overline X_i(1-\overline X_i)} \right)
-      &  \mbox{\rm otherwise}
-  \end{array} \right.\right)
-\label{eqn:emp-estimates}
-\end{eqnarray}
+a modified version of UCT in which the samples at the first step are
+selected according to their VOI estimates.
 
 \subsection{Selecting The Best Arm}
 \label{sec:emp-arm}
@@ -486,36 +444,16 @@ which are the subject of the experiment.
 \caption{Go: winning rate --- UCT against VCT}
 \label{fig:uct-against-vct}
 \end{figure}
-\begin{figure}[t]
-\centering
-\includegraphics[scale=0.5]{ect-wins.pdf}
-\caption{Go: winning rate --- UCT against ECT}
-\label{fig:uct-against-ect}
-\end{figure}
-\begin{figure}[t]
-\centering
-\includegraphics[scale=0.5]{bct-wins.pdf}
-\caption{Go: winning rate --- UCT against BCT}
-\label{fig:uct-against-bct}
-\end{figure}
+
 The engines were compared on the 9x9 board, for 5000, 7000, 1000, and
 15000 samples (game simulations) per ply, each experiment was repeated
-1000 times. Figures~\ref{fig:uct-against-vct}--\ref{fig:uct-against-bct}
-show the winning rate of UCT against VCT, ECT, BCT, correspondingly,
+1000 times. Figure~\ref{fig:uct-against-vct}
+show the winning rate of UCT against VCT
 vs. the stopping threshold (if the maximum VOI of a sample is below
 the threshold, the simulation is stopped, and a move is chosen). Each
 curve in the figures corresponds to a certain number of samples per
 ply. The lower the curve, the better is the corresponding policy
 compared to UCT.
-
-As the results show, without VOI-aware sample redistribution the
-VOI-aware policies are at best equal to UCT for lower numbers of
-samples per ply (5000, 7000), and the advantage of the VOI-aware policies
-for larger number of samples is rather modest (e.g., ECT wins in 55\%
-of games for 10000 samples per ply). For the stopping threshold of
-$10^{-6}$, however, the VOI-aware policies are almost always better
-than UCT (only VCT for 5000 samples wins in less than 50\% of games),
-with stronger policies (ECT, VCT) reaching the winning rate of 66\%.
 
 In agreement with intuition
 (Section~\ref{sec:control-redistribution}), VOI-based stopping and
@@ -524,26 +462,6 @@ samples per ply. When the maximum number of samples is too low, early
 stopping would result in poorly selected moves. On the other hand,
 when the maximum number of samples is sufficiently high, the VOI of
 increasing the maximum number of samples in a future state is low.
-
-\begin{figure}[t]
-\centering
-\includegraphics[scale=0.5]{bests-bw.pdf}
-\caption{Go: best winning rate comparison}
-\label{fig:best-winning-rate}
-\end{figure}
-Figure~\ref{fig:best-winning-rate} presents relative performance of
-different VOI-aware policies depending on the number of samples per
-ply by comparing the best achieved winning rates against UCT (again,
-the lower the bar, the better is the policy). Both ECT (based on the
-Hoeffding inequality with an intermediate point) and BCT (based on the empirical
-Bernstein inequality) are better than VCT. The difference between ECT
-and VCT is most prominent for smaller number of samples, and the
-winning rate of ECT increases relatively slowly with the number of
-samples. In contrast, BCT is worse than ECT and only slightly better
-than VCT for smaller number of samples, but the winning rate rapidly
-increases with the number of samples, and for 10000 and 15000 samples
-per ply BCT is the best of the policies with the winning rate reaching
-67\%.
 
 \section{Summary and Future Work}
 
@@ -570,7 +488,7 @@ sampling policies.
 
 \begin{proof}[]
 Equations (\ref{eqn:probound-perf-hoeffding}) is a direct
-application of the Hoeffding inequality (\ref{eqn:conc-hoeffding}).
+application of the Hoeffding inequality \cite{Hoeffding.ineq}.
 
 Equations (\ref{eqn:probound-blnk-hoeffding}) follow from the
 observation that if $i\ne\alpha$, $\overline X_i'>\overline X_\alpha$
