@@ -25,6 +25,7 @@
 \newtheorem{crl}{Corollary}
 
 \title{VOI-aware MCTS}
+\author {Blind submission}
 %\author {David Tolpin, Solomon Eyal Shimony \\
 %Department of Computer Science, \\
 %Ben-Gurion University of the Negev, Beer Sheva, Israel \\
@@ -35,55 +36,88 @@
 \maketitle
 
 \begin{abstract}
-An MCTS sampling policy based on VOI estimates of rollouts is
+UCT, a state-of-the art algorithm for Monte Carlo tree search (MCTS)
+in games and Markov decision processes, is based on UCB1, a sampling
+policy for the Multi-armed Bandit problem (MAB) that 
+minimizes the cumulative regret.  However, search differs from MAB in
+that in MCTS it is usually only the final ``arm pull'' (the actual
+move selection) that collects a reward, rather than all ``arm pulls''.
+In this paper, an MCTS sampling policy based on VOI estimates of rollouts is
 suggested. Empirical evaluation of the policy and comparison to
-UCB1 and UCT is performed on random Multi-armed Bandit instances
+UCB1 and UCT is performed on random MAB instances
 as well as on Computer Go.
 \end{abstract}
 
-\section{Introduction and Definitions}
+\section{Introduction}
 
-TODO: start with MCTS, then go to Bandits.
+MCTS, and especially UCT \cite{Kocsis.uct} appears in numerous search
+applications, such as \cite{Eyerich.ctp}. Although these methods are
+shown to be successful empirically, most authors appear to be using
+UCT ``because it has been shown to be successful in the past'', and
+``because it does a good job of trading off exploration and
+exploitation''. While the latter statement may be correct for the
+Multi-armed Bandit problem and for the UCB1 algorithm \cite{Auer.ucb},
+we argue that a simple reconsideration from basic principles can
+result in schemes that outperform UCT.
 
-Taking a sequence of samples in order to minimize the
-regret of a decision based on the samples is abstracted by the
-{\em Multi-armed Bandit Problem.} In the Multi-armed Bandit problem
-we have a set of $K$ arms. Each arm can be pulled multiple
-times. When the $i$th arm is pulled, a random reward $X_i$ from an
-unknown stationary distribution is returned.  The reward is bounded
-between 0 and 1.
+The core issue is that in MCTS for adversarial search and search in
+``games against nature'' the goal is typically to find the best
+first action of a good (or even optimal) policy, which is closer to
+minimizing the simple regret, rather than the cumulative regret
+minimized by UCB1.  However, the simple and the cumulative regret
+cannot be minimized simultaneously; moreover, \cite{Bubeck.pure} shows
+that in many cases the smaller the cumulative regret, the greater the
+simple regret.
 
-The simple regret of a sampling policy for the Multi-armed Bandit
-Problem is the expected difference between the best expected reward
-$\max\limits_i\IE[X_i]$ and the expected reward $\IE[X_j]$ of the arm
-with the best sample mean $\overline X_j=\max\limits_i\overline X_i$:
+We begin with background definitions and related work.  VOI estimates
+for arm pulls in MAB are presented, and a VOI-aware sampling policy is
+suggested, both for the simple regret in MAB and for MCTS.  Finally,
+the performance of the proposed sampling policy is evaluated on sets
+of Bernoulli arms and on Computer GO, showing the improved
+performance.
+
+\section{Background and Related Work}
+\label{sec:related-work}
+
+Monte-Carlo tree search was initially suggested as a scheme for
+finding approximately optimal policies for Markov Decision Processes
+(MDP).  MCTS explores an MDP by performing
+\emph{rollouts}---trajectories from the current state to a state in
+which a termination condition is satisfied (either the goal or a
+cutoff state).
+
+Taking a sequence of samples in order to minimize the regret of a
+decision based on the samples is captured by the Multi-armed Bandit
+problem (MAB) \cite{Vermorel.bandits}. In MAB, we have a set of $K$
+arms. Each arm can be pulled multiple times. When the $i$th arm is
+pulled, a random reward $X_i$ from an unknown stationary distribution
+is encountered. In the \textit{cumulative setting}, all encountered rewards are
+collected.  UCB1 \cite{Auer.ucb} was shown to be
+near-optimal in this respect. UCT, an extension of UCB1 to MCTS is
+described in \cite{Kocsis.uct}, and shown to outperform many state of
+the art search algorithms in both MDP and adversarial search
+\cite{Gelly.mogo,Eyerich.ctp}. In the \textit{simple regret setting}, the agent
+gets to collect only the reward of the last pull.
+\begin{dfn}
+The \textbf{simple regret} of a sampling policy for MAB
+is the expected difference between the best expected reward
+$\mu_*$ and the expected reward $\mu_j$ of the empirically best arm
+$\overline X_j=\max_i\overline X_i$:
 \begin{equation}
+\IE r=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
 \label{eqn:simple-regret}
-\IE[R]=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\vspace{-8pt}
 \end{equation}
-where $\Delta_j=\max\limits_i\IE[X_i]-\IE[X_j]$.  Strategies that
-minimize the simple regret are called pure exploration strategies
-\cite{Bubeck.pure}. Principles of rational metareasoning
-\cite{Russell.right} suggest that at each step the arm with the
-greatest value of information (VOI) estimate must be pulled.
+where $\Delta_j=\mu_*-\mu_j$.
+\end{dfn}
+Strategies that minimize the simple regret are called pure exploration
+strategies, explored in \cite{Bubeck.pure}. 
 
-\section{Related Work}
-
-Efficient algorithms for Multi-Armed Bandits based on
-distribution-independent bounds, in particular UCB1, are introduced in
-\cite{Auer.ucb}. The UCT algorithm, an extension of UCB1 to
-MCTS is described in \cite{Kocsis.uct}, and a successful
-application of UCT to playing Go is discussed in
-\cite{Gelly.mogo}. Pure exploration in Multi-armed bandits is explored in
-\cite{Bubeck.pure}. On the one hand, the paper proves certain upper
-and lower bounds for UCB1 and uniform sampling, showing that an upper
-bound on the simple regret is exponential in the number of samples for
-uniform sampling, while only polynomial for UCB1. On the other hand,
-empirical performance of UCB1 appears to be better than of uniform
-sampling. The principles of bounded rationality appear in
-\cite{Horvitz.reasoningabout}. \cite{Russell.right} provides a formal
-description of rational metareasoning and case studies of applications
-in several problem domains. 
+A different scheme for control of sampling can use the principles of
+bounded rationality \cite{Horvitz.reasoningabout} and rational
+metareasoning \cite{Russell.right}.  In search, one maintains a
+current best action $\alpha$, and finds the expected gain
+from finding another action $\beta $ to be better than the current best.
 
 \section{Upper Bounds on Value of Information}
 
@@ -104,14 +138,13 @@ can be estimated as the intrinsic value of information $\Lambda_i^b$
 of pulling the $i$th arm for the rest of the budget of $N$ samples:
 \begin{thm} Denote the current number of samples of the $i$th arm by
   $n_i$. $\Lambda_i^b$ is bounded from above as
-\begin{align}
-  \Lambda&_\alpha^b \le \frac {N \overline X_\beta} {N+n_i}\Pr(\overline X_i'\le\overline X_\beta)
-    \le \frac {N \overline X_\beta} {n_i} \Pr(\overline X_i'\le\overline X_\beta)\nonumber\\
-\Lambda&_{i|i\ne\alpha}^b \le \frac{ N(1-\overline  X_\alpha)} {N+n_i}\Pr(\overline X_i'\ge\overline X_\alpha)
-     \le \frac {N(1-\overline X_\alpha)} {n_i}\Pr(\overline   X_i'\ge\overline X_\alpha)
-\vspace{-24pt}
+\begin{eqnarray}
+  &\Lambda_\alpha^b \le \frac {N \overline X_\beta} {N+n_i}\Pr(\overline X_i'\le\overline X_\beta)
+    \le \frac {N \overline X_\beta} {n_i} \Pr(\overline X_i'\le\overline X_\beta)\\
+&\Lambda_{i|i\ne\alpha}^b \le \frac{ N(1-\overline  X_\alpha)} {N+n_i}\Pr(\overline X_i'\ge\overline X_\alpha)
+     \le \frac {N(1-\overline X_\alpha)} {n_i}\Pr(\overline   X_i'\ge\overline X_\alpha)\nonumber
 \label{eqn:thm-be}
-\end{align}
+\end{eqnarray}
 where $\overline X_i'$ is the sample mean of the $i$th arm after $n_i+N$ samples.
 \label{thm:be}
 \end{thm}
@@ -130,7 +163,6 @@ Hoeffding inequality \cite{Hoeffding.ineq}:
 where $\varphi(n)=2(\frac {1+n/N} {1+\sqrt {n/N}})^2 > 1.37$.
 \label{thm:hoeffding-prob-bounds}
 \end{thm}
-\vspace{-16pt}
 \begin{crl}
 An upper bound on the VOI estimate $\Lambda_i^b$ is obtained
 by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
@@ -141,7 +173,6 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \end{align}
 \label{crl:bound-blnk-hoeffding}
 \end{crl}
-\vspace{-16pt}
 Estimate $\hat\Lambda_i^b$ can be viewed as a
 relaxation of the myopic assumption such that sequences consisting
 of more than one action are taken into considertion.
@@ -219,8 +250,7 @@ samples. For most numbers of samples per node, VOI+UCT outperforms UCT.
 This work suggested a Monte-Carlo sampling policy in which sample
 selection is based on upper bounds on the value of
 information. Empirical evaluation showed that this policy outperforms
-heuristic algorithms for pure exploration in Multi-armed
-bandits, as well as for MCTS.
+heuristic algorithms for pure exploration in MAB, as well as for MCTS.
 
 MCTS still remains a largely unexplored field of
 application of VOI-aware algorithms. More elaborated VOI estimates,

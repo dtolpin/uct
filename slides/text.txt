@@ -59,7 +59,7 @@ problem: given a set of arms, each returning a random reward [in a
 common setting - from an unknown stationary bounded distribution],  
 pull arms in such a way that the total reward is maximized. This
 problem is well-known and thoroughly explored: there is a family
-of algorithms which are said to `solve exploitation/exploration reward'
+of algorithms which are said to `solve exploitation/exploration trade-off,
 no matter what the actual reward distributions of the arms are. One
 such algorithm is called UCB1 (or simply UCB).
 
