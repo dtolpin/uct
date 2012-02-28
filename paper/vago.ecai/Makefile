@@ -1,13 +1,17 @@
 all: paper.pdf
 
+%.svg: %.pdf
+	pdfcrop $< $<-cropped
+	mv $<-cropped $<
+	pdf2svg $< $@
+
 paper.bbl: paper.tex refs.bib paper.aux
 	bibtex paper
 
 paper.aux: paper.tex
 	pdflatex paper
 
-paper.pdf: paper.tex paper.bbl bests-bw.pdf bests-colorful.pdf \
-			ect-wins.pdf vct-wins.pdf bct-wins.pdf 
+paper.pdf: paper.tex paper.bbl flat.pdf flat.svg vct-wins.pdf vct-wins.svg 
 	pdflatex paper
 	pdflatex paper
 
