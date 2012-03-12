@@ -28,6 +28,18 @@
 
 \maketitle
 
+\begin{align*}
+\Lambda_i^p&=\int\limits_{\overline X_\alpha}^1\Pr[\overline X_i'=x]dx\\
+&\le \int\limits_{\overline X_\alpha}^1e^{-2(x-\overline X_i)^2n}dx
+=\hspace{-1em}\int\limits_{(\overline X_\alpha - \overline X_i)\sqrt{2n}}^{(1- \overline X_i)\sqrt{2n}}\hspace{-2em}e^{-u^2}du\\
+&=\frac {\sqrt \pi} {2 \sqrt {2n}}
+  \left[\mathrm{erf}\left((1-\overline X_i)\sqrt {2n}\right)
+      -\mathrm{erf}\left((\overline X_\alpha - \overline X_i)\sqrt{2n}\right)\right]\\
+\Lambda_\alpha^p&\le\frac {\sqrt \pi} {2 \sqrt {2n}}
+  \left[\mathrm{erf}\left(\overline X_\alpha\sqrt {2n}\right)
+      -\mathrm{erf}\left((\overline X_\alpha - \overline X_\beta)\sqrt{2n}\right)\right]
+\end{align*}
+
 \bibliographystyle{plain}
 \bibliography{refs}
 
