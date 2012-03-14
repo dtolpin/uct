@@ -391,10 +391,9 @@
 
   (defun 1-erf (x)    
     "1-ERF, where ERF is the error function, approximation according to A&S 7.1.26"
-    (let* ((y (/ 1.0 (+ 1.0 (* p x)))))
+    (let* ((y (/ 1.0d0 (+ 1.0d0 (* p x)))))
       (* (exp (- (* x x))) 
          y (+ a1 (* y (+ a2 (* y (+ a3 (* y (+ a4 (* y a5))))))))))))
-
 
 (let ((c (sqrt 2.0d0)))
   (flet ((estimate (n over under)
@@ -405,7 +404,7 @@
       "Chernoff-Hoeffding based VOI estimate, integral"
       (let ((avg (stat-avg stat))
             (n (1+ (stat-count stat))))
-        (if (> (stat-avg stat) beta)
+        (if (> avg beta)
             (estimate n alpha (- alpha beta))
             (estimate n ( - 1.0 avg) (- alpha avg)))))))
   
