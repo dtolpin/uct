@@ -1,0 +1,65 @@
+> to find this plan and thus a_1, we need to find optimal a_2
+
+In MCTS we average reward of all rollouts starting with a_1 to
+estimate the value of a_1 and choose optimal a_1. Thus in each rollout
+we choose a_2 to minimize expected average regret over all rollouts
+rather to select optimal a_2 (minimize the expected regret of
+selecting a_2 once). Optimizing average (cumulative) regret requires,
+in general, a different sampling policy than optimizing selection
+(simple) regret. For example, in a two-action node with normally
+distributed action rewards, to minimize average regret actions with
+higher means and uncertainty are preferred, but to minimize selection
+regret the actions with higher uncertainty regardless of the mean must
+be sampled (Hay and Russell 2011).
+
+> How is "near-optimal" for the UCB-scheme defined?
+
+UCB1 achieves logarithmic cumulative regret uniformly over number of
+samples, and no policy can achieve better than a logarithmic regret
+(Auer, Cesa-Bianchi, and Fischer 2002).
+
+> Algorithm 1
+
+The else branch returns the reward, sorry for the omission.
+There is no discounting in this setting of MCTS.
+
+> The expectation that SR+CR less sensitive to the
+> exploration factor c not discussed in terms of the experiments.
+> What does "minimum cost" refer to in Fig. 3b?
+
+The experiments on the sailing domain (Figures 3-5) discuss the
+influence of the exploration factor. In Figure~3, the experiments
+where performed for a range of values of c, [0.00001 .. 1000]. For UCT,
+the cost  is sensitive to c: median is much higher than minimum. 
+For SR+CR, the difference is significantly less prominent.
+In Figures 4-5 dependency of the cost on c is further explored.
+
+> How is c chosen for UCT in Fig. 2?
+
+c=2, the default value for rewards in [0,1].
+
+> How do the curves in Fig. 2,6 continue? When do they stop
+> falling? How do they converge to the minimum?
+
+The figures are in log-log scale, the curves approach 0
+asymptotically. 
+
+> "SR+CR differs from UCT mainly in the first step of the
+> rollout" -- where else does it differ?
+
+In SR+CR, the rest of the rollout may use a scheme different from
+UCT (e.g. based on domain-specific heuristics), but the advantage
+of SR+CR is in the first step.
+
+> Computer Go is the most popular domain as a successful example of
+> UCT
+
+Indeed, we should explain this and include the references. 
+
+> If we consider two-player games, the value of X_i is
+> not always precise because of the averaging property of X_i
+
+Right, however adaptive MCTS strives to sample moves such
+that winning moves are selected more often, hence, under
+certain conditions, X_i asymptotically converges to the true value.
+
