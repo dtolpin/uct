@@ -382,7 +382,35 @@
                    ( - 1.0 alpha) (- alpha (stat-avg stat))))
      (stat-count stat))))
 
+(let ((a1 0.254829592d0)
+      (a2 -0.284496736d0)
+      (a3 1.421413741d0)
+      (a4 -1.453152027d0)
+      (a5 1.061405429d0)
+      (p 0.3275911d0))
 
+  (defun erf (x)    
+    "ERF, the error function, approximation according to A&S 7.1.26"
+    (let* ((y (/ 1.0 (+ 1.0 (* p (abs x)))))
+           (z (- 1.0 (* y (exp (- (* x x))) 
+                        (+ a1 (* y (+ a2 (* y (+ a3 (* y (+ a4 (* y a5))))))))))))
+      (declare (type double-float y z))
+      (if (plusp x) z (- z)))))
+
+
+(let ((c (sqrt 2.0)))
+  (flet ((estimate (n over under)
+           (let ((sqrt-n (sqrt n)))
+             (/ (- (erf (* c sqrt-n over)) (erf (* c sqrt-n under))) (* n sqrt-n)))))
+    
+    (defun voi-ihoe (alpha beta stat)
+      "Chernoff-Hoeffding based VOI estimate, integral"
+      (let ((avg (stat-avg stat))
+            (n (1+ (stat-count stat))))
+        (if (> (stat-avg stat) beta)
+            (estimate n alpha (- alpha beta))
+            (estimate n ( - 1.0 avg) (- alpha avg)))))))
+  
 ;; find root of a function by bisection
 (labels ((bs (f a b fa fb eps)
            (declare (optimize (speed 3) (debug 0)))
@@ -423,7 +451,7 @@
            (let ((between (bisection #'destim under (+ under over) 0.001)))
              (+ (* (- between under) (exp (* -2.0 n (square under))))
                 (* over (exp (* -2.0 n (square between)))))))))
-
+ 
   (defun voi-eyal (alpha beta stat)
     "Improved by mid-point Chernoff-Hoeffding estimate"
     (per-sample
@@ -458,6 +486,7 @@
                  
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
+(defun vib (switch) (v*b switch #'voi-ihoe))
 (defun vthb (switch) (v*b switch #'voi-thoeffding))
 (defun vlb (switch) (v*b switch #'voi-loeffding))
 (defun veb (switch) (v*b switch #'voi-eyal))
@@ -504,6 +533,9 @@
 
 ;; HCT (Hoeffding then UCT)
 (def-mk-sampling-select :hct vhb :uct)
+
+;; ICT (Integrated Hoeffding then UCT)
+(def-mk-sampling-select :ict vib :uct)
 
 ;; THCT (Thoeffding then UCT)
 (def-mk-sampling-select :thct vthb :uct)

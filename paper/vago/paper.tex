@@ -633,13 +633,13 @@ Find $\delta$ for which the two terms on the right-hand side of
 \exp(-\delta^2n) = \exp(-2\left((\overline X_\alpha - \overline X_i)(1+\frac {n_i} N) - \delta\right)^2N)\label{eqn:app-hoeffding-eq-exp}
 \end{equation}
 Solve (\ref{eqn:app-hoeffding-eq-exp}) for $\delta$: $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha
-- \overline X_i) \ge (\sqrt 2 - 1)(\overline X_\alpha-\overline X_i)$. Substitute $\delta$ into 
+- \overline X_i) \ge 2(\sqrt 2 - 1)(\overline X_\alpha-\overline X_i)$. Substitute $\delta$ into 
 (\ref{eqn:app-hoeffding-le-maxexp}) and obtain
 \begin{eqnarray}
 \Pr(\overline X_i'\ge \overline X_\alpha) 
 & \le & 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
                           (\overline X_\alpha - \overline X_i)\right)^2 n_i\right)\nonumber \\
-& \le & 2\exp(-2(\sqrt 2 - 1)^2(\overline X_\alpha - \overline X_i)^2n_i)
+& \le & 2\exp(-8(\sqrt 2 - 1)^2(\overline X_\alpha - \overline X_i)^2n_i)
  \le 2\exp(-1.37(\overline X_\alpha - \overline X_i)^2n_i)
 \end{eqnarray}
 Derivation for the case $i=\alpha$ is similar.

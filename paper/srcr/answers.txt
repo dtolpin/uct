@@ -9,7 +9,7 @@ in general, a different sampling policy than optimizing selection
 (simple) regret. For example, in a two-action node with normally
 distributed action rewards, to minimize average regret actions with
 higher means and uncertainty are preferred, but to minimize selection
-regret the actions with higher uncertainty regardless of the mean must
+regret actions with higher uncertainty regardless of the mean must
 be sampled (Hay and Russell 2011).
 
 > How is "near-optimal" for the UCB-scheme defined?
@@ -36,7 +36,7 @@ In Figures 4-5 dependency of the cost on c is further explored.
 
 > How is c chosen for UCT in Fig. 2?
 
-c=2, the default value for rewards in [0,1].
+  c=2, the default value for rewards in [0,1].
 
 > How do the curves in Fig. 2,6 continue? When do they stop
 > falling? How do they converge to the minimum?
