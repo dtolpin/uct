@@ -262,7 +262,7 @@
           (setf best-node (aref (switch-nodes switch) i)
                 best-reward reward))))))
 
-(defun ucb (switch) (u*b switch #'log 2.0))
+(defun ucb (switch) (u*b switch #'log 2.0d0))
 
 (defvar *uqb-factor* 1.0)
 
@@ -341,46 +341,19 @@
      (if (> avg beta) beta (- 1.0 alpha))
      (stat-count stat))))
 
-(flet ((estimate (n over under)
-         (* over (exp (* -2.0 n (square under))))))
+(let ((c (* 8.0d0 (- 3.0d0 (* 2.0d0 (sqrt 2.0d0))))))
+  (flet ((estimate (n over under)
+           (* over (exp (- (* c n (square under)))))))
 
-  (defun voi-hoeffding (alpha beta stat)
-    "Chernoff-Hoeffding based VOI estimate"
-    (per-sample
-     (if (> (stat-avg stat) beta)
-         (estimate (stat-count stat)
-                   beta (- (stat-avg stat) beta))
-         (estimate (stat-count stat)
-                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
-     (stat-count stat))))
-
-(flet ((estimate (n over under)
-         (* over (exp (* -2.0 n (square under))))))
-
-  (defun voi-thoeffding (alpha beta stat)
-    "Minimum of trivial and Chernoff-Hoeffding based perfect VOI estimate"
-    (min 
-     (voi-trivial alpha beta stat)
-     (if (> (stat-avg stat) beta)
-         (estimate (stat-count stat)
-                   beta (- (stat-avg stat) beta))
-         (estimate (stat-count stat)
-                   ( - 1.0 alpha) (- alpha (stat-avg stat)))))))
-
-(flet ((estimate (n over under)
-         (if (zerop over) most-negative-single-float (+ (log over) (* -2.0 n (square under)))))
-       (per-sample (voi n-samples)
-         (- voi (log n-samples))))
-
-  (defun voi-loeffding (alpha beta stat)
-    "Chernoff-Hoeffding based VOI estimate, logariphmic"
-    (per-sample
-     (if (> (stat-avg stat) beta)
-         (estimate (stat-count stat)
-                   beta (- (stat-avg stat) beta))
-         (estimate (stat-count stat)
-                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
-     (stat-count stat))))
+    (defun voi-hoeffding (alpha beta stat)
+      "Chernoff-Hoeffding based VOI estimate"
+      (per-sample
+       (if (> (stat-avg stat) beta)
+           (estimate (stat-count stat)
+                     beta (- (stat-avg stat) beta))
+           (estimate (stat-count stat)
+                     ( - 1.0 alpha) (- alpha (stat-avg stat))))
+       (stat-count stat)))))
 
 (let ((a1 0.254829592d0)
       (a2 -0.284496736d0)
@@ -391,11 +364,12 @@
 
   (defun 1-erf (x)    
     "1-ERF, where ERF is the error function, approximation according to A&S 7.1.26"
+    (declare (optimize (speed 3) (debug 0)))
     (let* ((y (/ 1.0d0 (+ 1.0d0 (* p x)))))
       (* (exp (- (* x x))) 
          y (+ a1 (* y (+ a2 (* y (+ a3 (* y (+ a4 (* y a5))))))))))))
 
-(let ((c (sqrt 2.0d0)))
+(let ((c (* 2.0d0 (- 2.0d0 (sqrt 2.0d0)))))
   (flet ((estimate (n over under)
            (let ((sqrt-n (sqrt n)))
              (/ (- (1-erf (* c sqrt-n under)) (1-erf (* c sqrt-n over))) (* n sqrt-n)))))
@@ -406,7 +380,7 @@
             (n (1+ (stat-count stat))))
         (if (> avg beta)
             (estimate n alpha (- alpha beta))
-            (estimate n ( - 1.0 avg) (- alpha avg)))))))
+            (estimate n ( - 1.0d0 avg) (- alpha avg)))))))
   
 ;; find root of a function by bisection
 (labels ((bs (f a b fa fb eps)
@@ -439,26 +413,6 @@
                     (+ a1 (* y (+ a2 (* y (+ a3 (* y (+ a4 (* y a5))))))))))))
       (if (plusp x) z (- z)))))
 
-;; Hoeffding with Eyal's correction
-(flet ((estimate (n over under)
-         (flet ((destim (between)
-                  (- (* 4.0 n over between (exp (* -2.0 n (square between))))
-                     (exp (* -2.0 n (square under))))))
-
-           (let ((between (bisection #'destim under (+ under over) 0.001)))
-             (+ (* (- between under) (exp (* -2.0 n (square under))))
-                (* over (exp (* -2.0 n (square between)))))))))
- 
-  (defun voi-eyal (alpha beta stat)
-    "Improved by mid-point Chernoff-Hoeffding estimate"
-    (per-sample
-     (if (> (stat-avg stat) beta)
-         (estimate (stat-count stat)
-                   beta (- (stat-avg stat) beta))
-         (estimate (stat-count stat)
-                   ( - 1.0 alpha) (- alpha (stat-avg stat))))
-     (stat-count stat))))
-
 (flet ((estimate (n over under var)
          (* 2 over (exp (- (/ (* n (square under))
                               (+ (/ (* 14.0 n under)
@@ -484,9 +438,6 @@
 (defun vtb (switch) (v*b switch #'voi-trivial))
 (defun vhb (switch) (v*b switch #'voi-hoeffding))
 (defun vib (switch) (v*b switch #'voi-ihoe))
-(defun vthb (switch) (v*b switch #'voi-thoeffding))
-(defun vlb (switch) (v*b switch #'voi-loeffding))
-(defun veb (switch) (v*b switch #'voi-eyal))
 (defun vbb (switch) (v*b switch #'voi-bernstein))
 
 ;;; Adaptive sampling selection functions for passing to `pull-best-arm'
@@ -533,15 +484,6 @@
 
 ;; ICT (Integrated Hoeffding then UCT)
 (def-mk-sampling-select :ict vib :uct)
-
-;; THCT (Thoeffding then UCT)
-(def-mk-sampling-select :thct vthb :uct)
-
-;; LCT (Logarithmic Hoeffding then UCT)
-(def-mk-sampling-select :lct vlb :uct)
-
-;; ECT (hoEffding then UCT)
-(def-mk-sampling-select :ect veb :uct)
 
 ;; BCT (Bernstein then UCT)
 (def-mk-sampling-select :bct vbb :uct)
