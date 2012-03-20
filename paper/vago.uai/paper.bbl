@@ -5,6 +5,11 @@ Petr Braudi\v{s} and Jean {L}oup Gailly.
 \newblock Pachi: State of the art open source {G}o program.
 \newblock In {\em ACG 13}, 2011.
 
+\bibitem{Chaslot.montecarlo}
+Guillaume Chaslot, Sander Bakkes, Istvan Szita, and Pieter Spronck.
+\newblock {M}onte-{C}arlo tree search: A new framework for game {AI}.
+\newblock In {\em AIIDE}, 2008.
+
 \bibitem{Gelly.mogo}
 Sylvain Gelly and Yizao Wang.
 \newblock Exploration exploitation in {G}o: {UCT} for {M}onte-{C}arlo {G}o.
@@ -15,5 +20,10 @@ Wassily Hoeffding.
 \newblock Probability inequalities for sums of bounded random variables.
 \newblock {\em Journal of the American Statistical Association}, 58(301):pp.
   13--30, 1963.
+
+\bibitem{MaurerPontil.benrstein}
+Andreas Maurer and Massimiliano Pontil.
+\newblock Empirical {B}ernstein bounds and sample-variance penalization.
+\newblock In {\em COLT}, 2009.
 
 \end{thebibliography}
