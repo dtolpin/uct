@@ -8,10 +8,10 @@ all: paper.pdf
 paper.bbl: paper.tex refs.bib paper.aux
 	bibtex paper
 
-paper.aux: paper.tex
+paper.aux: paper.tex voi-wins.pdf uctvoi.pdf
 	pdflatex paper
 
-paper.pdf: paper.tex paper.bbl flat.pdf flat.svg vct-wins.pdf vct-wins.svg 
+paper.pdf: paper.tex paper.bbl flat.pdf flat.svg voi-wins.pdf voi-wins.svg uctvoi.pdf uctvoi.svg
 	pdflatex paper
 	pdflatex paper
 

@@ -86,23 +86,33 @@ go.draw.curves <- function(agent="vct") {
     fname <- paste("uct", agent, "-time=", time, ".shomersu.dat", sep="")
     res[[time]] <- read.table(fname, header=T)
     res[[time]]$MAXVOI <- res[[time]]$MAXVOI+1E-8
-    res[[time]]$WIN_W <- res[[time]]$WIN_W*100 
+    res[[time]]$WIN_W <- 100-res[[time]]$WIN_W*100 
     if(lo > min(res[[time]]$WIN_W)) lo <- min(res[[time]]$WIN_W)
     if(hi < max(res[[time]]$WIN_W)) hi <- max(res[[time]]$WIN_W)
   }
-  lo <- min(lo, 30)
+  lo <- max(lo, 30)
   hi <- min(hi, 70)
   
 
+  par(xpd=F, mgp=c(2.5, 1, 0))
   plot(res[['5000']]$MAXVOI, res[['5000']]$WIN_W, ylim=c(lo,hi), log="x", type='n',
-       main=NA, xlab=expression(VOI[min]+10^-8), ylab='UCT wins, %')
-  abline(h=50, lty='dashed')
-  lines
+       main=NA, xlab='c', ylab='VOI wins, %', xaxs='i', xaxp=c(1E-7, 1, 1))
+  abline(h=50, lty='longdash')
+  abline(v=1.01E-6, lty='dashed')
+  par(xpd=NA)
+  segments(x0=1E-8, y0=lo, y1=lo-3)
+  text(x=1E-8, y=lo-6, "0")
+  segments(x0=1.01E-6, y0=lo, y1=lo-3)
+  text(x=1.01E-6, y=lo-6, "1e-06")
+  segments(x0=1.E-4, y0=lo, y1=lo-3)
+  text(x=1.E-4, y=lo-6, "1e-04")
+
+  par(xpd=F)
   for(time in go.times) {
     lines(res[[time]]$MAXVOI, res[[time]]$WIN_W, type='o', pch=go.pchs[[time]])
   }
 
-  legend(x='topleft', legend=go.times, pch=sapply(go.times, function(time) go.pchs[[time]]))
+  legend(x='topright', legend=go.times, pch=sapply(go.times, function(time) go.pchs[[time]]))
 }
 
 go.draw.bests <- function(bestsfile, colors=rainbow(3), densities=c(20, 20, 30)) {
