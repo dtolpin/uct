@@ -1,0 +1,35 @@
+\documentclass[]{article}
+
+\begin{document}
+
+\begin{tabular}{ll} 
+    $K$ & Number of actions/arms \\ 
+    $n$ & Index of the number of samples; $N$ as an upper bound/total 
+number of samples \\ 
+    $U_i$ & Utility of $i$th action (random variable) \\ 
+    $X_{i,j}$ & $j$th sample of $i$th action (random variable) \\     
+    $\overline{X}^n_{i}$ & Sample mean of $i$th action after $n$ samples 
+(random variable) \\ 
+    $\Lambda^p_i$ & Intrinsic value of perfect information for $i$th action \\ 
+    $\Lambda^{VCT}_i$ & VCT upper bound on $\Lambda^p_i$; similarly for 
+ECT, BCT \\ 
+    $\mu_{i,n}$    & Posterior mean of $i$th action after $n$ samples (random 
+variable) \\ 
+    $\pi$ & Metalevel policy / sampling policy (pick one and use 
+consistently?) \\ 
+    $R^\pi_n$ & Simple regret of sampling policy $\pi$ given $n$ samples \\ 
+    $R^\pi_c$ & Simple regret of sampling policy $\pi$ with cost of 
+sampling $c$ \\     
+    $\Delta_j$ & Regret of choosing action $i$; $\Delta_j = (\max_i U_i) - 
+U_j$ \\ 
+    $M$ & Metalevel MDP \\ 
+    $M_{\mu_0}$ & Metalevel MDP $M$ with action of known value $\mu_0$ 
+adjoined \\ 
+    $S$ & Set of belief states in a given metalevel MDP \\     
+    $\mu_i(s)$ & Posterior mean of $i$th action in belief state $s$ \\         
+    $V^\pi_{M,c}(s)$ & Value of metalevel policy $\pi$ in metalevel MDP $M$ 
+with cost of sampling $c$ \\ 
+    $Q^\pi_{M,c}(s)$ & Q-value of .... \\ 
+\end{tabular} 
+
+\end{
