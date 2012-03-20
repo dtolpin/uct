@@ -1,0 +1,19 @@
+\begin{thebibliography}{1}
+
+\bibitem{Braudis.pachi}
+Petr Braudi\v{s} and Jean {L}oup Gailly.
+\newblock Pachi: State of the art open source {G}o program.
+\newblock In {\em ACG 13}, 2011.
+
+\bibitem{Gelly.mogo}
+Sylvain Gelly and Yizao Wang.
+\newblock Exploration exploitation in {G}o: {UCT} for {M}onte-{C}arlo {G}o.
+\newblock {\em Computer}, 2006.
+
+\bibitem{Hoeffding.ineq}
+Wassily Hoeffding.
+\newblock Probability inequalities for sums of bounded random variables.
+\newblock {\em Journal of the American Statistical Association}, 58(301):pp.
+  13--30, 1963.
+
+\end{thebibliography}
