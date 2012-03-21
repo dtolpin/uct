@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.11)  20 MAR 2012 23:05
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.11)  21 MAR 2012 17:25
 entering extended mode
  %&-line parsing enabled.
 **paper
@@ -241,64 +241,65 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 34.
 
-Overfull \hbox (7.37112pt too wide) in paragraph at lines 69--69
+Overfull \hbox (8.68678pt too wide) in paragraph at lines 114--114
 [] 
  []
 
 
-Overfull \hbox (14.06134pt too wide) in paragraph at lines 80--80
+Overfull \hbox (1.51158pt too wide) in paragraph at lines 150--150
 [] 
  []
 
 [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<flat.pdf, id=16, 400.49625pt x 184.69pt>
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+<flat.pdf, id=20, 400.49625pt x 184.69pt>
 File: flat.pdf Graphic file (type pdf)
  <use flat.pdf>
-Overfull \hbox (5.42209pt too wide) in paragraph at lines 195--196
+Overfull \hbox (5.42209pt too wide) in paragraph at lines 266--267
  [][] 
  []
 
-<uctvoi.pdf, id=17, 396.48125pt x 205.76875pt>
+<uctvoi.pdf, id=21, 396.48125pt x 205.76875pt>
 File: uctvoi.pdf Graphic file (type pdf)
  <use uctvoi.pdf>
-Overfull \hbox (3.01308pt too wide) in paragraph at lines 240--241
+Overfull \hbox (3.01308pt too wide) in paragraph at lines 311--312
  [][] 
  []
 
-[2 <./flat.pdf>] <voi-wins.pdf, id=29, 406.51875pt x 179.67125pt>
+<voi-wins.pdf, id=22, 406.51875pt x 179.67125pt>
 File: voi-wins.pdf Graphic file (type pdf)
-
-<use voi-wins.pdf>
-Overfull \hbox (9.03561pt too wide) in paragraph at lines 257--258
+ <use voi-wins.pdf>
+Overfull \hbox (9.03561pt too wide) in paragraph at lines 328--329
  [][] 
  []
 
-(./paper.bbl) [3 <./uctvoi.pdf> <./voi-wins.pdf>] (./paper.aux) ) 
+[3 <./flat.pdf> <./uctvoi.pdf> <./voi-wins.pdf>] (./paper.bbl) [4
+
+] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 2705 strings out of 495061
- 33380 string characters out of 1182621
- 98856 words of memory out of 3000000
- 5854 multiletter control sequences out of 15000+50000
+ 2707 strings out of 495061
+ 33432 string characters out of 1182621
+ 104872 words of memory out of 3000000
+ 5856 multiletter control sequences out of 15000+50000
  6598 words of font info for 26 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 27i,9n,22p,276b,212s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/te
-xmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive
-/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type
-1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/am
-sfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/c
-mmi5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></u
-sr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/tex
-mf-texlive/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fo
-nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/p
-ublic/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
-ts/cm/cmti10.pfb>
-Output written on paper.pdf (3 pages, 163817 bytes).
+ 27i,12n,22p,276b,212s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx1
+0.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr
+/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texm
+f-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/f
+onts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-texlive/fonts/type1/p
+ublic/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
+ts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr7.p
+fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sh
+are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-te
+xlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-texlive/fonts
+/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on paper.pdf (4 pages, 175778 bytes).
 PDF statistics:
- 83 PDF objects out of 1000 (max. 8388607)
+ 90 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

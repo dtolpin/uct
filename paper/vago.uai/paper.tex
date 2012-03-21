@@ -37,6 +37,21 @@ all. Two cases are possible:
 \item another arm $i$ is pulled, and $\overline X_i$ becomes higher
 than $\overline X_\alpha$.
 \end{itemize}
+
+In order to estimate the VOI of pulling an arm, a sampling model is
+needed.  The generic sampling model used is: 
+\begin{itemize}
+\item The actual value of an arm has a certain distribution.
+\item Pulling an arm is an i.i.d. noisy measurement of the actual
+  value of the arm.
+\end{itemize}
+Instead of using a specific distribution model, we use {\em concentration
+inequalities} to derive distribution-independent bounds on the
+VOI. Our bounds are applicable to any bounded distribution. Similar
+bounds can be derived for certain unbounded distributions, such as the
+normally distributed prior of the value with normally disributed
+sampling, a subject of future work.
+
 The \textit{myopic} VOI estimate is of limited applicability to
 Monte-Carlo sampling, since the effect of a single sample is small,
 and the myopic VOI estimate will often be zero. However, for the
@@ -48,38 +63,94 @@ by $N$:
 \begin{thm} $\Lambda_i^b$ is bounded from above as
 \begin{align}
 \label{eqn:thm-be}
-  \Lambda_\alpha^b& \le \frac {N \overline X_\beta^n} {N+n_\alpha}\Pr(\overline X_\alpha^{n+N}\le\overline X_\beta^n)\nonumber\\
-    &\le \frac {N \overline X_\beta^n} {n_\alpha} \Pr(\overline X_\alpha^{n+N}\le\overline X_\beta^n)\nonumber\\
-\Lambda_{i|i\ne\alpha}^b& \le \frac{ N(1-\overline  X_\alpha^{n_i})} {N+n_i}\Pr(\overline X_i^{{n_i}+N}\ge\overline X_\alpha^{n_i})\nonumber\\
-     &\le \frac {N(1-\overline X_\alpha^{n_i})} {n_i}\Pr(\overline   X_i^{{n_i}+N}\ge\overline X_\alpha^{n_i})
+  \Lambda_\alpha^b&\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\le\overline X_\beta^{n_\beta})\nonumber\\
+\Lambda_{i|i\ne\alpha}^b&\le \frac {N(1-\overline X_\alpha^{n_\alpha})} {n_i}\Pr(\overline   X_i^{{n_i}+N}\ge\overline X_\alpha^{n_\alpha})
 \end{align}
 \label{thm:be}
 \end{thm}
+\vspace{-2em}
+\begin{proof} For the case $i\ne \alpha$, the probability that the
+  $i$th arm is finally chosen instead of $\alpha$ is
+  $\Pr(\overline X_i^{n_i+N} \ge \overline X_\alpha^{n_\alpha})$. $X_i \le 1$,
+  therefore $\overline X_i^{n_i+N}\le \overline
+  X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of perfect
+  information is at most $\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
+  {N+n_i}\Pr(\overline X_i^{{n_i}+N}\ge\overline X_\alpha^{n_\alpha})\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\le\overline X_\beta^{n_\beta})$.
+  Proof for the case $i=\alpha$ is similar.
+\end{proof}
 
 The probabilities can be bounded from above using the
 Hoeffding inequality \cite{Hoeffding.ineq}:
 \begin{thm} The probabilities in equations (\ref{eqn:thm-be}) are bounded from above as
 \begin{align}
   \label{eqn:probound-blnk-hoeffding}
-  \Pr&(\overline X_\alpha^{{n_\alpha}+N} \le \overline X_\beta^{n_\alpha})
-  \le 2\exp\left(- \varphi(n_\alpha)(\overline X_\alpha^{n_\alpha} - \overline X_\beta^{n_\alpha})^2 n_\alpha
+  \Pr&(\overline X_\alpha^{{n_\alpha}+N} \le \overline X_\beta^{n_\beta})
+  \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} - \overline X_\beta^{n_\beta})^2 n_\alpha
   \right)\nonumber\\
-  \Pr&(\overline X_{i|i\ne\alpha}^{n+N} \ge \overline X_\beta^n)
-  \le 2\exp\left(- \varphi(n_i) (\overline X_\alpha^n -\overline  X_i^n)^2 n_i \right)
+  \Pr&(\overline X_{i|i\ne\alpha}^{n_\alpha+N} \ge \overline X_\beta^{n_\beta})
+  \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} -\overline  X_i^{n_i})^2 n_i \right)
 \end{align}
-where $\varphi(n)=2(\frac {1+n/N} {1+\sqrt {n/N}})^2 > 1.37$.
+where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 1)^2 > 1.37$.
 \label{thm:hoeffding-prob-bounds}
 \end{thm}
+\begin{proof}
+Equations (\ref{eqn:probound-blnk-hoeffding}) follow from the
+observation that if $i\ne\alpha$, $\overline X_i^{n_i+N}>\overline X_\alpha^{n_i}$
+if and only if the mean $\overline X_i^N$ of $N$ samples from $n_i+1$
+to $n_i+N$ is at least $\overline X_\alpha^{n_i}+(\overline X_\alpha^{n_i}-\overline
+X_i^{n_i})\frac {n_i} N$.
+
+For any $\delta$, the probability that $\overline X_i^{n_i+N}$ is greater
+than $\overline X_\alpha^{n_i}$ is less than the probability that
+$\IE[X_i]\ge\overline X_i^n+\delta$
+\emph{or} $\overline X_i^N\ge \IE[X_i]+\overline X_\alpha^{n_\alpha}
+- \overline X_i^{n_i} - \delta +(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})\frac {n_i} N$,
+thus, by the union bound, less than the sum of the probabilities:
+\begin{align}
+\Pr&(\overline X_i^{n_i+N}\ge \overline X_\alpha^{n_i})\nonumber\\
+   &\le\Pr(\IE[X_i]-\overline X_i^{n_i} \ge \delta)\\
+   &\hspace{0.25em}+\Pr\left(\overline X_i^N\hspace{-0.5em} - \IE[X_i] \ge \overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+           - \overline X_i^{n_i}\hspace{-0.5em} - \delta +(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})\frac {n_i} N\right)\nonumber
+\end{align}
+Bounding the probabilities on the right-hand side using the Hoeffding
+inequality, obtain:
+\begin{align}
+\Pr&(\overline X_i^{n_i+N}\ge \overline X_\alpha^{n_\alpha})\le \nonumber\\
+    &\exp(-2\delta^2n_i)+\nonumber\\
+    &\quad\exp\left(-2\left((\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+         - \overline X_i^{n_i})\left(1+\frac {n_i} N\right)
+         - \delta\right)^2N\right)
+\label{eqn:app-hoeffding-le-maxexp}
+\end{align}
+Find $\delta$ for which the two terms on the right-hand side of
+(\ref{eqn:app-hoeffding-le-maxexp}) are equal:
+\begin{equation}
+\exp(-\delta^2n) = \exp\left(-2\left((\overline X_\alpha - \overline X_i)(1+\frac {n_i} N) - \delta\right)^2N\right)\label{eqn:app-hoeffding-eq-exp}
+\end{equation}
+Solve (\ref{eqn:app-hoeffding-eq-exp}) for $\delta$: $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+- \overline X_i^{n_i}) \ge 2(\sqrt 2 - 1)(\overline X_\alpha^{n_\alpha}\hspace{-0.5em}-\overline X_i^{n_i})$. Substitute $\delta$ into 
+(\ref{eqn:app-hoeffding-le-maxexp}) and obtain
+\begin{align}
+\Pr&(\overline X_i^{n_i}\ge \overline X_\alpha^{n_\alpha}) \nonumber\\
+& \le 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
+                          (\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})\right)^2 n_i\right)\nonumber \\
+& \le 2\exp(-8(\sqrt 2 - 1)^2(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})^2n_i)\nonumber\\
+& = 2\exp(-\varphi(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})^2n_i)
+\end{align}
+Derivation for the case $i=\alpha$ is similar.
+\end{proof}
+
 \begin{crl}
 An upper bound on the VOI estimate $\Lambda_i^b$ is obtained
 by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \begin{align}
   \label{eqn:bound-blnk-hoeffding}
-  \Lambda&_\alpha^b \le \hat\Lambda_\alpha^b=\frac {2N\overline X_\beta^{n_\alpha}} {n_\alpha}\exp\left(- 1.37(\overline X_\alpha^{n_\alpha} - \overline X_\beta^{n_\alpha})^2 n_\alpha\right)\nonumber\\
-  \Lambda&_{i|i\ne\alpha}^b\le \hat\Lambda_i^b=  \frac {2N(1-\overline  X_\alpha^{n_i})} {n_i}\exp\left(- 1.37(\overline X_\alpha^{n_i} - \overline X_i^{n_i})^2 n_i\right)
+  \Lambda&_\alpha^b \le \hat\Lambda_\alpha^b=\frac {2N\overline X_\beta^{n_\beta}} {n_\alpha}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\nonumber\\
+  \Lambda&_{i|i\ne\alpha}^b\le \hat\Lambda_i^b=  \frac {2N(1-\overline  X_\alpha^{n_\alpha})} {n_i}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
 \end{align}
 \label{crl:bound-blnk-hoeffding}
 \end{crl}
+\vspace{-2em}
 Better bounds can be obtained through tighter estimates on the
 probabilities, for example, based on the empirical Bernstein
 inequality~\cite{MaurerPontil.benrstein}, or through a more careful
@@ -95,16 +166,16 @@ established in Theorem~\ref{thm:be} can be used as VOI estimates. MCTS
 differs from pure exploration in Multi-armed Bandits in that the
 distributions of the rewards are not stationary. However, VOI
 estimates computed as for stationary distributions work well in
-practice. As illustrated by the empirical evaluation. As illustrated
+practice. As illustrated
 by the empirical evaluation (Section~\ref{sec:empirical-evaluation}),
 estimates based on upper bounds on the VOI result in rational sampling
 policies, and exhibit performance comparable to the performance of
 some state-of-the-art heuristic algorithms.
 
-\subsection{Termination Condition}
-\label{sec:control-termination-condition}
+\subsection{Stopping Criterion}
+\label{sec:control-stopping-criterion}
 
-The simplest termination condition for a sampling policy is the
+The simplest stopping criterion for a sampling policy is the
 budget---a fixed number of samples performed before a decision is
 made. When a sample has a cost commensurable with the value of
 information of a measurement, an upper bound on the intrinsic VOI can
@@ -113,18 +184,18 @@ is less than the cost of sampling $C$:
 \begin{equation}
 \mbox{stop if } \max_i \Lambda_i \le C
 \end{equation}
-Blinkered VOI estimates~(\ref{eqn:thm-be},
+VOI estimates~(\ref{eqn:thm-be},
 \ref{eqn:bound-blnk-hoeffding}) include the remaining budget $N$ as a
 factor, but given the cost of a single sample $c$, the cost of the
 remaining samples accounted for in estimating the intrinsic VOI is
 $C=cN$. $N$ can be dropped on both sides of the inequality,
 and a viable stopping condition is
 \begin{align}
-\frac 1 N \Lambda_\alpha^b \le&\frac {\overline X_\beta^{n_\alpha}}
+\frac 1 N \Lambda_\alpha^b \le&\frac {\overline X_\beta^{n_\beta}}
   {n_\alpha}\Pr(\overline X_\alpha^{n_\alpha+N}\le\overline
   X_\beta^{n_\alpha})\le c\nonumber\\
-\frac 1 N \max_i\Lambda_i^b\le &\max_i\frac {(1-\overline X_\alpha^{n_i})} {n_i}\Pr(\overline
-  X_i^{n_i+N}\ge\overline X_\alpha^{n_i})\le c\nonumber\\
+\frac 1 N \max_i\Lambda_i^b\le &\max_i\frac {(1-\overline X_\alpha^{n_\alpha})} {n_i}\Pr(\overline
+  X_i^{n_i+N}\ge\overline X_\alpha^{n_\alpha})\le c\nonumber\\
     &\forall i: i\ne\alpha
 \label{eqn:stopping-blnk}
 \end{align}
@@ -170,7 +241,7 @@ myopically in search tree depth:
 \begin{enumerate}
 \item estimate VOI as though the information is discarded after each step;
 \item stop early if the VOI is below a certain threshold
-   (see Section~\ref{sec:control-termination-condition});
+   (see Section~\ref{sec:control-stopping-criterion});
 \item save the unused sample budget for search in future state, such that
    if the nominal budget is $N$, and the unused budget in the last state
    is $N_u$, the search budget in the next state will be $N+N_u$.
@@ -216,9 +287,9 @@ Go program, was used for the experiments:
 \begin{itemize}
 \item The UCT engine of Pachi was extended with VOI-aware sampling
   policies at the first step. 
-\item The stopping condition for the VOI-aware policy was
+\item The stopping criterion for the VOI-aware policy was
   modified and based solely on the sample cost, specified as
-  a constant parameter. The heuristic stopping condition for the
+  a constant parameter. The heuristic stopping criterion for the
   original UCT policy was left unchanged.
 \item The time-allocation mode based on the fixed number of samples
   was modified for \textit{both the original UCT policy and the VOI-aware
@@ -244,7 +315,7 @@ the experiment.
 The engines were compared on the 9x9 board, for 5000, 7000, 1000, and
 15000 samples (game simulations) per ply, each experiment was repeated
 1000 times. Figure~\ref{fig:uctvoi}
-show the winning rate of UCT against the VOI-aware policy
+show the winning rate of the VOI-aware policy against UCT
 vs. the stopping threshold $c$ (if the maximum VOI of a sample is below
 the threshold, the simulation is stopped, and a move is chosen). Each
 curve in the figure corresponds to a certain number of samples per
@@ -263,7 +334,7 @@ Figure~\ref{fig:voi-wins}
 shows the winning rate of VOI against UCT vs. the number of
 samples for $c=10^{-6}$. In agreement with the intuition
 (Section~\ref{sec:control-redistribution}), VOI-based stopping and
-sample redistribution is most influential for medium numbers of
+sample redistribution is most influential for intermediate numbers of
 samples per ply. When the maximum number of samples is too low, early
 stopping would result in poorly selected moves. On the other hand,
 when the maximum number of samples is sufficiently high, the VOI of
