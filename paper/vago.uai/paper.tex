@@ -154,7 +154,16 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 Better bounds can be obtained through tighter estimates on the
 probabilities, for example, based on the empirical Bernstein
 inequality~\cite{MaurerPontil.benrstein}, or through a more careful
-application of the Hoeffding inequality.
+application of the Hoeffding inequality:
+\begin{align}
+\Lambda_i^b&\le\frac {N\sqrt \pi} {n_i \sqrt {n_i}}
+  \left[\mathrm{erf}\left((1\hspace{-0.25em}-\hspace{-0.25em}\overline X_i^{n_i})\sqrt {n_i}\right)
+      \hspace{-0.25em}-\hspace{-0.25em}\mathrm{erf}\left((\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})\sqrt{n_i}\right)\right]\nonumber\\
+\Lambda_\alpha^b&\le\frac {N\sqrt \pi} {n_\alpha \sqrt {n_\alpha}}
+  \left[\mathrm{erf}\left(\overline X_\alpha^{n_\alpha}\sqrt {n_\alpha}\right)
+      -\mathrm{erf}\left((\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})\sqrt{n_\alpha}\right)\right]
+\label{eqn:erf-blinkered}
+\end{align}
 
 \section{VOI-based Sampling Control}
 
@@ -270,12 +279,14 @@ sampling policy in game tree search.
 
 The sampling policies are first compared on random Multi-armed bandit 
 problem instances. Figure~\ref{fig:random-instances} shows results for
-randomly-generated Multi-armed bandits with 32 Bernoulli arms, with
+randomly-generated Multi-armed bandits with 25 Bernoulli arms, with
 the mean rewards of the arms distributed uniformly in the range~$[0,
-  1]$, for a range of sample budgets~$32..1024$, with multiplicative
+  1]$, for a range of sample budgets~$200..2000$, with multiplicative
 step of~$2$. The experiment for each number of samples was repeated
-10000 times. UCB1 is always considerably worse than the
-VOI-aware sampling policy.
+10000 times. UCB1, as well as policies  based on bounds
+(\ref{eqn:bound-blnk-hoeffding}) (VOI) and
+(\ref{eqn:erf-blinkered}) (VOI+) are compared. UCB1 is always considerably worse than the
+VOI-aware sampling policies.
 
 \subsection{Playing Go Against UCT}
 \label{sec:emp-go}
