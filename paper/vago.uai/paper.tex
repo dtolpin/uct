@@ -27,39 +27,44 @@
 
 \section{Upper Bounds on Value of Information}
 
-The intrinsic VOI $\Lambda_i$ of pulling an arm is the expected decrease
-in the regret compared to selecting the best arm without pulling any arm at
-all. Two cases are possible:
+The intrinsic (myopic greedy) VOI $\Lambda_i$ of testing an arm $i$ is
+the expected reward of the best arm given the information obtained by the test,
+minus the expected reward of the best arm according to the current information state.
+We will assume here a distribution model where the arm with the highest sample mean
+in an information state is the one with the highest expected reward.
+Two cases are possible:
 \begin{itemize}
 \item the arm $\alpha$ with the highest sample mean $\overline
-  X_\alpha$ is pulled, and $\overline X_\alpha$ becomes lower than
+  X_\alpha$ is tested, and $\overline X_\alpha$ becomes lower than
   $\overline X_\beta$ of the second-best arm $\beta$;
-\item another arm $i$ is pulled, and $\overline X_i$ becomes higher
+\item another arm $i$ is tested, and $\overline X_i$ becomes higher
 than $\overline X_\alpha$.
 \end{itemize}
 
-In order to estimate the VOI of pulling an arm, a sampling model is
+In order to estimate the VOI of testing an arm, a sampling model is
 needed.  The generic sampling model used is: 
 \begin{itemize}
-\item The actual value of an arm has a certain distribution.
-\item Pulling an arm is an i.i.d. noisy measurement of the actual
+\item The actual value of an arm has a certain (possibly unknown) distribution.
+\item Testing an arm is an i.i.d. noisy measurement of the actual
   value of the arm.
 \end{itemize}
-Instead of using a specific distribution model, we use {\em concentration
+When the distribution model is known, one can use the methods of Section \ref{sec:normal}.
+Otherwise, one can still use {\em concentration
 inequalities} to derive distribution-independent bounds on the
 VOI. Our bounds are applicable to any bounded distribution. Similar
 bounds can be derived for certain unbounded distributions, such as the
-normally distributed prior of the value with normally disributed
-sampling, a subject of future work.
+normally distributed prior of the value with normally distributed
+sampling.
 
-The \textit{myopic} VOI estimate is of limited applicability to
+Unfortunately, the pure \textit{myopic} VOI estimate is of little use in
 Monte-Carlo sampling, since the effect of a single sample is small,
-and the myopic VOI estimate will often be zero. However, for the
-common case of a fixed budget of samples per node, $\Lambda_i$ can be
-estimated as the intrinsic VOI $\Lambda_i^b$ of pulling the $i$th arm
-for the rest of the budget.  Let us denote the current number of
-samples of the $i$th arm by $n_i$, and the remaining number of samples
-by $N$:
+and the myopic VOI estimate will often be zero. Instead, we will derive
+an estimate for the case where we decide to test an arm $N$ times,
+where $N$ can be the remaining ``budget'' of available samples or
+any other integer quantity.
+Denote by  $\Lambda_i^b$ the intrinsic VOI of testing the $i$th arm
+$N$ times, and the number of
+samples already taken from the $i$th arm by $n_i$.
 \begin{thm} $\Lambda_i^b$ is bounded from above as
 \begin{align}
 \label{eqn:thm-be}
@@ -74,8 +79,12 @@ by $N$:
   $\Pr(\overline X_i^{n_i+N} \ge \overline X_\alpha^{n_\alpha})$. $X_i \le 1$,
   therefore $\overline X_i^{n_i+N}\le \overline
   X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of perfect
-  information is at most $\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
-  {N+n_i}\Pr(\overline X_i^{{n_i}+N}\ge\overline X_\alpha^{n_\alpha})\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\le\overline X_\beta^{n_\beta})$.
+  information is at most: 
+\begin{equation}
+\label{eq:simplistic}
+\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
+  {N+n_i}\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\hspace{-0.5em}\le\overline X_\beta^{n_\beta})
+\end{equation}
   Proof for the case $i=\alpha$ is similar.
 \end{proof}
 
@@ -151,10 +160,11 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \label{crl:bound-blnk-hoeffding}
 \end{crl}
 \vspace{-2em}
-Better bounds can be obtained through tighter estimates on the
-probabilities, for example, based on the empirical Bernstein
+
+More refined bounds can be obtained through tighter estimates on the
+probabilities in Equation \ref{eq:simplistic}, for example, based on the empirical Bernstein
 inequality~\cite{MaurerPontil.benrstein}, or through a more careful
-application of the Hoeffding inequality:
+application of the Hoeffding inequality, resulting in:
 \begin{align}
 \Lambda_i^b&\le\frac {N\sqrt \pi} {n_i \sqrt {n_i}}
   \left[\mathrm{erf}\left((1\hspace{-0.25em}-\hspace{-0.25em}\overline X_i^{n_i})\sqrt {n_i}\right)
@@ -169,16 +179,16 @@ application of the Hoeffding inequality:
 
 \subsection{Selection Criterion}
 
-Following the principles of rational metareasoning, an arm with the
-highest VOI should be pulled at each step. The upper bounds
-established in Theorem~\ref{thm:be} can be used as VOI estimates. MCTS
+A reasonable greedy policy is to test the arm that has the best
+current VOI estimate. When the distributions are unknown, it makes sense
+to use the upper bounds established in Theorem~\ref{thm:be} instead. Although MCTS
 differs from pure exploration in Multi-armed Bandits in that the
-distributions of the rewards are not stationary. However, VOI
+distributions of the rewards are not stationary, VOI
 estimates computed as for stationary distributions work well in
 practice. As illustrated
 by the empirical evaluation (Section~\ref{sec:empirical-evaluation}),
-estimates based on upper bounds on the VOI result in rational sampling
-policies, and exhibit performance comparable to the performance of
+estimates based on upper bounds on the VOI result in good sampling
+policies, which exhibit performance comparable to the performance of
 some state-of-the-art heuristic algorithms.
 
 \subsection{Stopping Criterion}
@@ -186,19 +196,19 @@ some state-of-the-art heuristic algorithms.
 
 The simplest stopping criterion for a sampling policy is the
 budget---a fixed number of samples performed before a decision is
-made. When a sample has a cost commensurable with the value of
-information of a measurement, an upper bound on the intrinsic VOI can
+made. When a sample has a known cost commensurable with the value of
+information of a measurement, an upper bound on the intrinsic VOI can also
 be used to stop the sampling if the intrinsic VOI of any action
 is less than the cost of sampling $C$:
 \begin{equation}
 \mbox{stop if } \max_i \Lambda_i \le C
 \end{equation}
 VOI estimates~(\ref{eqn:thm-be},
-\ref{eqn:bound-blnk-hoeffding}) include the remaining budget $N$ as a
+\ref{eqn:bound-blnk-hoeffding}) include the remaining sample budget $N$ as a
 factor, but given the cost of a single sample $c$, the cost of the
 remaining samples accounted for in estimating the intrinsic VOI is
 $C=cN$. $N$ can be dropped on both sides of the inequality,
-and a viable stopping condition is
+and a reasonable stopping criterion would be:
 \begin{align}
 \frac 1 N \Lambda_\alpha^b \le&\frac {\overline X_\beta^{n_\beta}}
   {n_\alpha}\Pr(\overline X_\alpha^{n_\alpha+N}\le\overline
@@ -209,7 +219,7 @@ and a viable stopping condition is
 \label{eqn:stopping-blnk}
 \end{align}
 The empirical evaluation (Section~\ref{sec:empirical-evaluation})
-confirms viability of this stopping condition and illustrates the
+confirms the viability of this stopping criterion and illustrates the
 influence of the sample cost $c$ on the performance of
 the sampling policy.
 
@@ -222,36 +232,34 @@ of \textit{search rollouts}. Two different criteria are employed in
 action selection during a rollout:
 \begin{itemize}
 \item at the first step, the value of partial
-information should be maximized to minimize the \textit{simple} regret
-of the selection at the current root node;
-\item as the goal of sampling in deeper tree nodes is estimating the
-value of a node, rather than selection, it makes sense to minimize
-the \textit{cumulative} regret of the rollouts from the second step
-onwards.
+information should be used to select nodes to sample, as the goal is
+selection of a move at the current root node;
+\item as the goal of sampling in deeper tree nodes is usually to improve the
+node value estimate, rather than selection, a different sampling scheme
+should be used there. At these levels, the standard practice
+of using UCT-like rollouts makes sense, as this method is known to be nearly optimal
+in minimizing the \textit{cumulative} regret.
 \end{itemize}
 
-A natural approach would be to apply an algorithm that minimizes the
-simple regret in Multi-armed bandits at the first step, and the
-cumulative regret during the rest of the rollout.  However, this
-approach assumes that the information obtained from rollouts in the
+The above hybrid approach assumes
+that the information obtained from rollouts in the
 current state is discarded after an action is selected. In practice,
 many successful Monte-Carlo tree search algorithms re-use rollouts
-originating from an earlier search state and passing through the
-current search state; thus, the value of information of a rollout is
+generated at earlier search states, if the sample traverses the
+current search state during the rollout; thus, the value of information of a rollout is
 determined not just by the influence on the choice of the action at
-the current state, but also by the influence on the choice at future
-search states, provided the rollout passes through the search states
-which will be visited.
+the current state, but also by its potential influence on the choice at future
+search states.
 
 One way to account for this re-use would be to incorporate the
 `future' value of information into a VOI estimate. However, this 
-approach appears to be complicated. Alternatively, one can behave
-myopically in search tree depth:
+approach requires a non-trivial extension of the theory of meta-reasoning for search.
+Alternately, one can behave myopically w.r.t. search tree depth:
 \begin{enumerate}
 \item estimate VOI as though the information is discarded after each step;
 \item stop early if the VOI is below a certain threshold
    (see Section~\ref{sec:control-stopping-criterion});
-\item save the unused sample budget for search in future state, such that
+\item save the unused sample budget for search in future states, such that
    if the nominal budget is $N$, and the unused budget in the last state
    is $N_u$, the search budget in the next state will be $N+N_u$.
 \end{enumerate}
