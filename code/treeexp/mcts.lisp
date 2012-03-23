@@ -362,8 +362,8 @@
       (a5 1.061405429d0)
       (p 0.3275911d0))
 
-  (defun 1-erf (x)    
-    "1-ERF, where ERF is the error function, approximation according to A&S 7.1.26"
+  (defun erfc (x)    
+    "1-erf(x), where ERF is the error function, approximation according to A&S 7.1.26"
     (declare (optimize (speed 3) (debug 0)))
     (let* ((y (/ 1.0d0 (+ 1.0d0 (* p x)))))
       (* (exp (- (* x x))) 
@@ -372,7 +372,7 @@
 (let ((c (* 2.0d0 (- 2.0d0 (sqrt 2.0d0)))))
   (flet ((estimate (n over under)
            (let ((sqrt-n (sqrt n)))
-             (/ (- (1-erf (* c sqrt-n under)) (1-erf (* c sqrt-n over))) (* n sqrt-n)))))
+             (/ (- (erfc (* c sqrt-n under)) (erfc (* c sqrt-n over))) (* n sqrt-n)))))
     
     (defun voi-ihoe (alpha beta stat)
       "Chernoff-Hoeffding based VOI estimate, integral"
