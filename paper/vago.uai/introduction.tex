@@ -1,0 +1,92 @@
+The broad family of sequential decision problems includes
+combinatorial search problems, game playing, robotic path planning,
+model-predictive control problems, Markov decision processes (fully or
+partially observable), and a huge range of applications. In almost all
+realistic instances, exact solution is intractable and approximate
+methods are sought.  Perhaps the most popular approach is to simulate
+a limited number of possible future action sequences. For example,
+a typical game-playing algorithm explores a tree or graph of action sequences
+with some limit on depth, using pruning methods to avoid irrelevant
+subtrees; based on what it finds in the explored portion of the state space, the algorithm
+then selects a move.
+
+Clearly, it is desirable to select the best possible move from the
+least possible amount of exploration. For a given amount of
+exploration, decision quality can be improved by directing exploration
+towards those actions sequences whose outcomes are helpful in selecting
+a good move. Thus, the {\em metalevel} decision problem is to choose
+what future action sequences to explore (or, more generally, what
+deliberative computations to do), while the {\em object-level}
+decision problem is to choose an action to execute in the real world.
+
+That the metalevel decision problem can itself be formulated and
+solved decision-theoretically was noted by \citet{Matheson:1968},
+borrowing directly from the related concept of {\em information value
+  theory}~\citep{Howard:1966}. In essence, computations can be
+selected according to the expected improvement in decision quality
+resulting from their execution. I. J.~\citet{Good:1968} independently
+proposed using this idea to control search in chess, and later defined
+``Type II rationality'' to refer to agents that optimally solve the
+metalevel decision problem before acting. As interest in probabilistic
+and decision-theoretic approaches in AI grew during the 1980s, several
+authors explored these ideas further~\citep{Dean+Boddy:1988,Doyle:1988,Fehling+Breese:1988,Horvitz:1987b}.
+Work by
+\citet{Russell+Wefald:1988a,Russell+Wefald:1991a,Russell+Wefald:1991b}
+formulated the metalevel sequential decision problem, employing an
+explicit model of the results of computational actions, and applied
+this to the control of game-playing search in Othello with encouraging
+results.
+
+An independent thread of research on metalevel control began with work
+by \citet{Kocsis+Szepesvari:2006} on the UCT algorithm, which operates
+in the context of {\em Monte Carlo tree search} (MCTS) algorithms.
+In MCTS, each computation takes the form
+of a simulating a randomized sequence of actions leading from a leaf of the
+current tree to a terminal state. UCT is primarily a method for
+selecting a leaf from which to conduct the next simulation.
+It forms the core of the successful \textsc{MoGo} algorithm for Go playing \citep{Gelly+Silver:2011}.  It is situated 
+within the theory of bandit problems \citep{Berry+Fristedt:1985}, applying the bandit algorithm
+UCB1 \citep{Auer+et+al:2002} recursively to select actions to perform within simulations.
+
+It is natural to consider whether the two independent threads are
+consistent; for example, are bandit algorithms such as UCB1 approximate
+solutions to some particular case of the metalevel decision problem
+defined by Russell and Wefald? The answer, perhaps surprisingly, is no.
+The essential difference is that, in bandit problems, every trial involves
+executing a real object-level action with real costs, whereas in the metareasoning
+problem the trials are {\em simulations} whose cost is usually independent of the
+utility of the action being simulated. 
+Hence, in UCT, bandit algorithms are applied to problems that are not bandit problems.
+
+One consequence of the mismatch is that bandit policies are
+inappropriately biased away from exploring actions whose current
+utility estimates are low.  Another consequence is the absence of any
+notion of ``stopping'' in bandit algorithms, which are designed for
+infinite sequences of trials.  A metalevel policy needs to decide
+when to stop deliberating and execute a real action.
+
+Analyzing the metalevel problem within an appropriate theoretical
+framework ought to lead to more effective algorithms than those
+obtained within the bandit framework.  For Monte Carlo computations,
+in which samples are gathered to estimate the utilities of actions,
+the metalevel decision problem is an instance of the {\em selection
+problem} studied in statistics~\cite{early-selection-refs}.  Despite
+recent work by \citet{Frazier+Powell:2010}, the theory of selection
+problems is less well understood than that of bandit problems.
+Accordingly, we present in \secrefs{optimal-section}{context-section}
+a number of results concerning optimal policies for the general case
+and for specific sampling distributions. In particular, we give finite
+bounds on the number of samples collected by optimal policies for
+Bernoulli and Gaussian distributions. We also provide a simple
+counterexample to the intuitive conjecture that an optimal policy
+should not spend more on deciding than the decision is worth; in fact,
+it is possible for an optimal policy to compute forever. We also show
+by a simple counterexample that {\em index
+policies}~\cite{Gittins:1989} do not necessarily exist for selection
+problems.
+
+Motivated by this theoretical analysis, we propose in \secrefs{approx-bayesian-section}{approx-nonbayesian-section}
+two families of heuristic approximations, one for the Bayesian case and one for the distribution-free setting.
+We show empirically that these rules give better performance than UCB1 on a wide range of standard (non-sequential) selection problems.
+\secref{mcts-section} shows similar results for the case of guiding Monte Carlo tree search in the game of Go.
+

@@ -167,15 +167,13 @@ samples already taken from the $i$th arm by $n_i$.
   $i$th arm is finally chosen instead of $\alpha$ is
   $\Pr(\overline X_i^{n_i+N} \ge \overline X_\alpha^{n_\alpha})$. $X_i \le 1$,
   therefore $\overline X_i^{n_i+N}\le \overline
-  X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of blinkered
+  X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of perfect
   information is at most: 
-\begin{align}
+\begin{equation}
 \label{eq:simplistic}
 \frac{ N(1-\overline  X_\alpha^{n_\alpha})}
-  {N+n_i}&\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})\nonumber \\
-&\le\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
-{n_i}\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})
-\end{align}
+  {N+n_i}\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\hspace{-0.5em}\le\overline X_\beta^{n_\beta})
+\end{equation}
   Proof for the case $i=\alpha$ is similar.
 \end{proof}
 

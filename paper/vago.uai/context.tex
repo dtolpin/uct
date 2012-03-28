@@ -1,0 +1,89 @@
+%% \section{Context effects and non-indexability}
+
+\note{No index theorem; via context inversion counter-example}
+
+
+
+
+
+de
+
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.7, trim=90 70 400 300]{swap-counterex.pdf}
+\caption{Regret vs. cost}
+\label{fig:swap-counterex}
+\end{figure}
+
+
+\begin{comment}
+set samples 1000
+
+max(x,y) = x>y ? x : y
+max3(x,y,z) = max(max(x,y),z)
+
+q0(u) = max(1,u)
+qa(u) = 0.5*max3(u, 1.5, -0.2 + 0.5*max(u,1.5) + 0.5*max(u, 1.75)) + 0.5*max3(u, 1, -0.2 + 0.5*max(u,0.25) + 0.5*max(u, 1.75)) - 0.2
+qb(u) = 0.5*max3(u, 0.25, -0.2 + 0.5*max(u,1.5) + 0.5*max(u, 0.25)) + 0.5*max3(u, 1.75, -0.2 + 0.5*max(u,1.75) + 0.5*max(u, 1.75)) - 0.2
+
+set terminal postscript enhanced linewidth 2
+set size 0.5,0.5
+set output "swap-counterex.ps"
+set xlabel "Utility of fixed alternative (u)"
+set ylabel "Utility relative to stopping"
+set xtics 0.5
+set ytics 0.1
+set key left top
+plot [u=-2:2] [-0.3:0.3] 0 title "stop" with lines lw 2, qa(u)-q0(u) title "observe A" with lines lw 2, qb(u)-q0(u) title "observe B" with lines lw 2	
+\end{comment}
+
+
+
+
+%% \note{Theorem: /stopping/ context effect occurs only for a single convex interval of
+%%    context value (how general can we make this?)}
+
+\begin{dfn}\label{dfn:context}
+	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, and a constant $\mu\in\R$,
+	define $M_\mu = (S,s_0,A_s,T,R_\mu)$ to be $M$ with an additional action of known 
+	value $\mu$, defined by:
+	\begin{align*}
+		R_\mu(s,E,s')      &= R(s,E,s') \\
+		R_\mu(s,\bot,\bot) &= \max\{\mu, R(s,\bot,\bot)\}
+	\end{align*}
+\end{dfn}
+
+\begin{thm}
+	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, 
+	there exists a real interval $I(s)$ for every state $s\in I$ such that
+	it is optimal to stop in state $s$ in $M_\mu$ iff $\mu\in I(s)$.
+	Furthermore, $I(s)$ contains $\max_i\mu_i(s)$ whenever it is nonempty.
+\end{thm}
+
+\begin{proof}
+
+With $m(s) = \max_i\mu_i(s)$, the utility of a policy $\pi$ starting in state $s$ of $M_\mu$ is
+\[
+	V^\pi_{M_\mu}(s) = \IE_{\pi}[-c\,N + \max(\mu,m(S_N)) \given S_0=s]
+\]
+and the utility of stopping in this state $\max(\mu,m(s_0))$.
+We wish to show that the set of $\mu$ such that
+\[
+	\max_\pi \IE_{\pi}[-c\,N + \max(\mu,m(S_N)) - \max(\mu,m(S_0)) \given S_0=s] \le 0
+\]
+forms an interval.  
+
+Observe that for any random variable $X$, 
+	$\IE[\max(\mu,X)]$ is monotonically increasing in $\mu$ with subderivative between zero and one.
+As a result, for any $v_1$
+	$\IE[\max(\mu,X)] - \max(\mu,v_1)$ 
+	is monotonically increasing for $\mu<v$, 
+	and monotonically decreasing thereafter.
+Therefore, the set if $\mu$ such that this expression is at most $v_2$ forms an interval, containing $v_1$ if non-empty.
+
+Applying this with $v_1 = m(s_0)$ and $v_2=\IE_{\pi}[c\,N]$, and observing that the union of intervals containing
+a point is an interval containing that point, gives the result.
+\end{proof}
+
+%% \note{Example showing that choice between computations to perform 
+%% can vary arbitrarily many times?  Does one exist?}

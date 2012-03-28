@@ -1,0 +1,9 @@
+# Fdb version 2
+["latex"] 0 "introduction.tex" "introduction.dvi" "introduction" 
+  "introduction.tex" 1332552813 4035 ee6897ed56d013776e4255e361d06234 ""
+["pdflatex"] 1332552815 "introduction.tex" "introduction.pdf" "introduction" 
+  "e.g., `I\hbox'" 0 -1 0 ""
+  "e.g., `\hobx'" 0 -1 0 ""
+  "introduction.aux" 1332552815 8 a94a2480d3289e625eea47cd1b285758 ""
+  "introduction.tex" 1332552813 4035 ee6897ed56d013776e4255e361d06234 ""
+  "job aborted, no legal \end found" 0 -1 0 ""
