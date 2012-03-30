@@ -1,0 +1,189 @@
+\begin{comment}
+	\begin{lmm}\label{lmm:equivalent-mdp}
+		Given MDPs $M^1=(S^1,s^1_0,A^1_s,T^1,R^1)$ and $M^2=(S^2,s^2_0,A^2_s,T^2,R^2)$,
+		if there exists $f\maps S^1\to S^2$ such that for all $s,s'\in S^1$ and $a\in A_s$,
+		we have $A^2_{f(s)} = A^1_s$ and
+		\begin{align*}
+			T^2(f(s),a,f(s')) &= T(s_2,E,s_2') \\
+			\max_i \mu_i(s_1) &= \max_i \mu_i(s_2),\\
+		%
+		\intertext{then for any policy $\pi^2$ in $M^2$, with policy $\pi^1$ in $M^1$
+		defined by $\pi^1(s) = \pi^2(f(s))$ we have}
+		%
+			V^{\pi^1}_{M^1}(s) &= V^{\pi^2}_{M^2}(f(s)).
+		\end{align*}
+	\end{lmm}		
+\end{comment}
+
+\begin{comment}
+	\begin{thm}
+		MDPs $M=(S,s_0,A_s,T,R)$ where there exists a unique terminal state $\bot\in S$,
+		a distinguished action $\bot\in A_s$ for all $s\in S$, a constant $c>0$, and bounded functions 
+		$\mu_1,\dots,\mu_k\maps S\to\R$ such that for all $s\in S$, $a\in A_s\setminus\{\bot\}$, and $i=1,\dots,k$:
+		\begin{align*}
+			\mu_i(s) &= \sum_{s'\in S} T(s,a,s')\,\mu_i(s') \\
+			T(s,\bot,\bot) &= 1 \\
+			R(s,a,s') &= -c \\
+			R(s,\bot,\bot) &= \max_i \mu_i(s)
+		\end{align*}
+		are equivalent to metalevel decision problems with bounded utilities, and conversely any 
+		metalevel decision problem with bounded utilities $U_i$ is such an MDP.
+	\end{thm}
+
+	\begin{proof}
+	Given such an MDP, for simplicity will assume that $\mu_i(s)\in(0,1)$ for all $i$ and $s\in S$; the proof generalizes 
+	to any bounds $(\mu^-,\mu^+)$.  We assume further the MDP is acyclic, which can be ensured, e.g., by augmenting
+	the state space with a time variable incrementing on each transition.
+
+	Define $\{0,1\}$-valued random variables $U_1,\dots,U_k$ 
+	and $E_{sa}$ for all $s\in S$, $a\in A_s$ by
+	\begin{align*}
+		P(U_i=1) &= \mu_i(s_0) \\
+		P(E_{sa}=s'\given U_i=1) &= \frac{T(s,a,s')\,\mu_i(s')}{\mu_i(s)} \\
+		P(E_{sa}=s'\given U_i=0) &= \frac{T(s,a,s')\,(1-\mu_i(s'))}{1- \mu_i(s)}
+	\end{align*}
+	where $U_1,\dots,U_k$ are independent, and the $E_{sa}$ are conditionally 
+	independent given $(U_1,\dots,U_k)$.
+	These together form a metalevel probability model, so we can form the 
+	corresponding metalevel decision problem following definition~\ref{dfn:metalevel-mdp},
+	to avoid conflict of notation we denote the latter by $M'=(H,h_0,B_h,T',R')$,
+	and where since $B_h$ is underspecified in the definition we define
+	\[
+		B_h = \{\bot\} \cup \{E_{t(h)a} : a \in A_{t(h)a}\}
+	\]
+	where the tail function $t\maps H\to S$ has $t(\langle\rangle)=s_0$ and otherwise
+	\[
+		t(\langle e_{s_0a_0},\dots,e_{s_n a_n}\rangle) = e_{s_n a_n} \in S.
+	\]
+	This definition of $B_h$ means that all elements of $H$ reachable from $h_0=\langle\rangle$ with positive probability are 
+	sequences $h=\langle e_{s_0a_0},\dots,e_{s_n a_n}\rangle$
+	with $e_{s_ia_i} = s_{i+1} \in S$ and $a_i\in A_{s_i}$, i.e., are possible state sequences 
+	in the original MDP $M$ under some sequence of actions.  Fix such a sequence, and
+	note that given $E_{s_n a}\in B_h$, any $h'$ with positive transition probability
+	is the form $h'=\langle e_{s_0a_0},\dots,e_{s_n a_n},e_{s_{n+1}a}\rangle$, and
+	\[
+		T'(h,E_{s_n a},h') = T(t(h), a, t(h')).
+	\]
+
+	Finally, observe that by acyclicity and construction
+	\begin{align*}
+		& P(U_i=1, E_{s_0a_0}=s_1,\dots,E_{s_n a_n}=s_{n+1}) \\
+		&= \mu_i(s_0) \prod_{i=0}^n \frac{T(s_i,a_i,s_{i+1})\,\mu_i(s_{i+1})}{\mu_i(s_i)} \\
+		&= \mu_i(s_{n+1}) \prod_{i=0}^n T(s_i,a_i,s_{i+1}),
+	%
+	\intertext{and similarly}
+	%
+		& P(U_i=0, E_{s_0a_0}=s_1,\dots,E_{s_n a_n}=s_{n+1}) \\
+		&= (1-\mu_i(s_{n+1})) \prod_{i=0}^n T(s_i,a_i,s_{i+1}).
+	\end{align*}
+	As a result
+	\begin{align*}
+		& \IE(U_i\given E_{s_0a_0}=s_1,\dots,E_{s_n a_n}=s_{n+1})\\
+		& = \mu_i(s_n) = \mu_i(t(h))\\
+		& P(E_{s_n a_n}=s_{n+1} \given E_{s_0a_0}=s_1,\dots,E_{s_{n-1} a_{n-1}}=s_{n}) \\
+		&=  T(s_n,a,s_{n+1}) = T(t(h),a,t(h'))
+	\end{align*}
+
+	Thus the metalevel decision problem $M'$ is equivalent to the original MDP $M$
+	under the mapping $t\maps H\to S$.
+
+	For the converse, observe that the properties hold with $c$ the cost of computation
+	and \[\mu_i(s) = \IE(U_i\given E_1=e_1,\dots,E_n=e_n)\] where $s=\langle e_1,\dots,e_n \rangle$.
+	\end{proof}
+\end{comment}
+
+
+
+
+
+
+
+%% \note{Something about existence of optimal solutions?  Probably do not exist in general,
+%% but do for finite $S$ despite discounting as this is a positive bounded model.}
+%% Positive bounded model.  We do have upper and lower bounds on V^*.  For finite s we can get optimality...
+
+%% \note{Define value of perfect information here for the below?}
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{dfn}
+	Given an MDP $M=(S,s_0,A_s,T,R)$ a state $s'$ is \term{reachable} from a state $s$
+	if there is a sequence of states $s=s_0,s_1,\dots,s_n=s'$ and actions $a_i\in A_{s_i}$
+	with positive probability under the transition distribution $T$.
+\end{dfn}
+
+%% \note{Theorem: if Myopic stops in all states reachable from x, optimal stops in x}
+
+\begin{thm}\label{thm:myopic-optimal}
+	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$
+	if the myopic policy stops in all states $s'\in S$ reachable
+	from a given state $s$ then the optimal policy stops too.
+	then the myopic policy stops too, i.e., if $\pi^*(s)=\bot$ then $\pi^m(s)=\bot$.
+\end{thm}
+
+\begin{proof}
+Defining $m(s) = \max_i\mu_i(s)$, observe the myopic stopping for all
+reachable states implies that
+\begin{align*}
+	\IE^{\pi}[(m(S_{j+1}) - c)\, 1(j<N)\given S_0=s] \\
+	\le \IE^{\pi}[m(S_{j})\, 1(j<N)\given S_0=s]
+\end{align*}
+holds for all $j$, and as a result:
+\begin{align*}
+	V^\pi(s) 
+	&= \IE^{\pi}[ - c N + m(S_N) |S_0=s] \\
+	&= \IE^{\pi}[m(S_0) + \sum_{j=0}^{N-1} (m(S_{j+1}) - c - m(S_j)) |S_0=s] \\	
+%%	&\le \IE^{\pi}[m(S_0) + \sum_{j=0}^{N-1} 0 |S_0=s] \\		
+	&\le \max_i\mu_i(s) \qedhere
+\end{align*}
+\end{proof}
+
+
+
+\begin{thm}\label{thm:closed}
+	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$,
+	a subset $S'\subseteq S$ of states closed under transitions,
+	and a computation $E\in\Evidence$,
+	if $Q^m(s,E) \le Q^m(s,\bot)$ for all states $s\in S'$ where $E\in A_s$,
+	then $Q^*(s,E) \le \max{E\neq a\in A_s} Q^*(s,a)$ for all states $s\in S'$ where $E\in A_s$.
+\end{thm}
+
+
+
+
+
+
+
+
+
+
+The state space in definition \dfnref{metalevel-mdp} is often a bit cumbersome for analysis
+of particular examples, with many redundant.  However, we can use the following to reduce 
+the MDP to something more manageable:
+\begin{lmm}\label{lmm:equivalent-mdp}
+	Given MDPs $M^1=(S^1,s^1_0,A^1_s,T^1,R^1)$ and $M^2=(S^2,s^2_0,A^2_s,T^2,R^2)$,
+	if there exists $f\maps S^1\to S^2$ such that for all $s,s'\in S^1$ and $a\in A_s$,
+	we have $A^2_{f(s)} = A^1_s$ and
+	\begin{align*}
+		T^2(f(s),a,f(s')) &= T(s_2,E,s_2') \\
+		\max_i \mu_i(s_1) &= \max_i \mu_i(s_2),\\
+	%
+	\intertext{then for any policy $\pi^2$ in $M^2$, with policy $\pi^1$ in $M^1$
+	defined by $\pi^1(s) = \pi^2(f(s))$ we have}
+	%
+		V^{\pi^1}_{M^1}(s) &= V^{\pi^2}_{M^2}(f(s)).
+	\end{align*}
+\end{lmm}
+
+
+
+
