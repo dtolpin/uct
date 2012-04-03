@@ -413,7 +413,6 @@ rollout (e.g. $\frac 1 2$-greedy+UCT).
     \State reward $\gets$ \Call{Reward}{node, action, next-node}
      \State \hspace{4em} + \Call{Rollout}{next-node, depth+1}
     \State \Call{UpdateStats}{node, action, reward}
-    \State \textbf{return} reward
   \EndIf
 \EndProcedure
 \end{algorithmic}
