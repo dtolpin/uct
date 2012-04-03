@@ -71,7 +71,7 @@ both UCT and the other proposed algorithms.
 
 Monte-Carlo tree search, and especially a version based on the
 UCT formula \cite{Kocsis.uct} appears in numerous search applications,
-such as \cite{Eyerich.ctp}. Although these methods are shown to be successful empirically,
+such as \cite{GellyWang.mogo,Eyerich.ctp}. Although these methods are shown to be successful empirically,
 most authors appear to be using the UCT formula ``because it has been shown
 to be successful in the past'', and ``because it does a good job of
 trading off exploration and exploitation''. While the latter statement may be
@@ -207,12 +207,13 @@ However, this task is daunting for the following reasons:
   a single measurement (analogous to a sample in MCTS) is frequently
   less than its time-cost, even though this is not true for multiple
   measurements. 
-% When applying the selection problem to MCTS, the
-%  situation is exacerbated.  The utility of an action is usually
-%  bounded, and thus in many cases a single sample may be insufficient
-%  to change the current best action, \emph{regardless} of its
-%  outcome. As a result, we frequently get a \emph{zero} ``myopic''
-%  value of information for a single sample.
+
+When applying the selection problem to MCTS, the
+situation is exacerbated.  The utility of an action is usually
+bounded, and thus in many cases a single sample may be insufficient
+to change the current best action, \emph{regardless} of its
+outcome. As a result, we frequently get a \emph{zero} ``myopic''
+value of information for a single sample.
 \item Rational metareasoning requires a known distribution model, which may be
   difficult to obtain.
 \item Defining the time-cost of a sample is not trivial.
@@ -390,11 +391,15 @@ the simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot
 then selects actions according to UCB, minimizing the cumulative regret (\textbf{CR}).
 \end{dfn}
 
-The pseudocode of this two-stage rollout is in
+The pseudocode of this two-stage rollout for an undiscounted MDP is in
 Algorithm~\ref{alg:two-stage-mcts}: \textsc{FirstAction} selects the first
 step of a layout (line~\ref{alg:srcr-first-action}), and
 \textsc{NextAction} (line~\ref{alg:srcr-next-action}) selects steps during
-the rest of the layout (usually using UCB).
+the rest of the layout (usually using UCB). The reward statistic for
+the selected action is updated (line~\ref{alg:srcr-update-stat}), and
+the sample reward is back-propagated (line~\ref{alg:return-reward}) 
+towards the current root.
+
 We denote such two-step realizations of SR+CR as \emph{Alg}+UCT, where
 \emph{Alg} is the sampling scheme employed at the first step of a
 rollout (e.g. $\frac 1 2$-greedy+UCT).
@@ -412,8 +417,8 @@ rollout (e.g. $\frac 1 2$-greedy+UCT).
     \State next-node $\gets$ \Call{NextState}{node, action}
     \State reward $\gets$ \Call{Reward}{node, action, next-node}
      \State \hspace{4em} + \Call{Rollout}{next-node, depth+1}
-    \State \Call{UpdateStats}{node, action, reward}
-    \State \textbf{return} reward
+    \State \Call{UpdateStats}{node, action, reward} \label{alg:srcr-update-stat}
+    \State \textbf{return} reward \label{alg:return-reward}
   \EndIf
 \EndProcedure
 \end{algorithmic}
@@ -544,7 +549,7 @@ except for small numbers of instances. The advantage of both $\frac 1
     \centering
     \includegraphics[scale=0.7]{twolevel-tree.pdf}\\
     a. search tree, the path to the best arm shaded
-    \vspace{0.5em}
+    \vspace{1em}
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
     \centering
@@ -578,13 +583,13 @@ and UCB$_{\sqrt{\cdot}}$+UCT, the difference is significantly less prominent.
 \begin{figure}[h!]
   \begin{minipage}[b]{1.0\linewidth}
     \centering
-    \includegraphics[scale=0.425]{costs-size=6-group=median.pdf}\\
+    \includegraphics[scale=0.45]{costs-size=6-group=median.pdf}\\
     a. median cost
-    \vspace{0.5em}
+    \vspace{1em}
   \end{minipage}
   \begin{minipage}[b]{1.0\linewidth}
     \centering
-    \includegraphics[scale=0.425]{costs-size=6-group=minimum.pdf}\\
+    \includegraphics[scale=0.45]{costs-size=6-group=minimum.pdf}\\
     b. minimum cost
   \end{minipage}
   \caption{The sailing domain, $6\times 6$ lake, cost vs. samples}
@@ -598,14 +603,13 @@ values of the exploration factor.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=0.425]{costs-size=6-nsamples=397.pdf}\\
+  \includegraphics[scale=0.45]{costs-size=6-nsamples=397.pdf}\\
   a. 397 rollouts\\
-  \vspace{0.5em}
-  \includegraphics[scale=0.425]{costs-size=6-nsamples=1585.pdf}\\
-  c. 1585 rollouts
+  \vspace{1em}
+  \includegraphics[scale=0.45]{costs-size=6-nsamples=1585.pdf}\\
+  b. 1585 rollouts
   \caption{The sailing domain, $6\times 6$ lake, cost vs. factor}
   \label{fig:sailing-cost-vs-factor}
-  \vspace{-1.5em}
 \end{figure}
 
 Figure~\ref{fig:sailing-lake-size} shows the cost vs. the exploration
@@ -614,11 +618,11 @@ the sampling schemes becomes more prominent when the lake size
 increases.
 \begin{figure}[h!]
    \centering
-   \includegraphics[scale=0.425]{costs-size=6-nsamples=397.pdf}\\
-   b. $6\times 6$ lake \\
-   \vspace{0.5em}
-   \includegraphics[scale=0.425]{costs-size=10-nsamples=397.pdf}\\
-   c. $10\times 10$ lake
+   \includegraphics[scale=0.45]{costs-size=6-nsamples=397.pdf}\\
+   a. $6\times 6$ lake \\
+   \vspace{1em}
+   \includegraphics[scale=0.45]{costs-size=10-nsamples=397.pdf}\\
+   b. $10\times 10$ lake
   \caption{The sailing domain, 397 samples, cost vs. factor}
   \label{fig:sailing-lake-size}
 \end{figure}
@@ -638,7 +642,6 @@ outperforms all other sampling schemes in this example. Similar performance impr
   \includegraphics[scale=0.45]{tree-identity-k=32-uqb=8+voi.pdf}\\
   \caption{MCTS in random trees, including VOI+UCT.}
   \label{fig:mcts-regret-voi} 
-  \vspace{-1.5em}
 \end{figure}
 
 \section{Summary and Future Work}
@@ -657,7 +660,13 @@ regret is minimized instead of the cumulative regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
 better general performance of the proposed scheme.
 
-Although SR+CR is inspired  by the notion of VOI,
+MCTS and UCT are particularly successful in Computer
+Go \cite{GellyWang.mogo,Braudis.pachi,Enzenberger.Fuego}
+and the proposed scheme should be evaluated on this domain, a
+non-trivial task as Go programs typically use ``non-pure''
+versions of UCT, extended with domain-specific knowledge.
+
+Although SR+CR is inspired by the notion of VOI,
 the VOI is used there implicitly in the analysis of the algorithm,
 rather than computed or learned explicitly in order to plan the
 rollouts. Ideally, using VOI to control sampling ab-initio should do even better,
