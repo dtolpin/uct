@@ -11,70 +11,65 @@
 
 %% \note{Formal definition of selection problems and the metalevel MDP with cost per sample (time value); also mention budgeted learning.}
 
-In a \term{selection problem} the decision maker is faced with the choice between
-alternative actions.  To make this choice, they may gather evidence about the
-utility of each of these alternative, at some cost.  The objective is to maximize
-the expected utility of the final action selected, less the cost of computation.
-
-%% This problem has been studied in a number of related forms.  \note{Here}
-
-%% The Bayesian ranking and selection problem \citep{Swisher+et+al:2003} is an important
-%% special case where the computations performed are samples.
-
-%%What the decision maker can know and what they can find out is formalized in:
+In a selection problem the decision maker is faced with a choice among
+alternative arms\footnote{Alternative actions are known as \emph{arms} in the bandit setting;
+we borrow this terminology for uniformity.}.  To make this choice, they may gather evidence about the
+utility of each of these alternatives, at some cost.  The objective is to maximize
+the {\em net utility}, i.e., the expected utility of the final arm selected, less the cost of gathering the evidence. 
+In the classical case~\citep{Bechhofer:1954}, evidence might consist of physical samples
+from a product batch; in a metalevel problem with Monte Carlo simulations,
+the evidence consists of outcomes of sampling computations:
 
 \begin{dfn} \label{dfn:metalevel-model}
-	A \term{metalevel probability model} is a tuple $M=(U_1,\dots,U_k,\Evidence)$ 
+	A \term{metalevel probability model} is a tuple $(U_1,\dots,U_k,\Evidence)$ 
 	consisting of jointly distributed random variables:
 	\begin{itemize}
-		\item Real random variables $U_1,\dots,U_k$, where $U_i$ is the utility of performing action~$i$ (called ``arms" in the bandit setting), and
+		\item Real random variables $U_1,\dots,U_k$, where $U_i$ is the utility of arm~$i$, and
 		\item A countable set $\Evidence$ of random variables, each variable $E\in\Evidence$ being 
 		      a computation that can be performed and whose value is the result of that computation.
 	\end{itemize}
 \end{dfn}
 %% Not actually true that we necessarily define this with U's as roots:  in sampling models they are naturally /leaves/.
-
-A metalevel probability model, when combined with a cost $c>0$ of computation,%
-\footnote{The assumption of a fixed cost of computation is a simplification; 
-	precise conditions for its validity are given by \citep{Harada:1997}.} 
-defines a metalevel decision problem: what is the optimal strategy with which to choose a sequence 
-of computations $E\in\Evidence$ to observe in order to maximize the expected utility 
-of the action finally taken less the cost of computation?  Intuitively, 
-this strategy should observe the variables which give the most evidence relevant
-to deciding which action to perform, stopping when the cost of computation 
-outweighs the benefit gained.
+%% Bounedness assumption
+For simplicity, in the below we'll assume the utilities $U_i$ are bounded, 
+without loss of generality in $[0,1]$.
 
 \begin{example}[Bernoulli sampling]\label{example:bernoulli}
 %% One simple metalevel probability model is used as a model of the results of simulations \citep{someone}.
 In the \term{Bernoulli metalevel probability model},
-each action will either succeed or not $U_i\in\{0,1\}$, with an unknown latent frequency of success $\Theta_i$, 
+each arm will either succeed or not $U_i\in\{0,1\}$, with an unknown latent frequency of success $\Theta_i$, 
 and stochastic simulations of possible consequences $E_{ij}$ can be performed:
 \begin{align*}
-	\Theta_i &\iid {\rm Uniform}[0,1]                      &&\quad\text{for $i=1,\dots,k$}\\
-	U_i \given \Theta_i &\sample {\rm Bernoulli}(\Theta_i) &&\quad\text{for $i=1,\dots,k$}\\
-	E_{ij} \given \Theta_i &\iid {\rm Bernoulli}(\Theta_i) &&\quad\text{for $i=1,\dots,k$ and $j=1,\dots$}
+	\Theta_i &\iid {\rm Uniform}[0,1]                      &&\quad\text{for $i\in\{1,\dots,k\}$}\\
+	U_i \given \Theta_i &\sample {\rm Bernoulli}(\Theta_i) &&\quad\text{for $i\in\{1,\dots,k\}$}\\
+	E_{ij} \given \Theta_i &\iid {\rm Bernoulli}(\Theta_i) &&\quad\text{for $i\in\{1,\dots,k\}$, $j\in\Nat$}
 \end{align*}
 
-The \term{one-action Bernoulli metalevel probability model} has $k=2$,
-$\Theta_1=m\in[0,1]$ a constant, and $\Theta_2\sample{\rm Uniform}[0,1]$.
+The \term{one-armed Bernoulli metalevel probability model} has $k=2$,
+$\Theta_1=\lambda\in[0,1]$ a constant, and $\Theta_2\sample{\rm Uniform}[0,1]$.
 \end{example}
 
-%% Bounedness assumption
-For simplicity, in the below we'll assume the utilities $U_i$ are bounded and so, 
-without loss of generality, lie in $[0,1]$.  
-
-To formalize this problem, we use the theory of Markov Decision Processes (MDPs; 
-see, for example, \citet{Puterman:1994}):
+A metalevel probability model, when combined with a cost of computation $c>0$,%
+\footnote{The assumption of a fixed cost of computation is a simplification; 
+	precise conditions for its validity are given by \citet{Harada:1997}.} 
+defines a metalevel decision problem: what is the optimal strategy with which to choose a sequence 
+of computations $E\in\Evidence$ in order to maximize the agent's net utility?
+Intuitively, this strategy should choose the computations that give the most evidence relevant
+to deciding which arm to use, stopping when the cost of computation 
+outweighs the benefit gained. We formalize the selection problem as a Markov Decision Process (MDP; 
+see, e.g., \citet{Puterman:1994}):
 
 \begin{dfn}
 A (countable state, undiscounted) \term{Markov Decision Process} (MDP) is a tuple $M=(S,s_0,A_s,T,R)$ where:
 	$S$ is a countable set of states,
 	$s_0\in S$ is the fixed initial state,
 	$A_s$ is a countable set of actions available in state $s\in S$,
-	$T(s,a,s')$ is the transition distribution 
-	giving the probability of transitioning from a state $s\in S$ to a state $s'\in S$ after performing action $a\in A_s$,
-	and $R(s,a,s')$ is the expected reward received when transitioning from $s\in S$ to $s'\in S$ after performing action $a\in A_s$.
+	$T(s,a,s')$ is the transition probability from $s\in S$ to $s'\in S$ after performing action $a\in A_s$,
+	and $R(s,a,s')$ is the expected reward received on such a transition.
 \end{dfn}
+
+To formulate the metalevel decision problem as an MDP, we define the states as sequences of
+computation outcomes and allow for a terminal state when the agent chooses to stop computing and act:
 
 \begin{dfn}\label{dfn:metalevel-mdp}
 	Given a metalevel probability model%
@@ -82,16 +77,17 @@ A (countable state, undiscounted) \term{Markov Decision Process} (MDP) is a tupl
 			variables $E_i\in\Evidence$, but for simplicity in the following we'll assume that
 			each $E_i$ takes one of a countable set of values.  Without loss of generality, 
 			we'll further assume the domains of the computational variables $E\in\Evidence$ are disjoint.}
-	$M=(U_1,\dots,U_k,\Evidence)$ and
+	$(U_1,\dots,U_k,\Evidence)$ and
 	a cost of computation $c>0$, a corresponding \term{metalevel decision problem}
-	is any MDP $M=(S,s_0,A_s,T,R)$ \begin{align*}
+	is any MDP $M=(S,s_0,A_s,T,R)$ such that
+	\begin{align*}
 		S &= \{\bot\}\cup\{\langle e_1\dots, e_n \rangle : e_i\in E_i \text{ for all $i$,} \\
 								& \qquad\qquad \text{for finite $n\ge0$ and distinct $E_i\in\Evidence$}\} \\
 		s_0 &= \langle \rangle \\
 		A_s &= \{\bot\}\cup\Evidence_s \\
 	%
 	\intertext{where $\bot\in S$ is the unique terminal state,
-	where $\Evidence_s\subseteq\Evidence$ is a potentially state-dependent subset of allowed computations,
+	where $\Evidence_s\subseteq\Evidence$ is a state-dependent subset of allowed computations,
 	and when given any $s=\langle e_1, \dots, e_n \rangle\in S$,
 	computational action $E\in\Evidence$, 
 	and $s'= \langle e_1, \dots, e_n, e \rangle\in S$ where $e\in E$, we have:}
@@ -101,13 +97,13 @@ A (countable state, undiscounted) \term{Markov Decision Process} (MDP) is a tupl
 		R(s,E,s') &= -c \\
 		R(s,\bot,\bot) &= \max_i \mu_i(s) % \max_i \IE[U_i \given E_1=e_1,\dots,E_n=e_n]
 	\end{align*}		
-	and where $\mu_i(s) = \IE[U_i \given E_1=e_1,\dots,E_n=e_n]$.
+	where $\mu_i(s) = \IE[U_i \given E_1=e_1,\dots,E_n=e_n]$.
 \end{dfn}
 
 
 
 One can optionally add an external constraint on the number of computational actions, or their total cost,
-in the form of a deadline (called a budget henceforth).  This bridges with the related area of budgeted learning \citep{Madani+et+al:2004}.
+in the form of a deadline or {\em budget}.  This bridges with the related area of budgeted learning \citep{Madani+et+al:2004}.
 Although this feature is not formalized in the MDP, it can be added by including either time or past total cost 
 as part of the state.
 
@@ -120,52 +116,51 @@ note that:
 	\IE[U_i \given E_{i1},\dots,E_{in_i}] &= (s_i+1)/(n_i+2) \label{eq:bernoulli3}
 \end{align}
 by standard properties of these distributions, where $s_i=\sum_{j=1}^{n_i} E_{in_i}$
-is the number of simulated successes of action $i$, and $f_i=n_i-s_i$ the failures.  By \eqref{eq:bernoulli1}, 
-the state space is the set of all $k$ pairs $(s_i,f_i)$, \eqrefs{eq:bernoulli2}{eq:bernoulli3}
+is the number of simulated successes of arm~$i$, and $f_i=n_i-s_i$ the failures.  By \eqref{eq:bernoulli1}, 
+the state space is the set of all $k$ pairs $(s_i,f_i)$; \eqrefs{eq:bernoulli2}{eq:bernoulli3}
 suffice to give the transition probabilities and terminal rewards, respectively.
-The one-action Bernoulli case is similar, requiring only the two dimensional 
-space $(s,f)$ giving the posterior over $\Theta_2$.
+The one-armed Bernoulli case is similar, requiring as state just $(s,f)$ defining the posterior over $\Theta_2$.
 \end{example}
 
 
 Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$ one defines policies and 
-value functions as in all MDPs.  A (deterministic, stationary) \term{metalevel policy} 
+value functions as in any MDP.  A (deterministic, stationary) \term{metalevel policy} 
 $\pi$ is a function mapping states $s\in S$ to actions to take in that state $\pi(s)\in A_s$.	
 
 The \term{value function} for a policy $\pi$ gives the expected total reward
 received under that policy starting from a given state $s\in S$, and the \term{Q-function}
-does the state when starting in a state $s\in S$ and taking a given action $a\in A_s$: 
-\[
-	V^\pi_M(s) = \IE^\pi_M\left[ \sum_{i=0}^N R(S_i,\pi(S_i),S_{i+1}) \given S_0 = s\right]	\label{eq:value-fn}\\
-%%	Q^\pi_M(s,a) &= \IE^\pi_M\left[ \sum_{i=0}^N R(S_i,\pi(S_i),S_{i+1}) \given S_0 = s, A_0 = a\right] \label{eq:qvalue-fn}
-\]
+does the same when starting in a state $s\in S$ and taking a given action $a\in A_s$: 
+\begin{equation}
+		V^\pi_M(s) = \IE^\pi_M\left[ \sum_{i=0}^N R(S_i,\pi(S_i),S_{i+1}) \given S_0 = s\right]	\label{eq:value-fn}\\
+	%%	Q^\pi_M(s,a) &= \IE^\pi_M\left[ \sum_{i=0}^N R(S_i,\pi(S_i),S_{i+1}) \given S_0 = s, A_0 = a\right] \label{eq:qvalue-fn}
+\end{equation}
 where $N\in[0,\infty]$ is the random time the MDP is terminated, i.e.,
-the unique time where $\pi(S_N)=\bot$%
-\footnote{Whenever $N<\infty$, $S_{N+1}=\bot$ the unique terminal state.
-Instead of having a random termination time, one can equivalently make
-the state $\bot$ absorbing with zero reward on all transitions.}, 
+the unique time where $\pi(S_N)=\bot$,
+%% \footnote{Whenever $N<\infty$, $S_{N+1}=\bot$ the unique terminal state.
+%% Instead of having a random termination time, one can equivalently make
+%% the state $\bot$ absorbing with zero reward on all transitions.}
 and similarly for the Q-function $Q^\pi_M(s,a)$.
 
-As usual, an \term{optimal policy} $\pi^*$, when it exists, is one which maximises 
+As usual, an \term{optimal policy} $\pi^*$, when it exists, is one that maximizes 
 the value from every state $s\in S$, i.e., if we define for each $s\in S$
 \[
 	V^*_M(s)   = \sup_\pi V^\pi_M(s),
 %%	Q^*_M(s,a) &= \sup_\pi Q^*_M(s,a),
 \]
-then the optimal policy $\pi^*$ satisfies $V^{\pi^*}_M(s) = V^*_M(s)$
-for all $s\in S$, where we break ties towards stopping $\bot$.
+then an optimal policy $\pi^*$ satisfies $V^{\pi^*}_M(s) = V^*_M(s)$
+for all $s\in S$, where we break ties in favor of stopping.
 %% and by standard results, $\pi^*(s) \in \argmax_{a\in A_s} Q^*_M(s,a)$, where 
 
 The optimal policy must balance the cost of computations with the improved decision
-quality that results.  This is made clear by giving by expressing the value function:
+quality that results.  This tradeoff is made clear in the value function:
 
 \begin{thm}\label{thm:value-of-computation}
 	The value function of a metalevel decision process $M=(S,s_0,A_s,T,R)$ is of the form
 	\[
 		V^\pi_M(s) = \IE^\pi_M[ -c\,N + \max_i \mu_i(S_N) \given S_0=s]
 	\]
-	where the random variable $N$ denotes the total number of computations performed,
-	and similarly for $Q^\pi_M(s,a)$.
+	where $N$ denotes the (random) total number of computations performed;
+	similarly for $Q^\pi_M(s,a)$.
 \end{thm}
 
 \begin{proof}
@@ -181,53 +176,54 @@ There is in full generality an upper bound on the \emph{expected} number of comp
 a policy performs:
 
 \begin{thm}\label{thm:bounded-expected-computations}
-	The optimal policy $\pi^*$'s expected number of computations is bounded by the 
-	perfect value of information \citep{Howard:1966} times the inverse cost $1/c$:
+	The optimal policy's expected number of computations is bounded by the 
+	value of perfect information \citep{Howard:1966} times the inverse cost $1/c$:
 	\[
 		\IE^{\pi^*}[N\given S_0=s] \le \frac{1}{c} \left(\IE[\max_i U_i\given S_0=s] - \max_i \mu_i(s)\right).
 	\]
 	Further, any policy $\pi$ with infinite expected number of computations 
-	$\IE^\pi[N]=\infty$ has negative infinite value, so in particular the optimal
-	policy stops with probability 1.
+	%% $\IE^\pi[N]=\infty$
+	has negative infinite value, hence the optimal
+	policy stops with probability one.
 \end{thm}
 
 \begin{proof}
 	The first follows as in state $s$ the optimal policy has value at least that
-	of stopping immediately $\max_i \mu_i(s)$, and as $\IE \max_i\mu_i(S_N) \le \IE \max_i U_i$ by Jensen's inequality.
-	The second follows from \thmref{thm:value-of-computation} as $c>0$.
+	of stopping immediately ($\max_i \mu_i(s)$), and as $\IE \max_i\mu_i(S_N) \le \IE \max_i U_i$ by Jensen's inequality.
+	The second from \thmref{thm:value-of-computation}.
 \end{proof}
 
-However, although the \emph{expected} number of computations is always bounded,
+Although the \emph{expected} number of computations is always bounded,
 there are important cases in which the \emph{actual} number is not, such as
-the following example inspired by the sequential probability ratio test \citep{Wald+1945}:
+the following inspired by the sequential probability ratio test \citep{Wald+1945}:
 
 \begin{example}\label{example:sprt}
-Consider the Bernoulli sampling model for two actions but with different priors:
+Consider the Bernoulli sampling model for two arms but with a different prior:
 	$\Theta_1=1/2$,
 	and $\Theta_2$ is $1/3$ or $2/3$ with equal probability.
 %
-Simulating action 1 gains nothing, and after $(s,f)$ simulated successes and failures of action 2
-the posterior odds is
+Simulating arm~1 gains nothing, and after $(s,f)$ simulated successes and failures of arm~2
+the posterior odds ratio is
 \[
 	\frac{P(\Theta_2=2/3\given s,f)}{P(\Theta_2=1/3\given s,f)} = \frac{(2/3)^s(1/3)^f}{(1/3)^s(2/3)^f}= 2^{s-f}.
 \]
-Note that these odds completely specify the posterior distribution of $\Theta_2$,
-and thus the distribution of the utility and all future computations.  Thus, whether
-it is optimal to continue is a function only of this posterior odds, and thus $s-f$.
+Note that this ratio completely specifies the posterior distribution of $\Theta_2$,
+and hence the distribution of the utilities and all future computations.  Thus, whether
+it is optimal to continue is a function only of this ratio, and thus of $s-f$.
 %% In particular,
 %% note that after equal numbers of successes and failures, $s-f=0$ and so the posterior 
 %% distribution over $\Theta_2$ is equal to the prior.
 For sufficiently low cost, the 
-optimal policy samples when $s-f$ equals $-1$, $0$, and $1$.  But with probability
+optimal policy samples when $s-f$ equals $-1$, $0$, or $1$.  But with probability
 $1/3$, a state with $s-f=0$ transitions to another state $s-f=0$ after two samples, 
 giving finite, although exponentially decreasing, probability to arbitrarily long 
 sequences of computations.
 \end{example}
 
 
-Fortunately, in a number of settings, including the original Bernoulli model of \exampleref{example:bernoulli},
-we can prove an upper bound the number of computations.  For reasons of space,
-and for its later use in \secref{sec:blinkered}, we prove here the bound for the one-action Bernoulli model.
+However, in a number of settings, including the original Bernoulli model of \exampleref{example:bernoulli},
+we can prove an upper bound on the number of computations.  For reasons of space,
+and for its later use in \secref{sec:blinkered}, we prove here the bound for the one-armed Bernoulli model.
 
 Before we can do this, we need to get an analytical handle on the optimal policy.
 The key is through a natural approximate policy:
@@ -236,17 +232,15 @@ The key is through a natural approximate policy:
 	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$,
 	the \term{myopic policy} $\pi^m(s)$ is defined to equal $\argmax_{a\in A_s} Q^m(s,a)$ 
 	where $Q^m(s,\bot) = \max_i \mu_i(s)$ and
-	\begin{equation}\label{eq:myopic}
+	\begin{equation*}%% \label{eq:myopic}
 		 Q^m(s,E) = \IE_M[ -c + \max_i \mu_i(S_1) \given S_0 = s, A_0 = E].		
-	\end{equation}
+	\end{equation*}
 \end{dfn}
 
 The myopic policy takes the best action, to either stop or perform a computation,
 under the assumption that at most one further computation can be performed.
-%% This policy is typically easy to compute, although not necessarily very good.  
-
-It does have importance, however, in how it constrains the optimal policy in \thmref{thm:optimal-myopic}
-and its partial converse \thmref{thm:myopic-optimal}:
+It has a tendency to stop too early, because changing one's mind about which real action to take often takes more than one computation.
+In fact, we have:
 
 %% \note{Theorem: if Optimal stops in x, myopic stops in x (converse is more useful!)}
 	
@@ -256,7 +250,7 @@ and its partial converse \thmref{thm:myopic-optimal}:
 	then the optimal policy does too, i.e., if $\pi^m(s)\neq\bot$ then $\pi^*(s)\neq\bot$.
 \end{thm}
 
-\begin{comment}
+\begin{hiddenproof}
 	\begin{proof}
 		Observe that the myopic Q-function \eqref{dfn:myopic} is equivalently given by
 		\[
@@ -269,14 +263,14 @@ and its partial converse \thmref{thm:myopic-optimal}:
 		\]
 		and so the same holds for $Q^m$, showing the myopic stops.
 	\end{proof}
-\end{comment}
+\end{hiddenproof}
 
 % Similarity to an optimal stopping result
 	% Search <blah> for one-step lookahead rules.
 	% But HERE is generalized to a stopping problem where there are many ways to continue.
 
-This shows that the myopic policy is conservative in stopping, so stopping too early
-is one of its approximation errors.  However myopic stopping can be used to control optimal stopping:
+Despite this property, the stopping behavior of the myopic policy does
+have a close connection to that of the optimal policy:
 
 \begin{dfn}\label{dfn:closed}
 	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$,
@@ -288,11 +282,11 @@ is one of its approximation errors.  However myopic stopping can be used to cont
 \begin{thm}\label{thm:myopic-optimal}
 	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$
 	and a subset $S'\subseteq S$ of states closed under transitions,	
-	if the myopic policy stops in all states $s\in S$
+	if the myopic policy stops in all states $s'\in S'$
 	then the optimal policy does too.	
 \end{thm}
 
-\begin{comment}
+\begin{hiddenproof}
 	\begin{proof}
 	Take any $s^*\in S'$, and note that all states the chain can transition
 	to from $s^*$ are also in $S'$, by transition closure.  Defining $m(s) = \max_i\mu_i(s)$, 
@@ -310,39 +304,51 @@ is one of its approximation errors.  However myopic stopping can be used to cont
 		&\le \max_i\mu_i(s^*) \qedhere
 	\end{align*}
 	\end{proof}	
-\end{comment}
+\end{hiddenproof}
 
 Using this, we can prove our bound:
 
 \begin{thm}\label{thm:one-action-bound}
-	The one-action Bernoulli decision process with constant arm $m\in[0,1]$ 
-	performs at most $m(1-m)/c-3 \le 1/4c-3$ computations.
+	The one-armed Bernoulli decision process with constant arm $\lambda\in[0,1]$ 
+	performs at most $\lambda(1-\lambda)/c-3 \le 1/4c-3$ computations.
 \end{thm}
+\begin{proof}
+Using \dfnref{dfn:myopic} and \exampleref{example:bernoulli2}, we determine
+which states the myopic policy stops in by bounding $Q^m(s,E)$.  For a state $(s,f)$,
+let $\mu=(s+1)/(n+2)$ be the mean utility for arm~2, where $n=s+f$.
+Fixing $n$ and maximizing over $\mu$, we get sufficient condition for stopping
+\begin{equation}
+	c \ge \frac{\lambda(1-\lambda)}{(n+3)} \qquad\qquad   n\ge \frac{\lambda(1-\lambda)}{c} - 3  \label{eq:myopic-stopping}
+\end{equation}
+Since the set of states satisfying \eqref{eq:myopic-stopping} is closed under
+transitions ($n$ only increases), by \thmref{thm:optimal-myopic}.  Finally, note $\max_{\lambda\in[0,1]} \lambda(1-\lambda)=1/4$.
+\end{proof}	
 
-\begin{comment}
+\begin{hiddenproof}
 	\begin{proof}
 		By \dfnref{dfn:myopic} and \exampleref{example:bernoulli2}, the myopic policy stops in
 		a state $(s,f)$ when
 		\begin{align}
 			c \ge &\mu\max(\mu^+,m) + (1-\mu_i)\max(\mu^-, m) - \max(\mu,m) \label{eq:stopping}
 		\end{align}
-		where $\mu=(s+1)/(n+2)$  is the mean utility for action~2, where $n=s+f$,
+		where $\mu=(s+1)/(n+2)$  is the mean utility for arm~2, where $n=s+f$,
 		$\mu^- = \mu - \mu/(n+3)$, and $\mu^+ = \mu + (1-\mu)/(n+3)$
-		are the posterior means of action 2 after simulating a failure and a success,
+		are the posterior means of arm~2 after simulating a failure and a success,
 		%% and $\mu^-_i=(s_i+1)/(s_i+f_i+3) $ and $\mu^+_i = (s_i+2)/(s_i+f_i+3)$
 		%% are the posterior means of action $i$ after simulating a failure and a success,
 		respectively.  Whenever \eqref{eq:stopping} holds, stopping is preferred to sampling.
 
 		Fixing $n$ and maximizing over $\mu$, we get sufficient condition for stopping
 		\begin{equation}
-			c \ge \frac{m(1-m)}{(n_i+3)} \qquad\qquad   n_i\ge \frac{m(1-m)}{c} - 3  \label{eq:myopic-stopping}
+			c \ge \frac{\lambda(1-\lambda)}{(n+3)} \qquad\qquad   n\ge \frac{\lambda(1-\lambda)}{c} - 3  \label{eq:myopic-stopping}
 		\end{equation}
 		Since the set of states satisfying \eqref{eq:myopic-stopping} is closed under
-		transitions ($n$ only increases), by \thmref{thm:optimal-myopic}.  Finally, note $\max_{m\in[0,1]} m(1-m)=1/4$.
+		transitions ($n$ only increases), by \thmref{thm:optimal-myopic}.  Finally, note $\max_{\lambda\in[0,1]} \lambda(1-\lambda)=1/4$.
 	\end{proof}	
-\end{comment}
+\end{hiddenproof}
 
 A key implication is that the \emph{optimal} policy can be computed
-in time quadratic in the inverse cost $O(1/c^2)$.  This is particularly appropriate when the cost of 
+in time $O(1/c^2)$, i.e., quadratic in the inverse cost.  This is particularly appropriate when the cost of 
 computation is relatively high, such as in simulation experiments \citep{Swisher+et+al:2003},
-or when the decision to be made is critical.
+or when the decision to be made is critical. Finite bounds for the $k$-armed problem
+can also be derived and will be included in the full paper.

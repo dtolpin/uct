@@ -26,9 +26,10 @@
 \newcommand {\Evidence} {\mathcal{E}}
 \newcommand {\R} {\mathbb{R}}
 \newcommand {\maps} {\colon}
-\newcommand {\given} {\mathrel{|}}
+\newcommand {\given} {\mid} %{\mathrel{|}}
 \newcommand {\sample} {\sim}
 \newcommand {\iid} {\stackrel{\rm iid}{\sample}}
+\newcommand {\Nat} {\mathbb{N}}
 \DeclareMathOperator*{\argmax}{argmax}
 
 \newtheorem{thm}{Theorem}
@@ -45,6 +46,8 @@
 \newcommand{\thmref}[1]{Theorem~\ref{#1}}
 \newcommand{\dfnref}[1]{Definition~\ref{#1}}
 \newcommand{\exampleref}[1]{Example~\ref{#1}}
+
+\excludecomment{hiddenproof}
 
 \title{Selecting Computations: Theory and Applications} 
 
@@ -65,27 +68,7 @@
 
 \maketitle 
 
-\begin{abstract}
-Sequential decision problems are often approximately solvable by
-simulating possible future action sequences.  {\em Metalevel} decision
-procedures have been developed for selecting {\em which} action
-sequences to simulate, based on some estimate of the expected
-improvement in decision quality resulting from any particular
-simulation; an example is the recent work on using selection rules
-derived for bandit problems to control Monte Carlo tree search in the
-game of Go.  In this paper we develop a theoretical basis for
-metalevel decisions in the statistical framework of {\em selection problems}, 
-arguing that this is more appropriate than the bandit
-framework.  We derive a number of basic results applicable to simple
-Monte Carlo selection problems, including the first finite sampling
-bounds for optimal policies in certain cases; we also provide a simple
-counterexample to the intuitive conjecture that an optimal policy will
-necessarily reach a decision in all cases.  We then derive heuristic
-approximations in both Bayesian and distribution-free settings and
-demonstrate their superiority to bandit-based heuristics in one-shot
-decision problems and in Go.
-\end{abstract}
-
+\input{abstract}
 
 \section{Introduction}
 
@@ -118,38 +101,40 @@ decision problems and in Go.
 
 %% [[ESPb: Frazier's continuous time approximation]]
 
+  
 
-
-\section{Upper bounds on value of information}\label{approx-nonbayesian-section}
+\section{Upper bounds on Value of Information}\label{approx-nonbayesian-section}
 
 %% Solomon: Text presumably should be placed after the relevant theorems.
 
-Theorem \ref{thm:optimal-myopic} provides necessary conditions
-for a stopping condition for the optimal policy in terms of a myopic
-policy, but that does not preclude premature stopping of a greedy policy.
-Conversely, Theorem \ref{thm:myopic-optimal} provides sufficient conditions, but these 
-conditions are hard to evaluate in practice.
+\begin{comment}
+	Theorem \ref{thm:optimal-myopic} provides necessary conditions
+	for a stopping condition for the optimal policy in terms of a myopic
+	policy, but that does not preclude premature stopping of a greedy policy.
+	Conversely, Theorem \ref{thm:myopic-optimal} provides sufficient conditions, but these 
+	conditions are hard to evaluate in practice.
 
-The myopic selection policy uses
-the intrinsic value of information (VOI) $\Lambda_i$ of testing an arm $i$, which is
-the expected reward of the best arm given the information obtained by the test,
-minus the expected reward of the best arm according to the current information state.
-Unfortunately, the pure \textit{myopic} VOI estimate is of little use in
-Monte-Carlo sampling, since the effect of a single sample is small,
-and the myopic VOI estimate will often be zero.
+	The myopic selection policy uses
+	the intrinsic value of information (VOI) $\Lambda_i$ of testing an arm~$i$, which is
+	the expected reward of the best arm given the information obtained by the test,
+	minus the expected reward of the best arm according to the current information state.
+	Unfortunately, the pure \textit{myopic} VOI estimate is of little use in
+	Monte-Carlo sampling, since the effect of a single sample is small,
+	and the myopic VOI estimate will often be zero.
 
-Instead, we generalize myopic policies to include ``semi-myopic"
-up to $N$ samples of the same arm; these are called ``blinkered" policies.
-Such policies allow potentially unlimited lookahead, but only in a single ``direction'' (one specific arm),
-as if we ``had our blinkers on''.
+	Instead, we generalize myopic policies to include ``semi-myopic"
+	up to $N$ samples of the same arm; these are called ``blinkered" policies.
+	Such policies allow potentially unlimited lookahead, but only in a single ``direction'' (one specific arm),
+	as if we ``had our blinkers on''.	
+\end{comment}
 
 %% Solomon: end text to be (possibly moved).
 
 In many practical applications of the selection problem, such as search in
-the game of Go, prior distributions are unavailable\footnote{The analysis is also applicable to
+the game of Go, prior distributions are unavailable.\footnote{The analysis is also applicable to
 some Bayesian settings, using ``fake" samples to simulate prior distributions.}
 In such cases, one can still bound
-the value of information w.r.t. myopic policies using {\em concentration
+the value of information of myopic policies using {\em concentration
 inequalities} to derive distribution-independent bounds on the
 VOI. We obtain such bounds under the
 following assumptions:
@@ -160,23 +145,23 @@ sampling.
    after sampling terminates, the arm with the greatest sample mean will be selected).
 \end{enumerate}
 
-When considering possible samples in the ``blinkered'' semi-myopic setting,
-two cases are possible:
-\begin{itemize}
-\item the arm $\alpha$ with the highest sample mean $\overline
-  X_\alpha$ is tested, and $\overline X_\alpha$ becomes lower than
-  $\overline X_\beta$ of the second-best arm $\beta$;
-\item another arm $i$ is tested, and $\overline X_i$ becomes higher
-than $\overline X_\alpha$.
-\end{itemize}
+When considering possible samples in the blinkered semi-myopic setting,
+two cases are possible: either
+	the arm $\alpha$ with the highest sample mean $\overline
+  	X_\alpha$ is tested, and $\overline X_\alpha$ becomes lower than
+ 	$\overline X_\beta$ of the second-best arm $\beta$;
+or, 
+	another arm~$i$ is tested, and $\overline X_i$ becomes higher
+    than $\overline X_\alpha$.
 
-Our bounds below are applicable to any bounded distribution (with rewards being
-bounded to $[0,1]$). Similar
+
+Our bounds below are applicable to any bounded distribution (without loss of generality 
+bounded in $[0,1]$). Similar
 bounds can be derived for certain unbounded distributions, such as the
-normally distributed prior of the value with normally distributed
+normally distributed prior value with normally distributed
 sampling.
-We derive a VOI bound for testing an arm $N$ times,
-where $N$ can be the remaining ``budget'' of available samples or
+We derive a VOI bound for testing an arm a fixed $N$ times,
+where $N$ can be the remaining budget of available samples or
 any other integer quantity.
 Denote by  $\Lambda_i^b$ the intrinsic VOI of testing the $i$th arm
 $N$ times, and the number of
@@ -189,26 +174,29 @@ samples already taken from the $i$th arm by $n_i$.
 \end{align}
 \label{thm:be}
 \end{thm}
-\vspace{-2em}
-\begin{proof} For the case $i\ne \alpha$, the probability that the
-  $i$th arm is finally chosen instead of $\alpha$ is
-  $\Pr(\overline X_i^{n_i+N} \ge \overline X_\alpha^{n_\alpha})$. $X_i \le 1$,
-  therefore $\overline X_i^{n_i+N}\le \overline
-  X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of blinkered
-  information is at most: 
-\begin{align}
-\label{eq:simplistic}
-\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
-  {N+n_i}&\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})\nonumber \\
-&\le\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
-{n_i}\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})
-\end{align}
-  Proof for the case $i=\alpha$ is similar.
-\end{proof}
+\begin{hiddenproof}
+	\vspace{-2em}
+	\begin{proof} For the case $i\ne \alpha$, the probability that the
+	  $i$th arm is finally chosen instead of $\alpha$ is
+	  $\Pr(\overline X_i^{n_i+N} \ge \overline X_\alpha^{n_\alpha})$. $X_i \le 1$,
+	  therefore $\overline X_i^{n_i+N}\le \overline
+	  X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of blinkered
+	  information is at most: 
+	\begin{align}
+	\label{eq:simplistic}
+	\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
+	  {N+n_i}&\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})\nonumber \\
+	&\le\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
+	{n_i}\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})
+	\end{align}
+	  Proof for the case $i=\alpha$ is similar.
+	\end{proof}		
+\end{hiddenproof}
+
 
 The probabilities can be bounded from above using the
 Hoeffding inequality \citep{Hoeffding.ineq}:
-\begin{thm} The probabilities in equations (\ref{eqn:thm-be}) are bounded from above as
+\begin{thm} The probabilities in \eqref{eqn:thm-be} are bounded from above as
 \begin{align}
   \label{eqn:probound-blnk-hoeffding}
   \Pr&(\overline X_\alpha^{{n_\alpha}+N} \le \overline X_\beta^{n_\beta})
@@ -222,9 +210,9 @@ where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 
 \end{thm}
 
 
-\begin{comment}
+\begin{hiddenproof}
 	\begin{proof}
-	Equations (\ref{eqn:probound-blnk-hoeffding}) follow from the
+	\eqref{eqn:probound-blnk-hoeffding}) follow from the
 	observation that if $i\ne\alpha$, $\overline X_i^{n_i+N}>\overline X_\alpha^{n_i}$
 	if and only if the mean $\overline X_i^N$ of $N$ samples from $n_i+1$
 	to $n_i+N$ is at least $\overline X_\alpha^{n_i}+(\overline X_\alpha^{n_i}-\overline
@@ -253,13 +241,13 @@ where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 
 	\label{eqn:app-hoeffding-le-maxexp}
 	\end{align}
 	Find $\delta$ for which the two terms on the right-hand side of
-	(\ref{eqn:app-hoeffding-le-maxexp}) are equal:
+	\eqref{eqn:app-hoeffding-le-maxexp} are equal:
 	\begin{equation}
 	\exp(-\delta^2n) = \exp\left(-2\left((\overline X_\alpha - \overline X_i)(1+\frac {n_i} N) - \delta\right)^2N\right)\label{eqn:app-hoeffding-eq-exp}
 	\end{equation}
-	Solve (\ref{eqn:app-hoeffding-eq-exp}) for $\delta$: $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+	Solve \eqref{eqn:app-hoeffding-eq-exp} for $\delta$: $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
 	- \overline X_i^{n_i}) \ge 2(\sqrt 2 - 1)(\overline X_\alpha^{n_\alpha}\hspace{-0.5em}-\overline X_i^{n_i})$. Substitute $\delta$ into 
-	(\ref{eqn:app-hoeffding-le-maxexp}) and obtain
+	\eqref{eqn:app-hoeffding-le-maxexp} and obtain
 	\begin{align}
 	\Pr&(\overline X_i^{n_i}\ge \overline X_\alpha^{n_\alpha}) \nonumber\\
 	& \le 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
@@ -269,11 +257,11 @@ where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 
 	\end{align}
 	Derivation for the case $i=\alpha$ is similar.
 	\end{proof}	
-\end{comment}
+\end{hiddenproof}
 
 \begin{crl}
 An upper bound on the VOI estimate $\Lambda_i^b$ is obtained
-by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
+by substituting \eqref{eqn:probound-blnk-hoeffding} into \eqref{eqn:thm-be}.
 \begin{align}
   \label{eqn:bound-blnk-hoeffding}
   \Lambda&_\alpha^b \le \hat\Lambda_\alpha^b=\frac {2N\overline X_\beta^{n_\beta}} {n_\alpha}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\nonumber\\
@@ -284,7 +272,7 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \vspace{-2em}
 
 More refined bounds can be obtained through tighter estimates on the
-probabilities in Equation \ref{eq:simplistic}, for example, based on the empirical Bernstein
+probabilities in \eqref{eqn:thm-be}, for example, based on the empirical Bernstein
 inequality~\citep{MaurerPontil.benrstein}, or through a more careful
 application of the Hoeffding inequality, resulting in:
 \begin{align}
@@ -298,23 +286,17 @@ application of the Hoeffding inequality, resulting in:
 \end{align}
 
 
-\section{Practical sampling control: empirical evaluation}
-\label{sec:empirical-evaluation}\label{mcts-section}
 
-As the selection MDP is intractable, we use myopic or semi-myopic policies instead.
-The myopic policies usually separate out the decision of {\em whether} to
+Selection problems usually separate out the decision of {\em whether} to
 sample or to stop (called the stopping policy), and {\em what} to sample.
-We first examine the latter issue. 
-
-\subsection{Selecting The Best Arm}
-\label{sec:emp-arm}
+We'll examine the first issue here, along with the empirical evaluation 
+of the above approximate algorithms, and the second in the following section.
 
 Assuming that the sample costs are constant,
 a semi-myopic policy will decide to test the arm that has the best
 current VOI estimate. 
 When the distributions are unknown, it makes sense
-to use the upper bounds established in Theorem~\ref{thm:be} instead,
-which is the method adopted here.
+to use the upper bounds established in \thmref{thm:be}, as we do in the following.
 This evaluation assumes a fixed budget of samples, which is
 completely used up by each of the candidate schemes, making a stopping
 criterion irrelevant.
@@ -322,68 +304,75 @@ criterion irrelevant.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.6]{flat.pdf}
-\caption{Random instances: regret vs. number of samples}
+\caption{Average regret of various policies as a function of the fixed number 
+of samples in a 25-action Bernoulli sampling problem, over 10000 trials.}
 \label{fig:random-instances}
 \end{figure}
 
-The sampling policies are compared on random Multi-armed bandit 
-selection problem instances. Figure~\ref{fig:random-instances} shows results for
-randomly-generated Multi-armed bandits with 25 Bernoulli arms, with
-the mean rewards of the arms distributed uniformly in the range~$[0,
-  1]$, for a range of sample budgets~$200..2000$, with multiplicative
-step of~$2$. The experiment for each number of samples was repeated
-10000 times. UCB1, as well as policies  based on bounds
-(\ref{eqn:bound-blnk-hoeffding}) (VOI) and
-(\ref{eqn:erf-blinkered}) (VOI+) are compared. UCB1 is always considerably worse than the
-VOI-aware sampling policies.
+The sampling policies are compared on random Bernoulli
+selection problem instances. \figref{fig:random-instances} shows results for
+randomly-generated selection problems with 25 Bernoulli arms, where
+the mean rewards of the arms are distributed uniformly in~$[0,1]$, 
+for a range of sample budgets~$200..2000$, with multiplicative
+step of~$2$, averaging over 10000 trials.  We compare UCB1 with the 
+policies based on the bounds in
+\eqref{eqn:bound-blnk-hoeffding} (VOI) and
+\eqref{eqn:erf-blinkered} (VOI+).
+UCB1 is always considerably worse than the VOI-aware sampling policies.
 
-\subsection{Sampling in trees}
 
-Sampling in trees is considerably more complicated.
-The goal of Monte-Carlo tree search \citep{Chaslot.montecarlo} at the root node 
+
+
+
+\section{Sampling in trees}
+\label{sec:empirical-evaluation}\label{mcts-section}
+
+The previous section addressed the selection problem in the flat case.
+Selection in trees is more complicated.  The goal of Monte-Carlo tree 
+search \citep{Chaslot.montecarlo} at the root node 
 is usually to select an action that appears to be the best based on outcomes
 of \textit{search rollouts}.
 But the goal of rollouts at non-root nodes
-is different than at the root: here it is important to better approximate the ``true'' 
+is different than at the root: here it is important to better approximate the
 value of the node, so that selection at the root can be more informed. The exact analysis
 of sampling at internal nodes is outside the scope of this paper. At present we 
 have no better proposal for internal nodes than to use UCT there.
 
-We thus propose the following hybrid sampling scheme:
-\begin{itemize}
-\item at the root node, sample based on the VOI estimate;
-\item at non-root nodes, sample using UCT.
-\end{itemize}
+We thus propose the following hybrid sampling scheme: 
+	at the \emph{root node}, sample based on the VOI estimate;
+	at \emph{non-root nodes}, sample using UCT.
 
-Strictly speaking, even at the root node the assumptions underlying our belief-state
+Strictly speaking, even at the root node the stationarity assumptions\footnote{This is not a restriction,
+however, of the general formalism in \secref{sec:optimal}.} 
+underlying our belief-state
 MDP for selection do not hold exactly. UCT is an adaptive scheme, and therefore the values
-generated by sampling at non-root nodes will typically cause valued observed at
+generated by sampling at non-root nodes will typically cause values observed at
 children of the root node to be non-stationary. 
 Nevertheless, sampling based on VOI estimates
-computed as for stationary distributions work well in
+computed as for stationary distributions works well in
 practice. As illustrated
-by the empirical evaluation (Section~\ref{sec:empirical-evaluation}),
+by the empirical evaluation (\secref{sec:empirical-evaluation}),
 estimates based on upper bounds on the VOI result in good sampling
 policies, which exhibit performance comparable to the performance of
 some state-of-the-art heuristic algorithms.
 
 
-\subsubsection{Stopping criterion}
+\subsection{Stopping criterion}
 \label{sec:control-stopping-criterion}
 
 When a sample has a known cost commensurable with the value of
 information of a measurement, an upper bound on the intrinsic VOI can also
-be used to stop the sampling if the intrinsic VOI of any action
-is less than the cost of sampling $C$:
+be used to stop the sampling if the intrinsic VOI of any arm
+is less than the total cost of sampling $C$:
 \begin{equation}
 \mbox{stop if } \max_i \Lambda_i \le C
 \end{equation}
-VOI estimates~(\ref{eqn:thm-be},
-\ref{eqn:bound-blnk-hoeffding}) include the remaining sample budget $N$ as a
+The VOI estimates of \eqrefs{eqn:thm-be}{eqn:bound-blnk-hoeffding} 
+include the remaining sample budget $N$ as a
 factor, but given the cost of a single sample $c$, the cost of the
 remaining samples accounted for in estimating the intrinsic VOI is
 $C=cN$. $N$ can be dropped on both sides of the inequality,
-and a reasonable stopping criterion would be:
+giving a reasonable stopping criterion:
 \begin{align}
 \frac 1 N \Lambda_\alpha^b \le&\frac {\overline X_\beta^{n_\beta}}
   {n_\alpha}\Pr(\overline X_\alpha^{n_\alpha+N}\le\overline
@@ -393,51 +382,51 @@ and a reasonable stopping criterion would be:
     &\forall i: i\ne\alpha
 \label{eqn:stopping-blnk}
 \end{align}
-The empirical evaluation (Section~\ref{sec:empirical-evaluation})
+The empirical evaluation (\secref{sec:empirical-evaluation})
 confirms the viability of this stopping criterion and illustrates the
 influence of the sample cost $c$ on the performance of
 the sampling policy. When the sample cost $c$ is unknown, one can perform initial calibration experiments
-to determine a reasonable value, as done in this paper.
+to determine a reasonable value, as done in the following.
 
-\subsubsection{Sample redistribution in trees}
+\subsection{Sample redistribution in trees}
 \label{sec:control-redistribution}
 
 The above hybrid approach assumes
 that the information obtained from rollouts in the
 current state is discarded after an real-world action is selected. In practice,
-many successful Monte-Carlo tree search algorithms re-use rollouts
+many successful Monte-Carlo tree search algorithms reuse rollouts
 generated at earlier search states, if the sample traverses the
 current search state during the rollout; thus, the value of information of a rollout is
 determined not just by the influence on the choice of the action at
 the current state, but also by its potential influence on the choice at future
 search states.
 
-One way to account for this re-use would be to incorporate the
+One way to account for this reuse would be to incorporate the
 `future' value of information into a VOI estimate. However, this 
-approach requires a non-trivial extension of the theory of meta-reasoning for search.
-Alternately, one can behave myopically w.r.t. search tree depth:
+approach requires a nontrivial extension of the theory of metareasoning for search.
+Alternately, one can behave myopically with respect to the search tree depth:
 \begin{enumerate}
-\item estimate VOI as though the information is discarded after each step;
-\item stop early if the VOI is below a certain threshold
-   (see Section~\ref{sec:control-stopping-criterion});
-\item save the unused sample budget for search in future states, such that
+\item Estimate VOI as though the information is discarded after each step,
+\item Stop early if the VOI is below a certain threshold
+   (see \secref{sec:control-stopping-criterion}), and
+\item Save the unused sample budget for search in future states, such that
    if the nominal budget is $N$, and the unused budget in the last state
    is $N_u$, the search budget in the next state will be $N+N_u$.
 \end{enumerate}
 In this approach, the cost of a sample in the current state is the
 VOI of increasing the budget of a future state by one sample.  It is
-unclear whether this cost can be accurately estimated, but supposedly
+unclear whether this cost can be accurately estimated, but supposing
 a fixed value for a given problem type and algorithm implementation
-would work. Indeed, the empirical evaluation (Section~\ref{sec:emp-go})
+would work. Indeed, the empirical evaluation (\secref{sec:emp-go})
 confirms that stopping and sample redistribution based on a learned
 fixed cost  substantially improve the performance of the VOI-based
 sampling policy in game tree search.
 
 
-\subsubsection{Playing Go against UCT}
+\subsection{Playing Go against UCT}
 \label{sec:emp-go}
 
-The hybrid policies were compared on Computer Go, a search domain
+The hybrid policies were compared on the game Go, a search domain
 in which UCT-based MCTS has been particularly successful
 \citep{Gelly.mogo}. A modified version of Pachi \citep{Braudis.pachi}, a state of the art
 Go program, was used for the experiments:
@@ -448,14 +437,14 @@ Go program, was used for the experiments:
   modified and based solely on the sample cost, specified as
   a constant parameter. The heuristic stopping criterion for the
   original UCT policy was left unchanged.
-\item The time-allocation mode based on the fixed number of samples
+\item The time-allocation model based on the fixed number of samples
   was modified for \textit{both the original UCT policy and the VOI-aware
   policies} such that 
   \begin{itemize}
-    \item the same number of samples is available to
+    \item The same number of samples is available to
       the agent at each step, independently of the number of pre-simulated
       games;  
-    \item if samples were unused at the current step,
+    \item If samples were unused at the current step,
       they become available at the next step. 
   \end{itemize}
 \end{itemize}
@@ -466,42 +455,46 @@ the experiment.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.6]{uctvoi.pdf}
-\caption{Go: winning rate vs. $c$}
+\caption{Winning rate of the VOI-aware policy in Go as a function of the cost $c$, for varying numbers of samples per ply.}
 \label{fig:uctvoi}
 \end{figure}
 The engines were compared on the 9x9 board, for 5000, 7000, 1000, and
-15000 samples (game simulations) per ply, each experiment was repeated
-1000 times. Figure~\ref{fig:uctvoi} depicts a calibration experiment,
-showing the winning rate of the VOI-aware policy against UCT
-vs. the stopping threshold $c$ (if the maximum VOI of a sample is below
+15000 samples (game simulations) per ply, each experiment repeated
+1000 times. \figref{fig:uctvoi} depicts a calibration experiment,
+showing the winning rate of the VOI-aware policy against UCT as a function of
+the stopping threshold $c$ (if the maximum VOI of a sample is below
 the threshold, the simulation is stopped, and a move is chosen). Each
 curve in the figure corresponds to a certain number of samples per
-ply. For the stopping threshold of $10^{-6}$, the VOI-aware policy
-is almost always better than UCT, and  reaches the winning rate of
+ply.  For the stopping threshold of $10^{-6}$, the VOI-aware policy
+is almost always better than UCT, and reaches the winning rate of
 64\% for 10000 samples per ply.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.6]{voi-wins.pdf}
-\caption{Go: winning rate for $c=10^{-6}$}
+\caption{Winning rate of the VOI-aware policy in Go as a function of the number of samples, fixing cost $c=10^{-6}$.}
 \label{fig:voi-wins}
 \end{figure}
 
-Figure~\ref{fig:voi-wins}
-shows the winning rate of VOI against UCT vs. the number of
-samples for $c=10^{-6}$. In agreement with the intuition
-(Section~\ref{sec:control-redistribution}), VOI-based stopping and
+\figref{fig:voi-wins}
+shows the winning rate of VOI against UCT $c=10^{-6}$. In agreement with the intuition
+(\figref{sec:control-redistribution}), VOI-based stopping and
 sample redistribution is most influential for intermediate numbers of
 samples per ply. When the maximum number of samples is too low, early
 stopping would result in poorly selected moves. On the other hand,
 when the maximum number of samples is sufficiently high, the VOI of
 increasing the maximum number of samples in a future state is low.
 
-Note that if we disallowed re-use of samples in both Pachi and
+Note that if we disallowed reuse of samples in both Pachi and
 in our VOI-based scheme, the VOI based-scheme
-win rate is even higher than shown in Figure \ref{fig:voi-wins}. This is as expected,
+win rate is even higher than shown in \figref{fig:voi-wins}. This is as expected,
 as this setting (which is somewhat unfair to Pachi) is closer to
 meeting the assumptions underlying the selection MDP.
+
+
+
+\input{conclusion}
+
 
 \bibliographystyle{abbrvnat}
 \bibliography{refs}

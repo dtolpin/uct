@@ -6,40 +6,33 @@ realistic instances, exact solution is intractable and approximate
 methods are sought. Perhaps the most popular approach is to simulate
 a limited number of possible future action sequences, 
 in order to find a move in the current state that is (hopefully)
-near-optimal. One of the most successful
-examples of this approach are sampling algorithms for
-playing the game of Go \citep{Gelly.mogo} based on the upper-confidence bound (UCB)
-method \citep{Kocsis+Szepesvari:2006}. This paper examines the issue of sampling for move selection from
-first principles, by defining an appropriate meta-level MDP and formally
-analyzing some of its properties. Although
-the meta-level MDP is also intractable, approximation schemes based on
-provable value of information bounds for this problem are presented. 
-These lead to practical sampling schemes that
-are promising: they out-perform the UCB-based schemes,
-as indicated by empirical results on both ``flat'' selection and
-game-playing in Go.
+near-optimal. In this paper, we develop a theoretical framework to examine the problem of selecting
+{\em which} future sequences to simulate.
+We derive a number of new results concerning optimal policies for this selection problem
+as well as new heuristic policies for controlling Monte Carlo simulations.
+As described below, these policies outperform previously published methods for
+``flat'' selection and game-playing in Go.
 
-As selection is extremely general \citep{TolpinShimony:2012}, we focus on the adversarial
-game-playing domain as an example for clarity.
-A typical game-playing algorithm explores a tree or graph of action sequences
-with some limit on depth, using pruning methods to avoid irrelevant
-subtrees; based on what it finds in the explored portion of the state space, the algorithm
-then selects a move. This exploration is repeated after observing the move
-made by the opponent (whether or not information from previous explorations
-is reused is discussed in Section \ref{sec:control-redistribution}).
-
-Clearly, it is desirable to select the best possible move using the
-least possible amount of exploration. For a given amount of
-exploration, decision quality can be improved by directing exploration
-towards those actions sequences whose outcomes are helpful in selecting
-a good move. Thus, the {\em metalevel} decision problem is to choose
-what future action sequences to explore (or, more generally, what
-deliberative computations to do), while the {\em object-level}
-decision problem is to choose an action to execute in the real world.
+The basic ideas behind our approach are best explained in a familiar
+context such as game playing.  A typical game-playing algorithm
+chooses a move by first exploring a tree or graph of move sequences
+and then selecting the most promising move based on this exploration.
+Classical algorithms typically explore in a fixed order, imposing a
+limit on exploration depth and using pruning methods to avoid
+irrelevant subtrees; they may also reuse some previous computations
+(see Section \ref{sec:control-redistribution}).  Exploring unpromising
+or highly predictable paths to great depth is often wasteful; for a
+given amount of exploration, decision quality can be improved by
+directing exploration towards those actions sequences whose outcomes
+are helpful in selecting a good move. Thus, the {\em metalevel}
+decision problem is to choose what future action sequences to explore
+(or, more generally, what deliberative computations to do), while the
+{\em object-level} decision problem is to choose an action to execute
+in the real world.
 
 That the metalevel decision problem can itself be formulated and
 solved decision-theoretically was noted by \citet{Matheson:1968},
-borrowing directly from the related concept of {\em information value
+borrowing from the related concept of {\em information value
   theory}~\citep{Howard:1966}. In essence, computations can be
 selected according to the expected improvement in decision quality
 resulting from their execution. I. J.~\citet{Good:1968} independently
@@ -59,24 +52,26 @@ An independent thread of research on metalevel control began with work
 by \citet{Kocsis+Szepesvari:2006} on the UCT algorithm, which operates
 in the context of {\em Monte Carlo tree search} (MCTS) algorithms.
 In MCTS, each computation takes the form
-of a simulating a randomized sequence of actions leading from a leaf of the
+of a simulation of a randomized sequence of actions leading from a leaf of the
 current tree to a terminal state. UCT is primarily a method for
 selecting a leaf from which to conduct the next simulation, and
 forms the core of the successful \textsc{MoGo} algorithm for Go 
 playing \citep{Gelly+Silver:2011}.  The UCT algorithm is
-based on the the theory of bandit problems \citep{Berry+Fristedt:1985} and the near-optimal
+based on the the theory of bandit problems \citep{Berry+Fristedt:1985} and the asymptotically near-optimal
 UCB1 bandit algorithm \citep{Auer+et+al:2002}. UCT applies
 UCB1 recursively to select actions to perform within simulations.
 
 It is natural to consider whether the two independent threads are
-consistent; for example, are bandit algorithms such as UCB1 approximate
-solutions to some particular case of the metalevel decision problem
-defined by Russell and Wefald? The answer, perhaps surprisingly, is no.
-The essential difference is that, in bandit problems, every trial involves
-executing a real object-level action with real costs, whereas in the metareasoning
-problem the trials are {\em simulations} whose cost is usually independent of the
-utility of the action being simulated. 
-Hence, in UCT, bandit algorithms are applied to problems that are not bandit problems.
+consistent; for example, are bandit algorithms such as UCB1
+approximate solutions to some particular case of the metalevel
+decision problem defined by Russell and Wefald? The answer, perhaps
+surprisingly, is no.  The essential difference is that, in bandit
+problems, every trial involves executing a real object-level action
+with real costs, whereas in the metareasoning problem the trials are
+{\em simulations} whose cost is usually independent of the utility of
+the action being simulated.  Hence, as \citet{Audibert+al:2010}
+and \citet{Bubeck+al:2011} have also noted, UCT applies bandit
+algorithms to problems that are not bandit problems.
 
 One consequence of the mismatch is that bandit policies are
 inappropriately biased away from exploring actions whose current
@@ -91,18 +86,20 @@ obtained within the bandit framework.  For Monte Carlo computations,
 in which samples are gathered to estimate the utilities of actions,
 the metalevel decision problem is an instance of the {\em selection
 problem} studied in statistics~\citep{Bechhofer:1954,Swisher+et+al:2003}.  Despite
-recent work by \citet{Frazier+Powell:2010} and \citet{TolpinShimony:2012}, the theory of selection
+some recent work \citep{Frazier+Powell:2010,TolpinShimony:2012}, the theory of selection
 problems is less well understood than that of bandit problems.
+Most work has focused on the probability of selection error rather than
+optimal policies~\citep{Bubeck+al:2011}.
 Accordingly, we present in \secrefs{sec:optimal}{sec:context}
 a number of results concerning optimal policies for the general case
-and for specific sampling distributions. In particular, we give finite
+as well as specific finite
 bounds on the number of samples collected by optimal policies for
-Bernoulli and Gaussian distributions. We also provide a simple
+Bernoulli arms with beta priors. We also provide a simple
 counterexample to the intuitive conjecture that an optimal policy
 should not spend more on deciding than the decision is worth; in fact,
 it is possible for an optimal policy to compute forever. We also show
-by a simple counterexample that optimal {\em index
-policies}~\citep{Gittins:1989} do not necessarily exist for selection
+by counterexample that optimal {\em index
+policies}~\citep{Gittins:1989} may not exist for selection
 problems.
 
 Motivated by this theoretical analysis, we propose in \secrefs{approx-bayesian-section}{approx-nonbayesian-section}
@@ -112,3 +109,5 @@ We show empirically that these rules give better performance than UCB1 on
 a wide range of standard (non-sequential) selection problems.
 \secref{mcts-section} shows similar results for the case of guiding Monte Carlo tree search
 in the game of Go.
+
+(Proofs omitted due to space constraints can be found in the supplementary material.)

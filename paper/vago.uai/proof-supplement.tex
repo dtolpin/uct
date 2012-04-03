@@ -1,0 +1,454 @@
+\documentclass[]{article}
+\usepackage{proceed2e}
+\usepackage{enumerate}
+\usepackage{algpseudocode}
+\usepackage[ruled]{algorithm}
+\usepackage{url}
+\usepackage{framed}
+\usepackage{amsfonts,amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+\usepackage[round]{natbib}
+\usepackage{comment}
+
+\def\citeapos#1{\citeauthor{#1}'s (\citeyear{#1})}
+
+\newcommand {\mean} {\ensuremath {\mathop{\mathrm{mean}}}}
+\newcommand {\median} {\ensuremath {\mathop{\mathrm{median}}}}
+\newcommand {\N} {\ensuremath {\mathcal{N}}}
+\newcommand {\IE} {\ensuremath {\mathbb{E}}}
+\newcommand {\cov} {\ensuremath {\mathop{\mathrm{cov}}}}
+\newcommand {\BEL} {\ensuremath {\mathop{\mathrm{BEL}}}}
+
+\newcommand {\term}[1] {\textbf{#1}}
+\newcommand {\note}[1] {\textcolor{red}{[[#1]]}}
+\newcommand {\Evidence} {\mathcal{E}}
+\newcommand {\R} {\mathbb{R}}
+\newcommand {\maps} {\colon}
+\newcommand {\given} {\mid} %{\mathrel{|}}
+\newcommand {\sample} {\sim}
+\newcommand {\iid} {\stackrel{\rm iid}{\sample}}
+\newcommand {\Nat} {\mathbb{N}}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{dfn}[thm]{Definition}
+\newtheorem{lmm}[thm]{Lemma}
+\newtheorem{crl}[thm]{Corollary}
+\newtheorem{example}{Example}
+
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\secrefs}[2]{Sections~\ref{#1} and~\ref{#2}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\renewcommand{\eqref}[1]{Equation~(\ref{#1})}
+\newcommand{\eqrefs}[2]{Equations~(\ref{#1}) and~(\ref{#2})}
+\newcommand{\thmref}[1]{Theorem~\ref{#1}}
+\newcommand{\dfnref}[1]{Definition~\ref{#1}}
+\newcommand{\exampleref}[1]{Example~\ref{#1}}
+
+\includecomment{hiddenproof}
+
+\title{Selecting Computations: Supplemental proofs} 
+
+\author{}
+%\author{ {\bf Nicholas Hay} and {\bf Stuart Russell} \\   
+%Computer Science Division \\  
+%University of California\\ 
+%Berkeley, CA 94720 \\ 
+%\And 
+%{\bf Solomon Eyal Shimony} and {\bf David Tolpin}  \\ 
+%Department of Computer Science \\ 
+%Ben-Gurion University of the Negev\\
+%Beer Sheva, Israel
+%} 
+
+\begin{document}
+	
+\maketitle
+
+Included here are all the proofs of the results in the paper.
+Definitions are included to maintain theorem numbering.
+
+	\begin{dfn} \label{dfn:metalevel-model}
+		A \term{metalevel probability model} is a tuple $(U_1,\dots,U_k,\Evidence)$ 
+		consisting of jointly distributed random variables:
+		\begin{itemize}
+			\item Real random variables $U_1,\dots,U_k$, where $U_i$ is the utility of arm~$i$, and
+			\item A countable set $\Evidence$ of random variables, each variable $E\in\Evidence$ being 
+			      a computation that can be performed and whose value is the result of that computation.
+		\end{itemize}
+	\end{dfn}
+
+	\begin{dfn}
+	A (countable state, undiscounted) \term{Markov Decision Process} (MDP) is a tuple $M=(S,s_0,A_s,T,R)$ where:
+		$S$ is a countable set of states,
+		$s_0\in S$ is the fixed initial state,
+		$A_s$ is a countable set of actions available in state $s\in S$,
+		$T(s,a,s')$ is the transition probability from $s\in S$ to $s'\in S$ after performing action $a\in A_s$,
+		and $R(s,a,s')$ is the expected reward received on such a transition.
+	\end{dfn}
+
+	\begin{dfn}\label{dfn:metalevel-mdp}
+		Given a metalevel probability model%
+			\footnote{Definition~\ref{dfn:metalevel-model} made no assumption about the computational result
+				variables $E_i\in\Evidence$, but for simplicity in the following we'll assume that
+				each $E_i$ takes one of a countable set of values.  Without loss of generality, 
+				we'll further assume the domains of the computational variables $E\in\Evidence$ are disjoint.}
+		$(U_1,\dots,U_k,\Evidence)$ and
+		a cost of computation $c>0$, a corresponding \term{metalevel decision problem}
+		is any MDP $M=(S,s_0,A_s,T,R)$ such that
+		\begin{align*}
+			S &= \{\bot\}\cup\{\langle e_1\dots, e_n \rangle : e_i\in E_i \text{ for all $i$,} \\
+									& \qquad\qquad \text{for finite $n\ge0$ and distinct $E_i\in\Evidence$}\} \\
+			s_0 &= \langle \rangle \\
+			A_s &= \{\bot\}\cup\Evidence_s \\
+		%
+		\intertext{where $\bot\in S$ is the unique terminal state,
+		where $\Evidence_s\subseteq\Evidence$ is a state-dependent subset of allowed computations,
+		and when given any $s=\langle e_1, \dots, e_n \rangle\in S$,
+		computational action $E\in\Evidence$, 
+		and $s'= \langle e_1, \dots, e_n, e \rangle\in S$ where $e\in E$, we have:}
+		%
+			T(s,E,s') &= P(E=e \given E_1=e_1,\dots,E_n=e_n) \\
+			T(s,\bot,\bot) &= 1 \\
+			R(s,E,s') &= -c \\
+			R(s,\bot,\bot) &= \max_i \mu_i(s) % \max_i \IE[U_i \given E_1=e_1,\dots,E_n=e_n]
+		\end{align*}		
+		where $\mu_i(s) = \IE[U_i \given E_1=e_1,\dots,E_n=e_n]$.
+	\end{dfn}
+
+	\begin{equation}
+		V^\pi_M(s) = \IE^\pi_M\left[ \sum_{i=0}^N R(S_i,\pi(S_i),S_{i+1}) \given S_0 = s\right]	\label{eq:value-fn}\\		
+	\end{equation}
+
+
+	\begin{thm}\label{thm:value-of-computation}
+		The value function of a metalevel decision process $M=(S,s_0,A_s,T,R)$ is of the form
+		\[
+			V^\pi_M(s) = \IE^\pi_M[ -c\,N + \max_i \mu_i(S_N) \given S_0=s]
+		\]
+		where $N$ denotes the (random) total number of computations performed;
+		similarly for $Q^\pi_M(s,a)$.
+	\end{thm}
+
+	\begin{proof}
+		Follows immediately from \eqref{eq:value-fn} and the definition of the
+		reward function in \dfnref{dfn:metalevel-mdp}.
+	\end{proof}
+
+	\begin{thm}\label{thm:bounded-expected-computations}
+		The optimal policy's expected number of computations is bounded by the 
+		value of perfect information  times the inverse cost $1/c$:
+		\[
+			\IE^{\pi^*}[N\given S_0=s] \le \frac{1}{c} \left(\IE[\max_i U_i\given S_0=s] - \max_i \mu_i(s)\right).
+		\]
+		Further, any policy $\pi$ with infinite expected number of computations 
+		%% $\IE^\pi[N]=\infty$
+		has negative infinite value, hence the optimal
+		policy stops with probability one.
+	\end{thm}
+
+	\begin{proof}
+		The first follows as in state $s$ the optimal policy has value at least that
+		of stopping immediately ($\max_i \mu_i(s)$), and as $\IE \max_i\mu_i(S_N) \le \IE \max_i U_i$ by Jensen's inequality.
+		The second from \thmref{thm:value-of-computation}.
+	\end{proof}
+
+
+	\begin{dfn}\label{dfn:myopic}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$,
+		the \term{myopic policy} $\pi^m(s)$ is defined to equal $\argmax_{a\in A_s} Q^m(s,a)$ 
+		where $Q^m(s,\bot) = \max_i \mu_i(s)$ and
+		\begin{equation*}%% \label{eq:myopic}
+			 Q^m(s,E) = \IE_M[ -c + \max_i \mu_i(S_1) \given S_0 = s, A_0 = E].		
+		\end{equation*}
+	\end{dfn}
+
+
+	\begin{thm}\label{thm:optimal-myopic}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$
+		if the myopic policy performs some computation in state $s\in S$,
+		then the optimal policy does too, i.e., if $\pi^m(s)\neq\bot$ then $\pi^*(s)\neq\bot$.
+	\end{thm}
+
+	\begin{hiddenproof}
+		\begin{proof}
+			Observe that the myopic Q-function \eqref{dfn:myopic} is equivalently given by
+			\[
+				Q^m(s,a) = Q^\bot(s,a)
+			\]
+			where $\bot$ is the policy which immediately stops $\bot(s)=\bot$.
+			Thus $Q^m(s,a) \le Q^*(s,a)$.  If the optimal policy stops in a state $s\in S$ then
+			\[
+				Q^{\pi^*}(s,a) \le \max_i \mu_i(s),
+			\]
+			and so the same holds for $Q^m$, showing the myopic stops.
+		\end{proof}
+	\end{hiddenproof}
+
+
+	\begin{dfn}\label{dfn:closed}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$,
+		a subset $S'\subseteq S$ of states is \term{closed under transitions}
+		if whenever $s'\in S'$, $a\in A_{s'}$, $s''\in S$, and $T(s',a,s'')>0$,
+		we have $s''\in S'$.
+	\end{dfn}
+
+	\begin{thm}\label{thm:myopic-optimal}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$
+		and a subset $S'\subseteq S$ of states closed under transitions,	
+		if the myopic policy stops in all states $s'\in S'$
+		then the optimal policy does too.	
+	\end{thm}
+
+	\begin{hiddenproof}
+		\begin{proof}
+		Take any $s^*\in S'$, and note that all states the chain can transition
+		to from $s^*$ are also in $S'$, by transition closure.  Defining $m(s) = \max_i\mu_i(s)$, 
+		observe the myopic stopping for all such states implies that
+		\begin{align*}
+			\IE^{\pi}[(m(S_{j+1}) - c)\, 1(j<N)\given S_0=s^*] \\
+			\le \IE^{\pi}[m(S_{j})\, 1(j<N)\given S_0=s^*]
+		\end{align*}
+		holds for all $j$, and as a result:
+		\begin{align*}
+			V^\pi(s) 
+			&= \IE^{\pi}[ - c N + m(S_N) \given S_0=s^*] \\
+			&= \IE^{\pi}[m(S_0) + \sum_{j=0}^{N-1} (m(S_{j+1}) - c - m(S_j)) \given S_0=s^*] \\
+		%%	&\le \IE^{\pi}[m(S_0) + \sum_{j=0}^{N-1} 0 |S_0=s] \\		
+			&\le \max_i\mu_i(s^*) \qedhere
+		\end{align*}
+		\end{proof}	
+	\end{hiddenproof}
+
+	\begin{thm}\label{thm:one-action-bound}
+		The one-armed Bernoulli decision process with constant arm $\lambda\in[0,1]$ 
+		performs at most $\lambda(1-\lambda)/c-3 \le 1/4c-3$ computations.
+	\end{thm}
+   
+	\begin{hiddenproof}
+		\begin{proof}
+			By \dfnref{dfn:myopic} and \exampleref{example:bernoulli2}, the myopic policy stops in
+			a state $(s,f)$ when
+			\begin{align}
+				c \ge &\mu\max(\mu^+,m) + (1-\mu_i)\max(\mu^-, m) - \max(\mu,m) \label{eq:stopping}
+			\end{align}
+			where $\mu=(s+1)/(n+2)$  is the mean utility for arm~2, where $n=s+f$,
+			$\mu^- = \mu - \mu/(n+3)$, and $\mu^+ = \mu + (1-\mu)/(n+3)$
+			are the posterior means of arm~2 after simulating a failure and a success,
+			%% and $\mu^-_i=(s_i+1)/(s_i+f_i+3) $ and $\mu^+_i = (s_i+2)/(s_i+f_i+3)$
+			%% are the posterior means of action $i$ after simulating a failure and a success,
+			respectively.  Whenever \eqref{eq:stopping} holds, stopping is preferred to sampling.
+
+			Fixing $n$ and maximizing over $\mu$, we get sufficient condition for stopping
+			\begin{equation}
+				c \ge \frac{\lambda(1-\lambda)}{(n+3)} \qquad\qquad   n\ge \frac{\lambda(1-\lambda)}{c} - 3  \label{eq:myopic-stopping}
+			\end{equation}
+			Since the set of states satisfying \eqref{eq:myopic-stopping} is closed under
+			transitions ($n$ only increases), by \thmref{thm:optimal-myopic}.  Finally, note $\max_{\lambda\in[0,1]} \lambda(1-\lambda)=1/4$.
+		\end{proof}	
+	\end{hiddenproof}
+	
+	\begin{dfn}\label{dfn:context}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, and a constant $\lambda\in\R$,
+		define $M_\lambda = (S,s_0,A_s,T,R_\lambda)$ to be $M$ with an additional action of known 
+		value $\lambda$, defined by:
+		\begin{align*}
+			R_\lambda(s,E,s')      &= R(s,E,s') \\
+			R_\lambda(s,\bot,\bot) &= \max\{\lambda, R(s,\bot,\bot)\}
+		\end{align*}
+	\end{dfn}
+
+	\begin{thm}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, 
+		there exists a real interval $I(s)$ for every state $s\in S$ such that
+		it is optimal to stop in state $s$ in $M_\mu$ iff $\mu\notin I(s)$.
+		Furthermore, $I(s)$ contains $\max_i\mu_i(s)$ whenever it is nonempty.
+	\end{thm}
+
+	\begin{hiddenproof}
+		\begin{proof}
+		With $m(s) = \max_i\mu_i(s)$, the utility of a policy $\pi$ starting in state $s$ of $M_\mu$ is
+		\[
+			V^\pi_{M_\mu}(s) = \IE_{\pi}[-c\,N + \max(\mu,m(S_N)) \given S_0=s]
+		\]
+		and the utility of stopping in this state $\max(\mu,m(s_0))$.
+		We wish to show that the set of $\mu$ such that
+		\[
+			\max_\pi \IE_{\pi}[-c\,N + \max(\mu,m(S_N)) - \max(\mu,m(S_0)) \given S_0=s] \le 0
+		\]
+		forms an interval.  
+
+		Observe that for any random variable $X$, 
+			$\IE[\max(\mu,X)]$ is monotonically increasing in $\mu$ with subderivative between zero and one.
+		As a result, for any $v_1$
+			$\IE[\max(\mu,X)] - \max(\mu,v_1)$ 
+			is monotonically increasing for $\mu<v$, 
+			and monotonically decreasing thereafter.
+		Therefore, the set if $\mu$ such that this expression is at most $v_2$ forms an interval, containing $v_1$ if non-empty.
+
+		Applying this with $v_1 = m(s_0)$ and $v_2=\IE_{\pi}[c\,N]$, and observing that the union of intervals containing
+		a point is an interval containing that point, gives the result.
+		\end{proof}	
+	\end{hiddenproof}
+
+
+	\begin{dfn}\label{dfn:independent-actions}
+		A metalevel probability model $\mathcal{M}=(U_1,\dots,U_k,\Evidence)$ 
+		has \term{independent actions} if the computational variables can be partitioned 
+		$\Evidence = \Evidence_1\cup\dots\cup\Evidence_k$ such that
+		the sets $\{U_i\}\cup\Evidence_i$ are independent of each other for different $i$.	
+	\end{dfn}
+
+	\begin{dfn}\label{dfn:blinkered}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$ with independent actions,
+		the \term{blinkered policy} $\pi^b$ is defined by $\pi^b(s) = \argmax_{a\in A_s} Q^b(s,a)$ where
+		$Q^b(s,\bot) = \bot$ and
+		\begin{equation}\label{eq:blinkered}
+			Q^b(s,E_i) = \sup_{\pi\in\Pi^b_i} Q^\pi(s,E_i)
+		\end{equation}
+		for $E_i\in\Evidence_i$, where $\Pi^b_i$ is the set of policies $\pi$ where $\pi(s)\in\Evidence_i$ for all $s\in S$.
+	\end{dfn}
+
+	\begin{dfn}\label{dfn:one-action}
+		Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$ with independent actions,
+		a \term{one-action metalevel decision problem} for $i=1,\dots,k$ is the metalevel decision
+		problem $M^1_{i,m} = (S_i,s_0,A_{s0},T_i,R_i)$ defined by the metalevel probability
+		model $(U_0,U_i,\Evidence_i)$ with $U_0=m$.
+	\end{dfn}
+
+
+	\begin{thm}\label{thm:blinkered}
+	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$ with independent actions,
+	let $M^1_{i,\lambda_i}$ be the $i$th one-action metalevel decision problem for $i=1,\dots,k$.
+	Then for any $s\in S$, whenever $E_i\in A_s\cap\Evidence_i$ we have:
+	\[
+		Q^b_M(s,E_i) = Q^*_{M^1_{i,\mu^*_{-i}}}(s_i, E_i)
+	\]
+	where $\mu^*_{-i} = \max_{j\neq i} \mu_j(s)$.
+	\end{thm}
+
+	\begin{hiddenproof}
+		\begin{proof}
+		Fix a state $s$, a $E_i\in A_s$ and take any $\pi\in\Pi^b_i$.  Note that such policies
+		are equivalent to polices $\pi'$ on $M^1_{1,m}$, and all such policies are represented.
+		Consider $Q^\pi(s,E_i)$.  As $\pi(s)\in\Evidence_i$ for all $s\in S$, by action independence $\mu_j(S_n) = \mu_j(s)$.
+		By this and \thmref{thm:value-of-computation}, then,
+		\[
+			Q^\pi_M(s,E_i) = \IE^\pi_M[ -c\,N + \max(\mu_i(S_N), m_i) \given S_0=s, A_0=E_i].
+		\]
+		Noting that $\mu_i(S_N)$ is a function only of $(S_N)_i$, and that since 
+		But then this is exactly $Q^*_{M^1_{i,\mu^*_{-i}}}(s_i, E_i)$.  Taking the supremum
+		over $\pi$ gives the result.
+		\end{proof}	
+	\end{hiddenproof}
+
+
+
+
+
+\begin{thm} $\Lambda_i^b$ is bounded from above as
+\begin{align}
+\label{eqn:thm-be}
+  \Lambda_\alpha^b&\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\le\overline X_\beta^{n_\beta})\nonumber\\
+\Lambda_{i|i\ne\alpha}^b&\le \frac {N(1-\overline X_\alpha^{n_\alpha})} {n_i}\Pr(\overline   X_i^{{n_i}+N}\ge\overline X_\alpha^{n_\alpha})
+\end{align}
+\label{thm:be}
+\end{thm}
+	\vspace{-2em}
+	\begin{proof} For the case $i\ne \alpha$, the probability that the
+	  $i$th arm is finally chosen instead of $\alpha$ is
+	  $\Pr(\overline X_i^{n_i+N} \ge \overline X_\alpha^{n_\alpha})$. $X_i \le 1$,
+	  therefore $\overline X_i^{n_i+N}\le \overline
+	  X_\alpha^{n_\alpha}+\frac {N(1-\overline X_\alpha^{n_\alpha})} {N+n_i}$. Hence, the intrinsic value of blinkered
+	  information is at most: 
+	\begin{align}
+	\label{eq:simplistic}
+	\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
+	  {N+n_i}&\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})\nonumber \\
+	&\le\frac{ N(1-\overline  X_\alpha^{n_\alpha})}
+	{n_i}\Pr(\overline X_i^{{n_i}+N}\hspace{-0.5em}\ge\overline X_\alpha^{n_\alpha})
+	\end{align}
+	  Proof for the case $i=\alpha$ is similar.
+	\end{proof}	
+
+
+\begin{thm} The probabilities in \eqref{eqn:thm-be} are bounded from above as
+\begin{align}
+  \label{eqn:probound-blnk-hoeffding}
+  \Pr&(\overline X_\alpha^{{n_\alpha}+N} \le \overline X_\beta^{n_\beta})
+  \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} - \overline X_\beta^{n_\beta})^2 n_\alpha
+  \right)\nonumber\\
+  \Pr&(\overline X_{i|i\ne\alpha}^{n_\alpha+N} \ge \overline X_\beta^{n_\beta})
+  \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} -\overline  X_i^{n_i})^2 n_i \right)
+\end{align}
+where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 1)^2 > 1.37$.
+\label{thm:hoeffding-prob-bounds}
+\end{thm}
+
+
+\begin{hiddenproof}
+	\begin{proof}
+	\eqref{eqn:probound-blnk-hoeffding}) follow from the
+	observation that if $i\ne\alpha$, $\overline X_i^{n_i+N}>\overline X_\alpha^{n_i}$
+	if and only if the mean $\overline X_i^N$ of $N$ samples from $n_i+1$
+	to $n_i+N$ is at least $\overline X_\alpha^{n_i}+(\overline X_\alpha^{n_i}-\overline
+	X_i^{n_i})\frac {n_i} N$.
+
+	For any $\delta$, the probability that $\overline X_i^{n_i+N}$ is greater
+	than $\overline X_\alpha^{n_i}$ is less than the probability that
+	$\IE[X_i]\ge\overline X_i^n+\delta$
+	\emph{or} $\overline X_i^N\ge \IE[X_i]+\overline X_\alpha^{n_\alpha}
+	- \overline X_i^{n_i} - \delta +(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})\frac {n_i} N$,
+	thus, by the union bound, less than the sum of the probabilities:
+	\begin{align}
+	\Pr&(\overline X_i^{n_i+N}\ge \overline X_\alpha^{n_i})\nonumber\\
+	   &\le\Pr(\IE[X_i]-\overline X_i^{n_i} \ge \delta)\\
+	   &\hspace{0.25em}+\Pr\left(\overline X_i^N\hspace{-0.5em} - \IE[X_i] \ge \overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+	           - \overline X_i^{n_i}\hspace{-0.5em} - \delta +(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})\frac {n_i} N\right)\nonumber
+	\end{align}
+	Bounding the probabilities on the right-hand side using the Hoeffding
+	inequality, obtain:
+	\begin{align}
+	\Pr&(\overline X_i^{n_i+N}\ge \overline X_\alpha^{n_\alpha})\le \nonumber\\
+	    &\exp(-2\delta^2n_i)+\nonumber\\
+	    &\quad\exp\left(-2\left((\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+	         - \overline X_i^{n_i})\left(1+\frac {n_i} N\right)
+	         - \delta\right)^2N\right)
+	\label{eqn:app-hoeffding-le-maxexp}
+	\end{align}
+	Find $\delta$ for which the two terms on the right-hand side of
+	\eqref{eqn:app-hoeffding-le-maxexp} are equal:
+	\begin{equation}
+	\exp(-\delta^2n) = \exp\left(-2\left((\overline X_\alpha - \overline X_i)(1+\frac {n_i} N) - \delta\right)^2N\right)\label{eqn:app-hoeffding-eq-exp}
+	\end{equation}
+	Solve \eqref{eqn:app-hoeffding-eq-exp} for $\delta$: $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+	- \overline X_i^{n_i}) \ge 2(\sqrt 2 - 1)(\overline X_\alpha^{n_\alpha}\hspace{-0.5em}-\overline X_i^{n_i})$. Substitute $\delta$ into 
+	\eqref{eqn:app-hoeffding-le-maxexp} and obtain
+	\begin{align}
+	\Pr&(\overline X_i^{n_i}\ge \overline X_\alpha^{n_\alpha}) \nonumber\\
+	& \le 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
+	                          (\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})\right)^2 n_i\right)\nonumber \\
+	& \le 2\exp(-8(\sqrt 2 - 1)^2(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})^2n_i)\nonumber\\
+	& = 2\exp(-\varphi(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})^2n_i)
+	\end{align}
+	Derivation for the case $i=\alpha$ is similar.
+	\end{proof}	
+\end{hiddenproof}
+
+\begin{crl}
+An upper bound on the VOI estimate $\Lambda_i^b$ is obtained
+by substituting \eqref{eqn:probound-blnk-hoeffding} into \eqref{eqn:thm-be}.
+\begin{align}
+  \label{eqn:bound-blnk-hoeffding}
+  \Lambda&_\alpha^b \le \hat\Lambda_\alpha^b=\frac {2N\overline X_\beta^{n_\beta}} {n_\alpha}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\nonumber\\
+  \Lambda&_{i|i\ne\alpha}^b\le \hat\Lambda_i^b=  \frac {2N(1-\overline  X_\alpha^{n_\alpha})} {n_i}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
+\end{align}
+\label{crl:bound-blnk-hoeffding}
+\end{crl}
+\vspace{-2em}
+
+
+
+\end{document}

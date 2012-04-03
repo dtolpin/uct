@@ -1,0 +1,46 @@
+\begin{proof}
+\eqref{eqn:probound-blnk-hoeffding}) follow from the
+observation that if $i\ne\alpha$, $\overline X_i^{n_i+N}>\overline X_\alpha^{n_i}$
+if and only if the mean $\overline X_i^N$ of $N$ samples from $n_i+1$
+to $n_i+N$ is at least $\overline X_\alpha^{n_i}+(\overline X_\alpha^{n_i}-\overline
+X_i^{n_i})\frac {n_i} N$.
+
+For any $\delta$, the probability that $\overline X_i^{n_i+N}$ is greater
+than $\overline X_\alpha^{n_i}$ is less than the probability that
+$\IE[X_i]\ge\overline X_i^n+\delta$
+\emph{or} $\overline X_i^N\ge \IE[X_i]+\overline X_\alpha^{n_\alpha}
+- \overline X_i^{n_i} - \delta +(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})\frac {n_i} N$,
+thus, by the union bound, less than the sum of the probabilities:
+\begin{align}
+\Pr&(\overline X_i^{n_i+N}\ge \overline X_\alpha^{n_i})\nonumber\\
+   &\le\Pr(\IE[X_i]-\overline X_i^{n_i} \ge \delta)\\
+   &\hspace{0.25em}+\Pr\left(\overline X_i^N\hspace{-0.5em} - \IE[X_i] \ge \overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+           - \overline X_i^{n_i}\hspace{-0.5em} - \delta +(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})\frac {n_i} N\right)\nonumber
+\end{align}
+Bounding the probabilities on the right-hand side using the Hoeffding
+inequality, obtain:
+\begin{align}
+\Pr&(\overline X_i^{n_i+N}\ge \overline X_\alpha^{n_\alpha})\le \nonumber\\
+    &\exp(-2\delta^2n_i)+\nonumber\\
+    &\quad\exp\left(-2\left((\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+         - \overline X_i^{n_i})\left(1+\frac {n_i} N\right)
+         - \delta\right)^2N\right)
+\label{eqn:app-hoeffding-le-maxexp}
+\end{align}
+Find $\delta$ for which the two terms on the right-hand side of
+\eqref{eqn:app-hoeffding-le-maxexp} are equal:
+\begin{equation}
+\exp(-\delta^2n) = \exp\left(-2\left((\overline X_\alpha - \overline X_i)(1+\frac {n_i} N) - \delta\right)^2N\right)\label{eqn:app-hoeffding-eq-exp}
+\end{equation}
+Solve \eqref{eqn:app-hoeffding-eq-exp} for $\delta$: $\delta=\frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}} (\overline X_\alpha^{n_\alpha}\hspace{-0.5em}
+- \overline X_i^{n_i}) \ge 2(\sqrt 2 - 1)(\overline X_\alpha^{n_\alpha}\hspace{-0.5em}-\overline X_i^{n_i})$. Substitute $\delta$ into
+\eqref{eqn:app-hoeffding-le-maxexp} and obtain
+\begin{align}
+\Pr&(\overline X_i^{n_i}\ge \overline X_\alpha^{n_\alpha}) \nonumber\\
+& \le 2\exp\left(-2\left( \frac {1+\frac {n_i} N} {1+\sqrt {\frac {n_i} N}}
+                          (\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})\right)^2 n_i\right)\nonumber \\
+& \le 2\exp(-8(\sqrt 2 - 1)^2(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})^2n_i)\nonumber\\
+& = 2\exp(-\varphi(\overline X_\alpha^{n_\alpha} - \overline X_i^{n_i})^2n_i)
+\end{align}
+Derivation for the case $i=\alpha$ is similar.
+\end{proof}

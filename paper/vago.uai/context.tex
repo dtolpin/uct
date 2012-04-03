@@ -14,43 +14,43 @@ even when the action's values are independent (this formalized later in \dfnref{
 
 \begin{example}[Non-indexability]
 Consider a metalevel probability model with three actions. 
-	$U_0=m$ has a known value (the context),
-	$U_1$ is equally likely to be -1.5 or 1.5 (low mean, high variance),
-	and $U_2$ is equally likely to be 0.25 or 1.75 (high mean, low variance).
-The two computations are to observe exactly $U_1$ and $U_2$, respectively, with a cost 0.2 of computation.
+	$U_1$ is equally likely to be $-1.5$ or $1.5$ (low mean, high variance),
+	$U_2$ is equally likely to be $0.25$ or $1.75$ (high mean, low variance),
+	and $U_3=\lambda$ has a known value (the context).
+The two computations are to observe exactly $U_1$ and $U_2$, respectively, each with cost $0.2$.
 The corresponding metalevel MDP has 9 states and can be solved exactly.
-\figref{fig:swap-counterex} plots $Q^*_m(s_0,U_i) - Q^*_m(s_0,\bot)$ as a function of the known value $m$.
-As the context $m$ varies the optimal action inverts from observing 1 to observing 2.
+\figref{fig:swap-counterex} plots $Q^*_\lambda(s_0,U_i) - Q^*_\lambda(s_0,\bot)$ as a function of the known value $\lambda$.
+As the context $\lambda$ varies the optimal action inverts from observing 1 to observing 2.
 Inversions like this are impossible for index policies.
 \end{example}
 
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.7, trim=90 70 400 300]{swap-counterex.pdf}
-\caption{Optimal Q-values as a function of the utility of the fixed alternative.  Note the inversion
-where for low $m$ observing action~$1$ is strictly optimal, while for medium $u$ observing action~$2$ is strictly optimal.}
+\caption{Optimal Q-values of computing relative to stopping as a function of the utility of the fixed alternative.  Note the inversion
+where for low $\lambda$ observing action~$1$ is strictly optimal, while for medium $\lambda$ observing action~$2$ is strictly optimal.}
 \label{fig:swap-counterex}
 \end{figure}
 
 \begin{comment}
-set samples 1000
+	set samples 1000
 
-max(x,y) = x>y ? x : y
-max3(x,y,z) = max(max(x,y),z)
+	max(x,y) = x>y ? x : y
+	max3(x,y,z) = max(max(x,y),z)
 
-q0(u) = max(1,u)
-qa(u) = 0.5*max3(u, 1.5, -0.2 + 0.5*max(u,1.5) + 0.5*max(u, 1.75)) + 0.5*max3(u, 1, -0.2 + 0.5*max(u,0.25) + 0.5*max(u, 1.75)) - 0.2
-qb(u) = 0.5*max3(u, 0.25, -0.2 + 0.5*max(u,1.5) + 0.5*max(u, 0.25)) + 0.5*max3(u, 1.75, -0.2 + 0.5*max(u,1.75) + 0.5*max(u, 1.75)) - 0.2
+	q0(u) = max(1,u)
+	qa(u) = 0.5*max3(u, 1.5, -0.2 + 0.5*max(u,1.5) + 0.5*max(u, 1.75)) + 0.5*max3(u, 1, -0.2 + 0.5*max(u,0.25) + 0.5*max(u, 1.75)) - 0.2
+	qb(u) = 0.5*max3(u, 0.25, -0.2 + 0.5*max(u,1.5) + 0.5*max(u, 0.25)) + 0.5*max3(u, 1.75, -0.2 + 0.5*max(u,1.75) + 0.5*max(u, 1.75)) - 0.2
 
-set terminal postscript enhanced linewidth 2
-set size 0.5,0.5
-set output "swap-counterex.ps"
-set xlabel "Utility of fixed alternative (m)"
-set ylabel "Utility relative to stopping"
-set xtics 0.5
-set ytics 0.1
-set key left top
-plot [u=-2:2] [-0.3:0.3] 0 title "stop" with lines lw 2, qa(u)-q0(u) title "observe 1" with lines lw 2, qb(u)-q0(u) title "observe 2" with lines lw 2	
+	set terminal postscript enhanced linewidth 2
+	set size 0.5,0.5
+	set output "swap-counterex.ps"
+	set xlabel "Utility of fixed alternative ({/Symbol l})"
+	set ylabel "Utility relative to stopping"
+	set xtics 0.5
+	set ytics 0.1
+	set key left top
+	plot [u=-2:2] [-0.3:0.3] 0 title "stop" with lines lw 2, qa(u)-q0(u) title "observe 1" with lines lw 2, qb(u)-q0(u) title "observe 2" with lines lw 2	
 \end{comment}
 
 
@@ -62,23 +62,25 @@ plot [u=-2:2] [-0.3:0.3] 0 title "stop" with lines lw 2, qa(u)-q0(u) title "obse
 There is, however, a restriction on what kind of influence the context can have:
 
 \begin{dfn}\label{dfn:context}
-	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, and a constant $\mu\in\R$,
-	define $M_\mu = (S,s_0,A_s,T,R_\mu)$ to be $M$ with an additional action of known 
-	value $\mu$, defined by:
+	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, and a constant $\lambda\in\R$,
+	define $M_\lambda = (S,s_0,A_s,T,R_\lambda)$ to be $M$ with an additional action of known 
+	value $\lambda$, defined by:
 	\begin{align*}
-		R_\mu(s,E,s')      &= R(s,E,s') \\
-		R_\mu(s,\bot,\bot) &= \max\{\mu, R(s,\bot,\bot)\}
+		R_\lambda(s,E,s')      &= R(s,E,s') \\
+		R_\lambda(s,\bot,\bot) &= \max\{\lambda, R(s,\bot,\bot)\}
 	\end{align*}
 \end{dfn}
 
+Note this is equivalent to adding an extra arm with constant value $U_{k+1}=\lambda$.
+
 \begin{thm}
 	Given a metalevel decision problem $M=(S,s_0,A_s,T,R)$, 
-	there exists a real interval $I(s)$ for every state $s\in I$ such that
+	there exists a real interval $I(s)$ for every state $s\in S$ such that
 	it is optimal to stop in state $s$ in $M_\mu$ iff $\mu\notin I(s)$.
 	Furthermore, $I(s)$ contains $\max_i\mu_i(s)$ whenever it is nonempty.
 \end{thm}
 
-\begin{comment}
+\begin{hiddenproof}
 	\begin{proof}
 	With $m(s) = \max_i\mu_i(s)$, the utility of a policy $\pi$ starting in state $s$ of $M_\mu$ is
 	\[
@@ -102,7 +104,7 @@ There is, however, a restriction on what kind of influence the context can have:
 	Applying this with $v_1 = m(s_0)$ and $v_2=\IE_{\pi}[c\,N]$, and observing that the union of intervals containing
 	a point is an interval containing that point, gives the result.
 	\end{proof}	
-\end{comment}
+\end{hiddenproof}
 
 %% \note{Example showing that choice between computations to perform 
 %% can vary arbitrarily many times?  Does one exist?}
