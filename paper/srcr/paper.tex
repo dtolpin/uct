@@ -69,7 +69,7 @@ both UCT and the other proposed algorithms.
 
 \section{Introduction}
 
-Monte-Carlo tree sampling, and especially a version based on the
+Monte-Carlo tree search, and especially a version based on the
 UCT formula \cite{Kocsis.uct} appears in numerous search applications,
 such as \cite{Eyerich.ctp}. Although these methods are shown to be successful empirically,
 most authors appear to be using the UCT formula ``because it has been shown
@@ -83,7 +83,7 @@ principles can result in schemes that outperform UCT.
 The core issue is that in adversarial search
 and search in ``games against nature'' --- optimizing behavior under
 uncertainty, the goal is typically to either find a good (or optimal)
-strategy, or even to find the best first action of such a policy. Once
+strategy, or even just to find the best first action of such a policy. Once
 such an action is discovered, it is usually not beneficial to further sample
 that action, ``exploitation'' is thus meaningless for search
 problems. Finding a good first action is closer to the pure
@@ -140,7 +140,7 @@ upper confidence bound $b_i$ on the reward:
 b_i=\overline X_i+\sqrt {\frac {c \log (n)} {n_i}}
 \label{eqn:ucb}
 \end{equation}
-where $\overline X_i$ is the average reward obtained from arm $i$,
+where $\overline X_i$ is the average sample reward obtained from arm $i$,
 $n_i$ is the number of times arm $i$ was pulled, and $n$ is the total
 number of pulls so far. \end{dfn} 
 
@@ -154,11 +154,11 @@ collect only the reward of the last pull.
 
 \begin{dfn}
 The \textbf{simple regret} $\IE r$ of a sampling policy for the Multi-armed Bandit
-Problem is the expected difference between the best expected reward
-$\mu_*$ and the expected reward $\mu_j$ of the empirically best arm
-$\overline X_j=\max_i\overline X_i$:
+Problem is the expected difference between the best true expected reward
+$\mu_*$ and the true expected reward $\mu_j$ of the empirically best arm
+$j =\arg \max_i\overline X_i$:
 \begin{equation}
-\IE r=\sum_{j=1}^K\Delta_j\Pr(\overline X_j=\max_i\overline X_i)
+\IE r=\sum_{j=1}^K\Delta_j\Pr(j=\arg\max_i\overline X_i)
 \label{eqn:simple-regret}
 \end{equation}
 where $\Delta_j=\mu_*-\mu_j$.
@@ -413,6 +413,7 @@ rollout (e.g. $\frac 1 2$-greedy+UCT).
     \State reward $\gets$ \Call{Reward}{node, action, next-node}
      \State \hspace{4em} + \Call{Rollout}{next-node, depth+1}
     \State \Call{UpdateStats}{node, action, reward}
+    \State \textbf{return} reward
   \EndIf
 \EndProcedure
 \end{algorithmic}
@@ -426,7 +427,7 @@ value of $c$ on the first step (simple regret) and a smaller
 value for the rest of the rollout (cumulative regret)
 \cite{Bubeck.pure} is resolved. In fact, a sampling scheme that uses
 UCB($c$) at all steps but a larger value of $c$ for the first step
-than for the rest of the steps, outperforms UCT. 
+than for the rest of the steps, should outperform UCT. 
 
 
 \subsection{VOI-aware Sampling}
@@ -498,18 +499,16 @@ sampling, to the expected reward of the best arm.
 
 Figure~\ref{fig:mab-simple-regret}.b shows the regret
 vs. the number of samples, averaged over $10000$ experiments for
-randomly generated instances of 32 arms. For smaller numbers of
-samples, $\frac 1 2$-greedy achieves the best
-performance; for larger numbers of samples, UCB$_{\sqrt{\cdot}}$
-outperforms $\frac 1 2$-greedy. A combination of $\frac 1
-2$-greedy  and UCB$_{\sqrt{\cdot}}$ dominates UCB over the
-whole range.
+randomly generated instances of 32 arms. Either $\frac 1
+2$-greedy  or UCB$_{\sqrt{\cdot}}$ dominate UCB over the
+whole range. For larger number of samples, the advantage
+of UCB$_{\sqrt{\cdot}}$ over $\frac 1 2$-greedy becomes more significant.
 
 \begin{figure}[h!]
   \begin{minipage}[c]{1.0\linewidth}
     \centering
     \includegraphics[scale=0.8]{onelevel-tree.pdf}\\
-    a. search tree
+    a. search tree, the best arm shaded
     \vspace{1em}
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
@@ -531,7 +530,9 @@ such as UCT. That is due to the switch nodes, each with 2 children with anti-sym
 values, which would cause a uniform sampling scheme to incorrectly give them all a value of 0.5.
 
 Simple regret vs. the number of samples are shown for trees with root degree 16
-(Figure~\ref{fig:mcts-regret}.b) and 64 (Figure~\ref{fig:mcts-regret}.c).
+(Figure~\ref{fig:mcts-regret}.b) and 64
+(Figure~\ref{fig:mcts-regret}.c). The exploration factor $c$ is set to
+$2$, the default value for rewards in the range $[0, 1]$.
 The algorithms exhibit a similar relative performance: either $\frac 1
 2$-greedy+UCT or UCB$_{\sqrt{\cdot}}$+UCT
 gives the lowest regret, UCB$_{\sqrt{\cdot}}$+UCT dominates UCT everywhere
@@ -542,7 +543,7 @@ except for small numbers of instances. The advantage of both $\frac 1
   \begin{minipage}[c]{1.0\linewidth}
     \centering
     \includegraphics[scale=0.7]{twolevel-tree.pdf}\\
-    a. search tree
+    a. search tree, the path to the best arm shaded
     \vspace{0.5em}
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
