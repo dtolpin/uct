@@ -393,9 +393,9 @@ then selects actions according to UCB, minimizing the cumulative regret (\textbf
 
 The pseudocode of this two-stage rollout for an undiscounted MDP is in
 Algorithm~\ref{alg:two-stage-mcts}: \textsc{FirstAction} selects the first
-step of a layout (line~\ref{alg:srcr-first-action}), and
+step of a rollout (line~\ref{alg:srcr-first-action}), and
 \textsc{NextAction} (line~\ref{alg:srcr-next-action}) selects steps during
-the rest of the layout (usually using UCB). The reward statistic for
+the rest of the rollout (usually using UCB). The reward statistic for
 the selected action is updated (line~\ref{alg:srcr-update-stat}), and
 the sample reward is back-propagated (line~\ref{alg:return-reward}) 
 towards the current root.
