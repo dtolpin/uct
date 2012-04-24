@@ -103,14 +103,17 @@
 (defun experiment (&key levels branching sampling-factor nruns vararm (algorithms +algorithms+))
   (compute-uqb-factor branching)
   (flet ((avgrwd (alg)
-           (/ (float (loop repeat nruns
-                        sum (let* ((tree (with-unique-node-ids
-                                             (funcall *make-tree* levels branching))))
-                              (- (best-mean tree)
-                                 (pull-best-arm tree
-                                                alg sampling-factor)))))
-              nruns)))
-    (format t "~D~T~{~8F~^~T~}~%"
+           (loop repeat nruns
+              do (setf *number-of-samples* 0)
+              summing (let* ((tree (with-unique-node-ids
+                                       (funcall *make-tree* levels branching))))
+                        (- (best-mean tree)
+                           (pull-best-arm tree
+                                          alg sampling-factor)))
+              into totalrwd
+              summing *number-of-samples* into totalnos
+              finally (return (list (/ (float totalrwd) nruns) (/ (float totalnos) nruns))))))
+    (format t "~D~T~{~A~^~T~}~%"
             (if vararm branching (* branching sampling-factor))
             (mapcar (lambda (alg)
                       (avgrwd (intern (string alg) "KEYWORD")))
