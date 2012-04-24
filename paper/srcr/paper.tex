@@ -95,8 +95,8 @@ moreover, \cite{Bubeck.pure} shows that in many cases the smaller the
 cumulative regret, the greater the simple regret.
 
 We begin with background definitions and related work. 
-Some sampling schemes are introduced, and shown to have better than UCB
-bounds for the simple regret on sets, the first contribution of this paper. 
+Some sampling schemes are introduced, and shown to have better
+bounds for the simple regret on sets than UCB, the first contribution of this paper. 
 The results are applied to sampling in trees by combining the proposed sampling schemes on the
 first step of a rollout with UCT for the rest of the
 rollout. An additional sampling scheme based on metareasoning 
@@ -105,7 +105,7 @@ of this paper.
 Finally, the performance of the
 proposed sampling schemes is evaluated on sets of Bernoulli arms, in randomly
 generated 2-level trees, and on the sailing domain, showing where the proposed schemes have improved
-performance, the third contribution of this paper.
+performance.
 
 \section{Background and Related Work}
 \label{sec:related-work}
@@ -147,7 +147,7 @@ number of pulls so far. \end{dfn}
 The UCT algorithm, an extension of UCB
 to Monte-Carlo Tree Search is described in \cite{Kocsis.uct}, and
 shown to outperform many state of the art search algorithms in both
-MDP and adversarial search \cite{Eyerich.ctp}. 
+MDP and adversarial games \cite{Eyerich.ctp,GellyWang.mogo}. 
 
 In the simple regret (selection) setting, the agent gets to
 collect only the reward of the last pull.
@@ -155,7 +155,7 @@ collect only the reward of the last pull.
 \begin{dfn}
 The \textbf{simple regret} $\IE r$ of a sampling policy for the Multi-armed Bandit
 Problem is the expected difference between the best true expected reward
-$\mu_*$ and the true expected reward $\mu_j$ of the empirically best arm
+$\mu_*$ and the true expected reward $\mu_j$ of the arm with the greatest sample mean,
 $j =\arg \max_i\overline X_i$:
 \begin{equation}
 \IE r=\sum_{j=1}^K\Delta_j\Pr(j=\arg\max_i\overline X_i)
@@ -220,7 +220,7 @@ value of information for a single sample.
 \end{itemize}
 
 As the above ultimate goal is extremely difficult
-to achieve, we introduce
+to achieve, we introduce in this paper
 simple schemes more amenable to analysis, loosely based on the metareasoning
 concept of value of information, and compare
 them to UCB (on sets) and UCT (in trees).
@@ -242,8 +242,8 @@ by experiments.
 We first consider $\varepsilon$-greedy sampling as a straightforward
 generalization of uniform sampling:
 \begin{dfn} The \textbf{$\mathbf{\varepsilon}$-greedy} sampling scheme
-pulls the empirically best arm with probability
-$0<\varepsilon<1$ and any other
+pulls the arm that currently has the greatst sample mean, with probability
+$0<\varepsilon<1$, and any other
 arm with probability $\frac {1-\varepsilon} {K-1}$. 
 \end{dfn}
 This sampling scheme exhibits an exponentially decreasing simple regret:
@@ -261,7 +261,7 @@ with probability at least $1-\eta$.
 \begin{proof}[Proof outline:] 
 
 Bound the probability $P_i$ that a non-optimal arm $i$ is selected. Split the interval
- $[\mu_i, \mu_*]$ at $\mu_i+\delta_i$. By Chernoff-Hoeffding bound:
+ $[\mu_i, \mu_*]$ at $\mu_i+\delta_i$. Apply the Chernoff-Hoeffding bound to get:
 \begin{eqnarray}
 P_i&\le&\Pr[\overline X_i>\mu_i+\delta_i]+\Pr[\overline X_*<\mu_*-(\Delta_i-\delta_i)]\nonumber\\
    &\le&\exp\left(-2\delta_i^2n_i\right)+\exp\left(-2(\Delta_i-\delta_i)^2n_*\right)
@@ -269,7 +269,7 @@ P_i&\le&\Pr[\overline X_i>\mu_i+\delta_i]+\Pr[\overline X_*<\mu_*-(\Delta_i-\del
 Observe that, in probability, $\overline X_i \rightarrow \mu_i$ as $n\rightarrow\infty$, 
 therefore $n_*\rightarrow n\varepsilon$, $n_i\rightarrow\frac
 {n(1-\varepsilon)} {K-1}$ as $n\rightarrow \infty$. Conclude that for
-any $0<\eta<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
+every $0<\eta<1$, $\gamma>1$ there exists $N$ such that for every $n>N$ and
 all non-optimal arms $i$:
 \begin{equation}
 P_i \le \gamma \left(\exp\left(\frac {-2\delta_i^2n(1-\varepsilon)}{K-1}\right)
@@ -310,14 +310,15 @@ For $\frac 1 2$-greedy sampling,
 \end{eqnarray}
 \end{crl}
 
-$\varepsilon$-greedy is based solely on sampling the empirically best
-arm with a higher probability then the rest of the arms, and ignores
-information about empirical means of other arms. On the other hand,
-UCB distributes samples in accordance with empirical means, but, in order to
-minimize cumulative regret, chooses the empirically best arm too often.
+$\varepsilon$-greedy is based solely on sampling the
+arm that has the greatest sample mean (henceforth called the ``current best'' arm)
+with a higher probability then the rest of the arms, and ignores
+information about sample means of other arms. On the other hand,
+UCB distributes samples in accordance with sample means, but, in order to
+minimize cumulative regret, chooses the current best arm too often.
 Intuitively, a better scheme for simple regret minimization would
-distribute samples in a way similar to UCB, but would sample the best arm
-less. This can be achieved by replacing $\log(\cdot)$ in
+distribute samples in a way similar to UCB, but would sample the current best arm
+less often. This can be achieved by replacing $\log(\cdot)$ in
 Equation~\ref{eqn:ucb} with a faster growing sublinear function, for
 example, $\sqrt\cdot$.
 \begin{dfn} Scheme $\mathbf{UCB_{\sqrt{\cdot}}(c)}$ pulls arm $i$ that
@@ -341,7 +342,7 @@ with probability at least $1-\eta$.
 
 \begin{proof}[Proof outline:] Bound the probability $P_i$ that a
   non-optimal arm $i$ is chosen. Split the interval $[\mu_i, \mu_*]$
-  at $\mu_i+\frac {\Delta_i} 2$. By Chernoff-Hoeffding bound:
+  at $\mu_i+\frac {\Delta_i} 2$. Apply the Chernoff-Hoeffding bound to get:
 \begin{eqnarray}
 P_i&\le&Pr\left[\overline X_i>\mu_i+\frac {\Delta_i} 2\right]+\Pr\left[\overline X_*<\mu_*-\frac {\Delta_i}
   2\right]\nonumber \\
@@ -349,7 +350,7 @@ P_i&\le&Pr\left[\overline X_i>\mu_i+\frac {\Delta_i} 2\right]+\Pr\left[\overline
 \end{eqnarray}
 Observe that, in probability, $n_i\to \frac {c \sqrt n}
 {\Delta_i^2}$, $n_i\le n_*$ as $n\to\infty$. Conclude that for
-any $0<\eta<1$, $\gamma>1$ there exists $N$ such that for any $n>N$ and
+every $0<\eta<1$, $\gamma>1$ there exists $N$ such that for every $n>N$ and
 all non-optimal arms $i$:
 \begin{equation}
 P_i \le 2\gamma \exp\left(-\frac {c \sqrt n} 2\right)
@@ -373,22 +374,22 @@ either from scratch or using some previously collected information,
 after observing the actual outcome (in MDPs) or the opponent's move
 (in adversarial games). Once one move is shown to be the best
 choice with high confidence, the value of information of additional
-samples of the best move is low. Therefore, one should be able to do
-better than UCT by optimizing {\em simple regret}, rather than {\em
-  cumulative regret}, at the root node.
+samples of the best move (or, in fact, of any other samples) is low. Therefore, one should be able to do
+better than UCT by optimizing {\em simple regret}, rather than {\em cumulative regret}, at the root node.
 
 Nodes deeper in the search tree are a different matter.
-In order to support an optimal move choice at the root, a precise {\em value} of the search
-tree nodes is beneficial. For these internal nodes, optimizing simple regret is not the answer, and 
-cumulative regret optimization seems more reasonable. Lacking a complete metareasoning for sampling,
+In order to support an optimal move choice at the root, it is beneficial in many cases
+to find a more precise estimate of the {\em value} of the state in these search
+tree nodes. For these internal nodes, optimizing simple regret is not the answer, and 
+cumulative regret optimization is not so far off the mark. Lacking a complete metareasoning for sampling,
 which would indicate the optimal way to sample both root nodes and internal nodes,
 our suggested improvement to UCT thus combines different sampling schemes on the first step and
 during the rest of each rollout:
 \begin{dfn}
 The \textbf{SR+CR MCTS sampling scheme} selects an action at the
 current root node according to a scheme suitable for minimizing 
-the simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot}}$, and
-then selects actions according to UCB, minimizing the cumulative regret (\textbf{CR}).
+the simple regret (\textbf{SR}), such as $\frac 1 2$-greedy or UCB$_{\sqrt{\cdot}}$, and (at non-root nodes)
+then selects actions according to UCB, which approximately minimizes the cumulative regret (\textbf{CR}).
 \end{dfn}
 
 The pseudocode of this two-stage rollout for an undiscounted MDP is in
@@ -432,7 +433,7 @@ value of $c$ on the first step (simple regret) and a smaller
 value for the rest of the rollout (cumulative regret)
 \cite{Bubeck.pure} is resolved. In fact, a sampling scheme that uses
 UCB($c$) at all steps but a larger value of $c$ for the first step
-than for the rest of the steps, should outperform UCT. 
+than for the rest of the steps, should also outperform UCT. 
 
 
 \subsection{VOI-aware Sampling}
@@ -463,7 +464,7 @@ VOI_i&\approx&\frac {1-\overline X_\alpha} {n_i+1}
 \mbox{where }&&\alpha=\arg\max_i \overline X_i,\quad
              \beta=\arg\max_{i,\,i\ne\alpha} \overline X_i\nonumber
 \end{eqnarray}
-with $VOI_{\alpha}$ being (approximate) value for sampling the current best action,
+with $VOI_{\alpha}$ being the (approximate) value for sampling the current best action,
 and $VOI_i$ is the (approximate) value for sampling some other action $i$. 
 
 These equations were derived as follows. The gain from switching from the current best action $\alpha$ to another
@@ -480,8 +481,9 @@ These VOI estimates are used in the ``VOI-aware'' sampling scheme as follows: sa
 action that has maximum estimated VOI. We judged these estimates to be too crude
 to be used as ``stopping criteria'' that can be used to cut off sampling,
 leaving this issue for future research.
-Unfortunately, this scheme appears too complicated to be amenable to a formal
-analysis. Early experiments with this approach demonstrate a significantly lower simple regret.
+Although this scheme appears too complicated to be amenable to a formal
+analysis, early experiments (Section \ref{sec:emp})
+with this approach demonstrate a significantly lower simple regret.
 
 \section{Empirical Evaluation}
 \label{sec:emp}
@@ -513,7 +515,7 @@ of UCB$_{\sqrt{\cdot}}$ over $\frac 1 2$-greedy becomes more significant.
   \begin{minipage}[c]{1.0\linewidth}
     \centering
     \includegraphics[scale=0.8]{onelevel-tree.pdf}\\
-    a. search tree, the best arm shaded
+    a. search tree, with best arm shaded
     \vspace{1em}
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
@@ -540,15 +542,15 @@ Simple regret vs. the number of samples are shown for trees with root degree 16
 $2$, the default value for rewards in the range $[0, 1]$.
 The algorithms exhibit a similar relative performance: either $\frac 1
 2$-greedy+UCT or UCB$_{\sqrt{\cdot}}$+UCT
-gives the lowest regret, UCB$_{\sqrt{\cdot}}$+UCT dominates UCT everywhere
-except for small numbers of instances. The advantage of both $\frac 1
+result in the lowest regret, UCB$_{\sqrt{\cdot}}$+UCT dominates UCT everywhere
+except when the number of samples is small. The advantage of both $\frac 1
 2$-greedy+UCT and UCB$_{\sqrt{\cdot}}$+UCT grows with the number of arms.
 
 \begin{figure}[h!]
   \begin{minipage}[c]{1.0\linewidth}
     \centering
     \includegraphics[scale=0.7]{twolevel-tree.pdf}\\
-    a. search tree, the path to the best arm shaded
+    a. search tree, with path to the best arm shaded
     \vspace{1em}
   \end{minipage}
   \begin{minipage}[c]{1.0\linewidth}
@@ -623,7 +625,7 @@ increases.
    \vspace{1em}
    \includegraphics[scale=0.45]{costs-size=10-nsamples=397.pdf}\\
    b. $10\times 10$ lake
-  \caption{The sailing domain, 397 samples, cost vs. factor}
+  \caption{The sailing domain, 397 rollouts, cost vs. factor}
   \label{fig:sailing-lake-size}
 \end{figure}
 
@@ -644,7 +646,7 @@ outperforms all other sampling schemes in this example. Similar performance impr
   \label{fig:mcts-regret-voi} 
 \end{figure}
 
-\section{Summary and Future Work}
+\section{Conclusion and Future Work}
 \label{sec:summary}
 
 UCT-based Monte-Carlo tree search has been shown to be very effective
@@ -655,16 +657,10 @@ one can do better if the sampling scheme is considered from a metareasoning
 perspective of value of information (VOI).
 
 The MCTS SR+CR scheme presented in the paper differs
-from UCT mainly in the first step of the rollout, when the `simple' selection
-regret is minimized instead of the cumulative regret. Both the
+from UCT mainly in the first step of the rollout, when we attempt to minimize
+the `simple' selection regret rather than the cumulative regret. Both the
 theoretical analysis and the empirical evaluation provide evidence for
 better general performance of the proposed scheme.
-
-MCTS and UCT are particularly successful in Computer
-Go \cite{GellyWang.mogo,Braudis.pachi,Enzenberger.Fuego}
-and the proposed scheme should be evaluated on this domain, a
-non-trivial task as Go programs typically use ``non-pure''
-versions of UCT, extended with domain-specific knowledge.
 
 Although SR+CR is inspired by the notion of VOI,
 the VOI is used there implicitly in the analysis of the algorithm,
@@ -684,6 +680,23 @@ Although cumulative regret does reasonably
 well there, it is far from optimal, as meta-reasoning principles imply that an optimal scheme
 for these nodes must be asymmetrical (e.g. it is not helpful to find out that the
 value of the current best action is even better than previously believed).
+
+Finally, applying VOI methods in complex deployed applications that already use
+MCTS is a challenge that should be addressed in future work.
+In particular, UCT is extremely successful in Computer
+Go \cite{GellyWang.mogo,Braudis.pachi,Enzenberger.Fuego},
+and the proposed scheme should be evaluated on this domain. This is non-trivial, since
+Go programs typically use ``non-pure'' versions of UCT, extended with
+domain-specific knowledge. For example, Pachi \cite{Braudis.pachi}
+typically re-uses information from rollouts generated for earlier
+moves, thereby violating our underlying assumption that information is
+only used for selecting the current move.  In early experiments not
+shown here (disallowing re-use of samples, admittedly not really a
+fair comparison) the VOI-aware scheme apears to dominate UCT.
+Nevertheless, it should also be possible to adapt the VOI-aware
+schemes to take into account expected re-use of samples, another topic
+for future research.
+
 
 \section*{Acknowledgments}
 
