@@ -8,12 +8,18 @@
            "PULL-BEST-ARM"
            "MK-SAMPLING-SELECT"
            "COMPUTE-UQB-FACTOR"
-           "*UQB-ALPHA*"))
+           "*UQB-ALPHA*"
+           "*HOP-COST*"
+           "*NUMBER-OF-SAMPLES*"))
 (in-package "MCTS")
 
 (defvar *debug* nil)
 
 (defparameter *uqb-alpha* 8)
+
+(defparameter *hop-cost* most-negative-single-float)
+(defvar *number-of-samples* nil 
+  "number of actually performed samples")
 
 ;;; Monte-Carlo Tree Sampling
 ;;; Common Notions
@@ -180,6 +186,7 @@
                (multiple-value-bind (node sampling-select)
                    (funcall sampling-select switch)
                  (when node ; sample if node is not nil, skip otherwise
+                   (incf *number-of-samples*)
                    (update-stats switch node (play node sampling-select)))))
              
              ;; extract statistics
@@ -325,7 +332,10 @@
           ((> alpha avg beta)
            (psetf beta avg)))))
 
-    (dolist (i (shuffled-indices (switch-nodes switch)) best-node)
+    (dolist (i (shuffled-indices (switch-nodes switch)) 
+             (when (or (zerop best-reward) ; ALL VOIs are zero, return an arbitrary node
+                       (> best-reward *hop-cost*)) 
+               best-node))
       (let ((reward (funcall voi alpha beta (aref node-stats i))))
         (when (>= reward best-reward)
           (setf best-node (aref (switch-nodes switch) i)
@@ -506,7 +516,7 @@
 
 (defun test ()
   (format *error-output* "Testing ~A:" (package-name (symbol-package 'test)))
-  (run-test test-uct)
+  ;; (run-test test-uct)
   (format *error-output* "~%") (clear-output *error-output*))
 
 
