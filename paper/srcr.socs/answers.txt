@@ -1,0 +1,78 @@
+> to find this plan and thus a_1, we need to find optimal a_2
+
+MDP and adversarial domains require an exponential-size
+policy/contingency plan.  Search algorithms ("agents") thus typically
+select the first move, then recompute after observing environment
+responses (as assumed in this paper). One only needs the expected
+value of outcomes of first actions to select the best first
+action. Which actions contribute to this value after the first action
+is irrelevant.
+
+> How is "near-optimal" for the UCB-scheme defined?
+
+UCB1 achieves logarithmic cumulative regret uniformly over number of
+samples; no policy achieves better than logarithmic regret (Auer,
+Cesa-Bianchi, Fischer 2002).
+
+> Algorithm 1
+
+Else branch returns `reward', sorry for omission.
+No discounting in this setting.
+
+> UCB(c)
+
+We performed experiments, results omitted for lack of space.
+
+> deviations are missing in graphs
+
+to avoid clutter; for 10000 iterations deviations were within
+0.005 of the means. 
+
+> UCT performs very similar
+
+Fig 2c: regret of UCT is twice that of UCB[sqrt]+UCT for
+1000 rollouts, UCT requires 2000 rollouts to achieve equal regret.
+
+> expectation that SR+CR less sensitive to c not discussed in experiments.
+> What does "minimum cost" refer to in Fig. 3b?
+
+Experiments on sailing domain (Figures 3-5) discuss
+influence of the exploration factor. In Figure 3, the experiments
+were performed for a range of values of c, [0.00001 .. 1000]. For UCT,
+the cost  is sensitive to c: median is much higher than minimum. 
+For SR+CR, the difference is significantly smaller.
+Dependency of cost on c further explored in Figures 4-5.
+
+> How is c chosen for UCT in Fig. 2?
+
+  c=2,  default value for rewards in [0,1].
+
+> How do the curves in Fig. 2,6 continue?
+
+Figures are in log-log scale: curves approach zero roughly
+with slopes as at the right of curve.
+
+> "SR+CR differs from UCT mainly ..." -- where else?
+
+Rest of rollout may use UCT or another scheme
+(e.g. domain heuristics), but the advantage
+of SR+CR is in the first step.
+
+> Did not show empirical results for UCT[sqrt]
+
+Theoretical bounds are for UCB[sqrt]; empirical results for UCB[sqrt]
+in Figure 1. Theoretical results can be extended to SR+CR similar to
+(Kocsis, Szepesvari 2006).
+
+> Computer Go is the most popular domain 
+
+Agreed, we will explain and include references.  We chose problems on
+which UCT was evaluated initially. We obtained initial results for Go
+(nontrivial as Go programs typically use "non-pure" UCT).
+Presentation required more than available space.
+
+> the value of X_i is not always precise because of averaging
+
+Right, however adaptive MCTS samples winning moves increasingly often;
+under certain conditions, X_i converges to the true value.
+

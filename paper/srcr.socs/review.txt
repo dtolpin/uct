@@ -1,0 +1,231 @@
+  
+    The purpose of author feedback is to point out technical errors or significant misunderstandings in the reviews; it is not to dispute the opinions of the reviewers, or to explain how criticisms could be addressed in a future revision of the paper.
+    Do not necessarily expect replies to your feedback in the final reviews. The senior program committee will ensure that feedback identifying legitimate flaws or misunderstandings will be taken into account in final reviews and decisions.
+    Please do not provide feedback explaining how you can address the referees' concerns or criticisms in future versions of the paper. The paper must be publishable as submitted.
+    Feedback is strictly limited in length to 450 words, no exceptions.
+
+
+ Paper ID 	198 
+ Paper authors 	David Tolpin, Solomon Shimony 
+ Paper title 	MCTS based on simple regret 
+ Paper subtitle 	 
+ Paper Type 	Main Technical Track
+ Keywords 	Constraints, Satisfiability, and Search::Meta-Reasoning and Meta-heuristics ** Reasoning under Uncertainty::Sequential Decision Making ** Constraints, Satisfiability, and Search::Search (General/other)
+ Abstract 	UCT, a state-of-the art algorithm for Monte Carlo tree search
+(MCTS) in games and Markov decision processes, is based on UCB,
+a sampling policy for the Multi-armed Bandit problem (MAB) that asymptotically minimizes the cumulative regret.
+However, search differs from MAB in that in MCTS it
+is usually only the final ``arm pull'' (the actual move selection) that
+collects a reward, rather than all ``arm pulls''.
+Therefore, it makes more sense to minimize the simple regret, as opposed to the cumulative regret. We begin by introducing policies for multi-armed bandits
+with lower finite-time and asymptotic simple regret than UCB, using it
+to develop an algorithm (USRT) for MCTS which outperforms UCT empirically.
+
+We then observe that optimizing the sampling process is itself a meta-reasoning
+problem, a solution of which can use value of information (VOI) techniques.
+Although the theory of VOI for search exists, applying it to MCTS is
+non-trivial, as typical myopic assumptions fail. Lacking a working VOI
+theory for MCTS, we nevertheless propose a sampling scheme that is ``aware''
+of VOI, achieving an algorithm that in empirical evaluation outperforms
+USRT, as well as UCT.
+
+ Download 	download file
+
+Comments to author(s)
+SUMMARY
+
+This paper proposes an action sampling strategy for Monte Carlo tree
+search. The proposed strategy distinguishes between the first action
+and subsequent actions. For the first action, the simple regret is
+minimized which only takes into account the finally chosen action. For
+the subsequent actions, the strategy of UCT is followed which minimizes
+the cumulative regret taking into account all sampling actions.
+Technically, this translates to a slight modification of the UCT action
+utility estimate. The authors prove bounds on the regret of their
+method. The proposed approach is evaluated empirically in a series of
+experiments on bandits and tree search problems.
+
+
+MAJOR COMMENT
+
+The paper presents a potentially interesting method, but appears
+somewhat premature. On a positive side, it provides theoretical
+guarantees and plenty of experimental data. Unfortunately, the
+presentation is not everywhere convincing, including both the motivation
+for the approach as well as the formal presentation.
+
+
+DETAILED COMMENTS
+
+
+In general, it is confusing that it shall be best to use a mixture of
+two different sampling strategies to find a good action. The best action
+a_1 is the first action of the optimal plan (a_1, ..., a_n). But to
+find this plan and thus a_1, we need to find optimal a_2 once we have
+sampled a_1 -- but why is this a different type of problem than finding
+a_1? Why would this require a different searching (i.e. sampling)
+scheme? This reminds one somehow of Bellman's principle of optimality
+that the optimal path must contain optimal subpaths. However, in the
+proposed approach of the paper, the optimal path would use subpaths
+whose suboptimality is defined in different terms.
+
+Why is it "not beneficial to further sample that action [the best
+first action]" (Introduction)? UCT repeatedly samples it not for
+exploitation, but for exploration -- namely to correctly estimate the
+value of that action. This estimate depends on a sufficient number of
+rollouts. By chance, a low-probability rollout could be sampled which is
+unrepresentative of the value of this action -- hence, several rollouts
+are needed for statistical significance which is encapsulated in UCT's
+exploration bonus.
+
+On page 3, Subsection "Sampling in Trees": "Once one move is shown to
+be the best choice with confidence... " This intuition is underlying
+both UCT and UCB[sqrt]. The following conclusion "Therefore..." is
+hence odd. Why is a "precise value of the search tree nodes" not
+required for the top node? The precise value of the actions at the
+top-level is required to choose the best action.
+
+
+Simple and cumulative regret need to explained better and defined
+earlier in the paper. Cumulative regret is never defined. In the
+introduction, the difference is not fully clear. The "r" in Definition 2
+is never defined; similarly in Theorem 1 and 2. Eq. (2) is strange: the
+expectation is taken with respect to what? A sequence of samples of
+which length? Is the probability term quantifying the probability that j
+is the arm with the empirically best mean? This could be expressed
+better instead of the indirect expression in terms of the according
+value.
+
+
+The discussion of metareasoning and value of information (VOI)
+techniques is hard to follow (both in the background and analysis
+sections). VOI is never defined. This makes it hard to understand its
+discussion, in particular the approximations in Eq. (15). Also, the
+whole discussion of VOI does not seem necessary for the proposed
+approach.
+
+
+Abstract: The many abbreviations make it difficult to read.
+
+
+Introduction:
+
+"goal is to find a good strategy, or even to find the best first action"
+-- why is it harder ("even") to find only the first action?
+
+"third contribution of this paper": are empirical results a
+contribution?
+
+
+Background:
+
+This section could be better structured. First, the bandits and the
+regrets. Then, separately, the tree search algorithms.
+
+The planning problem itself is never formally defined. Something
+like "find a_1 such that there is a plan a with maximal P(reward|a)"
+(or in terms of regret). What is the overall loss function / goal which
+UCT etc. have to optimize? Likewise, UCT is never fully described,
+including how rewards are backpropagated in the rollouts to estimate the
+values of nodes.
+
+How is "near-optimal" for the UCB-scheme defined?
+
+
+Analysis:
+
+What is "N" in the theorems? If this N is very large (exponential in
+quantities describing the planning problem), then the bounds are less
+helpful.
+
+In Algorithm 1, many terms are not defined. What is "reward", what are
+the subroutines "UpdateStats" and "reward"? Where is the return value
+in the "else"-branch? Is there discounting?
+
+It is asserted that using different exploration factors c in the first
+and the following steps with UCB(c) outperforms UCT -- no reference or
+evidence is provided.
+
+Also, the expectation is raised that the SR+CR methods could be less
+sensitive to the exploration factor, but this is not discussed in
+terms of the experiments.
+
+
+
+
+Empirical evaluation:
+
+The experiments suggest, that the combination of SR and CR minimizing
+algorithms improve performance, but it does not get statistically clear
+to which level this is true. Standard deviations are missing in the
+graphs. In the random tree example UCT performs very similar to the
+combination of SR and CR methods. In the sailing domain UCT achieves
+equal performance with a large exploration factor. Overall it does not
+become fully clear, whether the proposed algorithms can outperform
+traditional MCTS algorithms more generally, although the conceptual
+idea seems promising.
+
+More details on the sailing domain and the feature of lakes would be
+helpful.
+
+How is "c" chosen for UCT in Fig. 2?
+
+How do the curves in Fig. 2 and Fig. 6 continue? When do they stop
+falling? How do they converge to the minimum?
+
+What does "minimum cost" refer to in Fig. 3b)? The best run?
+
+
+Summary:
+
+"MCTS SR+CR ... differs from UCT mainly in the first step of the
+rollout" -- where else does it differ?
+
+
+
+
+Comments to author(s)
+The authors present approaches such as the epsilon-greedy sampling scheme and UCT[sqrt] to try to minimize the simple regret. They then present SR+CR MCTS, which is a tree search combining UCB with UCB[sqrt]. Additionally, they present a new sampling policy based on VOI. They show experimental results using very simple Multi-armed Bandit instances and the sailing domain to evaluate their approaches.
+
+I basically like the idea of simple regret and agree that this is a better criteria than the cumulative regret. However, in my opinion the paper is currently on borderline because of the following reasons:
+
+1. The good news is that they provide the theoretical bounds of the simple regret for the epsilon-greedy sampling and UCT[sqrt]. However, they did not show any empirical results on UCT[sqrt]. Instead, they showed the empirical results on SR+CR MCTS, which is a very ad hoc method. If they proved some theoretical properties on SR+CR MCTS as well as showed empirical properties, the paper might be worth publishing. However, no theoretical results are shown in the paper regarding SR+CR MCTS. Additionally, the theoretical analysis of VOI (it would be difficult though) is not presented in the paper.
+
+2. Because they did not have theoretical contributions to the algorithms they think most important, it is important to show that the algorithms work empirically well in practical domains. However, the search space of their experimental domains is very small and a very small number of roll-outs is performed. Because the authors simplified too much about the experimental conditions, it is difficult to assess whether or not SR+CR MCTS and VOI really work well in practical and much more complicated domains such as the game of Go.
+
+Miscellaneous
+
+1. The author refers to (Eyerich, P.; Keller, T.; and Helmert, M. 2010) as a successful application of UCT to the adversarial domain. However, it is not fair because computer Go is the most popular domain as a successful example of UCT and UCT has been used before (Eyerich, P.; Keller, T.; and Helmert, M. 2010). Refer to a number of papers on Go such as:
+
+a. Gelly, S., and Silver, D. Combining online and offline knowledge in UCT. In Ghahramani, Z., ed., ICML, pages 273--280, 2007.
+
+b. Gelly, S.;Wang, Y.; Munos, R.; and Teytaud, O. Modification of UCT with patterns in Monte-Carlo Go. Technical Report 6062, INRIA, 2006.
+
+c. Enzenberger, M., and Mueller, M. Fuego - an open source framework for board games and Go engine based on Monte-Carlo tree search. Technical Report 09-08, University of Alberta, 2009.
+
+2. "In order to support an optimal move choice at the root, a precise value of the search tree nodes is beneficial. For these internal nodes, optimizing simple regret is not the answer, and cumulative regret optimization seems more reasonable."
+
+I do not understand if this is a reasonable discussion to validate the importance of SR+CR MCTS. This is probably related to the fact that I am not sure of what "precise value" indicates. I assume the "value" here is X_i. If we consider two-player games, the value of X_i is not always precise because
+of the averaging property of X_i (e.g., if there is only one winning way and the other moves are losing moves in a two-player game, X_i is not precise at all).
+
+
+
+
+Comments to author(s)
+This paper argues that minimizing simple regret for action selection at the root node in Monte-Carlo tree search (MCTS) is more appropriate than minimizing the cumulative regret as is done in UCT (based on applying UCB to every node), because only the action at the root actually gets a reward. The remainder of the search tree still requires minimizing the cumulative regret in order to get more accurate values therein. As the best-known upper bound on the simple regret of UCB is polynomially decreasing in the number of samples, the paper proffers two sampling schemes (epsilon-greedy and a UCB scheme that uses a square root instead of the log) that are demonstrated to have super-polynomially decreasing upper bounds on the simple regret.
+
+Lacking tractable metareasoning machinery for determining the optimal way of sampling any node within the search tree, the paper suggests applying the sampling techniques at the root node in conjunction with UCT being applied within the remainder of the search tree. These hybrid techniques are shown to be empirically superior to UCT in multiple domains. As the exact computation of value of information (VOI) within the search tree is infeasible, the paper proposes a sampling scheme that employs approximate features that relate to VOI and demonstrates that it empirically outperforms the other sampling schemes.
+
+This paper is extremely well-written. It explores a pertinent topic in the MCTS literature and makes notable contributions that are justified both theoretically and empirically. The experiments are well-designed and the empirical comparisons of the proposed sampling schemes are thorough.
+
+
+Additional comments:
+
+Def.1: The difference between mu_j and bar{X}_j should be clarified.
+
+Fig.1b: It looks like UCB_sqrt always outperforms the rest. Unlike what is mentioned in the paper, 1/2-greedy never achieves the best performance.
+
+Figs.1a & 2a: The captions should reiterate what the r_i are and explain why one prong is colored red.
+
+
+

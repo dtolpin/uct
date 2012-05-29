@@ -1,0 +1,92 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Auer, Cesa-Bianchi, and
+  Fischer}{2002}]{Auer.ucb}
+Auer, P.; Cesa-Bianchi, N.; and Fischer, P.
+\newblock 2002.
+\newblock Finite-time analysis of the multiarmed bandit problem.
+\newblock {\em Mach. Learn.} 47:235--256.
+
+\bibitem[\protect\citeauthoryear{Braudi\v{s} and {L}oup
+  Gailly}{2011}]{Braudis.pachi}
+Braudi\v{s}, P., and {L}oup Gailly, J.
+\newblock 2011.
+\newblock Pachi: State of the art open source {G}o program.
+\newblock In {\em ACG 13}.
+
+\bibitem[\protect\citeauthoryear{Bubeck, Munos, and Stoltz}{2011}]{Bubeck.pure}
+Bubeck, S.; Munos, R.; and Stoltz, G.
+\newblock 2011.
+\newblock Pure exploration in finitely-armed and continuous-armed bandits.
+\newblock {\em Theor. Comput. Sci.} 412(19):1832--1852.
+
+\bibitem[\protect\citeauthoryear{Enzenberger and
+  M\"{u}ller}{2009}]{Enzenberger.Fuego}
+Enzenberger, M., and M\"{u}ller, M.
+\newblock 2009.
+\newblock {Fuego - An Open-source Framework for Board Games and Go Engine Based
+  on Monte-Carlo Tree Search}.
+\newblock Technical report, University of Alberta, Dept. of Computing Science,
+  TR09-08.
+
+\bibitem[\protect\citeauthoryear{Eyerich, Keller, and
+  Helmert}{2010}]{Eyerich.ctp}
+Eyerich, P.; Keller, T.; and Helmert, M.
+\newblock 2010.
+\newblock High-quality policies for the {C}anadian traveler's problem.
+\newblock In {\em In Proc. AAAI 2010},  51--58.
+
+\bibitem[\protect\citeauthoryear{Gelly and Wang}{2006}]{GellyWang.mogo}
+Gelly, S., and Wang, Y.
+\newblock 2006.
+\newblock Exploration exploitation in {G}o: {UCT} for {M}onte-{C}arlo {G}o.
+\newblock {\em Computer}.
+
+\bibitem[\protect\citeauthoryear{Hay and Russell}{2011}]{HayRussell.MCTS}
+Hay, N., and Russell, S.~J.
+\newblock 2011.
+\newblock Metareasoning for {M}onte {C}arlo {T}ree {S}earch.
+\newblock Technical Report UCB/EECS-2011-119, EECS Department, University of
+  California, Berkeley.
+
+\bibitem[\protect\citeauthoryear{Horvitz}{1987}]{Horvitz.reasoningabout}
+Horvitz, E.~J.
+\newblock 1987.
+\newblock Reasoning about beliefs and actions under computational resource
+  constraints.
+\newblock In {\em Proceedings of the 1987 Workshop on Uncertainty in Artificial
+  Intelligence},  429--444.
+
+\bibitem[\protect\citeauthoryear{Kocsis and Szepesv{\'a}ri}{2006}]{Kocsis.uct}
+Kocsis, L., and Szepesv{\'a}ri, C.
+\newblock 2006.
+\newblock Bandit based {M}onte-{C}arlo planning.
+\newblock In {\em ECML},  282--293.
+
+\bibitem[\protect\citeauthoryear{Russell and Norvig}{2003}]{Russell.aima}
+Russell, S.~J., and Norvig, P.
+\newblock 2003.
+\newblock {\em Artificial Intelligence: A Modern Approach}.
+\newblock Pearson Education.
+
+\bibitem[\protect\citeauthoryear{Russell and Wefald}{1991}]{Russell.right}
+Russell, S., and Wefald, E.
+\newblock 1991.
+\newblock {\em Do the right thing: studies in limited rationality}.
+\newblock Cambridge, MA, USA: MIT Press.
+
+\bibitem[\protect\citeauthoryear{Tolpin and
+  Shimony}{2012}]{TolpinShimony.blinkered}
+Tolpin, D., and Shimony, S.~E.
+\newblock 2012.
+\newblock Semimyopic measurement selection for optimization under uncertainty.
+\newblock {\em IEEE Transactions on Systems, Man, and Cybernetics, Part B}
+  42(2):565--579.
+
+\bibitem[\protect\citeauthoryear{Vermorel and Mohri}{2005}]{Vermorel.bandits}
+Vermorel, J., and Mohri, M.
+\newblock 2005.
+\newblock Multi-armed bandit algorithms and empirical evaluation.
+\newblock In {\em ECML},  437--448.
+
+\end{thebibliography}
