@@ -10,8 +10,6 @@
 \usepackage{url}
 \usepackage{color}
 
-\ecaisubmission
-
 \newcommand {\mean} {\ensuremath {\mathop{\mathrm{mean}}}}
 \newcommand {\median} {\ensuremath {\mathop{\mathrm{median}}}}
 \newcommand {\N} {\ensuremath {\mathcal{N}}}
@@ -25,11 +23,9 @@
 \newtheorem{crl}{Corollary}
 
 \title{VOI-aware MCTS}
-\author {Blind submission}
-%\author {David Tolpin, Solomon Eyal Shimony \\
-%Department of Computer Science, \\
-%Ben-Gurion University of the Negev, Beer Sheva, Israel \\
-%\{tolpin,shimony\}@cs.bgu.ac.il}
+\author {David Tolpin \and Solomon Eyal Shimony \institute{Ben-Gurion
+    University of the Negev, Israel, 
+email: \{tolpin,shimony\}@cs.bgu.ac.il} }
 
 \begin{document}
 
@@ -143,7 +139,7 @@ by $N$:
 \begin{thm} $\Lambda_i^b$ is bounded from above as
 \begin{eqnarray}
 \label{eqn:thm-be}
-  &\Lambda_\alpha^b \le \frac {N \overline X_\beta} {N+n_\alpha}\Pr(\overline X_\alpha'\le\overline X_\beta)
+ &\Lambda_\alpha^b \le \frac {N \overline X_\beta} {N+n_\alpha}\Pr(\overline X_\alpha'\le\overline X_\beta)
     \le \frac {N \overline X_\beta} {n_\alpha} \Pr(\overline X_\alpha'\le\overline X_\beta)\\
 &\Lambda_{i|i\ne\alpha}^b \le \frac{ N(1-\overline  X_\alpha)} {N+n_i}\Pr(\overline X_i'\ge\overline X_\alpha)
      \le \frac {N(1-\overline X_\alpha)} {n_i}\Pr(\overline   X_i'\ge\overline X_\alpha)\nonumber
@@ -176,6 +172,7 @@ by substituting (\ref{eqn:probound-blnk-hoeffding}) into (\ref{eqn:thm-be}).
 \end{align}
 \label{crl:bound-blnk-hoeffding}
 \end{crl}
+\vspace{-24pt}
 
 \section{VOI-based Sample Allocation}
 
@@ -198,14 +195,14 @@ performance of some state-of-the-art heuristic algorithms.
 
 \subsection{Selecting The Best Arm}
 \label{sec:emp-arm}
-
+\vspace{-8pt}
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{flat.pdf}
-\vspace{-8pt}
+\includegraphics[scale=0.53]{flat.pdf}
+\vspace{-16pt}
 \caption{Random instances: regret vs. number of samples}
 \label{fig:random-instances}
-\vspace{-16pt}
+\vspace{-20pt}
 \end{figure}
 
 The sampling policies are first compared on random Multi-armed bandit 
@@ -233,11 +230,11 @@ engines would obstruct the MCTS phenomena which are the subject of
 the experiment.)
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{vct-wins.pdf}
-\vspace{-8pt}
+\includegraphics[scale=0.53]{vct-wins.pdf}
+\vspace{-16pt}
 \caption{Go: winning rate --- VOI against UCT}
 \label{fig:vct-against-uct}
-\vspace{-16pt}
+\vspace{-20pt}
 \end{figure}
 The engines were compared on the 9x9 board, for 5000, 7000, 10000, and
 15000 samples per ply, each experiment was repeated
