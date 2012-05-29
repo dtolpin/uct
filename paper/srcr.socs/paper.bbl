@@ -42,13 +42,6 @@ Gelly, S., and Wang, Y.
 \newblock Exploration exploitation in {G}o: {UCT} for {M}onte-{C}arlo {G}o.
 \newblock {\em Computer}.
 
-\bibitem[\protect\citeauthoryear{Hay and Russell}{2011}]{HayRussell.MCTS}
-Hay, N., and Russell, S.~J.
-\newblock 2011.
-\newblock Metareasoning for {M}onte {C}arlo {T}ree {S}earch.
-\newblock Technical Report UCB/EECS-2011-119, EECS Department, University of
-  California, Berkeley.
-
 \bibitem[\protect\citeauthoryear{Horvitz}{1987}]{Horvitz.reasoningabout}
 Horvitz, E.~J.
 \newblock 1987.
