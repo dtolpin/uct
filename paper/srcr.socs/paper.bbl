@@ -63,12 +63,6 @@ Kocsis, L., and Szepesv{\'a}ri, C.
 \newblock Bandit based {M}onte-{C}arlo planning.
 \newblock In {\em ECML},  282--293.
 
-\bibitem[\protect\citeauthoryear{Russell and Norvig}{2003}]{Russell.aima}
-Russell, S.~J., and Norvig, P.
-\newblock 2003.
-\newblock {\em Artificial Intelligence: A Modern Approach}.
-\newblock Pearson Education.
-
 \bibitem[\protect\citeauthoryear{Russell and Wefald}{1991}]{Russell.right}
 Russell, S., and Wefald, E.
 \newblock 1991.
