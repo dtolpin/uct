@@ -1,8 +1,5 @@
 all: paper.pdf
 
-%.pdf: %.tex
-	pdflatex $<
-
 %.svg: %.pdf
 	pdfcrop $< $<-cropped
 	mv $<-cropped $<
