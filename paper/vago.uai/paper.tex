@@ -50,18 +50,16 @@
 \excludecomment{hiddenproof}
 
 \title{Selecting Computations: Theory and Applications} 
-
-\author{}
-%\author{ {\bf Nicholas Hay} and {\bf Stuart Russell} \\   
-%Computer Science Division \\  
-%University of California\\ 
-%Berkeley, CA 94720 \\ 
-%\And 
-%{\bf Solomon Eyal Shimony} and {\bf David Tolpin}  \\ 
-%Department of Computer Science \\ 
-%Ben-Gurion University of the Negev\\
-%Beer Sheva, Israel
-%} 
+\author{ {\bf Nicholas Hay} and {\bf Stuart Russell} \\   
+Computer Science Division \\  
+University of California\\ 
+Berkeley, CA 94720 \\ 
+\And 
+{\bf David Tolpin} and {\bf Solomon Eyal Shimony} \\ 
+Department of Computer Science \\ 
+Ben-Gurion University of the Negev\\
+Beer Sheva 84105, Israel
+} 
  
 
 \begin{document}
@@ -338,7 +336,7 @@ value of the node, so that selection at the root can be more informed. The exact
 of sampling at internal nodes is outside the scope of this paper. At present we 
 have no better proposal for internal nodes than to use UCT there.
 
-We thus propose the following hybrid sampling scheme: 
+We thus propose the following hybrid sampling scheme \citep{TolpinShimony.mcts}: 
 	at the \emph{root node}, sample based on the VOI estimate;
 	at \emph{non-root nodes}, sample using UCT.
 
@@ -413,7 +411,7 @@ Alternately, one can behave myopically with respect to the search tree depth:
    if the nominal budget is $N$, and the unused budget in the last state
    is $N_u$, the search budget in the next state will be $N+N_u$.
 \end{enumerate}
-In this approach, the cost of a sample in the current state is the
+In this approach, the cost $c$ of a sample in the current state is the
 VOI of increasing the budget of a future state by one sample.  It is
 unclear whether this cost can be accurately estimated, but supposing
 a fixed value for a given problem type and algorithm implementation
@@ -441,7 +439,7 @@ Go program, was used for the experiments:
   was modified for \textit{both the original UCT policy and the VOI-aware
   policies} such that 
   \begin{itemize}
-    \item The same number of samples is available to
+    \item Initially, the same number of samples is available to
       the agent at each step, independently of the number of pre-simulated
       games;  
     \item If samples were unused at the current step,
@@ -494,6 +492,8 @@ meeting the assumptions underlying the selection MDP.
 
 
 \input{conclusion}
+
+\input{acknowledgements}
 
 
 \bibliographystyle{abbrvnat}
