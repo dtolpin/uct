@@ -32,13 +32,15 @@ the evidence consists of outcomes of sampling computations:
 %% Not actually true that we necessarily define this with U's as roots:  in sampling models they are naturally /leaves/.
 %% Bounedness assumption
 For simplicity, in the below we'll assume the utilities $U_i$ are bounded, 
-without loss of generality in $[0,1]$.
+without loss of generality in $[0,1]$.  We will abuse notation and denote by $e\in E$ that $e$ is
+a potential value of the computation $E$.
 
 \begin{example}[Bernoulli sampling]\label{example:bernoulli}
 %% One simple metalevel probability model is used as a model of the results of simulations \citep{someone}.
 In the \term{Bernoulli metalevel probability model},
 each arm will either succeed or not $U_i\in\{0,1\}$, with an unknown latent frequency of success $\Theta_i$, 
-and stochastic simulations of possible consequences $E_{ij}$ can be performed:
+and a set of stochastic simulations of possible consequences
+$\mathcal{E} = \{E_{ij} | 1\le i \le k, j\in \mathbb{N}\}$ that can be performed:
 \begin{align*}
 	\Theta_i &\iid {\rm Uniform}[0,1]                      &&\quad\text{for $i\in\{1,\dots,k\}$}\\
 	U_i \given \Theta_i &\sample {\rm Bernoulli}(\Theta_i) &&\quad\text{for $i\in\{1,\dots,k\}$}\\
@@ -56,8 +58,8 @@ defines a metalevel decision problem: what is the optimal strategy with which to
 of computations $E\in\Evidence$ in order to maximize the agent's net utility?
 Intuitively, this strategy should choose the computations that give the most evidence relevant
 to deciding which arm to use, stopping when the cost of computation 
-outweighs the benefit gained. We formalize the selection problem as a Markov Decision Process (MDP; 
-see, e.g., \citet{Puterman:1994}):
+outweighs the benefit gained. We formalize the selection problem as a Markov Decision Process
+(see, e.g., \citet{Puterman:1994}):
 
 \begin{dfn}
 A (countable state, undiscounted) \term{Markov Decision Process} (MDP) is a tuple $M=(S,s_0,A_s,T,R)$ where:
@@ -100,7 +102,9 @@ computation outcomes and allow for a terminal state when the agent chooses to st
 	where $\mu_i(s) = \IE[U_i \given E_1=e_1,\dots,E_n=e_n]$.
 \end{dfn}
 
-
+Note that when stopping in state $s$, the expected utility of 
+action $i$ is by definition $\mu_i(s)$, so the optimal action to take is $i^*\in\argmax_i \mu_i(s)$
+which has expected utility $\mu_{i*}(s) = \max_i\mu_i(s)$.
 
 One can optionally add an external constraint on the number of computational actions, or their total cost,
 in the form of a deadline or {\em budget}.  This bridges with the related area of budgeted learning \citep{Madani+et+al:2004}.
@@ -163,14 +167,18 @@ quality that results.  This tradeoff is made clear in the value function:
 	similarly for $Q^\pi_M(s,a)$.
 \end{thm}
 
-\begin{proof}
+\begin{hiddenproof}
 	Follows immediately from \eqref{eq:value-fn} and the definition of the
 	reward function in \dfnref{dfn:metalevel-mdp}.
-\end{proof}
+\end{hiddenproof}
 
 In many problems, including the Bernoulli sampling model of \exampleref{example:bernoulli2},
-the state space is infinite.  Does this preclude solving for the optimal policy?  Can 
-infinitely many computations be performed?
+the state space is infinite. Does this preclude solving for the optimal policy?  Can 
+infinitely many computations be performed? 
+
+%%This immediately raises the question of whether
+%%one can solve for an optimal policy, and whether it is sometimes optima
+%%to perform infinitely many computations.
 
 There is in full generality an upper bound on the \emph{expected} number of computations
 a policy performs:
@@ -187,11 +195,11 @@ a policy performs:
 	policy stops with probability one.
 \end{thm}
 
-\begin{proof}
+\begin{hiddenproof}
 	The first follows as in state $s$ the optimal policy has value at least that
 	of stopping immediately ($\max_i \mu_i(s)$), and as $\IE \max_i\mu_i(S_N) \le \IE \max_i U_i$ by Jensen's inequality.
 	The second from \thmref{thm:value-of-computation}.
-\end{proof}
+\end{hiddenproof}
 
 Although the \emph{expected} number of computations is always bounded,
 there are important cases in which the \emph{actual} number is not, such as
@@ -237,7 +245,8 @@ The key is through a natural approximate policy:
 	\end{equation*}
 \end{dfn}
 
-The myopic policy takes the best action, to either stop or perform a computation,
+The myopic policy (known the metalevel greedy approximation with single-step
+assumption in \cite{Russell+Wefald:1991a}) takes the best action, to either stop or perform a computation,
 under the assumption that at most one further computation can be performed.
 It has a tendency to stop too early, because changing one's mind about which real action to take often takes more than one computation.
 In fact, we have:
@@ -306,7 +315,7 @@ have a close connection to that of the optimal policy:
 	\end{proof}	
 \end{hiddenproof}
 
-Using this, we can prove our bound:
+Using these results connecting the behavior of the optimal and myopic policies, we can prove our bound:
 
 \begin{thm}\label{thm:one-action-bound}
 	The one-armed Bernoulli decision process with constant arm $\lambda\in[0,1]$ 
@@ -317,6 +326,7 @@ Using \dfnref{dfn:myopic} and \exampleref{example:bernoulli2}, we determine
 which states the myopic policy stops in by bounding $Q^m(s,E)$.  For a state $(s,f)$,
 let $\mu=(s+1)/(n+2)$ be the mean utility for arm~2, where $n=s+f$.
 Fixing $n$ and maximizing over $\mu$, we get sufficient condition for stopping
+Since the set of states satisfying \eqref{eq:myopic-stopping} is closed under
 \begin{equation}
 	c \ge \frac{\lambda(1-\lambda)}{(n+3)} \qquad\qquad   n\ge \frac{\lambda(1-\lambda)}{c} - 3  \label{eq:myopic-stopping}
 \end{equation}
@@ -350,5 +360,7 @@ transitions ($n$ only increases), by \thmref{thm:optimal-myopic}.  Finally, note
 A key implication is that the \emph{optimal} policy can be computed
 in time $O(1/c^2)$, i.e., quadratic in the inverse cost.  This is particularly appropriate when the cost of 
 computation is relatively high, such as in simulation experiments \citep{Swisher+et+al:2003},
-or when the decision to be made is critical. Finite bounds for the $k$-armed problem
-can also be derived and will be included in the full paper.
+or when the decision to be made is critical. 
+
+%% Finite bounds for the $k$-armed problem
+%% can also be derived and will be included in the full paper.

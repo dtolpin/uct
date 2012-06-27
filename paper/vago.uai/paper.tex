@@ -53,12 +53,14 @@
 \author{ {\bf Nicholas Hay} and {\bf Stuart Russell} \\   
 Computer Science Division \\  
 University of California\\ 
-Berkeley, CA 94720 \\ 
+Berkeley, CA 94720\\
+\texttt{\{nickjhay,russell\}@cs.berkeley.edu}
 \And 
 {\bf David Tolpin} and {\bf Solomon Eyal Shimony} \\ 
 Department of Computer Science \\ 
 Ben-Gurion University of the Negev\\
-Beer Sheva 84105, Israel
+Beer Sheva 84105, Israel\\
+\texttt{\{tolpin,shimony\}@cs.bgu.ac.il}
 } 
  
 
@@ -170,6 +172,7 @@ samples already taken from the $i$th arm by $n_i$.
   \Lambda_\alpha^b&\le \frac {N \overline X_\beta^{n_\beta}} {n_\alpha} \Pr(\overline X_\alpha^{n_\alpha+N}\le\overline X_\beta^{n_\beta})\nonumber\\
 \Lambda_{i|i\ne\alpha}^b&\le \frac {N(1-\overline X_\alpha^{n_\alpha})} {n_i}\Pr(\overline   X_i^{{n_i}+N}\ge\overline X_\alpha^{n_\alpha})
 \end{align}
+\vspace{-24pt}
 \label{thm:be}
 \end{thm}
 \begin{hiddenproof}
@@ -197,11 +200,11 @@ Hoeffding inequality \citep{Hoeffding.ineq}:
 \begin{thm} The probabilities in \eqref{eqn:thm-be} are bounded from above as
 \begin{align}
   \label{eqn:probound-blnk-hoeffding}
-  \Pr&(\overline X_\alpha^{{n_\alpha}+N} \le \overline X_\beta^{n_\beta})
+  \Pr&(\overline X_\alpha^{{n_\alpha}+N}\hspace{-6pt} \le \overline X_\beta^{n_\beta})
   \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} - \overline X_\beta^{n_\beta})^2 n_\alpha
   \right)\nonumber\\
-  \Pr&(\overline X_{i|i\ne\alpha}^{n_\alpha+N} \ge \overline X_\beta^{n_\beta})
-  \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} -\overline  X_i^{n_i})^2 n_i \right)
+  \Pr&(\overline X_{i|i\ne\alpha}^{n_\alpha+N}\hspace{-6pt} \ge \overline X_\beta^{n_\beta})
+  \le 2\exp\left(- \varphi (\overline X_\alpha^{n_\alpha} -\overline  X_i^{n_i})^2 n_i \right)\hspace{-6pt}
 \end{align}
 where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 1)^2 > 1.37$.
 \label{thm:hoeffding-prob-bounds}
@@ -259,11 +262,11 @@ where $\varphi=\min \left(2(\frac {1+n/N} {1+\sqrt {n/N}})^2\right)=8(\sqrt 2 - 
 
 \begin{crl}
 An upper bound on the VOI estimate $\Lambda_i^b$ is obtained
-by substituting \eqref{eqn:probound-blnk-hoeffding} into \eqref{eqn:thm-be}.
+by substituting \eqref{eqn:probound-blnk-hoeffding} into (\ref{eqn:thm-be}).
 \begin{align}
   \label{eqn:bound-blnk-hoeffding}
-  \Lambda&_\alpha^b \le \hat\Lambda_\alpha^b=\frac {2N\overline X_\beta^{n_\beta}} {n_\alpha}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\nonumber\\
-  \Lambda&_{i|i\ne\alpha}^b\le \hat\Lambda_i^b=  \frac {2N(1-\overline  X_\alpha^{n_\alpha})} {n_i}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
+  \Lambda&_\alpha^b \le \hat\Lambda_\alpha^b=\frac {2N\overline X_\beta^{n_\beta}} {n_\alpha}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\\
+  \Lambda&_{i|i\ne\alpha}^b\le \hat\Lambda_i^b=  \frac {2N(1-\overline  X_\alpha^{n_\alpha})} {n_i}\exp\left(- \varphi(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)\nonumber
 \end{align}
 \label{crl:bound-blnk-hoeffding}
 \end{crl}
@@ -301,7 +304,7 @@ criterion irrelevant.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{flat.pdf}
+\includegraphics[scale=0.55]{flat.pdf}
 \caption{Average regret of various policies as a function of the fixed number 
 of samples in a 25-action Bernoulli sampling problem, over 10000 trials.}
 \label{fig:random-instances}
@@ -361,10 +364,8 @@ some state-of-the-art heuristic algorithms.
 When a sample has a known cost commensurable with the value of
 information of a measurement, an upper bound on the intrinsic VOI can also
 be used to stop the sampling if the intrinsic VOI of any arm
-is less than the total cost of sampling $C$:
-\begin{equation}
-\mbox{stop if } \max_i \Lambda_i \le C
-\end{equation}
+is less than the total cost of sampling $C$: $\max_i \Lambda_i \le C$.
+
 The VOI estimates of \eqrefs{eqn:thm-be}{eqn:bound-blnk-hoeffding} 
 include the remaining sample budget $N$ as a
 factor, but given the cost of a single sample $c$, the cost of the
@@ -452,7 +453,7 @@ engines would obstruct the MCTS phenomena which are the subject of
 the experiment.
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{uctvoi.pdf}
+\includegraphics[scale=0.55]{uctvoi.pdf}
 \caption{Winning rate of the VOI-aware policy in Go as a function of the cost $c$, for varying numbers of samples per ply.}
 \label{fig:uctvoi}
 \end{figure}
@@ -469,7 +470,7 @@ is almost always better than UCT, and reaches the winning rate of
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{voi-wins.pdf}
+\includegraphics[scale=0.55]{voi-wins.pdf}
 \caption{Winning rate of the VOI-aware policy in Go as a function of the number of samples, fixing cost $c=10^{-6}$.}
 \label{fig:voi-wins}
 \end{figure}
