@@ -70,12 +70,27 @@
       </div>
       <div class="zoomable region halacha">
         <h2><span>Main Results</span></h2>
-        <h3><span>The SR+CR MCTS Sampling Scheme</span></h3>
-        <p>
-        </p>
-        <h3><span>Sampling for Simple Regret in Sets</span></h3>
-        <p>
-        </p>
+        <h3><span>The <em>SR+CR</em> MCTS Scheme</span></h3>
+        <p class="algorithm"><fun>Rollout</fun>(node, depth=1)
+  <kwd>if</kwd> <fun>IsLeaf</fun>(node, depth)
+    <kwd>return</kwd> 0
+  <kwd>else</kwd>
+    <kwd>if</kwd> depth=1 <kwd>then</kwd> action $\gets$ <strong><fun>FirstAction</fun>(node)</strong>
+    <kwd>else</kwd> action $\gets$ <em><fun>NextAction</fun>(node)</em>
+    next $\gets$ <fun>NextState</fun>(node, action)
+    reward $\gets$ <fun>Reward</fun>(node, action, next)
+              + <fun>Rollout</fun>(next, depth+1)
+    <fun>UpdateStats</fun>(node, action, reward)
+    <kwd>return</kwd> reward</p>
+        <h3><span>Sampling for Simple Regret</span></h3>
+        <ol>
+          <li><b>$\varepsilon$-greedy</b> sampling.</li>
+          <li>Modified version of <b>UCB</b> (optimized for simple regret).</li>
+          <li><b>VOI-aware</b> sampling:
+          $$VOI_\alpha\approx\frac {\overline X_\beta} {n_\alpha+1}\exp\left(-2(\overline X_\alpha - \overline X_\beta)^2 n_\alpha\right)$$
+$$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alpha - \overline X_i)^2 n_i\right),\; i\ne\alpha$$
+          </li>
+        </ol>
       </div>
     </div>
 
@@ -86,7 +101,7 @@
       <ul>
        <li>&#x2022;&#x2007;Improved MCTS scheme &#x2014; <em>SR+CR.</em></li>
        <li>&#x2022;&#x2007;SR+CR performs <em>better than</em> unmodified <em>UCT.</em></li>
-       <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing sampling regret proposed.</li>
+       <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing simple regret.</li>
       </ul>
     </div>
 

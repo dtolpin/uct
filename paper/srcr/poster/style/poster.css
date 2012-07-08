@@ -35,8 +35,8 @@ div.gmara  {  border-left: 12pt solid #fa6; }
 div.halacha { font-size: 120%;
               border-left: 12pt solid #6fa;}
 
-div.musar { float: left; width: 50%; line-height: 1.3; font-size: 109%; background-color: #efd }
-div.safek { float: right; width: 45%; font-size: 109%; background-color: #efd }
+div.musar { float: left; width: 47%; line-height: 1.3; font-size: 109%; background-color: #efd }
+div.safek { float: right; width: 47%; font-size: 109%; background-color: #efd }
 div.barcode { float: right; width: 12%; background-color: white; padding: 0.25em; margin-top: 1em }
 
 div.maximized { font-size: 200%;
