@@ -58,94 +58,24 @@
     <div class="rashi">
        <div class="zoomable region">
         <h2><span>Experiments</span></h2>
-        <h3>Benchmarks</h3>
-        <p>14 benchmarks from CSP Solver Competition 2005,
-        solved
-        <ul spacing="compact">
-          <li>&#x2022;&#x2007;for $\gamma=0$ ;</li>
-          <li>&#x2022;&#x2007;for the range $\gamma \in \{10^{-7},$ $10^{-6},$ $...,$ $1\}$ ,&nbsp;</li>
-          <li>&#x2022;&#x2007;with the <i>minimum-conflicts</i> and the <i>pAC</i> heuristics.</li>
-        </ul>
-        
-        </p>
-        <object data="benchmarks.svg" style="text-align: center; width: 99%"></object>
-        <p>
-          The maximum improvement is  
-          achieved when <em>the solution count is estimated only in a small fraction of
-          occasions</em> selected using rational metareasoning.
-        </p>
-        <h3 style="clear: right;  margin-top: 1.5em">Random instances</h3>
-        <p>Exhaustive deployment, rational deployment, the <i>minimum conflicts</i> and the <i>pAC</i> heuristics were compared on two sets of 100 problem instances.</p>
-
-        <object data="random-problems-arrows+legend.svg" style="text-align: center; width: 99%"></object>
-        
-        <p><em>$\gamma=10^{-3}$ chosen based on a small set of hard instances
-        gave good results on sets of instances of varying size and hardness.</em>
-        </p>
-        <h3 style="clear: right; margin-top: 1.5em">Generalized Sudoku</h3>
-        <ul>
-          <li>&#x2022;&#x2007;Real-world problem instances have much more structure
-          than Model RB random instances.</li>
-          <li>&#x2022;&#x2007;The experiments weree repeated on randomly generated Generalized Sudoku instances&#x2014;
-          a highly structured domain.</li>
-          <li>&#x2022;&#x2007;<em>Relative performance on Generalized
-          Sudoku was similar to  Model RB.</em></li>
-        </ul>
+        <h3><span>Random Trees</span></h3>
+        <h3><span>Sailing Domain</span></h3>
       </div>
 
     </div>
 
     <div class="guf">
       <div class="zoomable region mishna">
-        <h2><span>Overview</span></h2>
-        <ul style="list-style-type: none; margin-left: 0em">
-          <li>Heuristics help decrease search effort.</li>
-          <li>A heuristic must be both informative and efficient to compute.</li>
-          <li>Overhead of some well-known heuristics may outweigh the gain.</li>
-          <li>Such heuristics should be deployed selectively.</li>
-        </ul>
-        <h3>Case Study</h3>
-        <ul>
-          <li>&#x2022;&#x2007;CSP backtracking search algorithms typically employ
-          variable-ordering and <em>value-ordering</em> heuristics.</li>
-          <li>&#x2022;&#x2007;Many value ordering heuristics are computationally
-          heavy, e.g. heuristics <em>based on solution count
-          estimates.</em></li>
-          <li>&#x2022;&#x2007;Principles of <em>rational metareasoning</em> can be applied
-          to decide when to deploy the heuristics.</li>
-        </ul>
-      </div>
-      <div class="zoomable region gmara">
-        <h2><span>Value Ordering</span></h2>
-        <p>Value ordering heuristics provide information about:
-        </p>
-        <ul style="list-style: none">
-          <li>&#x2022;&#x2007;$T_i$&#x2014;the expected time to find a solution containing
-          an assignment  $X_k=y_{ki};$</li>
-          <li>&#x2022;&#x2007;$p_i$&#x2014;the probability that there is no solution consistent with $X_k=y_{ki}$ .</li>
-        </ul>
-        <p>        The expected remaining search time in the subtree under $X_k$ for ordering $\omega\;$ is given by:
-        \[T^{s|\omega}=T_{\omega(1)}+\sum_{i=2}^{|D_k|}T_{\omega(i)}\prod_{j=1}^{i-1}p_{\omega(j)}\]
-        </p>
-        <ul>
-          <li>&#x2022;&#x2007;The current optimal base-level action is picking the $\omega\;$ which optimizes $T^{s|\omega}$ .  $T^{s|\omega}$ is minimal if the values are sorted  by increasing order of $\frac {T_i} {1-p_i}$ .</li>
-          <li>&#x2022;&#x2007;The intrinsic VOI $\Lambda_i$ of estimating $T_i, p_i$ for the $i$th assignment is the expected decrease in the expected search time:
-          $\Lambda_i=\mathbb{E}\left[T^{s|\omega_-}-T^{s|\omega_{+i}}\right]$ .</li>
-          <li>&#x2022;&#x2007;Computing new estimates (with overhead $T^c$) for values $T_i, p_i$ is beneficial just when the net VOI is positive:  $V_i=\Lambda_i-T^c$ .</li>
-        </ul>
+        <h2><span>Monte-Carlo Sampling in Trees</span></h2>
       </div>
       <div class="zoomable region halacha">
         <h2><span>Main Results</span></h2>
-        <h3>Rational Value Ordering</h3>
-        <p>The intrinsic VOI $\Lambda_i$ of invoking the heuristic can be approximated as:
-        \[\Lambda_i\approx \mathbb{E}\left[(T_1-T_i)|D_k|\,\Big|\; T_i &lt; T_1 \right]\]
+        <h3><span>The SR+CR MCTS Sampling Scheme</span></h3>
+        <p>
         </p>
-        <h3>VOI of Solution Count Estimates</h3>
-        The net VOI $V$ of estimating a solution count can be approximated as:
-        \[V \propto |D_k|e^{-\nu}\sum_{n=n_\mathrm{max}}^\infty \! \! \left( \frac 1 {n_\mathrm{max}} - \frac 1 n\right) \frac {\nu^n} {n!}-\gamma\]
-        where the constant $\gamma$ <strong>depends on the search algorithm and the heuristic, rather than on the CSP instance,</strong> and can be learned offline. 
-        The sum $\!\!\sum\limits_{n=n_\mathrm{max}}^\infty\!\!\!\!\dots\;$ can be computed efficiently.
-
+        <h3><span>Sampling for Simple Regret in Sets</span></h3>
+        <p>
+        </p>
       </div>
     </div>
 
@@ -154,9 +84,10 @@
     <div class="zoomable region musar">
       <h2><span>Conclusions</span></h2>
       <ul>
-        <li>&#x2022;&#x2007;A <em>MUCH</em> cooler</li>
+       <li>&#x2022;&#x2007;Improved MCTS scheme &#x2014; <em>SR+CR.</em></li>
+       <li>&#x2022;&#x2007;SR+CR performs <em>better than</em> unmodified <em>UCT.</em></li>
+       <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing sampling regret proposed.</li>
       </ul>
-
     </div>
 
     <div class="zoomable region safek">
@@ -165,7 +96,9 @@
         <a href="http://www.offtopia.net/aaai-2012-srcr-poster/"><img width="100%" src="barcode.png" alt="http://www.offtopia.net/aaai-2012-srcr-poster/" /></a>
       </div>
       <ul>
-        <li>&#x2022;&#x2007; Do something cool.</li>
+        <li>&#x2022;&#x2007;Better <strong>sampling schemes</strong> based on Rational Metareasoning.</li>
+        <li>&#x2022;&#x2007;Sampling in <strong>non-root</strong> nodes.</li>
+        <li>&#x2022;&#x2007;Application to <strong>Computer Go.</strong></li>
       </ul>
     </div>
 
