@@ -143,17 +143,17 @@
           </li>
           <li>&#x2022;&#x2007;Then selects actions according to UCB, that approximately minimizes the <em>cumulative regret.</em></li>
         </ul>
-        <p class="algorithm"><fun>Rollout</fun>(node, depth=1)
-  <kwd>if</kwd> <fun>IsLeaf</fun>(node, depth)
-    <kwd>return</kwd> 0
-  <kwd>else</kwd>
-    <kwd>if</kwd> depth=1 <kwd>then</kwd> action $\gets$ <strong><fun>FirstAction</fun>(node)</strong>
-    <kwd>else</kwd> action $\gets$ <em><fun>NextAction</fun>(node)</em>
-    next $\gets$ <fun>NextState</fun>(node, action)
-    reward $\gets$ <fun>Reward</fun>(node, action, next)
-              + <fun>Rollout</fun>(next, depth+1)
-    <fun>UpdateStats</fun>(node, action, reward)
-    <kwd>return</kwd> reward</p>
+        <p class="algorithm"><span class="lineno"> 1</span> <fun>Rollout</fun>(node, depth=1)
+<span class="lineno"> 2</span>   <kwd>if</kwd> <fun>IsLeaf</fun>(node, depth)
+<span class="lineno"> 3</span>     <kwd>return</kwd> 0
+<span class="lineno"> 4</span>   <kwd>else</kwd>
+<span class="lineno"> 5</span>     <kwd>if</kwd> depth=1 <kwd>then</kwd> action $\gets$ <strong><fun>FirstAction</fun>(node)</strong>
+<span class="lineno"> 6</span>     <kwd>else</kwd> action $\gets$ <em><fun>NextAction</fun>(node)</em>
+<span class="lineno"> 7</span>     next $\gets$ <fun>NextState</fun>(node, action)
+<span class="lineno"> 8</span>     reward $\gets$ <fun>Reward</fun>(node, action, next)
+<span class="lineno"> 9</span>               + <fun>Rollout</fun>(next, depth+1)
+<span class="lineno">10</span>    <fun>UpdateStats</fun>(node, action, reward)
+<span class="lineno">11</span>    <kwd>return</kwd> reward</p>
         <h3><span>Sampling for Simple Regret</span></h3>
         <ol>
           <li><b>$\varepsilon$-greedy</b> sampling $\left(\varepsilon=\frac 1 2\right)$.</li>
@@ -175,6 +175,7 @@ $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alph
        <li>&#x2022;&#x2007;SR+CR performs <em>better than</em> unmodified <em>UCT.</em></li>
        <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing <i>simple regret.</i></li>
       </ul>
+	  <br/>
     </div>
 
     <div class="zoomable region safek">
@@ -187,6 +188,7 @@ $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alph
         <li>&#x2022;&#x2007;Better sampling for <strong>non-root nodes.</strong></li>
         <li>&#x2022;&#x2007;Application to <strong>Computer Go</strong> and other complex domains.</li>
       </ul>
+	  <br/>
     </div>
 
     <br style="clear: both" />
