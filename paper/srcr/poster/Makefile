@@ -4,7 +4,9 @@
 	mv crop-$@ $@
 
 %.svg: %.pdf
-	pdf2svg $< $@
+	pdf2svg $< $@-width-height
+	sed '/<svg/ s/width="[^\"]*"\|height="[^\"]*"//g' < $@-width-height > $@
+	rm $@-width-height
 
 all: sail.svg mcts-tree.svg
 

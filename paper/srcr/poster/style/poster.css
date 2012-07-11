@@ -26,18 +26,21 @@ h3 {font-size: 109%; text-align: left }
 h4 {font-size: 90%; font-style: italic; text-align: left; margin-left: 1em; }
 
 div.rashi { float: right; width: 28%; }
-div.tosafot { float: left; width: 22%; color: #333; background-color: #ffe; }
+div.tosafot { float: left; width: 23%; color: #333; background-color: #ffe; }
 
 div.guf { width: 48%; margin-left: 23%; padding: 0.5em;
           background-color: white }
 
 div.mishna { font-size: 120% ;
-             border-left-width: 12pt; border-color: #6af;  }
+             border-left-width: 12pt; border-top-width: 4pt; 
+              border-color: #6af;  }
 
-div.gmara  {  border-left-width: 12pt; border-color: #af6; }
+div.gmara  {  border-left-width: 12pt; border-top-width: 4pt; 
+              border-color: #af6; }
 
 div.halacha { font-size: 120%;
-              border-left-width: 12pt; border-color: #fa6;}
+              border-left-width: 12pt; border-top-width: 4pt; 
+              border-color: #fa6;}
 
 div.derecharetz { font-size: 90%; }
 
@@ -66,7 +69,7 @@ em { background-color: #ffc; border: 2pt solid #ee0;  padding: 0.1em; }
 strong { background-color: #fdd; border: 2pt solid #f00; padding: 0.1em }
 
 p.algorithm {
-    border:  4pt solid #fa6; border-radius: 8pt; margin: -2pt; padding: 4pt;
+    border:  4pt solid #fa6; border-radius: 8pt; padding: 4pt;
     font: 90% Courier; letter-spacing: -0.1em; white-space: pre }
 p.algorithm kwd { text-transform: lowercase; font-weight: bold }
 p.algorithm fun { font-variant: small-caps; letter-spacing: 0}
