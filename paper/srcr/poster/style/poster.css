@@ -35,8 +35,8 @@ div.gmara  {  border-left: 12pt solid #fa6; }
 div.halacha { font-size: 120%;
               border-left: 12pt solid #6fa;}
 
-div.musar { float: left; width: 47%; line-height: 1.3; font-size: 109%; background-color: #efd }
-div.safek { float: right; width: 47%; font-size: 109%; background-color: #efd }
+div.musar { float: left; width: 40%; line-height: 1.3; font-size: 109%; background-color: #efd }
+div.safek { float: right; width: 54%; font-size: 109%; background-color: #efd }
 div.barcode { float: right; width: 12%; background-color: white; padding: 0.25em; margin-top: 1em }
 
 div.maximized { font-size: 200%;
@@ -56,9 +56,11 @@ ul > li {text-indent: -1em}
 
 i { font-style: italic }
 b { font-weight: bold }
-em { background-color: #ffc; padding: 0.1em; border: 2pt solid #ee0; padding: 0.1em }
+em { background-color: #ffc; border: 2pt solid #ee0;  padding: 0.1em; }
 strong { background-color: #fdd; border: 2pt solid #f00; padding: 0.1em }
 
-p.algorithm { font: 90% Courier; letter-spacing: -0.1em; white-space: pre }
+p.algorithm {
+    border:  4pt solid #ffc888; border-radius: 8pt; margin: -4pt; padding: 4pt;
+    font: 90% Courier; letter-spacing: -0.1em; white-space: pre }
 p.algorithm kwd { text-transform: lowercase; font-weight: bold }
 p.algorithm fun { font-variant: small-caps; letter-spacing: 0}

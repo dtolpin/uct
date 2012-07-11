@@ -85,7 +85,7 @@
         <h3><span>Sampling for Simple Regret</span></h3>
         <ol>
           <li><b>$\varepsilon$-greedy</b> sampling.</li>
-          <li>Modified version of <b>UCB</b> (optimized for simple regret).</li>
+          <li>Modified version of <b>UCB</b> (optimized for <i>simple regret</i>).</li>
           <li><b>VOI-aware</b> sampling:
           $$VOI_\alpha\approx\frac {\overline X_\beta} {n_\alpha+1}\exp\left(-2(\overline X_\alpha - \overline X_\beta)^2 n_\alpha\right)$$
 $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alpha - \overline X_i)^2 n_i\right),\; i\ne\alpha$$
@@ -97,11 +97,11 @@ $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alph
     <div style="clear: both" />
 
     <div class="zoomable region musar">
-      <h2><span>Conclusions</span></h2>
+      <h2><span>Contributions</span></h2>
       <ul>
        <li>&#x2022;&#x2007;Improved MCTS scheme &#x2014; <em>SR+CR.</em></li>
        <li>&#x2022;&#x2007;SR+CR performs <em>better than</em> unmodified <em>UCT.</em></li>
-       <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing simple regret.</li>
+       <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing <i>simple regret.</i></li>
       </ul>
     </div>
 
@@ -111,9 +111,9 @@ $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alph
         <a href="http://www.offtopia.net/aaai-2012-srcr-poster/"><img width="100%" src="barcode.png" alt="http://www.offtopia.net/aaai-2012-srcr-poster/" /></a>
       </div>
       <ul>
-        <li>&#x2022;&#x2007;Better <strong>sampling schemes</strong> based on Rational Metareasoning.</li>
-        <li>&#x2022;&#x2007;Sampling in <strong>non-root</strong> nodes.</li>
-        <li>&#x2022;&#x2007;Application to <strong>Computer Go.</strong></li>
+        <li>&#x2022;&#x2007<strong>Rational metareasoning</strong> in MCTS: theory and VOI estimates.</li>
+        <li>&#x2022;&#x2007;Better sampling for <strong>non-root nodes.</strong></li>
+        <li>&#x2022;&#x2007;Application to <strong>Computer Go</strong> and other complex domains.</li>
       </ul>
     </div>
 
