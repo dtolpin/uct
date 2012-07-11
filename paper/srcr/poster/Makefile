@@ -6,7 +6,7 @@
 %.svg: %.pdf
 	pdf2svg $< $@
 
-all: sail.svg
+all: sail.svg mcts-tree.svg
 
 clean:
 	rm -f *.aux *.log *.eps *.dvi *.pdf *.nav *.out *.snm
