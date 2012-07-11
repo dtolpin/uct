@@ -59,11 +59,21 @@
        <div class="zoomable region gmara">
         <h2><span>Experiments</span></h2>
         <h3><span>Random Trees</span></h3>
-        <object class="results" data="twolevel-tree.svg" style="width: 99%"></object>
-        <p/>
-        <object class="results" data="tree-results.svg"></object>
+        <p>
+          <object class="results" data="twolevel-tree.svg" style="width: 100%; align: center"></object>
+        </p>
+        <h4>Regret vs. number of samples:</h4>
+        <p>
+          <object class="results" data="tree-results.svg"></object>
+        </p>
         <h3><span>Sailing Domain</span></h3>
-        <object class="results" data="sailing-results.svg"></object>
+        <p>
+        <img src="winds.jpg" width="50%">
+        </p>
+        <h4>Path cost vs. number of samples:</h4>
+        <p>
+          <object class="results" data="sailing-results.svg"></object>
+        </p>
       </div>
 
     </div>
@@ -75,6 +85,12 @@
       <div class="zoomable region halacha">
         <h2><span>Main Results</span></h2>
         <h3><span>The <em>SR+CR</em> MCTS Scheme</span></h3>
+        <ul>
+          <li>&#x2022;&#x2007;Selects an action at <b>the current root</b>
+              suitable for minimizing the <strong>simple regret.</strong>
+          </li>
+          <li>&#x2022;&#x2007;Then selects actions according to UCB, that approximately minimizes the <em>cumulative regret.</em></li>
+        </ul>
         <p class="algorithm"><fun>Rollout</fun>(node, depth=1)
   <kwd>if</kwd> <fun>IsLeaf</fun>(node, depth)
     <kwd>return</kwd> 0
