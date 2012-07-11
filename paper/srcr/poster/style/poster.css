@@ -24,16 +24,21 @@ div.region { min-height: 4em;
 h2 {font-size: 120%; text-align: left; font-variant: small-caps }
 h3 {font-size: 109%; text-align: left }
 
-div.rashi { float: right; width: 28%; color: #333; background-color: #ffe  }
-div.tosafot { float: left; width: 22%; color: #333; background-color: #ffe }
+div.rashi { float: right; width: 28%; }
+div.tosafot { float: left; width: 22%; color: #333; background-color: #ffe; }
 
 div.guf { width: 48%; margin-left: 23%; padding: 0.5em;
           background-color: white }
+
 div.mishna { font-size: 120% ;
-             border-left: 12pt solid #6af;  }
-div.gmara  {  border-left: 12pt solid #fa6; }
+             border-left-width: 12pt; border-color: #6af;  }
+
+div.gmara  {  border-left-width: 12pt; border-color: #af6; }
+
 div.halacha { font-size: 120%;
-              border-left: 12pt solid #6fa;}
+              border-left-width: 12pt; border-color: #fa6;}
+
+div.derecharetz { font-size: 90%; }
 
 div.musar { float: left; width: 40%; line-height: 1.3; font-size: 109%; background-color: #efd }
 div.safek { float: right; width: 54%; font-size: 109%; background-color: #efd }
@@ -60,7 +65,9 @@ em { background-color: #ffc; border: 2pt solid #ee0;  padding: 0.1em; }
 strong { background-color: #fdd; border: 2pt solid #f00; padding: 0.1em }
 
 p.algorithm {
-    border:  4pt solid #ffc888; border-radius: 8pt; margin: -4pt; padding: 4pt;
+    border:  4pt solid #fa6; border-radius: 8pt; margin: -4pt; padding: 4pt;
     font: 90% Courier; letter-spacing: -0.1em; white-space: pre }
 p.algorithm kwd { text-transform: lowercase; font-weight: bold }
 p.algorithm fun { font-variant: small-caps; letter-spacing: 0}
+
+object.results { width: 99%; }

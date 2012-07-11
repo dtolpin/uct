@@ -1,5 +1,8 @@
 all: paper.pdf
 
+%.svg: %.pdf
+	pdf2svg $< $@
+
 %.pdf: %.tex
 	pdflatex $<
 
