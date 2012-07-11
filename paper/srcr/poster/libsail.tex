@@ -2,7 +2,7 @@
 \def\fillcol{gray!20!white}
 \newcommand{\boat}[1]{ 
 	\begin{scope}[shift={#1}]
-		\begin{scope}[scale=2]
+		\begin{scope}[scale=1.5]
 			\draw [very thick,black] (3,1) -- (3,7.25);
                         \draw [thick,black,fill=red!70!white] (3,7)
                               .. controls +(1.5,0) and +(1,0) .. (5,1)
@@ -23,11 +23,13 @@
 			\draw[draw=black!70!blue,very thick] (0,0) rectangle (10,10);
 		    \draw[fill=red!40!white] (9,9) rectangle +(1,1);
 			\foreach \x in {1,...,9} {
-			    \draw[draw=black!70!blue,thick] (0,\x) -- (10,\x);
-			    \draw[draw=black!70!blue,thick] (\x,0) -- (\x,10);}
+			    \draw[draw=black!70!blue] (0,\x) -- (10,\x);
+			    \draw[draw=black!70!blue] (\x,0) -- (\x,10);}
 		\end{scope}
 	\end{scope}}
 
 \newcommand{\location}[2]{
-	\lake {10} {#1}
-	\boat {#2}}
+	\lake {5} {#1};
+        \draw [gray,dashed,very thick,->] {#2} +(3,3)
+         .. controls +(-5,30) and +(5,-30) .. (47,47);
+	\boat {#2};}

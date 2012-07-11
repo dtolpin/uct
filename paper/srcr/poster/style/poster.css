@@ -52,7 +52,7 @@ div.maximized { font-size: 200%;
                 background-color: white;
                 top: 9%; left: 0% }
 
-p  { margin-bottom: 0.4em; margin-top: 0.4em }
+p, table { margin-bottom: 0.4em; margin-top: 0.4em }
 ol, ul  { margin-bottom: 0.3em; margin-top: 0.3em; list-style-position: outside }
 ul { list-style-type: none; margin-left: 0.5em }
 ol { list-style-type: decimal }
