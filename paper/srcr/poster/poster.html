@@ -29,7 +29,7 @@
   <body>
     <div class="author">David&nbsp;Tolpin,&nbsp;Solomon&nbsp;Eyal&nbsp;Shimony<br/>Ben Gurion University of the Negev,<br/>Beer Sheva, Israel
     </div>
-    <h1>MCTS Based on Simple Regret<br/><span style="font-size: 80%; line-height: 0.5">AAAI 2012</span></h1>
+    <h1>MCTS Based on Simple Regret<br/><span style="font-size: 80%; line-height: 0.5">AAAI (SOCS) 2012</span></h1>
 
     <div class="tosafot">
       <div class="zoomable region">
@@ -39,8 +39,11 @@
           <li>&#x2022;&#x2007;A set of $K$ arms.</li>
           <li>&#x2022;&#x2007;Each arm can be pulled multiple times.</li>
           <li>&#x2022;&#x2007;When the $i$th arm is pulled, a random reward $X_i$ is encountered.</li>
-          <li>&#x2022;&#x2007;<em>Simple regret:</em> the reward of the last pull only is collected.</li>
-          <li>&#x2022;&#x2007;<em>Cumulative regret:</em>  all rewards are accumulated.</li>
+        </ul>
+        <h4><span>Regret minimization:</span></h4>
+        <ul>
+          <li>&#x25e6;&#x2007;<em>Simple regret (<b>SR</b>):</em> the reward of the last pull only is collected.</li>
+          <li>&#x25e6;&#x2007;<em>Cumulative regret (<b>CR</b>):</em>  all rewards are accumulated.</li>
         </ul>
       </div>
       <div class="zoomable region">
@@ -103,7 +106,7 @@
           <object class="results" data="tree-results.svg"></object>
         </p>
         <h3><span>Sailing Domain</span></h3>
-        <table style="width: 100">
+        <table style="width: 100%">
           <tr>
             <td style="width: 50%"><object data="sail.svg" style="width:100%"></object></td>
             <td><img src="winds.jpg" width="100%"></td>
@@ -130,7 +133,7 @@
         <ul>
           <li>&#x2022;&#x2007;MCTS performs multiple <i>rollouts</i> to partially explore the search space.</li>
           <li>&#x2022;&#x2007;At the current root node, the sampling is aimed at finding the <em>first&nbsp;move</em> to perform: minimizing the <em>simple regret</em> is more appropriate at the root node.</li>
-          <li>&#x2022;&#x2007;Deeper in the tree, minimizing <em>cumulative regret</em> results in a more precise estimate of the value of the state.</li>
+          <li>&#x2022;&#x2007;Deeper in the tree, minimizing <em>cumulative regret</em> results in a better estimate of the value of the state.</li>
           <li>&#x2022;&#x2007;An improvement over UCT can be achieved by <strong>combining different sampling&nbsp;schemes</strong> on the first step and during the rest of a rollout.</li>
         </ul>
       </div>
@@ -139,9 +142,9 @@
         <h3><span>The <em>SR+CR</em> MCTS Scheme</span></h3>
         <ul>
           <li>&#x2022;&#x2007;Selects an action at <b>the current root</b>
-              suitable for minimizing the <strong>simple regret.</strong>
+              suitable for minimizing the <strong>simple regret (<fun>FirstAction</fun>).</strong>
           </li>
-          <li>&#x2022;&#x2007;Then selects actions according to UCB, that approximately minimizes the <em>cumulative regret.</em></li>
+          <li>&#x2022;&#x2007;<b>Deeper down,</b> selects actions according to UCB, that approximately minimizes the <em>cumulative regret (<fun>NextAction</fun>).</em></li>
         </ul>
         <p class="algorithm"><span class="lineno"> 1</span> <fun>Rollout</fun>(node, depth=1)
 <span class="lineno"> 2</span>   <kwd>if</kwd> <fun>IsLeaf</fun>(node, depth)
@@ -184,7 +187,7 @@ $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alph
         <a href="http://www.offtopia.net/aaai-2012-srcr-poster/"><img width="100%" src="barcode.png" alt="http://www.offtopia.net/aaai-2012-srcr-poster/" /></a>
       </div>
       <ul>
-        <li>&#x2022;&#x2007<strong>Rational metareasoning</strong> in MCTS: theory and VOI estimates.</li>
+        <li>&#x2022;&#x2007;<strong>Rational metareasoning</strong> in MCTS: theory and VOI estimates.</li>
         <li>&#x2022;&#x2007;Better sampling for <strong>non-root nodes.</strong></li>
         <li>&#x2022;&#x2007;Application to <strong>Computer Go</strong> and other complex domains.</li>
       </ul>

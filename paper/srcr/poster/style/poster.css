@@ -65,14 +65,14 @@ ul > li {text-indent: -1em}
 
 i { font-style: italic }
 b { font-weight: bold }
-em { background-color: #ffc; border: 2pt solid #ee0;  padding: 0.1em; }
-strong { background-color: #fdd; border: 2pt solid #f00; padding: 0.1em }
+em { background-color: #ffc; border-bottom: 1pt solid #ee0; padding: 0em 0.1em; }
+strong { background-color: #fdd; border-bottom: 1pt solid #e00; padding: 0em 0.1em; }
 
 p.algorithm {
     border:  4pt solid #fa6; border-radius: 16pt; padding: 4pt;
     font: 90% Courier; letter-spacing: -0.1em; white-space: pre }
-p.algorithm kwd { text-transform: lowercase; font-weight: bold }
-p.algorithm fun { font-variant: small-caps; letter-spacing: 0}
+kwd { text-transform: lowercase; font-weight: bold }
+fun { font-variant: small-caps; letter-spacing: 0}
 p.algorithm span.lineno { color: #bbb; }
 
 object.results { width: 99%; text-align: center }
