@@ -25,12 +25,15 @@ draw.winrate <- function(regrets_file, log="xy", legend.position='topright', xla
         regrets <- as.matrix(regrets[-1,])
         regrets <- matrix(as.numeric(regrets), nrow=nrow(regrets), ncol=ncol(regrets))
 
-    xlim <- range(regrets[,1])
-    ylim <- range(max(0, min(regrets[,-1])*0.95), min(100, max(regrets[,-1])*1.05))
-
-	plot(x=regrets[,1], y=regrets[,2], type='o', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='VOI wins, %', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main, axes=F)
+        x <- regrets[,1]
+        y <- regrets[,2]
+        xlim <- range(x)
+        ylim <- range(max(0, min(y)*0.95), min(100, max(y)*1.05))
+        err <- sqrt(y*(100.0-y)/1000.0)  # sigma for 1000 trials
+	plot(x=x, y=y, type='o', log=log, xlim=xlim, ylim=ylim, yaxs='i', xlab=xlab, ylab='VOI wins, %', main=if(is.na(main)) unlist(strsplit(regrets_file, "\\."))[[1]] else main, axes=F)
+        arrows(x,y+err, x, y-err, angle=90, code=3, length=0.025)
 	box()
-	axis(1, at=regrets[,1])
+	axis(1, at=x)
 	axis(2)
 	abline(h=50.0, lty='dashed');
 }
