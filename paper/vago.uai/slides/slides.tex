@@ -31,6 +31,19 @@
 % \end{frame}
 
 \begin{frame}{Upper Bounds on Value of Information}
+Assuming that:
+\begin{enumerate}
+\item Samples are i.i.d. given the value of the arm.
+\item The expectation of a selection in a belief state is equal to the sample mean.
+\end{enumerate}
+Upper bounds on intrinsic VOI $\Lambda^b_i$ of testing the $i$th arm N
+times are (based on Hoeffding inequality):
+\begin{align*}
+  \Lambda&_\alpha^b < \frac {2N\overline X_\beta^{n_\beta}} {n_\alpha+1}\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\\
+  \Lambda&_{i|i\ne\alpha}^b <  \frac {2N(1-\overline  X_\alpha^{n_\alpha})} {n_i+1}\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
+\end{align*}
+Tighter bounds can be obtained (see the paper).
+
 \end{frame}
 
 \begin{frame}{Sampling in Trees}
@@ -40,25 +53,34 @@
 \item At the {\it root node}: sample based on the VOI estimate.
 \item At {\it non-root nodes}: sample using UCT.
 \end{enumerate}
-\item Stopping Criterion
+\item Stopping criterion: Assuming sample cost $c$ is known,\\
+\hspace{1em}stop sampling when intrinsic VOI is less than $C=cN$:
+\begin{align*}
+\frac 1 N \Lambda_\alpha^b \le&\frac {\overline X_\beta^{n_\beta}}
+  {n_\alpha+1}\Pr(\overline X_\alpha^{n_\alpha+N}\le\overline
+  X_\beta^{n_\alpha})\le c\\
+\frac 1 N \max_i\Lambda_i^b\le &\max_i\frac {(1-\overline X_\alpha^{n_\alpha})} {n_i+1}\Pr(\overline
+  X_i^{n_i+N}\ge\overline X_\alpha^{n_\alpha})\le c\\
+    &\forall i: i\ne\alpha
+\end{align*}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Sample Redistribution}
 \begin{itemize}
-\item<+-> The VOI estimate assumes that the information is {\bf discarded}
+\item The VOI estimate assumes that the information is {\bf discarded}
   between states.
-\item<+-> MCTS {\bf re-uses rollouts} generated at earlier search states.
+\item MCTS {\bf re-uses rollouts} generated at earlier search states.
 \vspace{\baselineskip}
-\item<+-> Either incorporate `future' influence into the VOI estimate
+\item Either incorporate `future' influence into the VOI estimate
   ({\it non-trivial!}).
-\item<+-> Or behave myopically w.r.t. search tree depth:
+\item Or behave myopically w.r.t. search tree depth:
 \begin{enumerate}
 \item Estimate VOI as though the information is discarded.
 \item Stop early if the VOI is below a certain threshold.
 \item Save the unused sample budget for search in future states.
 \end{enumerate}
-\item<+-> The cost $c$ of a sample  is\\\hspace{1em} the VOI of increasing a
+\item The cost $c$ of a sample  is\\\hspace{1em} the VOI of increasing a
   future budget by one sample.
 \end{itemize}
 \end{frame}
