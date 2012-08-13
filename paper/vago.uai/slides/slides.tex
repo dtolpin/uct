@@ -39,8 +39,10 @@ Assuming that:
 Upper bounds on intrinsic VOI $\Lambda^b_i$ of testing the $i$th arm N
 times are (based on Hoeffding inequality):
 \begin{align*}
-  \Lambda&_\alpha^b < \frac {2N\overline X_\beta^{n_\beta}} {n_\alpha+1}\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\\
-  \Lambda&_{i|i\ne\alpha}^b <  \frac {2N(1-\overline  X_\alpha^{n_\alpha})} {n_i+1}\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
+  \Lambda&_\alpha^b < \frac {N\overline X_\beta^{n_\beta}}
+  {n_\alpha+1}\cdot 2\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)\\
+  \Lambda&_{i|i\ne\alpha}^b <  \frac {N(1-\overline
+    X_\alpha^{n_\alpha})} {n_i+1}\cdot 2\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
 \end{align*}
 Tighter bounds can be obtained (see the paper).
 
