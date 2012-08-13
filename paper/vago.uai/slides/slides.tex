@@ -45,7 +45,15 @@ times are (based on Hoeffding inequality):
     X_\alpha^{n_\alpha})} {n_i+1}\cdot 2\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)
 \end{align*}
 Tighter bounds can be obtained (see the paper).
+\end{frame}
 
+\begin{frame}{VOI-based Sampling in Bernoulli Selection Problem}
+25 arms, 10000 trials:
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.65]{flat.pdf}
+\end{figure}
+UCB1 is always worse than VOI-aware policies (VOI, VOI+).
 \end{frame}
 
 \begin{frame}{Sampling in Trees}
