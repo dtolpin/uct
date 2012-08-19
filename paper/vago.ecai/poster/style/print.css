@@ -1,0 +1,8 @@
+body {width: 32in; font-size: 31pt}
+
+div.guf { min-height: 20in }
+div.musar { min-height: 3in }
+div.safek { min-height: 3in }
+
+div { -webkit-print-color-adjust:exact; }
+span { -webkit-print-color-adjust:exact; }
