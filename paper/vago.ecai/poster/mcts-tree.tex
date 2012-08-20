@@ -5,6 +5,8 @@
 \usetikzlibrary{shapes.callouts}
 \pagestyle{empty}
 
+\input{libtree}
+
 \begin{document}
 
 \begin{tikzpicture}
@@ -64,13 +66,13 @@ boundary/.style={dash pattern=on 4pt off 2pt on 1pt off 2pt}]
 \draw [] (s3) -- ++( -0.75,-1.5)
 	node (s32) [black] {};
 \draw (s31) -- ++( 0.75,-1.5)
-	node (s311) [win] {};
+	node (s311) {}; \win {(s311)};
 \draw [] (s31) -- ++( 0,-1.5)
-	node (s312) [loss] {};
+	node (s312) {}; \loss {(s312)};
 \draw  (s31) -- ++( -0.75,-1.5)
-	node (s313) [loss] {};
+	node (s313) {}; \loss {(s313)};
 \draw  [] (s32) -- ++( -0.75,-1.5)
-	node (s311) [win] {};
+	node (s321) {}; \win {(s321)};
 
 % samples
 \draw [sample] (0,0) ++(0.25,0.0) -- ++(3.15, -1.8)
