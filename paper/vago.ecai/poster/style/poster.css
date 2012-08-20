@@ -75,4 +75,4 @@ kwd { text-transform: lowercase; font-weight: bold }
 fun { font-variant: small-caps; letter-spacing: 0}
 p.algorithm span.lineno { color: #bbb; }
 
-object.results { width: 99%; text-align: center }
+object.results { width: 95%; text-align: center }

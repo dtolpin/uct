@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>MCTS Based on Simple Regret</title>
+    <title>VOI-aware MCTS</title>
     <!-- metadata -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="generator" content="PSS" />
@@ -29,7 +29,7 @@
   <body>
     <div class="author">David&nbsp;Tolpin,&nbsp;Solomon&nbsp;Eyal&nbsp;Shimony<br/>Ben Gurion University of the Negev,<br/>Beer Sheva, Israel
     </div>
-    <h1>MCTS Based on Simple Regret<br/><span style="font-size: 80%; line-height: 0.5">AAAI (SOCS) 2012</span></h1>
+    <h1>VOI-aware MCTS<br/><span style="font-size: 80%; line-height: 0.5">ECAI 2012</span></h1>
 
     <div class="tosafot">
       <div class="zoomable region">
@@ -96,6 +96,20 @@
           <li>&#x2022;&#x2007;SR+UCT($c$) is <em>less
           dependent on tuning</em> of the exploration factor $c$.</li>
         </ul>
+        <h3>Bandits</h3>
+        <p>
+          <object class="results" data="flat.svg"></object>
+        </p>        
+        <p style="float: right; width: 40%">
+          <object class="results" data="go-board.svg"></object>
+        </p>        
+        <h3>Computer Go</h3>
+        <p>
+          <object class="results" data="uctvoi.svg"></object>
+        </p>
+        <p>
+          <object class="results" data="voi-wins.svg"></object>
+        </p>
       </div>
 
     </div>
@@ -104,7 +118,7 @@
       <div class="zoomable region mishna">
         <h2><span>Monte-Carlo Sampling in Trees</span></h2>
         <p>
-          <object data="mcts-tree.svg" style="width: 100%"></object>
+          <object data="mcts-tree.svg" width="100%"></object>
         </p>
         <ul>
           <li>&#x2022;&#x2007;MCTS performs multiple <i>rollouts</i> to partially explore the search space.</li>
