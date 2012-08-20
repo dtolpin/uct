@@ -1,0 +1,20 @@
+\newcommand{\win}[1]{
+  \begin{scope}[shift={#1}]
+    \begin{scope}[scale=1.0]
+      \draw [very thick,draw=green!50!black,fill=green]
+            (0,0) .. controls (1.5,-0.5) and (1,-2.0) .. (0,-3)
+                  .. controls (0.25, -2) and (-2, -1.5) .. (0,0);
+      \draw [thin] (0,0) .. controls (0,-1) and (0.5,-2) .. (0,-3);
+    \end{scope}
+  \end{scope}}
+ 
+\newcommand{\loss}[1]{
+  \begin{scope}[shift={#1}]
+    \begin{scope}[scale=1.0]
+      \draw [very thick,draw=brown,fill=yellow!50!brown]
+            (0,0) .. controls (-1.0,-0.5) and (-0.35,-2.0) .. (0,-3)
+                  .. controls (-1.25, -1.75) and (1, -1.5) .. (0,0);
+      \draw [thin] (0,0) .. controls (0,-1) and (-0.75,-2) .. (0,-3);
+    \end{scope}
+  \end{scope}}
+  
