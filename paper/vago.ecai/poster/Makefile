@@ -8,7 +8,7 @@
 	sed '/<svg/ s/width="[^\"]*"\|height="[^\"]*"//g' < $@-width-height > $@
 	rm $@-width-height
 
-all: sail.svg mcts-tree.svg
+all: mcts-tree.svg
 
 clean:
 	rm -f *.aux *.log *.eps *.dvi *.pdf *.nav *.out *.snm
