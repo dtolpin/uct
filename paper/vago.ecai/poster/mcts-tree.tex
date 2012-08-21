@@ -30,7 +30,7 @@ boundary/.style={dash pattern=on 4pt off 2pt on 1pt off 2pt}]
 
 \draw (0,0) node (root) [black] {};
 
-\draw [] (root) -- ++(3.5,-2.0)
+\draw [thick] (root) -- ++(3.5,-2.0)
 	node (s1) [white] {};
 \draw [] (s1) -- ++( 0.75,-1.5)
 	node (s11) [black] {}
@@ -40,26 +40,26 @@ boundary/.style={dash pattern=on 4pt off 2pt on 1pt off 2pt}]
 \draw [] (s1) -- ++( -0.75,-1.5)
         node (s12) [black] {};
 \draw [] (s11) -- ++( 0.75,-1.5)
-        node (s111) [win] {};
+        node (s111) {}; \win {(s111)};
 \draw [] (s11) -- ++( -0.75,-1.5)
-        node (s112) [loss] {};
+        node (s112) {}; \loss {(s112)};
 \draw [] (s12) -- ++( -0.5,-1.5)
-        node (s121) [loss] {};
+        node (s121) {}; \loss {(s121)};
 
-\draw [] (root) -- ++(0.25,-2.0)
+\draw [thick] (root) -- ++(0.25,-2.0)
 	node (s2) [white] {};
 \draw [] (s2) -- ++( 0.75,-1.5)
 	node (s21) [black] {};
 \draw (s2) -- ++( -0.75, -1.5)
 	node (s22) [black] {};
 \draw [] (s21) -- ++( +0.5,-1.5)
-	node (s211) [loss] {};
+	node (s211) {}; \loss {(s211)};
 \draw (s22) -- ++( 0.75,-1.5)
-	node (s221) [win] {};
+	node (s221) {}; \win {(s221)};
 \draw [] (s22) -- ++( -0.75,-1.5)
-	node (s222) [loss] {};
+	node (s222) {}; \loss{(s222)};
 
-\draw [] (root) -- ++(-3.5,-2.0)
+\draw [thick] (root) -- ++(-3.5,-2.0)
 	node (s3) [white] {};
 \draw (s3) -- ++( 0.75,-1.5)
 	node (s31) [black] {};

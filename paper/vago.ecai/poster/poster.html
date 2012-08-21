@@ -92,24 +92,31 @@
        <div class="zoomable region gmara">
         <h2><span>Experiments</span></h2>
         <ul>
-          <li>&#x2022;&#x2007;SR+CR <em>outperforms UCT.</em></li>
-          <li>&#x2022;&#x2007;SR+UCT($c$) is <em>less
-          dependent on tuning</em> of the exploration factor $c$.</li>
+          <li>&#x2022;&#x2007;<em>VOI-based sampling</em> is better than <em>UCB1</em> for <strong>simple regret</strong> in Bandits.</li>
+          <li>&#x2022;&#x2007;<em>The hybrid scheme</em> outperforms <em>UCT</em>.</li>
         </ul>
-        <h3>Bandits</h3>
+        <h3><span>Bernoulli Selection Problem</span></h3>
+         <h4><span>25 arms, 10000 trials</span></h4>
         <p>
           <object class="results" data="flat.svg"></object>
         </p>        
         <p style="float: right; width: 40%">
           <object class="results" data="go-board.svg"></object>
         </p>        
-        <h3>Computer Go</h3>
-        <p>
-          <object class="results" data="uctvoi.svg"></object>
-        </p>
-        <p>
-          <object class="results" data="voi-wins.svg"></object>
-        </p>
+        <h3><span>Computer Go</span></h3>
+          <h4><span>Tuning the Sample Cost</span></h4>
+          <dl>
+            <dt>Best results for sample cost $\approx 10^{-6}$:</dt>
+            <dd>winning rate of <em>64%</em> for 10000 samples per ply.</dd>
+          </dl>
+          <p>
+            <object class="results" data="uctvoi.svg"></object>
+          </p>
+          <h4><span>Winning rate vs. number of samples</span></h4>
+          <p>Sample cost fixed at $10^{-6}$:</p>
+          <p>
+            <object class="results" data="voi-wins.svg"></object>
+          </p>
       </div>
 
     </div>
@@ -117,46 +124,36 @@
     <div class="guf">
       <div class="zoomable region mishna">
         <h2><span>Monte-Carlo Sampling in Trees</span></h2>
-        <p>
-          <object data="mcts-tree.svg" width="100%"></object>
-        </p>
         <ul>
           <li>&#x2022;&#x2007;MCTS performs multiple <i>rollouts</i> to partially explore the search space.</li>
           <li>&#x2022;&#x2007;At the current root node, the sampling is aimed at finding the <em>first&nbsp;move</em> to perform: minimizing the <em>simple regret</em> is more appropriate at the root node.</li>
           <li>&#x2022;&#x2007;Deeper in the tree, minimizing <em>cumulative regret</em> results in a better estimate of the value of the state.</li>
           <li>&#x2022;&#x2007;An improvement over UCT can be achieved by <strong>combining different sampling&nbsp;schemes</strong> on the first step and during the rest of a rollout.</li>
         </ul>
+        <p>
+          <object data="mcts-tree.svg" width="100%"></object>
+        </p>
       </div>
       <div class="zoomable region halacha">
         <h2><span>Main Results</span></h2>
-        <h3><span>The <em>SR+CR</em> MCTS Scheme</span></h3>
-        <ul>
-          <li>&#x2022;&#x2007;Selects an action at <b>the current root</b>
-              suitable for minimizing the <strong>simple regret (<fun>FirstAction</fun>).</strong>
-          </li>
-          <li>&#x2022;&#x2007;<b>Deeper down,</b> selects actions according to UCB, that approximately minimizes the <em>cumulative regret (<fun>NextAction</fun>).</em></li>
-        </ul>
-        <p class="algorithm"><span class="lineno"> 1</span> <fun>Rollout</fun>(node, depth=1)
-<span class="lineno"> 2</span>   <kwd>if</kwd> <fun>IsLeaf</fun>(node, depth)
-<span class="lineno"> 3</span>     <kwd>return</kwd> 0
-<span class="lineno"> 4</span>   <kwd>else</kwd>
-<span class="lineno"> 5</span>     <kwd>if</kwd> depth=1 <kwd>then</kwd> action $\gets$ <strong><fun>FirstAction</fun>(node)</strong>
-<span class="lineno"> 6</span>     <kwd>else</kwd> action $\gets$ <em><fun>NextAction</fun>(node)</em>
-<span class="lineno"> 7</span>     next $\gets$ <fun>NextState</fun>(node, action)
-<span class="lineno"> 8</span>     reward $\gets$ <fun>Reward</fun>(node, action, next)
-<span class="lineno"> 9</span>               + <fun>Rollout</fun>(next, depth+1)
-<span class="lineno">10</span>    <fun>UpdateStats</fun>(node, action, reward)
-<span class="lineno">11</span>    <kwd>return</kwd> reward</p>
-        <h3><span>Sampling for Simple Regret</span></h3>
-        <ol>
-          <li><b>$\varepsilon$-greedy</b> sampling $\left(\varepsilon=\frac 1 2\right)$.</li>
-          <li>Modified version of <b>UCB</b> (optimized for <i>simple regret</i>).</li>
-          <li><b>VOI-aware</b> sampling:
-          $$VOI_\alpha\approx\frac {\overline X_\beta} {n_\alpha+1}\exp\left(-2(\overline X_\alpha - \overline X_\beta)^2 n_\alpha\right)$$
-$$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alpha - \overline X_i)^2 n_i\right),\; i\ne\alpha$$
-          </li>
-        </ol>
-      </div>
+          <h3><span>Hybrid sampling scheme</span></h3>
+          <ol>
+            <li>At the <em>root node</em>: sample based on the VOI estimate.</li>
+            <li>At <em>non-root nodes</em>: sample using UCT.</li>
+          </ol>
+        <h3><span>Upper Bounds on VOI</span></h3>
+        <p>Upper bounds on intrinsic VOI $\Lambda^b_i$ of testing the $i$th arm N times:</p>
+          $$\Lambda_\alpha^b < \frac {N\overline X_\beta^{n_\beta}}{n_\alpha+1}\cdot 2\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_\beta^{n_\beta})^2 n_\alpha\right)$$
+          $$\Lambda_{i|i\ne\alpha}^b <  \frac {N(1-\overline X_\alpha^{n_\alpha})} {n_i+1}\cdot 2\exp\left(- 1.37(\overline X_\alpha^{n_\alpha}\hspace{-0.5em} - \overline X_i^{n_i})^2 n_i\right)$$
+          <h3><span>Sample Redistribution</span></h3>
+          <p>MCTS <strong>re-uses rollouts</strong> generated at earlier search states.
+          <ol>
+            <li><em>Estimate VOI</em> as though the information is discarded.</li>
+            <li><em>Stop early</em> if the VOI is below a certain threshold.</li>
+            <li><em>Save the unused</em> sample budget for search in future states.</li>
+          </ol>
+          <p>The <strong>cost of a sample</strong>  is the VOI of increasing a <strong>future budget</strong> by one sample.</p>
+        </div>
     </div>
 
     <div style="clear: both" />
@@ -174,7 +171,7 @@ $$VOI_i\approx\frac {1-\overline X_\alpha} {n_i+1}\exp\left(-2(\overline X_\alph
     <div class="zoomable region safek">
       <h2><span>Future Work</span></h2>
       <div class="region barcode">
-        <a href="http://www.offtopia.net/aaai-2012-srcr-poster/"><img width="100%" src="barcode.png" alt="http://www.offtopia.net/aaai-2012-srcr-poster/" /></a>
+        <a href="http://www.offtopia.net/ecai-2012-vago-poster/"><img width="100%" src="barcode.png" alt="http://www.offtopia.net/ecai-2012-vago-poster/" /></a>
       </div>
       <ul>
         <li>&#x2022;&#x2007;<strong>Rational metareasoning</strong> in MCTS: theory and VOI estimates.</li>
