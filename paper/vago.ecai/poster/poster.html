@@ -95,30 +95,35 @@
           <li>&#x2022;&#x2007;<em>VOI-based sampling</em> is better than <em>UCB1</em> for <strong>simple regret</strong> in Bandits.</li>
           <li>&#x2022;&#x2007;<em>The hybrid scheme</em> outperforms <em>UCT</em>.</li>
         </ul>
-        <h3><span>Bernoulli Selection Problem</span></h3>
+        <h3><span>Multi-armed Bandits</span></h3>
          <h4><span>25 arms, 10000 trials</span></h4>
         <p>
           <object class="results" data="flat.svg"></object>
         </p>        
-        <p style="float: right; width: 40%">
-          <object class="results" data="go-board.svg"></object>
-        </p>        
         <h3><span>Computer Go</span></h3>
-          <h4><span>Tuning the Sample Cost</span></h4>
-          <dl>
-            <dt>Best results for sample cost $\approx 10^{-6}$:</dt>
-            <dd>winning rate of <em>64%</em> for 10000 samples per ply.</dd>
-          </dl>
-          <p>
-            <object class="results" data="uctvoi.svg"></object>
-          </p>
-          <h4><span>Winning rate vs. number of samples</span></h4>
-          <p>Sample cost fixed at $10^{-6}$:</p>
-          <p>
-            <object class="results" data="voi-wins.svg"></object>
-          </p>
-      </div>
-
+        <p style="text-align: center">
+          <object class="results" data="go-board.svg" style="width: 80%"></object>
+        </p>        
+        <h3><span>Tuning the Sample Cost</span></h3>
+        <p>
+          <object class="results" data="uctvoi.svg"></object>
+        </p>
+        <dl>
+          <dt>Best results for sample cost $\approx 10^{-6}$:</dt>
+          <dd>winning rate of <em>64%</em> for 10000 samples per ply.</dd>
+        </dl>
+        <h3><span>Winning rate vs. number of samples</span></h3>
+        <h4>Sample cost fixed at $10^{-6}$:</h4>
+        <p>
+          <object class="results" data="voi-wins.svg"></object>
+        </p>
+        <p>Best results for <em>intermediate $N_{samples}$</em>:
+        <ul>
+          <li>&#x2022;&#x2007;When $N_{samples}$ is too low, poor moves are selected.</li>
+          <li>&#x2022;&#x2007;When $N_{samples}$ is too high, the VOI of further sampling
+  is low.</li>
+        </ul>
+       </div>
     </div>
 
     <div class="guf">
@@ -161,9 +166,9 @@
     <div class="zoomable region musar">
       <h2><span>Contributions</span></h2>
       <ul>
-       <li>&#x2022;&#x2007;Improved MCTS scheme &#x2014; <em>SR+CR.</em></li>
-       <li>&#x2022;&#x2007;SR+CR performs <em>better than</em> unmodified <em>UCT.</em></li>
-       <li>&#x2022;&#x2007;<em>VOI-aware sampling</em> for minimizing <i>simple regret.</i></li>
+       <li>&#x2022;&#x2007;<em>Hybrid</em> MCTS sampling scheme.</li>
+       <li>&#x2022;&#x2007;<em>Upper bounds on VOI</em> for <i>simple regret</i> in Multi-armed Bandits.</em></li>
+       <li>&#x2022;&#x2007;VOI-based <em>stopping</em> and sample redistribution.</li>
       </ul>
 	  <br/>
     </div>
@@ -174,9 +179,9 @@
         <a href="http://www.offtopia.net/ecai-2012-vago-poster/"><img width="100%" src="barcode.png" alt="http://www.offtopia.net/ecai-2012-vago-poster/" /></a>
       </div>
       <ul>
-        <li>&#x2022;&#x2007;<strong>Rational metareasoning</strong> in MCTS: theory and VOI estimates.</li>
-        <li>&#x2022;&#x2007;Better sampling for <strong>non-root nodes.</strong></li>
-        <li>&#x2022;&#x2007;Application to <strong>Computer Go</strong> and other complex domains.</li>
+        <li>&#x2022;&#x2007;Better <strong>VOI estimates.</strong></li>
+        <li>&#x2022;&#x2007;VOI-based sampling for <strong>non-root nodes.</strong></li>
+        <li>&#x2022;&#x2007;Application to <strong>other domains.</strong></li>
       </ul>
 	  <br/>
     </div>
