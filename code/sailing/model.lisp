@@ -91,7 +91,7 @@
       (dotimes (w +ndirs+)
         (let ((c (cprod (dir-x (aref +dirs+ l))
                         (dir-y (aref +dirs+ l))
-                        (dir-x (aref +dirs+ w))
+                        (dir-x (aref +dirs+ w))1G
                         (dir-y (aref +dirs+ w)))))
           (setf (aref costs l w)
                 (cond
@@ -127,7 +127,7 @@
 
 (defun state-leg-key (state leg)
   (declare (type fixnum leg) (type state state))
-  "key of state+leg combination, for haching and caching"
+  "key of state+leg combination, for hashing and caching"
   (+ (state-ptack state)
      (* 3
         (+ (state-wind state)
@@ -165,7 +165,7 @@
   (or (into-wind-p state leg) (into-shore-p state leg)))
 
 (defun leg-cost (state leg)
-  "returns actio cost for the action in the state"
+  "returns action cost for the action in the state"
   (let ((cost (with-slots (x y ptack wind) (the state state)
                 (+ (if (opposite-tacks-p ptack (aref +tacks+ leg wind))
                        +delay-cost+ 0)
